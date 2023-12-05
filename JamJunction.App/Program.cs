@@ -1,3 +1,3 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using JamJunction.App;
 
-Console.WriteLine("Hello, World!");
+await Bot.RunBotAsync();
