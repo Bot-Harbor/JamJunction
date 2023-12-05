@@ -1,6 +1,8 @@
 ﻿using DSharpPlus;
 using DSharpPlus.EventArgs;
+using DSharpPlus.SlashCommands;
 using JamJunction.App.Secrets;
+using JamJunction.App.Slash_Commands;
 
 namespace JamJunction.App;
 
@@ -23,6 +25,8 @@ public abstract class Bot
         Client = new DiscordClient(discordConfig);
 
         Client.Ready += Client_Ready;
+        
+        SlashCommands();
 
         await Client.ConnectAsync();
         await Task.Delay(-1);
@@ -31,5 +35,12 @@ public abstract class Bot
     private static Task Client_Ready(DiscordClient sender, ReadyEventArgs args)
     {
         return Task.CompletedTask;
+    }
+
+    public static void SlashCommands()
+    {
+        var slashCommands = Client.UseSlashCommands();
+        
+        slashCommands.RegisterCommands<PingCommand>();
     }
 }
