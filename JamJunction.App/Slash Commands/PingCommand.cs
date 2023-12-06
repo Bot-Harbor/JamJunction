@@ -1,4 +1,5 @@
 ﻿using DSharpPlus.SlashCommands;
+using JamJunction.App.Embed_Builders;
 using JamJunction.App.EmbedBuilders;
 
 namespace JamJunction.App.Slash_Commands;
