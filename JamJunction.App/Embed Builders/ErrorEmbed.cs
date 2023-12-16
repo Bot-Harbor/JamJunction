@@ -26,6 +26,17 @@ public class ErrorEmbed
 
         return voiceChannelErrorEmbed;
     }
+    
+    public DiscordEmbedBuilder ValidVoiceChannelErrorEmbedBuilder(InteractionContext context)
+    {
+        var voiceChannelErrorEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🔊 • You must be in a valid voice channel **{context.Member.Username}**!",
+            Color = DiscordColor.Red
+        };
+
+        return voiceChannelErrorEmbed;
+    }
 
     public DiscordEmbedBuilder LavaLinkErrorEmbedBuilder()
     {
@@ -43,6 +54,17 @@ public class ErrorEmbed
         var audioTrackErrorEmbed = new DiscordEmbedBuilder
         {
             Description = $"🎵 • Failed to find song!",
+            Color = DiscordColor.Red
+        };
+
+        return audioTrackErrorEmbed;
+    }
+
+    public DiscordEmbedBuilder NoAudioTrackErrorEmbedBuilder()
+    {
+        var audioTrackErrorEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🎵 • There are no tracks currently playing!",
             Color = DiscordColor.Red
         };
 
