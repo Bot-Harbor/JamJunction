@@ -3,7 +3,7 @@ using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Enums;
 
-namespace JamJunction.App.Slash_Commands;
+namespace JamJunction.App.Slash_Commands.OtherCommands;
 
 public class CaptionCommand : ApplicationCommandModule
 {
