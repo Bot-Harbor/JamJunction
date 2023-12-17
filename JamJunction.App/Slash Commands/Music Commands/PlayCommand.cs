@@ -56,7 +56,7 @@ public class PlayCommand : ApplicationCommandModule
                 }
 
                 var track = loadResult.Tracks.First();
-                
+
                 if (connection != null)
                 {
                     await connection.PlayAsync(track);

@@ -46,7 +46,7 @@ public class VolumeCommand : ApplicationCommandModule
                 {
                     await context.CreateResponseAsync(errorEmbed.NoAudioTrackErrorEmbedBuilder());
                 }
-                
+
                 if (volume > 200)
                 {
                     await context.CreateResponseAsync(audioEmbed.MaxVolumeEmbedBuilder(context));

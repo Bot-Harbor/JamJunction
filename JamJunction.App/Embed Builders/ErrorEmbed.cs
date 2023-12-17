@@ -15,7 +15,7 @@ public class ErrorEmbed
 
         return commandErrorEmbed;
     }
-    
+
     public DiscordEmbedBuilder ValidVoiceChannelErrorEmbedBuilder(InteractionContext context)
     {
         var voiceChannelErrorEmbed = new DiscordEmbedBuilder
@@ -37,7 +37,7 @@ public class ErrorEmbed
 
         return noConnectionErrorEmbed;
     }
-    
+
     public DiscordEmbedBuilder LavaLinkErrorEmbedBuilder()
     {
         var lavaLinkErrorEmbed = new DiscordEmbedBuilder
@@ -70,7 +70,7 @@ public class ErrorEmbed
 
         return audioTrackErrorEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoPlayPermissionEmbedBuilder()
     {
         var noPlayPermissionEmbed = new DiscordEmbedBuilder
@@ -81,7 +81,7 @@ public class ErrorEmbed
 
         return noPlayPermissionEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoPausePermissionEmbedBuilder()
     {
         var noPausePermissionEmbed = new DiscordEmbedBuilder
@@ -92,7 +92,7 @@ public class ErrorEmbed
 
         return noPausePermissionEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoResumePermissionEmbedBuilder()
     {
         var noResumePermissionEmbed = new DiscordEmbedBuilder
@@ -103,7 +103,7 @@ public class ErrorEmbed
 
         return noResumePermissionEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoStopPermissionEmbedBuilder()
     {
         var noStopPermissionEmbed = new DiscordEmbedBuilder
@@ -114,7 +114,7 @@ public class ErrorEmbed
 
         return noStopPermissionEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoVolumePermissionEmbedBuilder()
     {
         var noVolumePermissionEmbed = new DiscordEmbedBuilder
@@ -125,7 +125,7 @@ public class ErrorEmbed
 
         return noVolumePermissionEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoSeekPermissionEmbedBuilder()
     {
         var noSeekPermissionEmbed = new DiscordEmbedBuilder
