@@ -104,4 +104,16 @@ public class AudioPlayerEmbed
 
         return seekEmbed;
     }
+    
+    public DiscordEmbedBuilder RestartEmbedBuilder(InteractionContext context)
+    {
+        var restartEmbed = new DiscordEmbedBuilder()
+        {
+            Description =
+                $"⌛   • ``{context.Member.Username}`` restarted the song!",
+            Color = DiscordColor.Orange
+        };
+
+        return restartEmbed;
+    }
 }

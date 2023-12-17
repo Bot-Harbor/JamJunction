@@ -73,5 +73,6 @@ public abstract class Bot
         slashCommands.RegisterCommands<StopCommand>();
         slashCommands.RegisterCommands<VolumeCommand>();
         slashCommands.RegisterCommands<SeekCommand>();
+        slashCommands.RegisterCommands<RestartCommand>();
     }
 }

@@ -136,4 +136,15 @@ public class ErrorEmbed
 
         return noSeekPermissionEmbed;
     }
+    
+    public DiscordEmbedBuilder NoRestartPermissionEmbedBuilder()
+    {
+        var noRestartPermissionEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • You do not have permission to restart a song!",
+            Color = DiscordColor.Red
+        };
+
+        return noRestartPermissionEmbed;
+    }
 }
