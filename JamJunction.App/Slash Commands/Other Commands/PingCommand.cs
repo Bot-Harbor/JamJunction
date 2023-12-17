@@ -2,7 +2,7 @@
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.EmbedBuilders;
 
-namespace JamJunction.App.Slash_Commands.OtherCommands;
+namespace JamJunction.App.Slash_Commands.Other_Commands;
 
 public class PingCommand : ApplicationCommandModule
 {
