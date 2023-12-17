@@ -15,34 +15,34 @@ public class ErrorEmbed
 
         return commandErrorEmbed;
     }
-
-    public DiscordEmbedBuilder VoiceChannelErrorEmbedBuilder(InteractionContext context)
-    {
-        var voiceChannelErrorEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"🔊 • You must be in a voice channel **{context.Member.Username}**!",
-            Color = DiscordColor.Red
-        };
-
-        return voiceChannelErrorEmbed;
-    }
     
     public DiscordEmbedBuilder ValidVoiceChannelErrorEmbedBuilder(InteractionContext context)
     {
         var voiceChannelErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊 • You must be in a valid voice channel **{context.Member.Username}**!",
+            Description = $"🔊 • You must be in a valid voice channel ``{context.Member.Username}``!",
             Color = DiscordColor.Red
         };
 
         return voiceChannelErrorEmbed;
     }
 
+    public DiscordEmbedBuilder NoConnectionErrorEmbedBuilder()
+    {
+        var noConnectionErrorEmbed = new DiscordEmbedBuilder
+        {
+            Description = "🌋 🔗• Lavalink connection is not established!",
+            Color = DiscordColor.Red
+        };
+
+        return noConnectionErrorEmbed;
+    }
+    
     public DiscordEmbedBuilder LavaLinkErrorEmbedBuilder()
     {
         var lavaLinkErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = "🌋 🔗• Lavalink is not connected!",
+            Description = "🌋 🔗• Lavalink failed to connect!",
             Color = DiscordColor.Red
         };
 
@@ -69,5 +69,71 @@ public class ErrorEmbed
         };
 
         return audioTrackErrorEmbed;
+    }
+    
+    public DiscordEmbedBuilder NoPlayPermissionEmbedBuilder()
+    {
+        var noPlayPermissionEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • You do not have permission to play a song!",
+            Color = DiscordColor.Red
+        };
+
+        return noPlayPermissionEmbed;
+    }
+    
+    public DiscordEmbedBuilder NoPausePermissionEmbedBuilder()
+    {
+        var noPausePermissionEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • You do not have permission to pause a song!",
+            Color = DiscordColor.Red
+        };
+
+        return noPausePermissionEmbed;
+    }
+    
+    public DiscordEmbedBuilder NoResumePermissionEmbedBuilder()
+    {
+        var noResumePermissionEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • You do not have permission to resume a song!",
+            Color = DiscordColor.Red
+        };
+
+        return noResumePermissionEmbed;
+    }
+    
+    public DiscordEmbedBuilder NoStopPermissionEmbedBuilder()
+    {
+        var noStopPermissionEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • You do not have permission to stop a song!",
+            Color = DiscordColor.Red
+        };
+
+        return noStopPermissionEmbed;
+    }
+    
+    public DiscordEmbedBuilder NoVolumePermissionEmbedBuilder()
+    {
+        var noVolumePermissionEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • You do not have permission to change the volume!",
+            Color = DiscordColor.Red
+        };
+
+        return noVolumePermissionEmbed;
+    }
+    
+    public DiscordEmbedBuilder NoSeekPermissionEmbedBuilder()
+    {
+        var noSeekPermissionEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • You do not have permission to change the position of a song!",
+            Color = DiscordColor.Red
+        };
+
+        return noSeekPermissionEmbed;
     }
 }
