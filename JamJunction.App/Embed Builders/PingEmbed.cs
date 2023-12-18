@@ -13,15 +13,7 @@ public class PingEmbed
             ImageUrl = "https://pbs.twimg.com/media/CijH1M7WgAE_3we.jpg",
             Color = DiscordColor.Orange,
         };
-
-        var easternTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow,
-            TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-
-        pingEmbed.WithFooter
-        (
-            $"Time Stamp: {easternTime.ToString($"MMMM dd, yyyy h:mm tt")}"
-        );
-
+        
         return pingEmbed;
     }
 }

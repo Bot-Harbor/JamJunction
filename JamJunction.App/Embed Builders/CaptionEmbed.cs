@@ -44,15 +44,7 @@ public class CaptionEmbed
             ImageUrl = image.Url,
             Color = discordColor
         };
-
-        var easternTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow,
-            TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-
-        captionEmbed.WithFooter
-        (
-            $"Time Stamp: {easternTime.ToString($"MMMM dd, yyyy h:mm tt")}"
-        );
-
+        
         return captionEmbed;
     }
 }
