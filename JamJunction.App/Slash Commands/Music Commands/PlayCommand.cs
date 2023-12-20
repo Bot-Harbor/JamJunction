@@ -60,7 +60,8 @@ public class PlayCommand : ApplicationCommandModule
                 if (connection != null)
                 {
                     await connection.PlayAsync(track);
-                    await context.CreateResponseAsync(audioEmbed.PlayEmbedBuilder(track));
+                    
+                    await context.CreateResponseAsync(new DiscordInteractionResponseBuilder(audioEmbed.CurrentSongEmbedBuilder(track)));
                 }
             }
             else

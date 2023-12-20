@@ -1,4 +1,5 @@
-﻿using DSharpPlus.Entities;
+﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Slash_Commands.Music_Commands;
@@ -7,15 +8,16 @@ namespace JamJunction.App.Embed_Builders;
 
 public class AudioPlayerEmbed
 {
-    public DiscordEmbedBuilder PlayEmbedBuilder(LavalinkTrack track)
+    public DiscordMessageBuilder CurrentSongEmbedBuilder(LavalinkTrack track)
     {
-        var audioTrackEmbed = new DiscordEmbedBuilder()
+        var currentSongEmbed = new DiscordEmbedBuilder()
         {
             Description = $"💿  •  **Now playing**: {track.Title}\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"🔗  •  **Link:** {track.Uri.AbsoluteUri}",
+                          $"🔗  •  **Link:** {track.Uri.AbsoluteUri}\n" +
+                          $"⌛  •  **Song Duration**: {track.Length}",
             Color = DiscordColor.Teal,
-            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail() // Add track photo
+            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail()
             {
                 Width = 135,
                 Height = 71,
@@ -23,8 +25,91 @@ public class AudioPlayerEmbed
                       "08/tumblr_inline_pe4i0bR0o21s24py6_540.png"
             }
         };
+        
+        var pauseButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "pause", "⏸ Pause"
+        );
+        
+        var resumeButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "Resume", "▶️ Resume"
+        );
+        
+        var skipButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "skip", "⏭ Skip"
+        );
+        
+        var stopButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Danger, "stop", "⬜ Stop"
+        );
+        
+        var volumeDownButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "volume down", "🔉 Volume -"
+        );
+        
+        var volumeUpButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "volume up", "🔊 Volume +"
+        );
+        
+        var restartButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "restart", "🔁 Restart"
+        );
+        
+        var shuffleButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "shuffle", "🔀 Shuffle"
+        );
+        
+        var buttons = new List<DiscordComponent>
+        {
+            pauseButton, resumeButton, skipButton, stopButton,
+            volumeDownButton, volumeUpButton, restartButton, shuffleButton
+        };
+        
+        var componentsRows = new List<List<DiscordComponent>>();
+        var currentRow = new List<DiscordComponent>();
 
-        return audioTrackEmbed;
+        foreach (var button in buttons)
+        {
+            if (currentRow.Count == 4)
+            {
+                componentsRows.Add(currentRow);
+                currentRow = new List<DiscordComponent>();
+            }
+            currentRow.Add(button);
+        }
+
+        if (currentRow.Count > 0)
+        {
+            componentsRows.Add(currentRow);
+        }
+
+        var messageBuilder = new DiscordMessageBuilder();
+        messageBuilder.AddEmbed(currentSongEmbed);
+
+        foreach (var row in componentsRows)
+        {
+            messageBuilder.AddComponents(row);
+        }
+
+        return messageBuilder;
+    }
+    
+    public DiscordEmbedBuilder QueueEmbedBuilder(LavalinkTrack track)
+    {
+        var queueEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"✅  •  **{track.Title}** has been added to the queue.",
+            Color = DiscordColor.Green,
+        };
+
+        return queueEmbed;
     }
 
     public DiscordEmbedBuilder PauseEmbedBuilder(InteractionContext context)
@@ -104,7 +189,7 @@ public class AudioPlayerEmbed
 
         return seekEmbed;
     }
-    
+
     public DiscordEmbedBuilder RestartEmbedBuilder(InteractionContext context)
     {
         var restartEmbed = new DiscordEmbedBuilder()
