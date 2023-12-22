@@ -48,11 +48,23 @@ public class SeekCommand : ApplicationCommandModule
                     await context.CreateResponseAsync(errorEmbed.NoAudioTrackErrorEmbedBuilder());
                 }
 
+                if (connection != null && connection.CurrentState.CurrentTrack == null)
+                {
+                    await context.CreateResponseAsync(errorEmbed.NoAudioTrackErrorEmbedBuilder());
+                }
+
                 if (connection != null)
                 {
-                    await connection.ResetEqualizerAsync();
-                    await connection.SeekAsync(TimeSpan.FromSeconds(Math.Floor(time)));
-                    await context.CreateResponseAsync(audioEmbed.SeekEmbedBuilder(context, Math.Floor(time)));
+                    if (PauseCommand.PauseCommandInvoked)
+                    {
+                        await context.CreateResponseAsync(errorEmbed.NoSeekWhilePausedEmbedBuilder(context));
+                    }
+                    else
+                    {
+                        await connection.ResetEqualizerAsync();
+                        await connection.SeekAsync(TimeSpan.FromSeconds(Math.Floor(time)));
+                        await context.CreateResponseAsync(audioEmbed.SeekEmbedBuilder(context, Math.Floor(time)));
+                    }
                 }
             }
             else

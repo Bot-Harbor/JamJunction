@@ -125,7 +125,40 @@ public class ErrorEmbed
 
         return noVolumePermissionEmbed;
     }
+    
+    public DiscordEmbedBuilder MaxVolumeEmbedBuilder(InteractionContext context)
+    {
+        var maxVolumeEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  You cannot set the volume above 100 ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
 
+        return maxVolumeEmbed;
+    }
+
+    public DiscordEmbedBuilder MinVolumeEmbedBuilder(InteractionContext context)
+    {
+        var minVolumeEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  You cannot set the volume below 0 ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return minVolumeEmbed;
+    }
+
+    public DiscordEmbedBuilder NoVolumeWhilePausedEmbedBuilder(InteractionContext context)
+    {
+        var noVolumeWhilePausedEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  You cannot set the volume while the player is paused ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return noVolumeWhilePausedEmbed;
+    }
+    
     public DiscordEmbedBuilder NoSeekPermissionEmbedBuilder()
     {
         var noSeekPermissionEmbed = new DiscordEmbedBuilder
@@ -137,6 +170,17 @@ public class ErrorEmbed
         return noSeekPermissionEmbed;
     }
     
+    public DiscordEmbedBuilder NoSeekWhilePausedEmbedBuilder(InteractionContext context)
+    {
+        var noSeekWhilePausedEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"⌛  •  You cannot change the song position while the player is paused ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return noSeekWhilePausedEmbed;
+    }
+    
     public DiscordEmbedBuilder NoRestartPermissionEmbedBuilder()
     {
         var noRestartPermissionEmbed = new DiscordEmbedBuilder
@@ -146,5 +190,16 @@ public class ErrorEmbed
         };
 
         return noRestartPermissionEmbed;
+    }
+
+    public DiscordEmbedBuilder NoRestartWithPausedEmbedBuilder(InteractionContext context)
+    {
+        var noRestartWhilePausedEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"⌛  •  You cannot restart the song while player is paused ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return noRestartWhilePausedEmbed;
     }
 }

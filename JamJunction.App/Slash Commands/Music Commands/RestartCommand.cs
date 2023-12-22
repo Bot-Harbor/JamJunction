@@ -47,8 +47,15 @@ public class RestartCommand : ApplicationCommandModule
 
                 if (connection != null)
                 {
-                    await connection.SeekAsync(TimeSpan.FromSeconds(0));
-                    await context.CreateResponseAsync(audioEmbed.RestartEmbedBuilder(context));
+                    if (PauseCommand.PauseCommandInvoked)
+                    {
+                        await context.CreateResponseAsync(errorEmbed.NoRestartWithPausedEmbedBuilder(context));
+                    }
+                    else
+                    {
+                        await connection.SeekAsync(TimeSpan.FromSeconds(0));
+                        await context.CreateResponseAsync(audioEmbed.RestartEmbedBuilder(context));
+                    }
                 }
             }
             else

@@ -7,9 +7,13 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class PauseCommand : ApplicationCommandModule
 {
+    public static bool PauseCommandInvoked { get; set; } = false;
+    
     [SlashCommand("pause", "Pauses the current song.")]
     public async Task PauseCommandAsync(InteractionContext context)
     {
+        PauseCommandInvoked = true;
+        
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
 

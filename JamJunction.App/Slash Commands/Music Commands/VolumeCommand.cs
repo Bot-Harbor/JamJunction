@@ -7,7 +7,7 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class VolumeCommand : ApplicationCommandModule
 {
-    [SlashCommand("volume", "Adjust the volume 0-200.")]
+    [SlashCommand("volume", "Adjust the volume 0-100.")]
     public async Task VolumeCommandAsync(InteractionContext context,
         [Option("level", "How loud do you want the music to be? Note: Must have \"manage channels\" permission.")]
         double volume)
@@ -47,21 +47,28 @@ public class VolumeCommand : ApplicationCommandModule
                     await context.CreateResponseAsync(errorEmbed.NoAudioTrackErrorEmbedBuilder());
                 }
 
-                if (volume > 200)
+                if (volume > 100)
                 {
-                    await context.CreateResponseAsync(audioEmbed.MaxVolumeEmbedBuilder(context));
+                    await context.CreateResponseAsync(errorEmbed.MaxVolumeEmbedBuilder(context));
                 }
                 else if (volume < 0)
                 {
-                    await context.CreateResponseAsync(audioEmbed.MinVolumeEmbedBuilder(context));
+                    await context.CreateResponseAsync(errorEmbed.MinVolumeEmbedBuilder(context));
                 }
                 else
                 {
                     if (connection != null)
                     {
-                        await connection.SetVolumeAsync(Convert.ToInt32(volume));
-                        await context.CreateResponseAsync(audioEmbed.VolumeEmbedBuilder(Convert.ToInt32(volume),
-                            context));
+                        if (PauseCommand.PauseCommandInvoked)
+                        {
+                            await context.CreateResponseAsync(errorEmbed.NoVolumeWhilePausedEmbedBuilder(context));
+                        }
+                        else
+                        {
+                            await connection.SetVolumeAsync(Convert.ToInt32(volume));
+                            await context.CreateResponseAsync(audioEmbed.VolumeEmbedBuilder(Convert.ToInt32(volume),
+                                context));
+                        }
                     }
                 }
             }

@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-using DSharpPlus;
+﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
@@ -61,8 +60,34 @@ public class PlayCommand : ApplicationCommandModule
                 {
                     await connection.PlayAsync(track);
                     
-                    await context.CreateResponseAsync(new DiscordInteractionResponseBuilder(audioEmbed.CurrentSongEmbedBuilder(track)));
+                    PauseCommand.PauseCommandInvoked = false;
+
+                    await context.CreateResponseAsync(
+                        new DiscordInteractionResponseBuilder(audioEmbed.CurrentSongEmbedBuilder(track)));
+
+                    await Task.Delay(connection!.CurrentState.CurrentTrack.Length);
+
+                    await context.DeleteResponseAsync();
+
+                    if (connection.CurrentState.CurrentTrack == null)
+                    {
+                        if (connection.IsConnected)
+                        {
+                            if (!StopCommand.StopCommandInvoked)
+                            {
+                                var queueSomethingMessage =
+                                    await context.Channel.SendMessageAsync(audioEmbed.QueueSomethingEmbedBuilder());
+
+                                await Task.Delay(TimeSpan.FromMinutes(1));
+                                await queueSomethingMessage.DeleteAsync("End of ambient mode.");
+
+                                await connection.DisconnectAsync();
+                            }
+                        }
+                    }
                 }
+                
+                StopCommand.StopCommandInvoked = false;
             }
             else
             {

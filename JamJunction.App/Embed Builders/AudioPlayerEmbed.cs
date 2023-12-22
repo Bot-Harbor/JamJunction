@@ -25,63 +25,69 @@ public class AudioPlayerEmbed
                       "08/tumblr_inline_pe4i0bR0o21s24py6_540.png"
             }
         };
-        
+
         var pauseButton = new DiscordButtonComponent
         (
             ButtonStyle.Primary, "pause", "⏸ Pause"
         );
-        
+
         var resumeButton = new DiscordButtonComponent
         (
             ButtonStyle.Success, "Resume", "▶️ Resume"
         );
-        
+
         var skipButton = new DiscordButtonComponent
         (
             ButtonStyle.Primary, "skip", "⏭ Skip"
         );
-        
+
         var stopButton = new DiscordButtonComponent
         (
             ButtonStyle.Danger, "stop", "⬜ Stop"
         );
-        
+
         var volumeDownButton = new DiscordButtonComponent
         (
             ButtonStyle.Success, "volume down", "🔉 Volume -"
         );
-        
+
+        var muteVolumeButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Secondary, "mute", "🔇 Mute Volume"
+        );
+
         var volumeUpButton = new DiscordButtonComponent
         (
             ButtonStyle.Success, "volume up", "🔊 Volume +"
         );
-        
+
         var restartButton = new DiscordButtonComponent
         (
             ButtonStyle.Primary, "restart", "🔁 Restart"
         );
-        
+
         var shuffleButton = new DiscordButtonComponent
         (
             ButtonStyle.Success, "shuffle", "🔀 Shuffle"
         );
-        
+
         var buttons = new List<DiscordComponent>
         {
-            pauseButton, resumeButton, skipButton, stopButton,
-            volumeDownButton, volumeUpButton, restartButton, shuffleButton
+            pauseButton, resumeButton, skipButton, stopButton, shuffleButton,
+            volumeDownButton, volumeUpButton, muteVolumeButton, restartButton
         };
-        
+
         var componentsRows = new List<List<DiscordComponent>>();
         var currentRow = new List<DiscordComponent>();
 
         foreach (var button in buttons)
         {
-            if (currentRow.Count == 4)
+            if (currentRow.Count == 5)
             {
                 componentsRows.Add(currentRow);
                 currentRow = new List<DiscordComponent>();
             }
+
             currentRow.Add(button);
         }
 
@@ -100,7 +106,7 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-    
+
     public DiscordEmbedBuilder QueueEmbedBuilder(LavalinkTrack track)
     {
         var queueEmbed = new DiscordEmbedBuilder()
@@ -145,6 +151,24 @@ public class AudioPlayerEmbed
         return stopEmbed;
     }
 
+    public DiscordEmbedBuilder QueueSomethingEmbedBuilder()
+    {
+        var queueSomethingEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"**Nothing is playing. Ambient mode enabled.**\n" +
+                          $"Please use ``/play`` command to queue something.",
+            Color = DiscordColor.Orange,
+            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail()
+            {
+                Width = 50,
+                Height = 50,
+                Url = "https://lordicon.com/icons/wired/gradient/29-play-pause-circle.gif"
+            }
+        };
+
+        return queueSomethingEmbed;
+    }
+
     public DiscordEmbedBuilder VolumeEmbedBuilder(int volume, InteractionContext context)
     {
         var volumeEmbed = new DiscordEmbedBuilder()
@@ -154,28 +178,6 @@ public class AudioPlayerEmbed
         };
 
         return volumeEmbed;
-    }
-
-    public DiscordEmbedBuilder MaxVolumeEmbedBuilder(InteractionContext context)
-    {
-        var maxVolumeEmbed = new DiscordEmbedBuilder()
-        {
-            Description = $"🔊  •  You cannot set the volume above 200 ``{context.Member.Username}!``",
-            Color = DiscordColor.Yellow
-        };
-
-        return maxVolumeEmbed;
-    }
-
-    public DiscordEmbedBuilder MinVolumeEmbedBuilder(InteractionContext context)
-    {
-        var minVolumeEmbed = new DiscordEmbedBuilder()
-        {
-            Description = $"🔊  •  You cannot set the volume below 0 ``{context.Member.Username}!``",
-            Color = DiscordColor.Teal
-        };
-
-        return minVolumeEmbed;
     }
 
     public DiscordEmbedBuilder SeekEmbedBuilder(InteractionContext context, double time)

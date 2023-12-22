@@ -55,6 +55,8 @@ public class ResumeCommand : ApplicationCommandModule
             {
                 await context.CreateResponseAsync(errorEmbed.NoResumePermissionEmbedBuilder());
             }
+
+            PauseCommand.PauseCommandInvoked = false;
         }
         catch (Exception e)
         {

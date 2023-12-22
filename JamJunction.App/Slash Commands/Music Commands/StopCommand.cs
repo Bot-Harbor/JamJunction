@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
@@ -7,6 +8,8 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class StopCommand : ApplicationCommandModule
 {
+    public static bool StopCommandInvoked { get; set; } = false;
+    
     [SlashCommand("stop", "Stops the playback.")]
     public async Task StopCommandAsync(InteractionContext context)
     {
@@ -48,7 +51,26 @@ public class StopCommand : ApplicationCommandModule
                 if (connection != null)
                 {
                     await connection.StopAsync();
-                    await context.CreateResponseAsync(audioEmbed.StopEmbedBuilder(context));
+
+                    StopCommandInvoked = true;
+
+                    await context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
+                        .AddEmbed(audioEmbed.StopEmbedBuilder(context))
+                        .AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
+                    
+                    if (connection.IsConnected)
+                    {
+                        await Task.Delay(TimeSpan.FromMinutes(1));
+                        await context.EditResponseAsync(
+                            new DiscordWebhookBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(context)));
+                        
+                        await connection.DisconnectAsync();
+                    }
+                    if (!connection.IsConnected)
+                    {
+                        await context.EditResponseAsync(
+                            new DiscordWebhookBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(context)));
+                    }
                 }
             }
             else
