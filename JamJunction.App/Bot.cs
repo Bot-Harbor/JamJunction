@@ -5,6 +5,7 @@ using DSharpPlus.Lavalink.EventArgs;
 using DSharpPlus.Net;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events;
+using JamJunction.App.Events.Buttons;
 using JamJunction.App.Secrets;
 using JamJunction.App.Slash_Commands;
 using JamJunction.App.Slash_Commands.Music_Commands;
@@ -43,18 +44,18 @@ public abstract class Bot
             RestEndpoint = endpoint,
             SocketEndpoint = endpoint,
         };
-
+        
         Client = new DiscordClient(discordConfig);
-
+        
         Client.Ready += ClientReady.Client_Ready;
+        
+        //var lavaNode = lavaLink.GetNodeConnection(endpoint);
+        //lavaNode.PlaybackFinished += PlayCommand.PlayNextTrack;
 
         SlashCommands();
 
         var lavaLink = Client.UseLavalink();
-
-        //var lavaNode = lavaLink.GetNodeConnection(endpoint);
-        //lavaNode.PlaybackFinished += PlayCommand.PlaybackFinishedHandler;
-
+        
         await Client.ConnectAsync();
         await lavaLink.ConnectAsync(lavaLinkConfig);
 
@@ -74,5 +75,6 @@ public abstract class Bot
         slashCommands.RegisterCommands<VolumeCommand>();
         slashCommands.RegisterCommands<SeekCommand>();
         slashCommands.RegisterCommands<RestartCommand>();
+        slashCommands.RegisterCommands<LeaveCommand>();
     }
 }

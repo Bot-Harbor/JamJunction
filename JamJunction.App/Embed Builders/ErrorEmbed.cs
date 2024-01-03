@@ -202,4 +202,15 @@ public class ErrorEmbed
 
         return noRestartWhilePausedEmbed;
     }
+    
+    public DiscordEmbedBuilder NoLeavePermissionEmbedBuilder()
+    {
+        var noLeavePermissionEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • You do not have permission to disconnect the player!",
+            Color = DiscordColor.Red
+        };
+
+        return noLeavePermissionEmbed;
+    }
 }

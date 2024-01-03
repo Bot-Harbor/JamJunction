@@ -15,7 +15,7 @@ public class AudioPlayerEmbed
             Description = $"💿  •  **Now playing**: {track.Title}\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
                           $"🔗  •  **Link:** {track.Uri.AbsoluteUri}\n" +
-                          $"⌛  •  **Song Duration**: {track.Length}",
+                          $"⌛  •  **Song Duration** (HH:MM:SS): {track.Length}",
             Color = DiscordColor.Teal,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail()
             {
@@ -202,5 +202,17 @@ public class AudioPlayerEmbed
         };
 
         return restartEmbed;
+    }
+
+    public DiscordEmbedBuilder LeaveEmbedBuilder(InteractionContext context)
+    {
+        var leaveEmbed = new DiscordEmbedBuilder()
+        {
+            Description =
+                $"🔌   • ``{context.Member.Username}`` has disconnected Jam Junction!",
+            Color = DiscordColor.DarkRed
+        };
+
+        return leaveEmbed;
     }
 }
