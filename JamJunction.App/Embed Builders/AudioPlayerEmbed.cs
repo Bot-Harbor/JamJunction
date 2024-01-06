@@ -1,5 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Slash_Commands.Music_Commands;
@@ -127,6 +128,17 @@ public class AudioPlayerEmbed
         };
 
         return pauseEmbed;
+    }
+    
+    public DiscordEmbedBuilder PauseButtonEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var pauseButtonEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🟡  • ``{e.User.Username}`` paused the track!",
+            Color = DiscordColor.Yellow
+        };
+
+        return pauseButtonEmbed;
     }
 
     public DiscordEmbedBuilder ResumeEmbedBuilder(InteractionContext context)

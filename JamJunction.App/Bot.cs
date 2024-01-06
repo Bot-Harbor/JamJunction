@@ -49,6 +49,11 @@ public abstract class Bot
         
         Client.Ready += ClientReady.Client_Ready;
         
+        Client.ComponentInteractionCreated += async (sender, args) =>
+        {
+            await ButtonHandler.Execute(new PauseButton(), sender, args);
+        };
+        
         //var lavaNode = lavaLink.GetNodeConnection(endpoint);
         //lavaNode.PlaybackFinished += PlayCommand.PlayNextTrack;
 
