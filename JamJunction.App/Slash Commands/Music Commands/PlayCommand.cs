@@ -59,7 +59,7 @@ public class PlayCommand : ApplicationCommandModule
                 if (connection != null)
                 {
                     await connection.PlayAsync(track);
-                    
+
                     PauseCommand.PauseCommandInvoked = false;
 
                     await context.CreateResponseAsync(
@@ -86,13 +86,14 @@ public class PlayCommand : ApplicationCommandModule
                         }
                     }
                 }
-                
-                StopCommand.StopCommandInvoked = false;
             }
             else
             {
                 await context.CreateResponseAsync(errorEmbed.NoPlayPermissionEmbedBuilder());
             }
+
+            StopCommand.StopCommandInvoked = false;
+            PauseCommand.PauseCommandInvoked = false;
         }
         catch (Exception e)
         {

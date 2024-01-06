@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
@@ -7,13 +8,11 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class PauseCommand : ApplicationCommandModule
 {
-    public static bool PauseCommandInvoked { get; set; } = false;
-    
+    public static bool PauseCommandInvoked { get; set; }
+
     [SlashCommand("pause", "Pauses the current song.")]
     public async Task PauseCommandAsync(InteractionContext context)
     {
-        PauseCommandInvoked = true;
-        
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
 
@@ -52,6 +51,9 @@ public class PauseCommand : ApplicationCommandModule
                 if (connection != null)
                 {
                     await connection.PauseAsync();
+
+                    PauseCommandInvoked = true;
+
                     await context.CreateResponseAsync(audioEmbed.PauseEmbedBuilder(context));
                 }
             }

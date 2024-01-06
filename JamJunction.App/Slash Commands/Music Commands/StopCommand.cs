@@ -8,7 +8,7 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class StopCommand : ApplicationCommandModule
 {
-    public static bool StopCommandInvoked { get; set; } = false;
+    public static bool StopCommandInvoked { get; set; }
     
     [SlashCommand("stop", "Stops the playback.")]
     public async Task StopCommandAsync(InteractionContext context)
