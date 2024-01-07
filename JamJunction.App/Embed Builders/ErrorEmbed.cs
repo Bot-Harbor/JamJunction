@@ -1,4 +1,5 @@
 ﻿using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
 
 namespace JamJunction.App.Embed_Builders;
@@ -25,6 +26,18 @@ public class ErrorEmbed
         };
 
         return voiceChannelErrorEmbed;
+    }
+
+    public DiscordEmbedBuilder ValidVoiceChannelBtnErrorEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var voiceChannelErrorEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🔊 • You must be in a valid voice channel ``{e.User.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return voiceChannelErrorEmbed;
+        
     }
 
     public DiscordEmbedBuilder NoConnectionErrorEmbedBuilder()

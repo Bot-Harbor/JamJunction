@@ -83,5 +83,15 @@ public abstract class Bot
         {
             await ButtonHandler.Execute(new PauseButton(), sender, args);
         };
+        
+        Client.ComponentInteractionCreated += async (sender, args) =>
+        {
+            await ButtonHandler.Execute(new ResumeButton(), sender, args);
+        };
+        
+        Client.ComponentInteractionCreated += async (sender, args) =>
+        {
+            await ButtonHandler.Execute(new StopButton(), sender, args);
+        };
     }
 }

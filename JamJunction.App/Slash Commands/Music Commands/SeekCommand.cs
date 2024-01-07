@@ -2,6 +2,7 @@
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
+using JamJunction.App.Events.Buttons;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
@@ -55,7 +56,7 @@ public class SeekCommand : ApplicationCommandModule
 
                 if (connection != null)
                 {
-                    if (PauseCommand.PauseCommandInvoked)
+                    if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
                     {
                         await context.CreateResponseAsync(errorEmbed.NoSeekWhilePausedEmbedBuilder(context));
                     }

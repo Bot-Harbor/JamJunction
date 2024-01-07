@@ -3,6 +3,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
+using JamJunction.App.Events.Buttons;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
@@ -73,7 +74,7 @@ public class PlayCommand : ApplicationCommandModule
                     {
                         if (connection.IsConnected)
                         {
-                            if (!StopCommand.StopCommandInvoked)
+                            if (!StopCommand.StopCommandInvoked && !StopButton.StopCommandInvoked)
                             {
                                 var queueSomethingMessage =
                                     await context.Channel.SendMessageAsync(audioEmbed.QueueSomethingEmbedBuilder());
@@ -93,7 +94,9 @@ public class PlayCommand : ApplicationCommandModule
             }
 
             StopCommand.StopCommandInvoked = false;
+            StopButton.StopCommandInvoked = false;
             PauseCommand.PauseCommandInvoked = false;
+            PauseButton.PauseCommandInvoked = false;
         }
         catch (Exception e)
         {

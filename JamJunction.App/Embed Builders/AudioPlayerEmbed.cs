@@ -3,7 +3,6 @@ using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Slash_Commands.Music_Commands;
 
 namespace JamJunction.App.Embed_Builders;
 
@@ -34,7 +33,7 @@ public class AudioPlayerEmbed
 
         var resumeButton = new DiscordButtonComponent
         (
-            ButtonStyle.Success, "Resume", "▶️ Resume"
+            ButtonStyle.Success, "resume", "▶️ Resume"
         );
 
         var skipButton = new DiscordButtonComponent
@@ -130,7 +129,7 @@ public class AudioPlayerEmbed
         return pauseEmbed;
     }
     
-    public DiscordEmbedBuilder PauseButtonEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    public DiscordEmbedBuilder PauseEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var pauseButtonEmbed = new DiscordEmbedBuilder()
         {
@@ -151,12 +150,34 @@ public class AudioPlayerEmbed
 
         return resumeEmbed;
     }
+    
+    public DiscordEmbedBuilder ResumeEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var resumeEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🟢  • ``{e.User.Username}`` resumed the track!",
+            Color = DiscordColor.Green
+        };
+
+        return resumeEmbed;
+    }
 
     public DiscordEmbedBuilder StopEmbedBuilder(InteractionContext context)
     {
         var stopEmbed = new DiscordEmbedBuilder()
         {
             Description = $"🔴   • ``{context.Member.Username}`` stopped the player!",
+            Color = DiscordColor.Red
+        };
+
+        return stopEmbed;
+    }
+    
+    public DiscordEmbedBuilder StopEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var stopEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔴   • ``{e.User.Username}`` stopped the player!",
             Color = DiscordColor.Red
         };
 

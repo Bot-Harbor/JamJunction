@@ -7,10 +7,8 @@ using JamJunction.App.Interfaces;
 
 namespace JamJunction.App.Events.Buttons;
 
-public class PauseButton : IButton
+public class ResumeButton : IButton
 {
-    public static bool PauseCommandInvoked { get; set; }
-
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs e)
     {
         var audioEmbed = new AudioPlayerEmbed();
@@ -20,7 +18,7 @@ public class PauseButton : IButton
 
         try
         {
-            if (e.Interaction.Data.CustomId == "pause")
+            if (e.Interaction.Data.CustomId == "resume")
             {
                 var member = await e.Guild.GetMemberAsync(e.User.Id);
                 var userVc = member?.VoiceState?.Channel;
@@ -42,7 +40,7 @@ public class PauseButton : IButton
                             new DiscordInteractionResponseBuilder().AddEmbed(
                                 errorEmbed.ValidVoiceChannelBtnErrorEmbedBuilder(e)));
                     }
-
+                    
                     await node.ConnectAsync(userVc);
 
                     var connection = node.GetGuildConnection(e.Guild);
@@ -62,19 +60,19 @@ public class PauseButton : IButton
 
                     if (connection != null)
                     {
-                        await connection.PauseAsync();
+                        await connection.ResumeAsync();
 
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                            new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.PauseEmbedBuilder(e)));
-
-                        PauseCommandInvoked = true;
+                            new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.ResumeEmbedBuilder(e)));
                     }
                 }
                 else
                 {
                     await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                        new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.NoPausePermissionEmbedBuilder()));
+                        new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.NoResumePermissionEmbedBuilder()));
                 }
+
+                PauseButton.PauseCommandInvoked = false;
             }
         }
         catch (Exception exception)
