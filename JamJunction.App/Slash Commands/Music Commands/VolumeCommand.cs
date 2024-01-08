@@ -8,6 +8,8 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class VolumeCommand : ApplicationCommandModule
 {
+    public static int Volume { get; set; }
+    
     [SlashCommand("volume", "Adjust the volume 0-100.")]
     public async Task VolumeCommandAsync(InteractionContext context,
         [Option("level", "How loud do you want the music to be? Note: Must have \"manage channels\" permission.")]
@@ -24,7 +26,7 @@ public class VolumeCommand : ApplicationCommandModule
 
             if (context.Member != null && (context.Member.Permissions & Permissions.ManageChannels) != 0)
             {
-                if (!lava.ConnectedNodes.Any())
+                if (!lava.ConnectedNodes!.Any())
                 {
                     await context.CreateResponseAsync(errorEmbed.NoConnectionErrorEmbedBuilder());
                 }
@@ -34,11 +36,9 @@ public class VolumeCommand : ApplicationCommandModule
                     await context.CreateResponseAsync(errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context));
                 }
 
-                await node.ConnectAsync(userVc);
-
                 var connection = node.GetGuildConnection(context.Guild);
 
-                if (connection == null)
+                if (connection! == null)
                 {
                     await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
                 }
@@ -69,6 +69,8 @@ public class VolumeCommand : ApplicationCommandModule
                             await connection.SetVolumeAsync(Convert.ToInt32(volume));
                             await context.CreateResponseAsync(audioEmbed.VolumeEmbedBuilder(Convert.ToInt32(volume),
                                 context));
+                            
+                            Volume = Convert.ToInt32(volume);
                         }
                     }
                 }

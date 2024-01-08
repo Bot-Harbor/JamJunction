@@ -27,7 +27,7 @@ public class ResumeButton : IButton
                 
                 if (member != null && (e.Channel.PermissionsFor(member) & Permissions.ManageChannels) != 0)
                 {
-                    if (!lava.ConnectedNodes.Any())
+                    if (!lava.ConnectedNodes!.Any())
                     {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(
@@ -40,12 +40,10 @@ public class ResumeButton : IButton
                             new DiscordInteractionResponseBuilder().AddEmbed(
                                 errorEmbed.ValidVoiceChannelBtnErrorEmbedBuilder(e)));
                     }
-                    
-                    await node.ConnectAsync(userVc);
 
                     var connection = node.GetGuildConnection(e.Guild);
 
-                    if (connection == null)
+                    if (connection! == null)
                     {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.LavaLinkErrorEmbedBuilder()));
@@ -78,7 +76,7 @@ public class ResumeButton : IButton
         catch (Exception exception)
         {
             await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.CommandFailedEmbedBuilder()));
+                new DiscordInteractionResponseBuilder().AsEphemeral().AddEmbed(errorEmbed.CommandFailedEmbedBuilder()));
         }
     }
 }

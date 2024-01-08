@@ -25,7 +25,7 @@ public class SeekCommand : ApplicationCommandModule
 
             if (context.Member != null && (context.Member.Permissions & Permissions.ManageChannels) != 0)
             {
-                if (!lava.ConnectedNodes.Any())
+                if (!lava.ConnectedNodes!.Any())
                 {
                     await context.CreateResponseAsync(errorEmbed.NoConnectionErrorEmbedBuilder());
                 }
@@ -35,11 +35,9 @@ public class SeekCommand : ApplicationCommandModule
                     await context.CreateResponseAsync(errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context));
                 }
 
-                await node.ConnectAsync(userVc);
-
                 var connection = node.GetGuildConnection(context.Guild);
 
-                if (connection == null)
+                if (connection! == null)
                 {
                     await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
                 }

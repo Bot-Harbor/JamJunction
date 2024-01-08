@@ -31,7 +31,7 @@ public class PlayCommand : ApplicationCommandModule
 
             if (context.Member != null && (context.Member.Permissions & Permissions.ManageChannels) != 0)
             {
-                if (!lava.ConnectedNodes.Any())
+                if (!lava.ConnectedNodes!.Any())
                 {
                     await context.CreateResponseAsync(errorEmbed.NoConnectionErrorEmbedBuilder());
                 }
@@ -45,7 +45,7 @@ public class PlayCommand : ApplicationCommandModule
 
                 var connection = node.GetGuildConnection(context.Guild);
 
-                if (connection == null)
+                if (connection! == null)
                 {
                     await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
                 }
