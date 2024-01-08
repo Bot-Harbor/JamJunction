@@ -9,6 +9,9 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class PlayCommand : ApplicationCommandModule
 {
+    public static int Volume { get; set; } = 75;
+    public static bool FirstTrack { get; set; }
+    
     [SlashCommand("play", "Queue a song.")]
     public async Task PlayAsync
     (
@@ -56,11 +59,17 @@ public class PlayCommand : ApplicationCommandModule
                 }
 
                 var track = loadResult.Tracks.First();
-
+                
                 if (connection != null)
                 {
                     await connection.PlayAsync(track);
 
+                    if (FirstTrack)
+                    {
+                        await connection.SetVolumeAsync(Volume);
+                        FirstTrack = false;
+                    }
+                    
                     PauseCommand.PauseCommandInvoked = false;
 
                     await context.CreateResponseAsync(
@@ -83,6 +92,8 @@ public class PlayCommand : ApplicationCommandModule
                                 await queueSomethingMessage.DeleteAsync("End of ambient mode.");
 
                                 await connection.DisconnectAsync();
+
+                                FirstTrack = true;
                             }
                         }
                     }

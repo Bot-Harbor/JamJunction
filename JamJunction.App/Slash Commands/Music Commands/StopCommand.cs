@@ -54,6 +54,8 @@ public class StopCommand : ApplicationCommandModule
 
                     StopCommandInvoked = true;
 
+                    PlayCommand.FirstTrack = true;
+
                     await context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                         .AddEmbed(audioEmbed.StopEmbedBuilder(context))
                         .AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));

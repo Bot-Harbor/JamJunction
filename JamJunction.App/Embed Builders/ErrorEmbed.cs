@@ -149,12 +149,34 @@ public class ErrorEmbed
 
         return maxVolumeEmbed;
     }
+    
+    public DiscordEmbedBuilder MaxVolumeEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var maxVolumeEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  The volume is already at its maximum ``{e.User.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return maxVolumeEmbed;
+    }
 
     public DiscordEmbedBuilder MinVolumeEmbedBuilder(InteractionContext context)
     {
         var minVolumeEmbed = new DiscordEmbedBuilder()
         {
             Description = $"🔊  •  You cannot set the volume below 0 ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return minVolumeEmbed;
+    }
+    
+    public DiscordEmbedBuilder MinVolumeEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var minVolumeEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  The volume is already at its minimum ``{e.User.Username}``!",
             Color = DiscordColor.Red
         };
 

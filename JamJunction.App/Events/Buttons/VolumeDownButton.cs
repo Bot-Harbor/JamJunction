@@ -4,14 +4,11 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Interfaces;
-using JamJunction.App.Slash_Commands.Music_Commands;
 
 namespace JamJunction.App.Events.Buttons;
 
-public class StopButton : IButton
+public class VolumeDownButton : IButton
 {
-    public static bool StopCommandInvoked { get; set; }
-
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs e)
     {
         var audioEmbed = new AudioPlayerEmbed();
@@ -21,13 +18,13 @@ public class StopButton : IButton
 
         try
         {
-            if (e.Interaction.Data.CustomId == "stop")
+            if (e.Interaction.Data.CustomId == "volume down")
             {
                 var member = await e.Guild.GetMemberAsync(e.User.Id);
                 var userVc = member?.VoiceState?.Channel;
                 var lava = sender.GetLavalink();
                 var node = lava.ConnectedNodes.Values.First();
-                
+
                 if (member != null && (e.Channel.PermissionsFor(member) & Permissions.ManageChannels) != 0)
                 {
                     if (!lava.ConnectedNodes.Any())
@@ -36,14 +33,14 @@ public class StopButton : IButton
                             new DiscordInteractionResponseBuilder().AddEmbed(
                                 errorEmbed.NoConnectionErrorEmbedBuilder()));
                     }
-                    
+
                     if (userVc == null || userVc.Type != ChannelType.Voice)
                     {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(
                                 errorEmbed.ValidVoiceChannelBtnErrorEmbedBuilder(e)));
                     }
-                    
+
                     await node.ConnectAsync(userVc);
 
                     var connection = node.GetGuildConnection(e.Guild);
@@ -61,36 +58,34 @@ public class StopButton : IButton
                                 errorEmbed.NoAudioTrackErrorEmbedBuilder()));
                     }
 
-                    if (connection != null)
+                    int volume = 100;
+                    
+                    if (volume > 100)
                     {
-                        await connection.StopAsync();
-
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                            new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(e))
-                                .AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
-
-                        StopCommandInvoked = true;
-
-                        PlayCommand.FirstTrack = true;
-
-                        if (connection.IsConnected)
+                            new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.MaxVolumeEmbedBuilder(e)));
+                    }
+                    else if (volume < 0)
+                    {
+                        await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                            new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.MinVolumeEmbedBuilder(e)));
+                    }
+                    else
+                    {
+                        if (connection != null)
                         {
-                            await Task.Delay((TimeSpan.FromMinutes(1)));
-                            await message.EditOriginalResponseAsync(
-                                new DiscordWebhookBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(e)));
-                            await connection.DisconnectAsync();
-                        }
-                        if (!connection.IsConnected)
-                        {
-                            await message.EditOriginalResponseAsync(
-                                new DiscordWebhookBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(e)));
+                            await connection.SetVolumeAsync(volume - 10);
+
+                            await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                new DiscordInteractionResponseBuilder().AddEmbed(
+                                    audioEmbed.VolumeDecreaseEmbedBuilder(e)));
                         }
                     }
                 }
                 else
                 {
                     await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                        new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.NoStopPermissionEmbedBuilder()));
+                        new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.NoVolumePermissionEmbedBuilder()));
                 }
             }
         }

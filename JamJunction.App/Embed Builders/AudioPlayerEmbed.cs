@@ -1,4 +1,5 @@
-﻿using DSharpPlus;
+﻿using System.ComponentModel;
+using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
@@ -211,6 +212,17 @@ public class AudioPlayerEmbed
         };
 
         return volumeEmbed;
+    }
+
+    public DiscordEmbedBuilder VolumeDecreaseEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var volumeDecreaseEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  ``{e.User.Username}`` has decreased the volume``!",
+            Color = DiscordColor.Teal
+        };
+
+        return volumeDecreaseEmbed;
     }
 
     public DiscordEmbedBuilder SeekEmbedBuilder(InteractionContext context, double time)
