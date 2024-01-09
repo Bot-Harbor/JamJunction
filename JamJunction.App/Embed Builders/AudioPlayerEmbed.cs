@@ -49,7 +49,7 @@ public class AudioPlayerEmbed
 
         var volumeDownButton = new DiscordButtonComponent
         (
-            ButtonStyle.Success, "volume down", "🔉 Volume -"
+            ButtonStyle.Success, "volumedown", "🔉 Volume -"
         );
 
         var muteVolumeButton = new DiscordButtonComponent
@@ -59,7 +59,7 @@ public class AudioPlayerEmbed
 
         var volumeUpButton = new DiscordButtonComponent
         (
-            ButtonStyle.Success, "volume up", "🔊 Volume +"
+            ButtonStyle.Success, "volumeup", "🔊 Volume +"
         );
 
         var restartButton = new DiscordButtonComponent
@@ -218,7 +218,7 @@ public class AudioPlayerEmbed
     {
         var volumeDecreaseEmbed = new DiscordEmbedBuilder()
         {
-            Description = $"🔊  •  ``{e.User.Username}`` has decreased the volume``!",
+            Description = $"🔊  •  ``{e.User.Username}`` has decreased the volume!",
             Color = DiscordColor.Teal
         };
 
@@ -243,6 +243,18 @@ public class AudioPlayerEmbed
         {
             Description =
                 $"⌛   • ``{context.Member.Username}`` restarted the song!",
+            Color = DiscordColor.Orange
+        };
+
+        return restartEmbed;
+    }
+    
+    public DiscordEmbedBuilder RestartEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var restartEmbed = new DiscordEmbedBuilder()
+        {
+            Description =
+                $"⌛   • ``{e.User.Username}`` restarted the song!",
             Color = DiscordColor.Orange
         };
 

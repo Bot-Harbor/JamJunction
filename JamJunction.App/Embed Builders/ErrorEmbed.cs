@@ -226,12 +226,34 @@ public class ErrorEmbed
 
         return noRestartPermissionEmbed;
     }
+    
+    public DiscordEmbedBuilder NoRestartBtnPermissionEmbedBuilder()
+    {
+        var noRestartPermissionEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • You do not have permission to restart a song!",
+            Color = DiscordColor.Red
+        };
+
+        return noRestartPermissionEmbed;
+    }
 
     public DiscordEmbedBuilder NoRestartWithPausedEmbedBuilder(InteractionContext context)
     {
         var noRestartWhilePausedEmbed = new DiscordEmbedBuilder()
         {
             Description = $"⌛  •  You cannot restart the song while player is paused ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return noRestartWhilePausedEmbed;
+    }
+    
+    public DiscordEmbedBuilder NoRestartWithPausedEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var noRestartWhilePausedEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"⌛  •  You cannot restart the song while player is paused ``{e.User.Username}``!",
             Color = DiscordColor.Red
         };
 
