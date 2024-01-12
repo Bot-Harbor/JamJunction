@@ -35,7 +35,7 @@ public abstract class Bot
         {
             Hostname = discord.HostName,
             Port = discord.Port,
-            Secured = true
+            Secured = false
         };
 
         var lavaLinkConfig = new LavalinkConfiguration
@@ -48,6 +48,12 @@ public abstract class Bot
         Client = new DiscordClient(discordConfig);
         
         Client.Ready += ClientReady.Client_Ready;
+
+        Client.VoiceStateUpdated += (sender, args) =>
+        {
+            ResetDefaultVolume.ResetVolume(sender, args);
+            return Task.CompletedTask;
+        };
         
         ButtonEvents();
         
@@ -97,6 +103,11 @@ public abstract class Bot
         Client.ComponentInteractionCreated += async (sender, args) =>
         {
             await ButtonHandler.Execute(new VolumeDownButton(), sender, args);
+        };
+        
+        Client.ComponentInteractionCreated += async (sender, args) =>
+        {
+            await ButtonHandler.Execute(new VolumeUpButton(), sender, args);
         };
         
         Client.ComponentInteractionCreated += async (sender, args) =>
