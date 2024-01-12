@@ -4,6 +4,7 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Interfaces;
+using JamJunction.App.Slash_Commands.Music_Commands;
 
 namespace JamJunction.App.Events.Buttons;
 
@@ -18,7 +19,7 @@ public class VolumeDownButton : IButton
 
         try
         {
-            if (e.Interaction.Data.CustomId == "volume down")
+            if (e.Interaction.Data.CustomId == "volumedown")
             {
                 var member = await e.Guild.GetMemberAsync(e.User.Id);
                 var userVc = member?.VoiceState?.Channel;
@@ -27,7 +28,7 @@ public class VolumeDownButton : IButton
 
                 if (member != null && (e.Channel.PermissionsFor(member) & Permissions.ManageChannels) != 0)
                 {
-                    if (!lava.ConnectedNodes.Any())
+                    if (!lava.ConnectedNodes!.Any())
                     {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(
@@ -41,11 +42,9 @@ public class VolumeDownButton : IButton
                                 errorEmbed.ValidVoiceChannelBtnErrorEmbedBuilder(e)));
                     }
 
-                    await node.ConnectAsync(userVc);
-
                     var connection = node.GetGuildConnection(e.Guild);
 
-                    if (connection == null)
+                    if (connection! == null)
                     {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.LavaLinkErrorEmbedBuilder()));
@@ -58,23 +57,54 @@ public class VolumeDownButton : IButton
                                 errorEmbed.NoAudioTrackErrorEmbedBuilder()));
                     }
 
-                    int volume = 100;
-                    
-                    if (volume > 100)
+                    if (!VolumeCommand.VolumeCommandInvoked)
                     {
-                        await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                            new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.MaxVolumeEmbedBuilder(e)));
-                    }
-                    else if (volume < 0)
-                    {
-                        await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                            new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.MinVolumeEmbedBuilder(e)));
+                        if (connection != null)
+                        {
+                            if (PlayCommand.DefaultVolume == 0)
+                            {
+                                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                    new DiscordInteractionResponseBuilder().AddEmbed(
+                                        errorEmbed.MinVolumeEmbedBuilder(e)));
+                            }
+                            
+                            var defaultVolume = PlayCommand.DefaultVolume;
+                            var adjustedDefaultVolume = defaultVolume - 10;
+                            
+                            adjustedDefaultVolume = Math.Max(adjustedDefaultVolume, 0);
+
+                            await connection.SetVolumeAsync(adjustedDefaultVolume);
+                            PlayCommand.DefaultVolume = adjustedDefaultVolume;
+
+                            // Remove test case
+                            Console.WriteLine(adjustedDefaultVolume);
+
+                            await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                new DiscordInteractionResponseBuilder().AddEmbed(
+                                    audioEmbed.VolumeDecreaseEmbedBuilder(e)));
+                        }
                     }
                     else
                     {
                         if (connection != null)
                         {
-                            await connection.SetVolumeAsync(volume - 10);
+                            if (VolumeCommand.Volume == 0)
+                            {
+                                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                    new DiscordInteractionResponseBuilder().AddEmbed(
+                                        errorEmbed.MinVolumeEmbedBuilder(e)));
+                            }
+                            
+                            var userVolume = VolumeCommand.Volume;
+                            var adjustedVolume = userVolume - 10;
+                            
+                            adjustedVolume = Math.Max(adjustedVolume, 0);
+
+                            await connection.SetVolumeAsync(adjustedVolume);
+                            VolumeCommand.Volume = adjustedVolume;
+
+                            // Remove test case
+                            Console.WriteLine(adjustedVolume);
 
                             await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                                 new DiscordInteractionResponseBuilder().AddEmbed(
@@ -92,7 +122,7 @@ public class VolumeDownButton : IButton
         catch (Exception exception)
         {
             await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.CommandFailedEmbedBuilder()));
+                new DiscordInteractionResponseBuilder().AsEphemeral().AddEmbed(errorEmbed.CommandFailedEmbedBuilder()));
         }
     }
 }
