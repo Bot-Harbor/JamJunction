@@ -51,8 +51,9 @@ public class StopCommand : ApplicationCommandModule
                     await connection.StopAsync();
 
                     StopCommandInvoked = true;
-
-                    PlayCommand.FirstTrack = true;
+                    VolumeCommand.VolumeCommandInvoked = false;
+                    PlayCommand.FirstTrackOnConnection = true;
+                    PlayCommand.DefaultVolume = 50;
 
                     await context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                         .AddEmbed(audioEmbed.StopEmbedBuilder(context))

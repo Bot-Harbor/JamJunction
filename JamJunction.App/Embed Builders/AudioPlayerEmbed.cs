@@ -224,6 +224,17 @@ public class AudioPlayerEmbed
 
         return volumeDecreaseEmbed;
     }
+    
+    public DiscordEmbedBuilder VolumeIncreaseEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var volumeIncreaseEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  ``{e.User.Username}`` has increased the volume!",
+            Color = DiscordColor.Teal
+        };
+
+        return volumeIncreaseEmbed;
+    }
 
     public DiscordEmbedBuilder SeekEmbedBuilder(InteractionContext context, double time)
     {

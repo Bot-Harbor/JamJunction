@@ -9,8 +9,9 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 public class VolumeCommand : ApplicationCommandModule
 {
     public static int Volume { get; set; }
+    public static bool VolumeCommandInvoked { get; set; }
     
-    [SlashCommand("volume", "Adjust the volume 0-100.")]
+    [SlashCommand("volume", "Adjust the volume 0-100. Default volume is 50.")]
     public async Task VolumeCommandAsync(InteractionContext context,
         [Option("level", "How loud do you want the music to be? Note: Must have \"manage channels\" permission.")]
         double volume)
@@ -71,6 +72,7 @@ public class VolumeCommand : ApplicationCommandModule
                                 context));
                             
                             Volume = Convert.ToInt32(volume);
+                            VolumeCommandInvoked = true;
                         }
                     }
                 }

@@ -41,6 +41,11 @@ public class LeaveCommand : ApplicationCommandModule
                 if (connection != null)
                 {
                     await connection.DisconnectAsync();
+                    
+                    VolumeCommand.VolumeCommandInvoked = false;
+                    PlayCommand.FirstTrackOnConnection = true;
+                    PlayCommand.DefaultVolume = 50;
+                    
                     await context.CreateResponseAsync(audioEmbed.LeaveEmbedBuilder(context));
                 }
             }
@@ -48,6 +53,7 @@ public class LeaveCommand : ApplicationCommandModule
             {
                 await context.CreateResponseAsync(errorEmbed.NoLeavePermissionEmbedBuilder());
             }
+            
         }
         catch (Exception e)
         {

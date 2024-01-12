@@ -9,9 +9,9 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class PlayCommand : ApplicationCommandModule
 {
-    public static int Volume { get; set; } = 75;
-    public static bool FirstTrack { get; set; }
-    
+    public static int DefaultVolume { get; set; } = 50;
+    public static bool FirstTrackOnConnection { get; set; } = true;
+
     [SlashCommand("play", "Queue a song.")]
     public async Task PlayAsync
     (
@@ -64,13 +64,11 @@ public class PlayCommand : ApplicationCommandModule
                 {
                     await connection.PlayAsync(track);
 
-                    if (FirstTrack)
+                    if (FirstTrackOnConnection)
                     {
-                        await connection.SetVolumeAsync(Volume);
-                        FirstTrack = false;
+                        await connection.SetVolumeAsync(DefaultVolume);
+                        FirstTrackOnConnection = false;
                     }
-                    
-                    PauseCommand.PauseCommandInvoked = false;
 
                     await context.CreateResponseAsync(
                         new DiscordInteractionResponseBuilder(audioEmbed.CurrentSongEmbedBuilder(track)));
@@ -93,7 +91,8 @@ public class PlayCommand : ApplicationCommandModule
 
                                 await connection.DisconnectAsync();
 
-                                FirstTrack = true;
+                                VolumeCommand.VolumeCommandInvoked = false;
+                                FirstTrackOnConnection = true;
                             }
                         }
                     }
