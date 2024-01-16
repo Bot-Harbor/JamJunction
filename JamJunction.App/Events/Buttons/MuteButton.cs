@@ -10,7 +10,7 @@ namespace JamJunction.App.Events.Buttons;
 
 public class MuteButton : IButton
 {
-    public static bool MuteButtonInvoked { get; set; } = false;
+    public static bool MuteButtonInvoked { get; set; }
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs e)
     {
@@ -64,35 +64,62 @@ public class MuteButton : IButton
                     {
                         if (!MuteButtonInvoked)
                         {
-                            await connection.SetVolumeAsync(0);
+                            if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
+                            {
+                                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                    new DiscordInteractionResponseBuilder().AddEmbed(
+                                        errorEmbed.NoMuteWhilePausedEmbedBuilder(e)));
+                            }
+                            else
+                            {
+                                await connection.SetVolumeAsync(0);
 
-                            MuteButtonInvoked = true;
+                                MuteButtonInvoked = true;
 
-                            await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                                new DiscordInteractionResponseBuilder().AddEmbed(
-                                    audioEmbed.MuteEmbedBuilder(e))); // Add custom mute embed
+                                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                    new DiscordInteractionResponseBuilder().AddEmbed(
+                                        audioEmbed.MuteEmbedBuilder(e)));
+                            }
                         }
                         else
                         {
                             if (!VolumeCommand.VolumeCommandInvoked)
                             {
-                                await connection.SetVolumeAsync(PlayCommand.DefaultVolume);
+                                if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
+                                {
+                                    await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                        new DiscordInteractionResponseBuilder().AddEmbed(
+                                            errorEmbed.NoUnMuteWhilePausedEmbedBuilder(e)));
+                                }
+                                else
+                                {
+                                    await connection.SetVolumeAsync(PlayCommand.DefaultVolume);
 
-                                MuteButtonInvoked = false;
+                                    MuteButtonInvoked = false;
 
-                                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                                    new DiscordInteractionResponseBuilder().AddEmbed(
-                                        audioEmbed.UnmuteEmbedBuilder(e))); // Add custom unmute embed
+                                    await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                        new DiscordInteractionResponseBuilder().AddEmbed(
+                                            audioEmbed.UnmuteEmbedBuilder(e)));
+                                }
                             }
                             else
                             {
-                                await connection.SetVolumeAsync(VolumeCommand.Volume);
+                                if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
+                                {
+                                    await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                        new DiscordInteractionResponseBuilder().AddEmbed(
+                                            errorEmbed.NoUnMuteWhilePausedEmbedBuilder(e)));
+                                }
+                                else
+                                {
+                                    await connection.SetVolumeAsync(VolumeCommand.Volume);
 
-                                MuteButtonInvoked = false;
+                                    MuteButtonInvoked = false;
 
-                                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                                    new DiscordInteractionResponseBuilder().AddEmbed(
-                                        audioEmbed.UnmuteEmbedBuilder(e))); // Add custom unmute embed
+                                    await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                        new DiscordInteractionResponseBuilder().AddEmbed(
+                                            audioEmbed.UnmuteEmbedBuilder(e)));
+                                }
                             }
                         }
                     }
@@ -101,7 +128,7 @@ public class MuteButton : IButton
                 {
                     await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                         new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed
-                            .NoVolumePermissionEmbedBuilder())); //Change permission for mute permission
+                            .NoVolumePermissionEmbedBuilder()));
                 }
             }
         }
