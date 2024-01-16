@@ -15,6 +15,7 @@ public class ResetAudioPlayer
             PlayCommand.DefaultVolume = 50;
             PauseCommand.PauseCommandInvoked = false;
             PauseButton.PauseCommandInvoked = false;
+            MuteCommand.MuteCommandInvoked = false;
             MuteButton.MuteButtonInvoked = false;
         }
     }

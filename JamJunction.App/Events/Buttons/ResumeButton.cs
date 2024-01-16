@@ -4,6 +4,7 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Interfaces;
+using JamJunction.App.Slash_Commands.Music_Commands;
 
 namespace JamJunction.App.Events.Buttons;
 
@@ -70,6 +71,7 @@ public class ResumeButton : IButton
                         new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.NoResumePermissionEmbedBuilder()));
                 }
 
+                PauseCommand.PauseCommandInvoked = false;
                 PauseButton.PauseCommandInvoked = false;
             }
         }

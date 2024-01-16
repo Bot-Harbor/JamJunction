@@ -6,10 +6,12 @@ using JamJunction.App.Events.Buttons;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
-public class ResumeCommand : ApplicationCommandModule
+public class MuteCommand : ApplicationCommandModule
 {
-    [SlashCommand("resume", "Resumes the current song.")]
-    public async Task ResumeCommandAsync(InteractionContext context)
+    public static bool MuteCommandInvoked { get; set; }
+    
+    [SlashCommand("mute", "Mute the volume.")]
+    public async Task MuteCommandAsync(InteractionContext context)
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
@@ -43,20 +45,26 @@ public class ResumeCommand : ApplicationCommandModule
                 {
                     await context.CreateResponseAsync(errorEmbed.NoAudioTrackErrorEmbedBuilder());
                 }
-
+                
                 if (connection != null)
                 {
-                    await connection.ResumeAsync();
-                    await context.CreateResponseAsync(audioEmbed.ResumeEmbedBuilder(context));
+                    if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
+                    {
+                        await context.CreateResponseAsync(errorEmbed.NoMuteWhilePausedEmbedBuilder(context));
+                    }
+                    else
+                    {
+                        await connection.SetVolumeAsync(0);
+                        MuteCommandInvoked = true;
+                        MuteButton.MuteButtonInvoked = true;
+                        await context.CreateResponseAsync(audioEmbed.MuteEmbedBuilder(context));
+                    }
                 }
             }
             else
             {
-                await context.CreateResponseAsync(errorEmbed.NoResumePermissionEmbedBuilder());
+                await context.CreateResponseAsync(errorEmbed.NoVolumePermissionEmbedBuilder());
             }
-
-            PauseCommand.PauseCommandInvoked = false;
-            PauseButton.PauseCommandInvoked = false;
         }
         catch (Exception e)
         {

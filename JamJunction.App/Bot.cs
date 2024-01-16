@@ -78,6 +78,8 @@ public abstract class Bot
         slashCommands.RegisterCommands<SeekCommand>();
         slashCommands.RegisterCommands<RestartCommand>();
         slashCommands.RegisterCommands<LeaveCommand>();
+        slashCommands.RegisterCommands<MuteCommand>();
+        slashCommands.RegisterCommands<UnmuteCommand>();
     }
 
     private static void ButtonEvents()

@@ -1,5 +1,4 @@
 ﻿using DSharpPlus;
-using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
@@ -7,12 +6,12 @@ using JamJunction.App.Events.Buttons;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
-public class StopCommand : ApplicationCommandModule
+public class UnmuteCommand : ApplicationCommandModule
 {
-    public static bool StopCommandInvoked { get; set; }
-    
-    [SlashCommand("stop", "Stops the playback.")]
-    public async Task StopCommandAsync(InteractionContext context)
+    public static bool MuteCommandInvoked { get; set; }
+
+    [SlashCommand("unmute", "Unmute the volume.")]
+    public async Task UnmuteCommandAsync(InteractionContext context)
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
@@ -49,37 +48,39 @@ public class StopCommand : ApplicationCommandModule
 
                 if (connection != null)
                 {
-                    await connection.StopAsync();
-
-                    StopCommandInvoked = true;
-                    VolumeCommand.VolumeCommandInvoked = false;
-                    PlayCommand.FirstTrackOnConnection = true;
-                    PlayCommand.DefaultVolume = 50;
-                    MuteCommand.MuteCommandInvoked = false;
-                    MuteButton.MuteButtonInvoked = false;
-
-                    await context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
-                        .AddEmbed(audioEmbed.StopEmbedBuilder(context))
-                        .AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
-                    
-                    if (connection.IsConnected)
+                    if (!VolumeCommand.VolumeCommandInvoked)
                     {
-                        await Task.Delay(TimeSpan.FromMinutes(1));
-                        await context.EditResponseAsync(
-                            new DiscordWebhookBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(context)));
-                        
-                        await connection.DisconnectAsync();
+                        if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
+                        {
+                            await context.CreateResponseAsync(errorEmbed.NoUnMuteWhilePausedEmbedBuilder(context));
+                        }
+                        else
+                        {
+                            await connection.SetVolumeAsync(PlayCommand.DefaultVolume);
+                            MuteCommand.MuteCommandInvoked = false;
+                            MuteButton.MuteButtonInvoked = false;
+                            await context.CreateResponseAsync(audioEmbed.UnmuteEmbedBuilder(context));
+                        }
                     }
-                    if (!connection.IsConnected)
+                    else
                     {
-                        await context.EditResponseAsync(
-                            new DiscordWebhookBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(context)));
+                        if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
+                        {
+                            await context.CreateResponseAsync(errorEmbed.NoUnMuteWhilePausedEmbedBuilder(context));
+                        }
+                        else
+                        {
+                            await connection.SetVolumeAsync(VolumeCommand.Volume);
+                            MuteCommand.MuteCommandInvoked = false;
+                            MuteButton.MuteButtonInvoked = false;
+                            await context.CreateResponseAsync(audioEmbed.UnmuteEmbedBuilder(context));
+                        }
                     }
                 }
             }
             else
             {
-                await context.CreateResponseAsync(errorEmbed.NoStopPermissionEmbedBuilder());
+                await context.CreateResponseAsync(errorEmbed.NoVolumePermissionEmbedBuilder());
             }
         }
         catch (Exception e)

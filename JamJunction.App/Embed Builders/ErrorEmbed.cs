@@ -216,6 +216,17 @@ public class ErrorEmbed
         return noSeekWhilePausedEmbed;
     }
     
+    public DiscordEmbedBuilder NoMuteWhilePausedEmbedBuilder(InteractionContext context)
+    {
+        var noMuteWhilePausedEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"⌛  •  You cannot mute the song while the player is paused ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return noMuteWhilePausedEmbed;
+    }
+    
     public DiscordEmbedBuilder NoMuteWhilePausedEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var noMuteWhilePausedEmbed = new DiscordEmbedBuilder()
@@ -225,6 +236,17 @@ public class ErrorEmbed
         };
 
         return noMuteWhilePausedEmbed;
+    }
+    
+    public DiscordEmbedBuilder NoUnMuteWhilePausedEmbedBuilder(InteractionContext context)
+    {
+        var noUnMuteWhilePausedEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"⌛  •  You cannot unmute the song while the player is paused ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return noUnMuteWhilePausedEmbed;
     }
     
     public DiscordEmbedBuilder NoUnMuteWhilePausedEmbedBuilder(ComponentInteractionCreateEventArgs e)

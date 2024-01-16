@@ -91,6 +91,12 @@ public class PlayCommand : ApplicationCommandModule
 
                                 await connection.DisconnectAsync();
 
+                                StopCommand.StopCommandInvoked = false;
+                                StopButton.StopCommandInvoked = false;
+                                PauseCommand.PauseCommandInvoked = false;
+                                PauseButton.PauseCommandInvoked = false;
+                                MuteCommand.MuteCommandInvoked = false;
+                                MuteButton.MuteButtonInvoked = false;
                                 VolumeCommand.VolumeCommandInvoked = false;
                                 FirstTrackOnConnection = true;
                             }
@@ -107,7 +113,6 @@ public class PlayCommand : ApplicationCommandModule
             StopButton.StopCommandInvoked = false;
             PauseCommand.PauseCommandInvoked = false;
             PauseButton.PauseCommandInvoked = false;
-            MuteButton.MuteButtonInvoked = false;
         }
         catch (Exception e)
         {

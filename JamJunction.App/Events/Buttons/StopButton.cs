@@ -67,6 +67,7 @@ public class StopButton : IButton
                         VolumeCommand.VolumeCommandInvoked = false;
                         PlayCommand.FirstTrackOnConnection = true;
                         PlayCommand.DefaultVolume = 50;
+                        MuteCommand.MuteCommandInvoked = false;
                         MuteButton.MuteButtonInvoked = false;
                         
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,

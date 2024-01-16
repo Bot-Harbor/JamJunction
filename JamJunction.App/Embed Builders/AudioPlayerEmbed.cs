@@ -235,6 +235,17 @@ public class AudioPlayerEmbed
         return volumeIncreaseEmbed;
     }
 
+    public DiscordEmbedBuilder MuteEmbedBuilder(InteractionContext context)
+    {
+        var muteEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  ``{context.Member.Username}`` has muted the volume!",
+            Color = DiscordColor.Teal
+        };
+
+        return muteEmbed;
+    }
+
     public DiscordEmbedBuilder MuteEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var muteEmbed = new DiscordEmbedBuilder()
@@ -244,6 +255,17 @@ public class AudioPlayerEmbed
         };
 
         return muteEmbed;
+    }
+
+    public DiscordEmbedBuilder UnmuteEmbedBuilder(InteractionContext context)
+    {
+        var unmuteEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  ``{context.Member.Username}`` has unmuted the volume!",
+            Color = DiscordColor.Teal
+        };
+
+        return unmuteEmbed;
     }
     
     public DiscordEmbedBuilder UnmuteEmbedBuilder(ComponentInteractionCreateEventArgs e)
@@ -256,7 +278,7 @@ public class AudioPlayerEmbed
 
         return unmuteEmbed;
     }
-    
+
     public DiscordEmbedBuilder SeekEmbedBuilder(InteractionContext context, double time)
     {
         var seekEmbed = new DiscordEmbedBuilder()

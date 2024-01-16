@@ -74,6 +74,8 @@ public class MuteButton : IButton
                             {
                                 await connection.SetVolumeAsync(0);
 
+                                
+                                MuteCommand.MuteCommandInvoked = true;
                                 MuteButtonInvoked = true;
 
                                 await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
@@ -95,6 +97,7 @@ public class MuteButton : IButton
                                 {
                                     await connection.SetVolumeAsync(PlayCommand.DefaultVolume);
 
+                                    MuteCommand.MuteCommandInvoked = false;
                                     MuteButtonInvoked = false;
 
                                     await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
@@ -114,6 +117,7 @@ public class MuteButton : IButton
                                 {
                                     await connection.SetVolumeAsync(VolumeCommand.Volume);
 
+                                    MuteCommand.MuteCommandInvoked = false;
                                     MuteButtonInvoked = false;
 
                                     await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
