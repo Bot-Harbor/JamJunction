@@ -9,7 +9,7 @@ namespace JamJunction.App.Embed_Builders;
 
 public class AudioPlayerEmbed
 {
-    public DiscordMessageBuilder CurrentSongEmbedBuilder(LavalinkTrack track)
+    public DiscordMessageBuilder CurrentSongEmbedBuilder(LavalinkTrack track, InteractionContext context)
     {
         var currentSongEmbed = new DiscordEmbedBuilder()
         {
@@ -22,8 +22,7 @@ public class AudioPlayerEmbed
             {
                 Width = 135,
                 Height = 71,
-                Url = "https://haulixdaily.com/wp-content/uploads/2018/" +
-                      "08/tumblr_inline_pe4i0bR0o21s24py6_540.png"
+                Url = context.Guild.IconUrl
             }
         };
 
@@ -54,7 +53,7 @@ public class AudioPlayerEmbed
 
         var muteVolumeButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "mute", "🔇 Mute Volume"
+            ButtonStyle.Secondary, "mute", "🔇 Mute/Unmute"
         );
 
         var volumeUpButton = new DiscordButtonComponent

@@ -71,7 +71,7 @@ public class PlayCommand : ApplicationCommandModule
                     }
 
                     await context.CreateResponseAsync(
-                        new DiscordInteractionResponseBuilder(audioEmbed.CurrentSongEmbedBuilder(track)));
+                        new DiscordInteractionResponseBuilder(audioEmbed.CurrentSongEmbedBuilder(track, context)));
 
                     await Task.Delay(connection!.CurrentState.CurrentTrack.Length);
 
