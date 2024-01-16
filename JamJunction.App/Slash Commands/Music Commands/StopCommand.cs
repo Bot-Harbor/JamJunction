@@ -3,6 +3,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
+using JamJunction.App.Events.Buttons;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
@@ -54,6 +55,7 @@ public class StopCommand : ApplicationCommandModule
                     VolumeCommand.VolumeCommandInvoked = false;
                     PlayCommand.FirstTrackOnConnection = true;
                     PlayCommand.DefaultVolume = 50;
+                    MuteButton.MuteButtonInvoked = false;
 
                     await context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
                         .AddEmbed(audioEmbed.StopEmbedBuilder(context))

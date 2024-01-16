@@ -75,6 +75,8 @@ public class VolumeDownButton : IButton
 
                             await connection.SetVolumeAsync(adjustedDefaultVolume);
                             PlayCommand.DefaultVolume = adjustedDefaultVolume;
+                            
+                            MuteButton.MuteButtonInvoked = false;
 
                             // Remove test case
                             Console.WriteLine(adjustedDefaultVolume);
@@ -102,6 +104,8 @@ public class VolumeDownButton : IButton
 
                             await connection.SetVolumeAsync(adjustedVolume);
                             VolumeCommand.Volume = adjustedVolume;
+                            
+                            MuteButton.MuteButtonInvoked = false;
 
                             // Remove test case
                             Console.WriteLine(adjustedVolume);

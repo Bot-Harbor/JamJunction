@@ -1,13 +1,10 @@
 ﻿using DSharpPlus;
-using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
-using DSharpPlus.Lavalink.EventArgs;
 using DSharpPlus.Net;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events;
 using JamJunction.App.Events.Buttons;
 using JamJunction.App.Secrets;
-using JamJunction.App.Slash_Commands;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Microsoft.Extensions.Logging;
@@ -51,7 +48,7 @@ public abstract class Bot
 
         Client.VoiceStateUpdated += (sender, args) =>
         {
-            ResetDefaultVolume.ResetVolume(sender, args);
+            ResetAudioPlayer.ResetPlayer(sender, args);
             return Task.CompletedTask;
         };
         
@@ -108,6 +105,11 @@ public abstract class Bot
         Client.ComponentInteractionCreated += async (sender, args) =>
         {
             await ButtonHandler.Execute(new VolumeUpButton(), sender, args);
+        };
+        
+        Client.ComponentInteractionCreated += async (sender, args) =>
+        {
+            await ButtonHandler.Execute(new MuteButton(), sender, args);
         };
         
         Client.ComponentInteractionCreated += async (sender, args) =>

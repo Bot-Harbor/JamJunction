@@ -73,6 +73,7 @@ public class VolumeCommand : ApplicationCommandModule
                             
                             Volume = Convert.ToInt32(volume);
                             VolumeCommandInvoked = true;
+                            MuteButton.MuteButtonInvoked = false;
                         }
                     }
                 }

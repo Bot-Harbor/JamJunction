@@ -129,7 +129,7 @@ public class AudioPlayerEmbed
 
         return pauseEmbed;
     }
-    
+
     public DiscordEmbedBuilder PauseEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var pauseButtonEmbed = new DiscordEmbedBuilder()
@@ -151,7 +151,7 @@ public class AudioPlayerEmbed
 
         return resumeEmbed;
     }
-    
+
     public DiscordEmbedBuilder ResumeEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var resumeEmbed = new DiscordEmbedBuilder()
@@ -173,7 +173,7 @@ public class AudioPlayerEmbed
 
         return stopEmbed;
     }
-    
+
     public DiscordEmbedBuilder StopEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var stopEmbed = new DiscordEmbedBuilder()
@@ -224,7 +224,7 @@ public class AudioPlayerEmbed
 
         return volumeDecreaseEmbed;
     }
-    
+
     public DiscordEmbedBuilder VolumeIncreaseEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var volumeIncreaseEmbed = new DiscordEmbedBuilder()
@@ -236,6 +236,28 @@ public class AudioPlayerEmbed
         return volumeIncreaseEmbed;
     }
 
+    public DiscordEmbedBuilder MuteEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var muteEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  ``{e.User.Username}`` has muted the volume!",
+            Color = DiscordColor.Teal
+        };
+
+        return muteEmbed;
+    }
+    
+    public DiscordEmbedBuilder UnmuteEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var unmuteEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  ``{e.User.Username}`` has unmuted the volume!",
+            Color = DiscordColor.Teal
+        };
+
+        return unmuteEmbed;
+    }
+    
     public DiscordEmbedBuilder SeekEmbedBuilder(InteractionContext context, double time)
     {
         var seekEmbed = new DiscordEmbedBuilder()
@@ -259,7 +281,7 @@ public class AudioPlayerEmbed
 
         return restartEmbed;
     }
-    
+
     public DiscordEmbedBuilder RestartEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var restartEmbed = new DiscordEmbedBuilder()

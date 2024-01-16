@@ -8,8 +8,10 @@ using JamJunction.App.Slash_Commands.Music_Commands;
 
 namespace JamJunction.App.Events.Buttons;
 
-public class VolumeUpButton : IButton
+public class MuteButton : IButton
 {
+    public static bool MuteButtonInvoked { get; set; } = false;
+
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs e)
     {
         var audioEmbed = new AudioPlayerEmbed();
@@ -19,7 +21,7 @@ public class VolumeUpButton : IButton
 
         try
         {
-            if (e.Interaction.Data.CustomId == "volumeup")
+            if (e.Interaction.Data.CustomId == "mute")
             {
                 var member = await e.Guild.GetMemberAsync(e.User.Id);
                 var userVc = member?.VoiceState?.Channel;
@@ -57,76 +59,56 @@ public class VolumeUpButton : IButton
                                 errorEmbed.NoAudioTrackErrorEmbedBuilder()));
                     }
 
-                    if (!VolumeCommand.VolumeCommandInvoked)
+
+                    if (connection != null)
                     {
-                        if (connection != null)
+                        if (!MuteButtonInvoked)
                         {
-                            if (PlayCommand.DefaultVolume == 100)
-                            {
-                                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                                    new DiscordInteractionResponseBuilder().AddEmbed(
-                                        errorEmbed.MaxVolumeEmbedBuilder(e)));
-                            }
+                            await connection.SetVolumeAsync(0);
 
-                            var defaultVolume = PlayCommand.DefaultVolume;
-                            var adjustedDefaultVolume = defaultVolume + 10;
-
-                            adjustedDefaultVolume = Math.Min(adjustedDefaultVolume, 100);
-
-                            await connection.SetVolumeAsync(adjustedDefaultVolume);
-                            PlayCommand.DefaultVolume = adjustedDefaultVolume;
-                            
-                            MuteButton.MuteButtonInvoked = false;
-
-                            // Remove test case
-                            Console.WriteLine(adjustedDefaultVolume);
+                            MuteButtonInvoked = true;
 
                             await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                                 new DiscordInteractionResponseBuilder().AddEmbed(
-                                    audioEmbed.VolumeIncreaseEmbedBuilder(e)));
+                                    audioEmbed.MuteEmbedBuilder(e))); // Add custom mute embed
                         }
-                    }
-                    else
-                    {
-                        if (connection != null)
+                        else
                         {
-                            if (VolumeCommand.Volume == 100)
+                            if (!VolumeCommand.VolumeCommandInvoked)
                             {
+                                await connection.SetVolumeAsync(PlayCommand.DefaultVolume);
+
+                                MuteButtonInvoked = false;
+
                                 await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                                     new DiscordInteractionResponseBuilder().AddEmbed(
-                                        errorEmbed.MaxVolumeEmbedBuilder(e)));
+                                        audioEmbed.UnmuteEmbedBuilder(e))); // Add custom unmute embed
                             }
-                            
-                            var userVolume = VolumeCommand.Volume;
-                            var adjustedVolume = userVolume + 10;
-                            
-                            adjustedVolume = Math.Min(adjustedVolume, 100);
+                            else
+                            {
+                                await connection.SetVolumeAsync(VolumeCommand.Volume);
 
-                            await connection.SetVolumeAsync(adjustedVolume);
-                            VolumeCommand.Volume = adjustedVolume;
-                            
-                            MuteButton.MuteButtonInvoked = false;
+                                MuteButtonInvoked = false;
 
-                            // Remove test case
-                            Console.WriteLine(adjustedVolume);
-
-                            await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                                new DiscordInteractionResponseBuilder().AddEmbed(
-                                    audioEmbed.VolumeIncreaseEmbedBuilder(e)));
+                                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                    new DiscordInteractionResponseBuilder().AddEmbed(
+                                        audioEmbed.UnmuteEmbedBuilder(e))); // Add custom unmute embed
+                            }
                         }
                     }
                 }
                 else
                 {
                     await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                        new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.NoVolumePermissionEmbedBuilder()));
+                        new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed
+                            .NoVolumePermissionEmbedBuilder())); //Change permission for mute permission
                 }
             }
         }
         catch (Exception exception)
         {
             await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                new DiscordInteractionResponseBuilder().AsEphemeral().AddEmbed(errorEmbed.CommandFailedEmbedBuilder()));
+                new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.CommandFailedEmbedBuilder()));
         }
     }
 }

@@ -138,7 +138,7 @@ public class ErrorEmbed
 
         return noVolumePermissionEmbed;
     }
-    
+
     public DiscordEmbedBuilder MaxVolumeEmbedBuilder(InteractionContext context)
     {
         var maxVolumeEmbed = new DiscordEmbedBuilder()
@@ -227,17 +227,6 @@ public class ErrorEmbed
         return noRestartPermissionEmbed;
     }
     
-    public DiscordEmbedBuilder NoRestartBtnPermissionEmbedBuilder()
-    {
-        var noRestartPermissionEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"❌ • You do not have permission to restart a song!",
-            Color = DiscordColor.Red
-        };
-
-        return noRestartPermissionEmbed;
-    }
-
     public DiscordEmbedBuilder NoRestartWithPausedEmbedBuilder(InteractionContext context)
     {
         var noRestartWhilePausedEmbed = new DiscordEmbedBuilder()

@@ -107,6 +107,7 @@ public class PlayCommand : ApplicationCommandModule
             StopButton.StopCommandInvoked = false;
             PauseCommand.PauseCommandInvoked = false;
             PauseButton.PauseCommandInvoked = false;
+            MuteButton.MuteButtonInvoked = false;
         }
         catch (Exception e)
         {
