@@ -50,8 +50,7 @@ public class PauseCommand : ApplicationCommandModule
                 if (connection != null)
                 {
                     await connection.PauseAsync();
-
-                    PauseCommandInvoked = true;
+                    
                     PauseButton.PauseCommandInvoked = true;
 
                     await context.CreateResponseAsync(audioEmbed.PauseEmbedBuilder(context));

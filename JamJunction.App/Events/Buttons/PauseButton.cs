@@ -65,8 +65,7 @@ public class PauseButton : IButton
 
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.PauseEmbedBuilder(e)));
-
-                        PauseCommand.PauseCommandInvoked = true;
+                        
                         PauseCommandInvoked = true;
                     }
                 }
