@@ -9,6 +9,7 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class PlayCommand : ApplicationCommandModule
 {
+    public static Queue<LavalinkTrack> Queue { get; set; } = new Queue<LavalinkTrack>();
     public static int DefaultVolume { get; set; } = 50;
     public static bool FirstTrackOnConnection { get; set; } = true;
 
@@ -59,10 +60,10 @@ public class PlayCommand : ApplicationCommandModule
                 }
 
                 var track = loadResult.Tracks.First();
-                
+
                 if (connection != null)
                 {
-                    await connection.PlayAsync(track);
+                    Queue.Enqueue(track);
 
                     if (FirstTrackOnConnection)
                     {
@@ -70,37 +71,21 @@ public class PlayCommand : ApplicationCommandModule
                         FirstTrackOnConnection = false;
                     }
 
-                    await context.CreateResponseAsync(
-                        new DiscordInteractionResponseBuilder(audioEmbed.CurrentSongEmbedBuilder(track, context)));
-
-                    await Task.Delay(connection!.CurrentState.CurrentTrack.Length);
-
-                    await context.DeleteResponseAsync();
+                    if (Queue.Count <= 0)
+                    {
+                        await context.CreateResponseAsync(
+                            new DiscordInteractionResponseBuilder(audioEmbed.CurrentSongEmbedBuilder(track, context)));
+                        Console.WriteLine(Queue.Count);
+                    }
+                    else
+                    {
+                        await context.CreateResponseAsync(audioEmbed.QueueEmbedBuilder(track));
+                        Console.WriteLine(Queue.Count);
+                    }
 
                     if (connection.CurrentState.CurrentTrack == null)
                     {
-                        if (connection.IsConnected)
-                        {
-                            if (!StopCommand.StopCommandInvoked && !StopButton.StopCommandInvoked)
-                            {
-                                var queueSomethingMessage =
-                                    await context.Channel.SendMessageAsync(audioEmbed.QueueSomethingEmbedBuilder());
-
-                                await Task.Delay(TimeSpan.FromMinutes(1));
-                                await queueSomethingMessage.DeleteAsync("End of ambient mode.");
-
-                                await connection.DisconnectAsync();
-
-                                StopCommand.StopCommandInvoked = false;
-                                StopButton.StopCommandInvoked = false;
-                                PauseCommand.PauseCommandInvoked = false;
-                                PauseButton.PauseCommandInvoked = false;
-                                MuteCommand.MuteCommandInvoked = false;
-                                MuteButton.MuteButtonInvoked = false;
-                                VolumeCommand.VolumeCommandInvoked = false;
-                                FirstTrackOnConnection = true;
-                            }
-                        }
+                        await PlayNextTrack(connection, context, track);
                     }
                 }
             }
@@ -108,15 +93,39 @@ public class PlayCommand : ApplicationCommandModule
             {
                 await context.CreateResponseAsync(errorEmbed.NoPlayPermissionEmbedBuilder());
             }
-
-            StopCommand.StopCommandInvoked = false;
-            StopButton.StopCommandInvoked = false;
-            PauseCommand.PauseCommandInvoked = false;
-            PauseButton.PauseCommandInvoked = false;
         }
         catch (Exception e)
         {
             await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), ephemeral: true);
+        }
+    }
+
+    private static async Task PlayNextTrack(LavalinkGuildConnection connection, InteractionContext context,
+        LavalinkTrack track)
+    {
+        var audioEmbed = new AudioPlayerEmbed();
+
+        if (Queue.Count > 0)
+        {
+            var nextTrack = Queue.Dequeue();
+            await connection.PlayAsync(nextTrack);
+
+            // If seek, pause, or restart is used, update task length accordingly
+            await Task.Delay(nextTrack.Length);
+
+            // If Queue is empty, display ambient mode
+            if (Queue.Count != 0)
+            {
+                await PlayNextTrack(connection, context, track);
+                await context.CreateResponseAsync(
+                    new DiscordInteractionResponseBuilder(audioEmbed.CurrentSongEmbedBuilder(track, context)));
+                Console.WriteLine("Current Song");
+            }
+            else
+            {
+                await context.CreateResponseAsync(audioEmbed.QueueSomethingEmbedBuilder());
+                Console.WriteLine("Queue Something");
+            }
         }
     }
 }

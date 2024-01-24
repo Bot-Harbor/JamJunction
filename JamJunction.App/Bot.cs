@@ -1,5 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Lavalink;
+using DSharpPlus.Lavalink.EventArgs;
 using DSharpPlus.Net;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events;
@@ -41,23 +42,28 @@ public abstract class Bot
             RestEndpoint = endpoint,
             SocketEndpoint = endpoint,
         };
-        
+
         Client = new DiscordClient(discordConfig);
-        
+
         Client.Ready += ClientReady.Client_Ready;
 
         Client.VoiceStateUpdated += (sender, args) =>
         {
-            ResetAudioPlayer.ResetPlayer(sender, args);
+            ResetAudioPlayer.UserDisconnectsPlayer(sender, args);
             return Task.CompletedTask;
         };
         
         ButtonEvents();
-        
+
         SlashCommands();
 
         var lavaLink = Client.UseLavalink();
-        
+        lavaLink.NodeDisconnected += (sender, args) =>
+        {
+            ResetAudioPlayer.NodeDisconnected(sender, args);
+            return Task.CompletedTask;
+        };
+
         await Client.ConnectAsync();
         await lavaLink.ConnectAsync(lavaLinkConfig);
 
@@ -88,32 +94,32 @@ public abstract class Bot
         {
             await ButtonHandler.Execute(new PauseButton(), sender, args);
         };
-        
+
         Client.ComponentInteractionCreated += async (sender, args) =>
         {
             await ButtonHandler.Execute(new ResumeButton(), sender, args);
         };
-        
+
         Client.ComponentInteractionCreated += async (sender, args) =>
         {
             await ButtonHandler.Execute(new StopButton(), sender, args);
         };
-        
+
         Client.ComponentInteractionCreated += async (sender, args) =>
         {
             await ButtonHandler.Execute(new VolumeDownButton(), sender, args);
         };
-        
+
         Client.ComponentInteractionCreated += async (sender, args) =>
         {
             await ButtonHandler.Execute(new VolumeUpButton(), sender, args);
         };
-        
+
         Client.ComponentInteractionCreated += async (sender, args) =>
         {
             await ButtonHandler.Execute(new MuteButton(), sender, args);
         };
-        
+
         Client.ComponentInteractionCreated += async (sender, args) =>
         {
             await ButtonHandler.Execute(new RestartButton(), sender, args);
