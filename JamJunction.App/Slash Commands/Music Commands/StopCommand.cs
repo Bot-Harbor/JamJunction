@@ -9,8 +9,6 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class StopCommand : ApplicationCommandModule
 {
-    public static bool StopCommandInvoked { get; set; }
-    
     [SlashCommand("stop", "Stops the playback.")]
     public async Task StopCommandAsync(InteractionContext context)
     {
@@ -50,31 +48,16 @@ public class StopCommand : ApplicationCommandModule
                 if (connection != null)
                 {
                     await connection.StopAsync();
-
-                    StopCommandInvoked = true;
+                    
                     VolumeCommand.VolumeCommandInvoked = false;
                     PlayCommand.FirstTrackOnConnection = true;
                     PlayCommand.DefaultVolume = 50;
+                    PauseCommand.PauseCommandInvoked = false;
+                    PauseButton.PauseCommandInvoked = false;
                     MuteCommand.MuteCommandInvoked = false;
                     MuteButton.MuteButtonInvoked = false;
 
-                    await context.CreateResponseAsync(new DiscordInteractionResponseBuilder()
-                        .AddEmbed(audioEmbed.StopEmbedBuilder(context))
-                        .AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
-                    
-                    if (connection.IsConnected)
-                    {
-                        await Task.Delay(TimeSpan.FromMinutes(1));
-                        await context.EditResponseAsync(
-                            new DiscordWebhookBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(context)));
-                        
-                        await connection.DisconnectAsync();
-                    }
-                    if (!connection.IsConnected)
-                    {
-                        await context.EditResponseAsync(
-                            new DiscordWebhookBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(context)));
-                    }
+                    await context.CreateResponseAsync(audioEmbed.StopEmbedBuilder(context));
                 }
             }
             else

@@ -10,8 +10,6 @@ namespace JamJunction.App.Events.Buttons;
 
 public class StopButton : IButton
 {
-    public static bool StopCommandInvoked { get; set; }
-
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs e)
     {
         var audioEmbed = new AudioPlayerEmbed();
@@ -27,7 +25,7 @@ public class StopButton : IButton
                 var userVc = member?.VoiceState?.Channel;
                 var lava = sender.GetLavalink();
                 var node = lava.ConnectedNodes.Values.First();
-                
+
                 if (member != null && (e.Channel.PermissionsFor(member) & Permissions.ManageChannels) != 0)
                 {
                     if (!lava.ConnectedNodes!.Any())
@@ -36,7 +34,7 @@ public class StopButton : IButton
                             new DiscordInteractionResponseBuilder().AddEmbed(
                                 errorEmbed.NoConnectionErrorEmbedBuilder()));
                     }
-                    
+
                     if (userVc == null || userVc.Type != ChannelType.Voice)
                     {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
@@ -62,30 +60,17 @@ public class StopButton : IButton
                     if (connection != null)
                     {
                         await connection.StopAsync();
-
-                        StopCommandInvoked = true;
+                        
                         VolumeCommand.VolumeCommandInvoked = false;
                         PlayCommand.FirstTrackOnConnection = true;
                         PlayCommand.DefaultVolume = 50;
+                        PauseCommand.PauseCommandInvoked = false;
+                        PauseButton.PauseCommandInvoked = false;
                         MuteCommand.MuteCommandInvoked = false;
                         MuteButton.MuteButtonInvoked = false;
-                        
-                        await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                            new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(e))
-                                .AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
 
-                        if (connection.IsConnected)
-                        {
-                            await Task.Delay((TimeSpan.FromMinutes(1)));
-                            await message.EditOriginalResponseAsync(
-                                new DiscordWebhookBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(e)));
-                            await connection.DisconnectAsync();
-                        }
-                        if (!connection.IsConnected)
-                        {
-                            await message.EditOriginalResponseAsync(
-                                new DiscordWebhookBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(e)));
-                        }
+                        await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                            new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(e)));
                     }
                 }
                 else
