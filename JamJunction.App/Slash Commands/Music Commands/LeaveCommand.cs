@@ -50,6 +50,7 @@ public class LeaveCommand : ApplicationCommandModule
                     PauseButton.PauseCommandInvoked = false;
                     MuteCommand.MuteCommandInvoked = false;
                     MuteButton.MuteButtonInvoked = false;
+                    PlayCommand.Queue.Clear();
                     
                     await context.CreateResponseAsync(audioEmbed.LeaveEmbedBuilder(context));
                 }

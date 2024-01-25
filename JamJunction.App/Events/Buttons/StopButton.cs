@@ -68,6 +68,7 @@ public class StopButton : IButton
                         PauseButton.PauseCommandInvoked = false;
                         MuteCommand.MuteCommandInvoked = false;
                         MuteButton.MuteButtonInvoked = false;
+                        PlayCommand.Queue.Clear();
 
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(e)));

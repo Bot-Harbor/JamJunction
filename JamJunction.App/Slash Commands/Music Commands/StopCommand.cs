@@ -56,6 +56,7 @@ public class StopCommand : ApplicationCommandModule
                     PauseButton.PauseCommandInvoked = false;
                     MuteCommand.MuteCommandInvoked = false;
                     MuteButton.MuteButtonInvoked = false;
+                    PlayCommand.Queue.Clear();
 
                     await context.CreateResponseAsync(audioEmbed.StopEmbedBuilder(context));
                 }
