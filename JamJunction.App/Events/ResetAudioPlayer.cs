@@ -19,6 +19,8 @@ public class ResetAudioPlayer
             PauseButton.PauseCommandInvoked = false;
             MuteCommand.MuteCommandInvoked = false;
             MuteButton.MuteButtonInvoked = false;
+            PlayCommand.FirstSongInTrack = true;
+            PlayCommand.Queue.Clear();
         }
     }
     
@@ -33,6 +35,8 @@ public class ResetAudioPlayer
             PauseButton.PauseCommandInvoked = false;
             MuteCommand.MuteCommandInvoked = false;
             MuteButton.MuteButtonInvoked = false;
+            PlayCommand.FirstSongInTrack = true;
+            PlayCommand.Queue.Clear();
         }
     }
 }
