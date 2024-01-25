@@ -12,6 +12,7 @@ public class PlayCommand : ApplicationCommandModule
     public static Queue<LavalinkTrack> Queue { get; set; } = new Queue<LavalinkTrack>();
     public static int DefaultVolume { get; set; } = 50;
     public static bool FirstTrackOnConnection { get; set; } = true;
+    public static bool FirstSongInTrack { get; set; } = true;
 
     [SlashCommand("play", "Queue a song.")]
     public async Task PlayAsync
@@ -64,25 +65,25 @@ public class PlayCommand : ApplicationCommandModule
                 if (connection != null)
                 {
                     Queue.Enqueue(track);
-
+                    
                     if (FirstTrackOnConnection)
                     {
                         await connection.SetVolumeAsync(DefaultVolume);
                         FirstTrackOnConnection = false;
                     }
-
-                    if (Queue.Count <= 0)
+                    
+                    if (FirstSongInTrack)
                     {
                         await context.CreateResponseAsync(
-                            new DiscordInteractionResponseBuilder(audioEmbed.CurrentSongEmbedBuilder(track, context)));
-                        Console.WriteLine(Queue.Count);
+                            new DiscordInteractionResponseBuilder(audioEmbed.SongEmbedBuilder(track, context)));
+
+                        FirstSongInTrack = false;
                     }
                     else
                     {
                         await context.CreateResponseAsync(audioEmbed.QueueEmbedBuilder(track));
-                        Console.WriteLine(Queue.Count);
                     }
-
+                    
                     if (connection.CurrentState.CurrentTrack == null)
                     {
                         await PlayNextTrack(connection, context, track);
@@ -108,24 +109,27 @@ public class PlayCommand : ApplicationCommandModule
         if (Queue.Count > 0)
         {
             var nextTrack = Queue.Dequeue();
+            
             await connection.PlayAsync(nextTrack);
 
             // If seek, pause, or restart is used, update task length accordingly
             await Task.Delay(nextTrack.Length);
-
-            // If Queue is empty, display ambient mode
-            if (Queue.Count != 0)
+            
+            if (Queue.Count == 0)
             {
-                await PlayNextTrack(connection, context, track);
-                await context.CreateResponseAsync(
-                    new DiscordInteractionResponseBuilder(audioEmbed.CurrentSongEmbedBuilder(track, context)));
-                Console.WriteLine("Current Song");
+                // Needs to create new response
+                await context.FollowUpAsync(new DiscordFollowupMessageBuilder().AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
+                
+                FirstSongInTrack = true;
             }
             else
             {
-                await context.CreateResponseAsync(audioEmbed.QueueSomethingEmbedBuilder());
-                Console.WriteLine("Queue Something");
+                // Needs to create new response
+                await context.FollowUpAsync(
+                    new DiscordFollowupMessageBuilder(audioEmbed.SongEmbedBuilder(nextTrack, context)));
             }
+
+            await PlayNextTrack(connection, context, track);
         }
     }
 }

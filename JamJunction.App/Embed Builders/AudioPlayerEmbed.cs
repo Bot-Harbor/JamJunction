@@ -9,7 +9,7 @@ namespace JamJunction.App.Embed_Builders;
 
 public class AudioPlayerEmbed
 {
-    public DiscordMessageBuilder CurrentSongEmbedBuilder(LavalinkTrack track, InteractionContext context)
+    public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, InteractionContext context)
     {
         var currentSongEmbed = new DiscordEmbedBuilder()
         {
@@ -188,8 +188,8 @@ public class AudioPlayerEmbed
     {
         var queueSomethingEmbed = new DiscordEmbedBuilder()
         {
-            Description = $"**Nothing is playing. Ambient mode enabled.**\n" +
-                          $"Please use ``/play`` command to queue something.",
+            Description = $"**Nothing is playing.**\n" +
+                          $"Please use the ``/play`` command to queue something.",
             Color = DiscordColor.Orange,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail()
             {
