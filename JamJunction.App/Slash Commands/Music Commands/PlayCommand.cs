@@ -3,7 +3,6 @@ using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
-using JamJunction.App.Events.Buttons;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
@@ -65,25 +64,18 @@ public class PlayCommand : ApplicationCommandModule
                 if (connection != null)
                 {
                     Queue.Enqueue(track);
-                    
+
                     if (FirstTrackOnConnection)
                     {
                         await connection.SetVolumeAsync(DefaultVolume);
                         FirstTrackOnConnection = false;
                     }
-                    
-                    if (FirstSongInTrack)
-                    {
-                        await context.CreateResponseAsync(
-                            new DiscordInteractionResponseBuilder(audioEmbed.SongEmbedBuilder(track, context)));
 
-                        FirstSongInTrack = false;
-                    }
-                    else
+                    if (!FirstSongInTrack)
                     {
                         await context.CreateResponseAsync(audioEmbed.QueueEmbedBuilder(track));
                     }
-                    
+
                     if (connection.CurrentState.CurrentTrack == null)
                     {
                         await PlayNextTrack(connection, context, track);
@@ -104,32 +96,40 @@ public class PlayCommand : ApplicationCommandModule
     private static async Task PlayNextTrack(LavalinkGuildConnection connection, InteractionContext context,
         LavalinkTrack track)
     {
-        var audioEmbed = new AudioPlayerEmbed();
-
         if (Queue.Count > 0)
         {
+            var audioEmbed = new AudioPlayerEmbed();
+
             var nextTrack = Queue.Dequeue();
-            
+
             await connection.PlayAsync(nextTrack);
 
-            // If seek, pause, or restart is used, update task length accordingly
-            await Task.Delay(nextTrack.Length);
-            
-            if (Queue.Count == 0)
+            if (FirstSongInTrack)
             {
-                // Needs to create new response
-                await context.FollowUpAsync(new DiscordFollowupMessageBuilder().AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
-                
-                FirstSongInTrack = true;
+                await context.CreateResponseAsync(
+                    new DiscordInteractionResponseBuilder(audioEmbed.SongEmbedBuilder(track, context)));
+
+                FirstSongInTrack = false;
             }
             else
             {
-                // Needs to create new response
                 await context.FollowUpAsync(
                     new DiscordFollowupMessageBuilder(audioEmbed.SongEmbedBuilder(nextTrack, context)));
             }
 
-            await PlayNextTrack(connection, context, track);
+            await Task.Delay(nextTrack.Length);
+
+            if (Queue.Count == 0)
+            {
+                await context.FollowUpAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
+
+                FirstSongInTrack = true;
+            }
+            else
+            {
+                await PlayNextTrack(connection, context, track);
+            }
         }
     }
 }

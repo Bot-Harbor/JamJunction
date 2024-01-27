@@ -8,8 +8,6 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class UnmuteCommand : ApplicationCommandModule
 {
-    public static bool MuteCommandInvoked { get; set; }
-
     [SlashCommand("unmute", "Unmute the volume.")]
     public async Task UnmuteCommandAsync(InteractionContext context)
     {
