@@ -32,7 +32,7 @@ public class ShuffleQueueCommand : ApplicationCommandModule
         }
     }
 
-    public void ShuffleQueue<T>(Queue<T> queue)
+    protected void ShuffleQueue<T>(Queue<T> queue)
     {
         var list = new List<T>(queue);
         var random = new Random();
