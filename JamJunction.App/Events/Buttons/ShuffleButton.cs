@@ -7,7 +7,7 @@ using JamJunction.App.Slash_Commands.Music_Commands;
 
 namespace JamJunction.App.Events.Buttons;
 
-public class ShuffleButton :  ShuffleQueueCommand, IButton
+public class ShuffleButton : ShuffleQueueCommand, IButton
 {
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs e)
     {
@@ -15,7 +15,7 @@ public class ShuffleButton :  ShuffleQueueCommand, IButton
         var audioEmbed = new AudioPlayerEmbed();
 
         var message = e.Interaction;
-        
+
         try
         {
             if (e.Interaction.Data.CustomId == "shuffle")
@@ -25,7 +25,7 @@ public class ShuffleButton :  ShuffleQueueCommand, IButton
                 if (member != null && (e.Channel.PermissionsFor(member) & Permissions.ManageChannels) != 0)
                 {
                     ShuffleQueue(PlayCommand.Queue);
-                    
+
                     await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                         new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.ShuffleQueueBuilder(e)));
                 }
