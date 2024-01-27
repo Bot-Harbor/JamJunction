@@ -360,6 +360,30 @@ public class AudioPlayerEmbed
 
         return viewQueue;
     }
+    
+    public DiscordEmbedBuilder ShuffleQueueBuilder(InteractionContext context)
+    {
+        var shuffleQueue = new DiscordEmbedBuilder()
+        {
+            Description =
+                $"🔀  • ``{context.Member.Username}`` has shuffled the queue!",
+            Color = DiscordColor.Cyan
+        };
+
+        return shuffleQueue;
+    }
+    
+    public DiscordEmbedBuilder ShuffleQueueBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var shuffleQueue = new DiscordEmbedBuilder()
+        {
+            Description =
+                $"🔀  • ``{e.User.Username}`` has shuffled the queue!",
+            Color = DiscordColor.Cyan
+        };
+
+        return shuffleQueue;
+    }
 
     // Add skipped embed: "username" has skipped "song name"
 }

@@ -303,4 +303,15 @@ public class ErrorEmbed
 
         return noLeavePermissionEmbed;
     }
+    
+    public DiscordEmbedBuilder NoShufflePermissionEmbedBuilder()
+    {
+        var noShufflePermissionEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • You do not have permission to shuffle the queue!",
+            Color = DiscordColor.Red
+        };
+
+        return noShufflePermissionEmbed;
+    }
 }
