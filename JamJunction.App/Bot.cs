@@ -102,6 +102,7 @@ public abstract class Bot
             await ButtonHandler.Execute(new ShuffleButton(), sender, args);
             await ButtonHandler.Execute(new VolumeDownButton(), sender, args);
             await ButtonHandler.Execute(new VolumeUpButton(), sender, args);
+            await ButtonHandler.Execute(new ViewQueueButton(), sender, args);
             await ButtonHandler.Execute(new MuteButton(), sender, args);
             await ButtonHandler.Execute(new RestartButton(), sender, args);
         };

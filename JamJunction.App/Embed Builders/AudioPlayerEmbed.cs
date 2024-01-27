@@ -48,17 +48,22 @@ public class AudioPlayerEmbed
 
         var volumeDownButton = new DiscordButtonComponent
         (
-            ButtonStyle.Success, "volumedown", "🔉 Volume -"
+            ButtonStyle.Success, "volumedown", "🔉 -"
         );
 
         var muteVolumeButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "mute", "🔇 Mute/Unmute"
+            ButtonStyle.Secondary, "mute", "🔇 Mute"
         );
 
         var volumeUpButton = new DiscordButtonComponent
         (
-            ButtonStyle.Success, "volumeup", "🔊 Volume +"
+            ButtonStyle.Success, "volumeup", "🔊 +"
+        );
+
+        var viewQueueButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "viewqueue", "🎶 View Queue"
         );
 
         var restartButton = new DiscordButtonComponent
@@ -74,7 +79,7 @@ public class AudioPlayerEmbed
         var buttons = new List<DiscordComponent>
         {
             pauseButton, resumeButton, skipButton, stopButton, shuffleButton,
-            volumeDownButton, volumeUpButton, muteVolumeButton, restartButton
+            volumeDownButton, volumeUpButton, muteVolumeButton, viewQueueButton, restartButton
         };
 
         var componentsRows = new List<List<DiscordComponent>>();
@@ -361,6 +366,40 @@ public class AudioPlayerEmbed
         return viewQueue;
     }
     
+    public DiscordEmbedBuilder ViewQueueBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var songQueue = PlayCommand.Queue;
+
+        var viewQueue = new DiscordEmbedBuilder()
+        {
+            Title = " 🎵  Queue List:",
+            Color = DiscordColor.Cyan,
+            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail()
+            {
+                Url = e.Guild.IconUrl
+            }
+        };
+
+        if (songQueue.Count == 0)
+        {
+            viewQueue.Description = "There are no songs currently in the queue.";
+        }
+        else
+        {
+            var i = 1;
+
+            viewQueue.Description = "• Only shows first **25** songs due to Discord's API rate limit";
+
+            foreach (var song in songQueue.Take(25))
+            {
+                viewQueue.AddField($"{i++}. {song.Title}",
+                    $"**Song Duration** (HH:MM:SS): {song.Length}");
+            }
+        }
+
+        return viewQueue;
+    }
+
     public DiscordEmbedBuilder ShuffleQueueBuilder(InteractionContext context)
     {
         var shuffleQueue = new DiscordEmbedBuilder()
@@ -372,7 +411,7 @@ public class AudioPlayerEmbed
 
         return shuffleQueue;
     }
-    
+
     public DiscordEmbedBuilder ShuffleQueueBuilder(ComponentInteractionCreateEventArgs e)
     {
         var shuffleQueue = new DiscordEmbedBuilder()
@@ -384,6 +423,6 @@ public class AudioPlayerEmbed
 
         return shuffleQueue;
     }
-
+    
     // Add skipped embed: "username" has skipped "song name"
 }
