@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel;
+using System.Text.Json;
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
+using JamJunction.App.Slash_Commands.Music_Commands;
 
 namespace JamJunction.App.Embed_Builders;
 
@@ -20,8 +22,6 @@ public class AudioPlayerEmbed
             Color = DiscordColor.Teal,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail()
             {
-                Width = 135,
-                Height = 71,
                 Url = context.Guild.IconUrl
             }
         };
@@ -267,7 +267,7 @@ public class AudioPlayerEmbed
 
         return unmuteEmbed;
     }
-    
+
     public DiscordEmbedBuilder UnmuteEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var unmuteEmbed = new DiscordEmbedBuilder()
@@ -326,4 +326,40 @@ public class AudioPlayerEmbed
 
         return leaveEmbed;
     }
+
+    public DiscordEmbedBuilder ViewQueueBuilder(InteractionContext context)
+    {
+        var songQueue = PlayCommand.Queue;
+
+        var viewQueue = new DiscordEmbedBuilder()
+        {
+            Title = " 🎵  Queue List:",
+            Color = DiscordColor.Cyan,
+            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail()
+            {
+                Url = context.Guild.IconUrl
+            }
+        };
+
+        if (songQueue.Count == 0)
+        {
+            viewQueue.Description = "There are no songs currently in the queue.";
+        }
+        else
+        {
+            var i = 1;
+
+            viewQueue.Description = "• Only shows first **25** songs due to Discord's API rate limit";
+
+            foreach (var song in songQueue.Take(25))
+            {
+                viewQueue.AddField($"{i++}. {song.Title}",
+                    $"**Song Duration** (HH:MM:SS): {song.Length}");
+            }
+        }
+
+        return viewQueue;
+    }
+
+    // Add skipped embed: "username" has skipped "song name"
 }

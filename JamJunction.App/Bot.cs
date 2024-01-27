@@ -6,6 +6,7 @@ using DSharpPlus.SlashCommands;
 using JamJunction.App.Events;
 using JamJunction.App.Events.Buttons;
 using JamJunction.App.Secrets;
+using JamJunction.App.Slash_Commands;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Microsoft.Extensions.Logging;
@@ -52,7 +53,7 @@ public abstract class Bot
             ResetAudioPlayer.UserDisconnectsPlayer(sender, args);
             return Task.CompletedTask;
         };
-        
+
         ButtonEvents();
 
         SlashCommands();
@@ -86,6 +87,8 @@ public abstract class Bot
         slashCommands.RegisterCommands<LeaveCommand>();
         slashCommands.RegisterCommands<MuteCommand>();
         slashCommands.RegisterCommands<UnmuteCommand>();
+        slashCommands.RegisterCommands<ViewQueueCommand>();
+        //slashCommands.RegisterCommands<SkipCommand>();
     }
 
     private static void ButtonEvents()
@@ -93,35 +96,11 @@ public abstract class Bot
         Client.ComponentInteractionCreated += async (sender, args) =>
         {
             await ButtonHandler.Execute(new PauseButton(), sender, args);
-        };
-
-        Client.ComponentInteractionCreated += async (sender, args) =>
-        {
             await ButtonHandler.Execute(new ResumeButton(), sender, args);
-        };
-
-        Client.ComponentInteractionCreated += async (sender, args) =>
-        {
             await ButtonHandler.Execute(new StopButton(), sender, args);
-        };
-
-        Client.ComponentInteractionCreated += async (sender, args) =>
-        {
             await ButtonHandler.Execute(new VolumeDownButton(), sender, args);
-        };
-
-        Client.ComponentInteractionCreated += async (sender, args) =>
-        {
             await ButtonHandler.Execute(new VolumeUpButton(), sender, args);
-        };
-
-        Client.ComponentInteractionCreated += async (sender, args) =>
-        {
             await ButtonHandler.Execute(new MuteButton(), sender, args);
-        };
-
-        Client.ComponentInteractionCreated += async (sender, args) =>
-        {
             await ButtonHandler.Execute(new RestartButton(), sender, args);
         };
     }
