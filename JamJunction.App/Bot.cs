@@ -89,6 +89,7 @@ public abstract class Bot
         slashCommands.RegisterCommands<UnmuteCommand>();
         slashCommands.RegisterCommands<ViewQueueCommand>();
         slashCommands.RegisterCommands<ShuffleQueueCommand>();
+        slashCommands.RegisterCommands<CurrentSongCommand>();
         //slashCommands.RegisterCommands<SkipCommand>();
     }
 

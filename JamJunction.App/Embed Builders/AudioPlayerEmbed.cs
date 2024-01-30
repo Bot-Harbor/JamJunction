@@ -26,6 +26,16 @@ public class AudioPlayerEmbed
             }
         };
 
+        var nextSongs = PlayCommand.Queue.Skip(1);
+
+        foreach (var nextSong in nextSongs.Take(1))
+        {
+            currentSongEmbed.Footer = new DiscordEmbedBuilder.EmbedFooter()
+            {
+                Text = $"Next Song: {nextSong.Title}"
+            };
+        }
+
         var pauseButton = new DiscordButtonComponent
         (
             ButtonStyle.Primary, "pause", "⏸ Pause"
@@ -334,8 +344,8 @@ public class AudioPlayerEmbed
 
     public DiscordEmbedBuilder ViewQueueBuilder(InteractionContext context)
     {
-        var songQueue = PlayCommand.Queue;
-
+        var songQueue = PlayCommand.Queue.Skip(1);
+        
         var viewQueue = new DiscordEmbedBuilder()
         {
             Title = " 🎵  Queue List:",
@@ -345,8 +355,8 @@ public class AudioPlayerEmbed
                 Url = context.Guild.IconUrl
             }
         };
-
-        if (songQueue.Count == 0)
+        
+        if (!songQueue.ToList().Any())
         {
             viewQueue.Description = "There are no songs currently in the queue.";
         }
@@ -365,10 +375,10 @@ public class AudioPlayerEmbed
 
         return viewQueue;
     }
-    
+
     public DiscordEmbedBuilder ViewQueueBuilder(ComponentInteractionCreateEventArgs e)
     {
-        var songQueue = PlayCommand.Queue;
+        var songQueue = PlayCommand.Queue.Skip(1);
 
         var viewQueue = new DiscordEmbedBuilder()
         {
@@ -380,7 +390,7 @@ public class AudioPlayerEmbed
             }
         };
 
-        if (songQueue.Count == 0)
+        if (!songQueue.ToList().Any())
         {
             viewQueue.Description = "There are no songs currently in the queue.";
         }
@@ -423,6 +433,5 @@ public class AudioPlayerEmbed
 
         return shuffleQueue;
     }
-    
     // Add skipped embed: "username" has skipped "song name"
 }

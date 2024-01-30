@@ -78,7 +78,7 @@ public class PlayCommand : ApplicationCommandModule
 
                     if (connection.CurrentState.CurrentTrack == null)
                     {
-                        await PlayNextTrack(connection, context, track);
+                        await PlayNextTrack(connection, context);
                     }
                 }
             }
@@ -93,32 +93,36 @@ public class PlayCommand : ApplicationCommandModule
         }
     }
 
-    private static async Task PlayNextTrack(LavalinkGuildConnection connection, InteractionContext context,
-        LavalinkTrack track)
+    private static async Task PlayNextTrack(LavalinkGuildConnection connection, InteractionContext context)
     {
         if (Queue.Count > 0)
         {
             var audioEmbed = new AudioPlayerEmbed();
 
-            var nextTrack = Queue.Dequeue();
+            var nextTrackInQueue = Queue.Peek();
 
-            await connection.PlayAsync(nextTrack);
+            // Stops playing after 4-5 songs
+            await connection.PlayAsync(nextTrackInQueue);
 
             if (FirstSongInTrack)
             {
                 await context.CreateResponseAsync(
-                    new DiscordInteractionResponseBuilder(audioEmbed.SongEmbedBuilder(track, context)));
+                    new DiscordInteractionResponseBuilder(audioEmbed.SongEmbedBuilder(nextTrackInQueue, context)));
 
                 FirstSongInTrack = false;
             }
             else
             {
+                // May be a limitation on wait time for follow up response
+                // May need to create a new response
                 await context.FollowUpAsync(
-                    new DiscordFollowupMessageBuilder(audioEmbed.SongEmbedBuilder(nextTrack, context)));
+                    new DiscordFollowupMessageBuilder(audioEmbed.SongEmbedBuilder(nextTrackInQueue, context)));
             }
 
-            await Task.Delay(nextTrack.Length);
+            await Task.Delay(nextTrackInQueue.Length);
 
+            Queue.Dequeue();
+            
             if (Queue.Count == 0)
             {
                 await context.FollowUpAsync(
@@ -128,7 +132,7 @@ public class PlayCommand : ApplicationCommandModule
             }
             else
             {
-                await PlayNextTrack(connection, context, track);
+                await PlayNextTrack(connection, context);
             }
         }
     }
