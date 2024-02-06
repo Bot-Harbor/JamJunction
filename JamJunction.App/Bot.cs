@@ -1,12 +1,10 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Lavalink;
-using DSharpPlus.Lavalink.EventArgs;
 using DSharpPlus.Net;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events;
 using JamJunction.App.Events.Buttons;
 using JamJunction.App.Secrets;
-using JamJunction.App.Slash_Commands;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Microsoft.Extensions.Logging;
@@ -54,19 +52,19 @@ public abstract class Bot
             return Task.CompletedTask;
         };
 
-        ButtonEvents();
-
-        SlashCommands();
-
         var lavaLink = Client.UseLavalink();
         lavaLink.NodeDisconnected += (sender, args) =>
         {
             ResetAudioPlayer.NodeDisconnected(sender, args);
             return Task.CompletedTask;
         };
-
+        
         await Client.ConnectAsync();
         await lavaLink.ConnectAsync(lavaLinkConfig);
+
+        ButtonEvents();
+
+        SlashCommands();
 
         await Task.Delay(-1);
     }
@@ -90,7 +88,7 @@ public abstract class Bot
         slashCommands.RegisterCommands<ViewQueueCommand>();
         slashCommands.RegisterCommands<ShuffleQueueCommand>();
         slashCommands.RegisterCommands<CurrentSongCommand>();
-        //slashCommands.RegisterCommands<SkipCommand>();
+        slashCommands.RegisterCommands<SkipCommand>();
     }
 
     private static void ButtonEvents()
@@ -106,6 +104,7 @@ public abstract class Bot
             await ButtonHandler.Execute(new ViewQueueButton(), sender, args);
             await ButtonHandler.Execute(new MuteButton(), sender, args);
             await ButtonHandler.Execute(new RestartButton(), sender, args);
+            await ButtonHandler.Execute(new SkipButton(), sender, args);
         };
     }
 }

@@ -121,6 +121,117 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
+    
+    public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, ComponentInteractionCreateEventArgs e)
+    {
+        var currentSongEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"💿  •  **Now playing**: {track.Title}\n" +
+                          $"🎙️  •  **Artist**: {track.Author}\n" +
+                          $"🔗  •  **Link:** {track.Uri.AbsoluteUri}\n" +
+                          $"⌛  •  **Song Duration** (HH:MM:SS): {track.Length}",
+            Color = DiscordColor.Teal,
+            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail()
+            {
+                Url = e.Guild.IconUrl
+            }
+        };
+
+        var nextSongs = PlayCommand.Queue.Skip(1);
+
+        foreach (var nextSong in nextSongs.Take(1))
+        {
+            currentSongEmbed.Footer = new DiscordEmbedBuilder.EmbedFooter()
+            {
+                Text = $"Next Song: {nextSong.Title}"
+            };
+        }
+
+        var pauseButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "pause", "⏸ Pause"
+        );
+
+        var resumeButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "resume", "▶️ Resume"
+        );
+
+        var skipButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "skip", "⏭ Skip"
+        );
+
+        var stopButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Danger, "stop", "⬜ Stop"
+        );
+
+        var volumeDownButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "volumedown", "🔉 -"
+        );
+
+        var muteVolumeButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Secondary, "mute", "🔇 Mute"
+        );
+
+        var volumeUpButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "volumeup", "🔊 +"
+        );
+
+        var viewQueueButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "viewqueue", "🎶 View Queue"
+        );
+
+        var restartButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "restart", "🔁 Restart"
+        );
+
+        var shuffleButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "shuffle", "🔀 Shuffle"
+        );
+
+        var buttons = new List<DiscordComponent>
+        {
+            pauseButton, resumeButton, skipButton, stopButton, shuffleButton,
+            volumeDownButton, volumeUpButton, muteVolumeButton, viewQueueButton, restartButton
+        };
+
+        var componentsRows = new List<List<DiscordComponent>>();
+        var currentRow = new List<DiscordComponent>();
+
+        foreach (var button in buttons)
+        {
+            if (currentRow.Count == 5)
+            {
+                componentsRows.Add(currentRow);
+                currentRow = new List<DiscordComponent>();
+            }
+
+            currentRow.Add(button);
+        }
+
+        if (currentRow.Count > 0)
+        {
+            componentsRows.Add(currentRow);
+        }
+
+        var messageBuilder = new DiscordMessageBuilder();
+        messageBuilder.AddEmbed(currentSongEmbed);
+
+        foreach (var row in componentsRows)
+        {
+            messageBuilder.AddComponents(row);
+        }
+
+        return messageBuilder;
+    }
 
     public DiscordEmbedBuilder QueueEmbedBuilder(LavalinkTrack track)
     {
