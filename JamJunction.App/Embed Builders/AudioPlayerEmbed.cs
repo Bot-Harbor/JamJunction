@@ -433,5 +433,4 @@ public class AudioPlayerEmbed
 
         return shuffleQueue;
     }
-    // Add skipped embed: "username" has skipped "song name"
 }

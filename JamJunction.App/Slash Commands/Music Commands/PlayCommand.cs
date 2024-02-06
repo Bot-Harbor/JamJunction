@@ -100,7 +100,7 @@ public class PlayCommand : ApplicationCommandModule
             var audioEmbed = new AudioPlayerEmbed();
 
             var nextTrackInQueue = Queue.Peek();
-
+            
             // Stops playing after 4-5 songs
             await connection.PlayAsync(nextTrackInQueue);
 

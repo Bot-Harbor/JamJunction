@@ -314,4 +314,38 @@ public class ErrorEmbed
 
         return noShufflePermissionEmbed;
     }
+
+    
+    public DiscordEmbedBuilder NoSkipPermissionEmbedBuilder()
+    {
+        var noSkipPermissionEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • You do not have permission to skip a song!",
+            Color = DiscordColor.Red
+        };
+
+        return noSkipPermissionEmbed;
+    }
+    
+    public DiscordEmbedBuilder NoSongsToSkipEmbedBuilder(InteractionContext context)
+    {
+        var noSongsToSkipEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🎵 • There are no songs to skip ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return noSongsToSkipEmbed;
+    }
+    
+    public DiscordEmbedBuilder NoSongsToSkipEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var noSongsToSkipEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🎵 • There are no songs to skip ``{e.User.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return noSongsToSkipEmbed;
+    }
 }
