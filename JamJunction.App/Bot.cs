@@ -89,6 +89,7 @@ public abstract class Bot
         slashCommands.RegisterCommands<ShuffleQueueCommand>();
         slashCommands.RegisterCommands<CurrentSongCommand>();
         slashCommands.RegisterCommands<SkipCommand>();
+        slashCommands.RegisterCommands<HelpCommand>();
     }
 
     private static void ButtonEvents()
