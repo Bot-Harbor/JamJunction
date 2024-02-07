@@ -331,7 +331,7 @@ public class ErrorEmbed
     {
         var noSongsToSkipEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • There are no songs to skip ``{context.Member.Username}``!",
+            Description = $"🎵 • There are no songs to skip to ``{context.Member.Username}``!",
             Color = DiscordColor.Red
         };
 
@@ -342,7 +342,7 @@ public class ErrorEmbed
     {
         var noSongsToSkipEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • There are no songs to skip ``{e.User.Username}``!",
+            Description = $"🎵 • There are no songs to skip to ``{e.User.Username}``!",
             Color = DiscordColor.Red
         };
 

@@ -13,12 +13,14 @@ public class AudioPlayerEmbed
 {
     public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, InteractionContext context)
     {
+        var currentTrack = PlayCommand.CurrentSongData;
+        
         var currentSongEmbed = new DiscordEmbedBuilder()
         {
-            Description = $"💿  •  **Now playing**: {track.Title}\n" +
-                          $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"🔗  •  **Link:** {track.Uri.AbsoluteUri}\n" +
-                          $"⌛  •  **Song Duration** (HH:MM:SS): {track.Length}",
+            Description = $"💿  •  **Now playing**: {currentTrack.Title}\n" +
+                          $"🎙️  •  **Artist**: {currentTrack.Author}\n" +
+                          $"🔗  •  **Link:** {currentTrack.Uri.AbsoluteUri}\n" +
+                          $"⌛  •  **Song Duration** (HH:MM:SS): {currentTrack.Length}",
             Color = DiscordColor.Teal,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail()
             {
@@ -26,7 +28,7 @@ public class AudioPlayerEmbed
             }
         };
 
-        var nextSongs = PlayCommand.Queue.Skip(1);
+        var nextSongs = PlayCommand.Queue;
 
         foreach (var nextSong in nextSongs.Take(1))
         {
@@ -124,12 +126,14 @@ public class AudioPlayerEmbed
     
     public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, ComponentInteractionCreateEventArgs e)
     {
+        var currentTrack = PlayCommand.CurrentSongData;
+        
         var currentSongEmbed = new DiscordEmbedBuilder()
         {
-            Description = $"💿  •  **Now playing**: {track.Title}\n" +
-                          $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"🔗  •  **Link:** {track.Uri.AbsoluteUri}\n" +
-                          $"⌛  •  **Song Duration** (HH:MM:SS): {track.Length}",
+            Description = $"💿  •  **Now playing**: {currentTrack.Title}\n" +
+                          $"🎙️  •  **Artist**: {currentTrack.Author}\n" +
+                          $"🔗  •  **Link:** {currentTrack.Uri.AbsoluteUri}\n" +
+                          $"⌛  •  **Song Duration** (HH:MM:SS): {currentTrack.Length}",
             Color = DiscordColor.Teal,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail()
             {
@@ -455,7 +459,7 @@ public class AudioPlayerEmbed
 
     public DiscordEmbedBuilder ViewQueueBuilder(InteractionContext context)
     {
-        var songQueue = PlayCommand.Queue.Skip(1);
+        var songQueue = PlayCommand.Queue;
         
         var viewQueue = new DiscordEmbedBuilder()
         {
@@ -489,7 +493,7 @@ public class AudioPlayerEmbed
 
     public DiscordEmbedBuilder ViewQueueBuilder(ComponentInteractionCreateEventArgs e)
     {
-        var songQueue = PlayCommand.Queue.Skip(1);
+        var songQueue = PlayCommand.Queue;
 
         var viewQueue = new DiscordEmbedBuilder()
         {

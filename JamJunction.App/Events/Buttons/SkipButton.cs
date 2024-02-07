@@ -12,11 +12,11 @@ public class SkipButton : IButton
 {
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs e)
     {
-         var audioEmbed = new AudioPlayerEmbed();
+        var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
 
         var message = e.Interaction;
-
+        
         try
         {
             if (e.Interaction.Data.CustomId == "skip")
@@ -25,7 +25,7 @@ public class SkipButton : IButton
                 var userVc = member?.VoiceState?.Channel;
                 var lava = sender.GetLavalink();
                 var node = lava.ConnectedNodes.Values.First();
-                
+
                 if (member != null && (e.Channel.PermissionsFor(member) & Permissions.ManageChannels) != 0)
                 {
                     if (!lava.ConnectedNodes!.Any())
@@ -34,7 +34,7 @@ public class SkipButton : IButton
                             new DiscordInteractionResponseBuilder().AddEmbed(
                                 errorEmbed.NoConnectionErrorEmbedBuilder()));
                     }
-                    
+
                     if (userVc == null || userVc.Type != ChannelType.Voice)
                     {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
@@ -59,21 +59,23 @@ public class SkipButton : IButton
 
                     if (connection != null)
                     {
-                        if (PlayCommand.Queue.Count != 1)
+                        if (PlayCommand.Queue.Count != 0)
                         {
-                            PlayCommand.Queue.Dequeue();
-                            
                             var nextTrackInQueue = PlayCommand.Queue.Peek();
+                            
+                            PlayCommand.Queue.Dequeue();
 
                             await connection.PlayAsync(nextTrackInQueue);
 
                             await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                                new DiscordInteractionResponseBuilder(audioEmbed.SongEmbedBuilder(nextTrackInQueue, e)));
+                                new DiscordInteractionResponseBuilder(
+                                    audioEmbed.SongEmbedBuilder(nextTrackInQueue, e)));
                         }
                         else
                         {
                             await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                                new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.NoSongsToSkipEmbedBuilder(e)));
+                                new DiscordInteractionResponseBuilder().AddEmbed(
+                                    errorEmbed.NoSongsToSkipEmbedBuilder(e)));
                         }
                     }
                 }

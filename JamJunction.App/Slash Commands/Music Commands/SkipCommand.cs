@@ -46,11 +46,11 @@ public class SkipCommand : ApplicationCommandModule
 
                 if (connection != null)
                 {
-                    if (PlayCommand.Queue.Count != 1)
+                    if (PlayCommand.Queue.Count != 0)
                     {
-                        PlayCommand.Queue.Dequeue();
-
                         var nextTrackInQueue = PlayCommand.Queue.Peek();
+                        
+                        PlayCommand.Queue.Dequeue();
 
                         await connection.PlayAsync(nextTrackInQueue);
 

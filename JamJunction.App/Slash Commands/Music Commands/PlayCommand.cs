@@ -9,6 +9,7 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 public class PlayCommand : ApplicationCommandModule
 {
     public static Queue<LavalinkTrack> Queue { get; set; } = new Queue<LavalinkTrack>();
+    public static LavalinkTrack CurrentSongData { get; set; } = new LavalinkTrack();
     public static int DefaultVolume { get; set; } = 50;
     public static bool FirstTrackOnConnection { get; set; } = true;
     public static bool FirstSongInTrack { get; set; } = true;
@@ -95,13 +96,14 @@ public class PlayCommand : ApplicationCommandModule
 
     private static async Task PlayNextTrack(LavalinkGuildConnection connection, InteractionContext context)
     {
+        var audioEmbed = new AudioPlayerEmbed();
+
         if (Queue.Count > 0)
         {
-            var audioEmbed = new AudioPlayerEmbed();
+            CurrentSongData = Queue.Peek();
 
-            var nextTrackInQueue = Queue.Peek();
-            
-            // Stops playing after 4-5 songs
+            var nextTrackInQueue = Queue.Dequeue();
+
             await connection.PlayAsync(nextTrackInQueue);
 
             if (FirstSongInTrack)
@@ -113,27 +115,21 @@ public class PlayCommand : ApplicationCommandModule
             }
             else
             {
-                // May be a limitation on wait time for follow up response
-                // May need to create a new response
                 await context.FollowUpAsync(
                     new DiscordFollowupMessageBuilder(audioEmbed.SongEmbedBuilder(nextTrackInQueue, context)));
             }
 
+            // Remove once placed in "playbackfinished" event method
             await Task.Delay(nextTrackInQueue.Length);
 
-            Queue.Dequeue();
-            
-            if (Queue.Count == 0)
-            {
-                await context.FollowUpAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
+            await PlayNextTrack(connection, context);
+        }
+        else
+        {
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
 
-                FirstSongInTrack = true;
-            }
-            else
-            {
-                await PlayNextTrack(connection, context);
-            }
+            FirstSongInTrack = true;
         }
     }
 }

@@ -44,7 +44,7 @@ public class CurrentSongCommand : ApplicationCommandModule
 
             if (connection != null)
             {
-                var currentSong = PlayCommand.Queue.Peek();
+                var currentSong = PlayCommand.CurrentSongData;
 
                 await context.CreateResponseAsync(
                     new DiscordInteractionResponseBuilder(audioEmbed.SongEmbedBuilder(currentSong, context)));
