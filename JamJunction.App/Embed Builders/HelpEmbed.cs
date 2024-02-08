@@ -16,6 +16,7 @@ public class HelpEmbed
         var serverCount = context.Client.Guilds.Count;
         var shardCount = context.Client.ShardCount;
         var ping = context.Client.Ping;
+        var botVersion = context.Client.VersionString.Substring(0, 5);
 
         var helpEmbed = new DiscordEmbedBuilder
         {
@@ -44,7 +45,7 @@ public class HelpEmbed
                         $"Total Servers: {serverCount}  •  " +
                         $"Shard: {shardCount}  •  " +
                         $"Ping: {ping}  •  " +
-                        $"Version: 1.0.0")
+                        $"Version: {botVersion}")
             },
         };
 
