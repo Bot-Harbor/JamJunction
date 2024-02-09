@@ -8,6 +8,19 @@ namespace JamJunction.App.Events;
 
 public class ResetAudioPlayer
 {
+    public static void GeneralReset()
+    {
+        VolumeCommand.VolumeCommandInvoked = false;
+        PlayCommand.FirstTrackOnConnection = true;
+        PlayCommand.DefaultVolume = 50;
+        PauseCommand.PauseCommandInvoked = false;
+        PauseButton.PauseCommandInvoked = false;
+        MuteCommand.MuteCommandInvoked = false;
+        MuteButton.MuteButtonInvoked = false;
+        PlayCommand.FirstSongInTrack = true;
+        PlayCommand.Queue.Clear();
+    }
+    
     public static void UserDisconnectsPlayer(object sender, VoiceStateUpdateEventArgs e)
     {
         if (e.User == Bot.Client.CurrentUser)

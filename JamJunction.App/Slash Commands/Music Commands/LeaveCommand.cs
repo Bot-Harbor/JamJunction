@@ -2,6 +2,7 @@
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
+using JamJunction.App.Events;
 using JamJunction.App.Events.Buttons;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
@@ -43,15 +44,7 @@ public class LeaveCommand : ApplicationCommandModule
                 {
                     await connection.DisconnectAsync();
                     
-                    VolumeCommand.VolumeCommandInvoked = false;
-                    PlayCommand.FirstTrackOnConnection = true;
-                    PlayCommand.DefaultVolume = 50;
-                    PauseCommand.PauseCommandInvoked = false;
-                    PauseButton.PauseCommandInvoked = false;
-                    MuteCommand.MuteCommandInvoked = false;
-                    MuteButton.MuteButtonInvoked = false;
-                    PlayCommand.FirstSongInTrack = true;
-                    PlayCommand.Queue.Clear();
+                    ResetAudioPlayer.GeneralReset();
                     
                     await context.CreateResponseAsync(audioEmbed.LeaveEmbedBuilder(context));
                 }

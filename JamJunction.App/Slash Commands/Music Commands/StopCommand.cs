@@ -3,6 +3,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
+using JamJunction.App.Events;
 using JamJunction.App.Events.Buttons;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
@@ -49,17 +50,8 @@ public class StopCommand : ApplicationCommandModule
                 {
                     await connection.StopAsync();
                     
-                    VolumeCommand.VolumeCommandInvoked = false;
-                    PlayCommand.FirstTrackOnConnection = true;
-                    PlayCommand.DefaultVolume = 50;
-                    PauseCommand.PauseCommandInvoked = false;
-                    PauseButton.PauseCommandInvoked = false;
-                    MuteCommand.MuteCommandInvoked = false;
-                    MuteButton.MuteButtonInvoked = false;
-                    PlayCommand.FirstSongInTrack = true;
-                    PlayCommand.Queue.Clear();
+                    ResetAudioPlayer.GeneralReset();
                     
-
                     await context.CreateResponseAsync(audioEmbed.StopEmbedBuilder(context));
                 }
             }

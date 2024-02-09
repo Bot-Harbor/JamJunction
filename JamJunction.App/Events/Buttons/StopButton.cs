@@ -61,15 +61,7 @@ public class StopButton : IButton
                     {
                         await connection.StopAsync();
                         
-                        VolumeCommand.VolumeCommandInvoked = false;
-                        PlayCommand.FirstTrackOnConnection = true;
-                        PlayCommand.DefaultVolume = 50;
-                        PauseCommand.PauseCommandInvoked = false;
-                        PauseButton.PauseCommandInvoked = false;
-                        MuteCommand.MuteCommandInvoked = false;
-                        MuteButton.MuteButtonInvoked = false;
-                        PlayCommand.FirstSongInTrack = true;
-                        PlayCommand.Queue.Clear();
+                        ResetAudioPlayer.GeneralReset();
 
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(e)));
