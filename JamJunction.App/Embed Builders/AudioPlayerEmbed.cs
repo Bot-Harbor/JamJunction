@@ -139,7 +139,7 @@ public class AudioPlayerEmbed
             }
         };
 
-        var nextSongs = PlayCommand.Queue.Skip(1);
+        var nextSongs = PlayCommand.Queue;
 
         foreach (var nextSong in nextSongs.Take(1))
         {

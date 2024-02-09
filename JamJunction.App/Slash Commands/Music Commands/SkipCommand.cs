@@ -55,7 +55,7 @@ public class SkipCommand : ApplicationCommandModule
                         var nextTrackInQueue = PlayCommand.Queue.Dequeue();
 
                         await connection.PlayAsync(nextTrackInQueue);
-
+                        
                         await context.CreateResponseAsync(
                             new DiscordInteractionResponseBuilder(
                                 audioEmbed.SongEmbedBuilder(nextTrackInQueue, context)));
