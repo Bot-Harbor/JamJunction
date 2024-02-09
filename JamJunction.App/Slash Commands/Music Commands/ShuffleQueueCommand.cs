@@ -16,9 +16,16 @@ public class ShuffleQueueCommand : ApplicationCommandModule
         {
             if (context.Member != null && (context.Member.Permissions & Permissions.ManageChannels) != 0)
             {
-                ShuffleQueue(PlayCommand.Queue);
+                if (PlayCommand.Queue.Count != 0)
+                {
+                    ShuffleQueue(PlayCommand.Queue);
 
-                await context.CreateResponseAsync(audioEmbed.ShuffleQueueBuilder(context));
+                    await context.CreateResponseAsync(audioEmbed.ShuffleQueueBuilder(context));
+                }
+                else
+                {
+                    await context.CreateResponseAsync(errorEmbed.QueueIsEmptyEmbedBuilder(context));
+                }
             }
             else
             {

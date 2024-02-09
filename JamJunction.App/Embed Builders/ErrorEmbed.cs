@@ -348,4 +348,26 @@ public class ErrorEmbed
 
         return noSongsToSkipEmbed;
     }
+    
+    public DiscordEmbedBuilder QueueIsEmptyEmbedBuilder(InteractionContext context)
+    {
+        var noSongsToSkipEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🎶 • There are no songs in the queue to shuffle ``{context.User.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return noSongsToSkipEmbed;
+    }
+    
+    public DiscordEmbedBuilder QueueIsEmptyEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var noSongsToSkipEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🎶 • There are no songs in the queue to shuffle ``{e.User.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return noSongsToSkipEmbed;
+    }
 }

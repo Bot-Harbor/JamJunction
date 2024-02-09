@@ -1,4 +1,5 @@
-﻿using DSharpPlus;
+﻿using System.Collections;
+using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Embed_Builders;
@@ -24,10 +25,18 @@ public class ShuffleButton : ShuffleQueueCommand, IButton
 
                 if (member != null && (e.Channel.PermissionsFor(member) & Permissions.ManageChannels) != 0)
                 {
-                    ShuffleQueue(PlayCommand.Queue);
+                    if (PlayCommand.Queue.Count != 0)
+                    {
+                        ShuffleQueue(PlayCommand.Queue);
 
-                    await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                        new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.ShuffleQueueBuilder(e)));
+                        await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                            new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.ShuffleQueueBuilder(e)));
+                    }
+                    else
+                    {
+                        await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                            new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.QueueIsEmptyEmbedBuilder(e)));
+                    }
                 }
                 else
                 {
