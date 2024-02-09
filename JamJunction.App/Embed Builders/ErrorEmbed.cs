@@ -37,7 +37,6 @@ public class ErrorEmbed
         };
 
         return voiceChannelErrorEmbed;
-        
     }
 
     public DiscordEmbedBuilder NoConnectionErrorEmbedBuilder()
@@ -149,7 +148,7 @@ public class ErrorEmbed
 
         return maxVolumeEmbed;
     }
-    
+
     public DiscordEmbedBuilder MaxVolumeEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var maxVolumeEmbed = new DiscordEmbedBuilder()
@@ -171,7 +170,7 @@ public class ErrorEmbed
 
         return minVolumeEmbed;
     }
-    
+
     public DiscordEmbedBuilder MinVolumeEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var minVolumeEmbed = new DiscordEmbedBuilder()
@@ -193,7 +192,7 @@ public class ErrorEmbed
 
         return noVolumeWhilePausedEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoSeekPermissionEmbedBuilder()
     {
         var noSeekPermissionEmbed = new DiscordEmbedBuilder
@@ -204,18 +203,19 @@ public class ErrorEmbed
 
         return noSeekPermissionEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoSeekWhilePausedEmbedBuilder(InteractionContext context)
     {
         var noSeekWhilePausedEmbed = new DiscordEmbedBuilder()
         {
-            Description = $"⌛  •  You cannot change the song position while the player is paused ``{context.Member.Username}``!",
+            Description =
+                $"⌛  •  You cannot change the song position while the player is paused ``{context.Member.Username}``!",
             Color = DiscordColor.Red
         };
 
         return noSeekWhilePausedEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoMuteWhilePausedEmbedBuilder(InteractionContext context)
     {
         var noMuteWhilePausedEmbed = new DiscordEmbedBuilder()
@@ -226,7 +226,7 @@ public class ErrorEmbed
 
         return noMuteWhilePausedEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoMuteWhilePausedEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var noMuteWhilePausedEmbed = new DiscordEmbedBuilder()
@@ -237,7 +237,7 @@ public class ErrorEmbed
 
         return noMuteWhilePausedEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoUnMuteWhilePausedEmbedBuilder(InteractionContext context)
     {
         var noUnMuteWhilePausedEmbed = new DiscordEmbedBuilder()
@@ -248,7 +248,7 @@ public class ErrorEmbed
 
         return noUnMuteWhilePausedEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoUnMuteWhilePausedEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var noUnMuteWhilePausedEmbed = new DiscordEmbedBuilder()
@@ -259,7 +259,7 @@ public class ErrorEmbed
 
         return noUnMuteWhilePausedEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoRestartPermissionEmbedBuilder()
     {
         var noRestartPermissionEmbed = new DiscordEmbedBuilder
@@ -270,7 +270,7 @@ public class ErrorEmbed
 
         return noRestartPermissionEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoRestartWithPausedEmbedBuilder(InteractionContext context)
     {
         var noRestartWhilePausedEmbed = new DiscordEmbedBuilder()
@@ -281,7 +281,7 @@ public class ErrorEmbed
 
         return noRestartWhilePausedEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoRestartWithPausedEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var noRestartWhilePausedEmbed = new DiscordEmbedBuilder()
@@ -292,7 +292,7 @@ public class ErrorEmbed
 
         return noRestartWhilePausedEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoLeavePermissionEmbedBuilder()
     {
         var noLeavePermissionEmbed = new DiscordEmbedBuilder
@@ -303,7 +303,7 @@ public class ErrorEmbed
 
         return noLeavePermissionEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoShufflePermissionEmbedBuilder()
     {
         var noShufflePermissionEmbed = new DiscordEmbedBuilder
@@ -315,7 +315,7 @@ public class ErrorEmbed
         return noShufflePermissionEmbed;
     }
 
-    
+
     public DiscordEmbedBuilder NoSkipPermissionEmbedBuilder()
     {
         var noSkipPermissionEmbed = new DiscordEmbedBuilder
@@ -326,7 +326,7 @@ public class ErrorEmbed
 
         return noSkipPermissionEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoSongsToSkipEmbedBuilder(InteractionContext context)
     {
         var noSongsToSkipEmbed = new DiscordEmbedBuilder
@@ -337,7 +337,7 @@ public class ErrorEmbed
 
         return noSongsToSkipEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoSongsToSkipEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var noSongsToSkipEmbed = new DiscordEmbedBuilder
@@ -348,26 +348,50 @@ public class ErrorEmbed
 
         return noSongsToSkipEmbed;
     }
-    
+
     public DiscordEmbedBuilder QueueIsEmptyEmbedBuilder(InteractionContext context)
     {
-        var noSongsToSkipEmbed = new DiscordEmbedBuilder
+        var queueIsEmptyEmbed = new DiscordEmbedBuilder
         {
             Description = $"🎶 • There are no songs in the queue to shuffle ``{context.User.Username}``!",
             Color = DiscordColor.Red
         };
 
-        return noSongsToSkipEmbed;
+        return queueIsEmptyEmbed;
     }
-    
+
     public DiscordEmbedBuilder QueueIsEmptyEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
-        var noSongsToSkipEmbed = new DiscordEmbedBuilder
+        var queueIsEmptyEmbed = new DiscordEmbedBuilder
         {
             Description = $"🎶 • There are no songs in the queue to shuffle ``{e.User.Username}``!",
             Color = DiscordColor.Red
         };
 
-        return noSongsToSkipEmbed;
+        return queueIsEmptyEmbed;
     }
+
+    public DiscordEmbedBuilder TrackFailedToLoadEmbedBuilder()
+    {
+        var trackFailedToLoadEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • Track failed to load! Reattempting to connect in 5 seconds.",
+            Color = DiscordColor.Red
+        };
+
+        return trackFailedToLoadEmbed;
+    }
+    
+    public DiscordEmbedBuilder CouldNotLoadTrackOnAttemptEmbedBuilder()
+    {
+        var couldNotLoadOnAttemptTrackEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • Attempt to load track again failed! The audio player has been reset.",
+            Color = DiscordColor.Red
+        };
+
+        return couldNotLoadOnAttemptTrackEmbed;
+    }
+    
+    // Add trackstuck embed. Restart song
 }
