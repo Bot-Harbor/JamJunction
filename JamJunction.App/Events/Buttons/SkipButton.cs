@@ -16,7 +16,7 @@ public class SkipButton : IButton
         var errorEmbed = new ErrorEmbed();
 
         var message = e.Interaction;
-        
+
         try
         {
             if (e.Interaction.Data.CustomId == "skip")
@@ -61,9 +61,11 @@ public class SkipButton : IButton
                     {
                         if (PlayCommand.Queue.Count != 0)
                         {
-                            var nextTrackInQueue = PlayCommand.Queue.Peek();
-                            
-                            PlayCommand.Queue.Dequeue();
+                            var queue = PlayCommand.Queue;
+
+                            PlayCommand.CurrentSongData = queue.Peek();
+
+                            var nextTrackInQueue = PlayCommand.Queue.Dequeue();
 
                             await connection.PlayAsync(nextTrackInQueue);
 
