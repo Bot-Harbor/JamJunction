@@ -65,6 +65,8 @@ public abstract class Bot
         var nodeConnection = lavaLink.GetNodeConnection(endpoint);
         nodeConnection.PlaybackFinished += PlayBackFinished.PlayBackFinishedAsync;
 
+        nodeConnection.TrackStuck += TrackStuck.TrackStuckAsync;
+        
         ButtonEvents();
         SlashCommands();
 
