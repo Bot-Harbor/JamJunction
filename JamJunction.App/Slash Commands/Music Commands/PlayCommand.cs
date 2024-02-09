@@ -8,7 +8,7 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class PlayCommand : ApplicationCommandModule
 {
-    public static InteractionContext Context { get; set; }
+    public static ulong ChannelId { get; set; }
     public static Queue<LavalinkTrack> Queue { get; set; } = new Queue<LavalinkTrack>();
     public static LavalinkTrack CurrentSongData { get; set; } = new LavalinkTrack();
     public static int DefaultVolume { get; set; } = 50;
@@ -25,9 +25,7 @@ public class PlayCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
-
-        Context = context;
-
+        
         try
         {
             var userVc = context.Member?.VoiceState?.Channel;
@@ -81,6 +79,7 @@ public class PlayCommand : ApplicationCommandModule
 
                         var nextTrackInQueue = Queue.Dequeue();
 
+                        ChannelId = context.Channel.Id;
                         FirstSongInTrack = false;
 
                         await connection.PlayAsync(track);

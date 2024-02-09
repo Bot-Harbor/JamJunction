@@ -58,12 +58,14 @@ public abstract class Bot
             ResetAudioPlayer.NodeDisconnected(sender, args);
             return Task.CompletedTask;
         };
-        
+
         await Client.ConnectAsync();
         await lavaLink.ConnectAsync(lavaLinkConfig);
 
-        ButtonEvents();
+        var nodeConnection = lavaLink.GetNodeConnection(endpoint);
+        nodeConnection.PlaybackFinished += PlayBackFinished.PlayBackFinishedAsync;
 
+        ButtonEvents();
         SlashCommands();
 
         await Task.Delay(-1);
