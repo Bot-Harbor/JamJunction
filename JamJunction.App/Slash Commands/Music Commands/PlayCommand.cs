@@ -8,6 +8,7 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class PlayCommand : ApplicationCommandModule
 {
+    public static InteractionContext Context { get; set; }
     public static Queue<LavalinkTrack> Queue { get; set; } = new Queue<LavalinkTrack>();
     public static LavalinkTrack CurrentSongData { get; set; } = new LavalinkTrack();
     public static int DefaultVolume { get; set; } = 50;
@@ -24,6 +25,8 @@ public class PlayCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
+
+        Context = context;
 
         try
         {
@@ -72,14 +75,23 @@ public class PlayCommand : ApplicationCommandModule
                         FirstTrackOnConnection = false;
                     }
 
-                    if (!FirstSongInTrack)
+                    if (FirstSongInTrack)
+                    {
+                        CurrentSongData = Queue.Peek();
+
+                        var nextTrackInQueue = Queue.Dequeue();
+
+                        FirstSongInTrack = false;
+
+                        await connection.PlayAsync(track);
+
+                        await context.CreateResponseAsync(
+                            new DiscordInteractionResponseBuilder(
+                                audioEmbed.SongEmbedBuilder(nextTrackInQueue, context)));
+                    }
+                    else
                     {
                         await context.CreateResponseAsync(audioEmbed.QueueEmbedBuilder(track));
-                    }
-
-                    if (connection.CurrentState.CurrentTrack == null)
-                    {
-                        await PlayNextTrack(connection, context);
                     }
                 }
             }
@@ -91,45 +103,6 @@ public class PlayCommand : ApplicationCommandModule
         catch (Exception e)
         {
             await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), ephemeral: true);
-        }
-    }
-
-    private static async Task PlayNextTrack(LavalinkGuildConnection connection, InteractionContext context)
-    {
-        var audioEmbed = new AudioPlayerEmbed();
-
-        if (Queue.Count > 0)
-        {
-            CurrentSongData = Queue.Peek();
-
-            var nextTrackInQueue = Queue.Dequeue();
-
-            await connection.PlayAsync(nextTrackInQueue);
-
-            if (FirstSongInTrack)
-            {
-                await context.CreateResponseAsync(
-                    new DiscordInteractionResponseBuilder(audioEmbed.SongEmbedBuilder(nextTrackInQueue, context)));
-
-                FirstSongInTrack = false;
-            }
-            else
-            {
-                await context.FollowUpAsync(
-                    new DiscordFollowupMessageBuilder(audioEmbed.SongEmbedBuilder(nextTrackInQueue, context)));
-            }
-
-            // Remove once placed in "playbackfinished" event method
-            await Task.Delay(nextTrackInQueue.Length);
-
-            await PlayNextTrack(connection, context);
-        }
-        else
-        {
-            await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
-
-            FirstSongInTrack = true;
         }
     }
 }
