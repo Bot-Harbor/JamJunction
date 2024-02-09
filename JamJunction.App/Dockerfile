@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Copy csproj and restore as distinct layers
 COPY ./*.csproj ./
-RUN dotnet restore PremBot.App.csproj
+RUN dotnet restore JamJunction.App.csproj
 
 # Copy everything else and build
 COPY ../ ./
