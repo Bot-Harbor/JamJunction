@@ -393,5 +393,14 @@ public class ErrorEmbed
         return couldNotLoadOnAttemptTrackEmbed;
     }
     
-    // Add trackstuck embed. Restart song
+    public DiscordEmbedBuilder TrackStuckEmbedBuilder()
+    {
+        var trackStuckEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"❌ • Track was stuck! The audio player has restarted the song.",
+            Color = DiscordColor.Red
+        };
+
+        return trackStuckEmbed;
+    }
 }

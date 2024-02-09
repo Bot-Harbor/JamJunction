@@ -1,4 +1,5 @@
-﻿using DSharpPlus.Entities;
+﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using DSharpPlus.Lavalink.EventArgs;
 using JamJunction.App.Embed_Builders;
@@ -10,28 +11,15 @@ public class TrackStuck
 {
     public static async Task TrackStuckAsync(LavalinkGuildConnection sender, TrackStuckEventArgs args)
     {
-        var audioEmbed = new AudioPlayerEmbed();
+        var errorEmbed = new ErrorEmbed();
         var queue = PlayCommand.Queue;
         var channelId = PlayCommand.ChannelId;
         var channel = sender.Guild.GetChannel(channelId);
+        
+        var connection = sender;
 
-        if (queue.Count > 0)
-        {
-            var connection = sender;
-
-            PlayCommand.CurrentSongData = queue.Peek();
-            var nextTrackInQueue = queue.Dequeue();
-
-            await channel.SendMessageAsync(
-                new DiscordMessageBuilder(audioEmbed.SongEmbedBuilder(nextTrackInQueue, sender)));
-
-            await connection.PlayAsync(nextTrackInQueue);
-        }
-        else
-        {
-            await channel.SendMessageAsync(
-                new DiscordMessageBuilder().AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
-            PlayCommand.FirstSongInTrack = true;
-        }
+        await connection.SeekAsync(TimeSpan.FromSeconds(0));
+        await channel.SendMessageAsync(
+            new DiscordMessageBuilder().AddEmbed(errorEmbed.TrackStuckEmbedBuilder()));
     }
 }
