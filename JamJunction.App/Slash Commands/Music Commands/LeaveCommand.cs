@@ -43,9 +43,7 @@ public class LeaveCommand : ApplicationCommandModule
                 if (connection != null)
                 {
                     await connection.DisconnectAsync();
-                    
-                    ResetAudioPlayer.GeneralReset();
-                    
+
                     await context.CreateResponseAsync(audioEmbed.LeaveEmbedBuilder(context));
                 }
             }

@@ -14,6 +14,9 @@ public class ResumeButton : IButton
     {
         var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
+        
+        var guildId = e.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
         var message = e.Interaction;
 
@@ -71,8 +74,7 @@ public class ResumeButton : IButton
                         new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.NoResumePermissionEmbedBuilder()));
                 }
 
-                PauseCommand.PauseCommandInvoked = false;
-                PauseButton.PauseCommandInvoked = false;
+                audioPlayerController.PauseInvoked = false;
             }
         }
         catch (Exception exception)

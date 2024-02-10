@@ -8,9 +8,6 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class VolumeCommand : ApplicationCommandModule
 {
-    public static int Volume { get; set; }
-    public static bool VolumeCommandInvoked { get; set; }
-    
     [SlashCommand("volume", "Adjust the volume 0-100. Default volume is 50.")]
     public async Task VolumeCommandAsync(InteractionContext context,
         [Option("level", "How loud do you want the music to be? Note: Must have \"manage channels\" permission.")]
@@ -18,6 +15,9 @@ public class VolumeCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
+        
+        var guildId = context.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
         try
         {
@@ -61,7 +61,7 @@ public class VolumeCommand : ApplicationCommandModule
                 {
                     if (connection != null)
                     {
-                        if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
+                        if (audioPlayerController.PauseInvoked)
                         {
                             await context.CreateResponseAsync(errorEmbed.NoVolumeWhilePausedEmbedBuilder(context));
                         }
@@ -71,9 +71,8 @@ public class VolumeCommand : ApplicationCommandModule
                             await context.CreateResponseAsync(audioEmbed.VolumeEmbedBuilder(Convert.ToInt32(volume),
                                 context));
                             
-                            Volume = Convert.ToInt32(volume);
-                            VolumeCommandInvoked = true;
-                            MuteButton.MuteButtonInvoked = false;
+                            audioPlayerController.Volume = Convert.ToInt32(volume);
+                            audioPlayerController.MuteInvoked = false;
                         }
                     }
                 }

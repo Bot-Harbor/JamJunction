@@ -49,9 +49,7 @@ public class StopCommand : ApplicationCommandModule
                 if (connection != null)
                 {
                     await connection.StopAsync();
-                    
-                    ResetAudioPlayer.GeneralReset();
-                    
+
                     await context.CreateResponseAsync(audioEmbed.StopEmbedBuilder(context));
                 }
             }

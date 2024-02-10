@@ -14,6 +14,9 @@ public class UnmuteCommand : ApplicationCommandModule
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
 
+        var guildId = context.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+
         try
         {
             var userVc = context.Member?.VoiceState?.Channel;
@@ -46,33 +49,15 @@ public class UnmuteCommand : ApplicationCommandModule
 
                 if (connection != null)
                 {
-                    if (!VolumeCommand.VolumeCommandInvoked)
+                    if (audioPlayerController.PauseInvoked)
                     {
-                        if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
-                        {
-                            await context.CreateResponseAsync(errorEmbed.NoUnMuteWhilePausedEmbedBuilder(context));
-                        }
-                        else
-                        {
-                            await connection.SetVolumeAsync(PlayCommand.DefaultVolume);
-                            MuteCommand.MuteCommandInvoked = false;
-                            MuteButton.MuteButtonInvoked = false;
-                            await context.CreateResponseAsync(audioEmbed.UnmuteEmbedBuilder(context));
-                        }
+                        await context.CreateResponseAsync(errorEmbed.NoUnMuteWhilePausedEmbedBuilder(context));
                     }
                     else
                     {
-                        if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
-                        {
-                            await context.CreateResponseAsync(errorEmbed.NoUnMuteWhilePausedEmbedBuilder(context));
-                        }
-                        else
-                        {
-                            await connection.SetVolumeAsync(VolumeCommand.Volume);
-                            MuteCommand.MuteCommandInvoked = false;
-                            MuteButton.MuteButtonInvoked = false;
-                            await context.CreateResponseAsync(audioEmbed.UnmuteEmbedBuilder(context));
-                        }
+                        await connection.SetVolumeAsync(audioPlayerController.Volume);
+                        audioPlayerController.MuteInvoked = false;
+                        await context.CreateResponseAsync(audioEmbed.UnmuteEmbedBuilder(context));
                     }
                 }
             }

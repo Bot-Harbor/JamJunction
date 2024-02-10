@@ -14,6 +14,9 @@ public class SkipButton : IButton
     {
         var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
+        
+        var guildId = e.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
         var message = e.Interaction;
 
@@ -59,13 +62,13 @@ public class SkipButton : IButton
 
                     if (connection != null)
                     {
-                        if (PlayCommand.Queue.Count != 0)
+                        if (audioPlayerController.Queue.Count != 0)
                         {
-                            var queue = PlayCommand.Queue;
+                            var queue = audioPlayerController.Queue;
 
-                            PlayCommand.CurrentSongData = queue.Peek();
+                            audioPlayerController.CurrentSongData = queue.Peek();
 
-                            var nextTrackInQueue = PlayCommand.Queue.Dequeue();
+                            var nextTrackInQueue = audioPlayerController.Queue.Dequeue();
 
                             await connection.PlayAsync(nextTrackInQueue);
 

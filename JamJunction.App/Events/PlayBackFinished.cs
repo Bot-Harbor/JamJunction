@@ -9,63 +9,89 @@ namespace JamJunction.App.Events;
 
 public class PlayBackFinished
 {
-    public static async Task PlayBackFinishedAsync(LavalinkGuildConnection sender, TrackFinishEventArgs args)
+    public static Task PlayBackIsFinished(LavalinkGuildConnection sender, TrackFinishEventArgs args)
     {
         var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
 
-        var queue = PlayCommand.Queue;
-
-        var channelId = PlayCommand.ChannelId;
-        var channel = sender.Guild.GetChannel(channelId);
-
+        var guildId = sender.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+        
+        var channel = sender.Channel.Guild.GetChannel(guildId);
+        
         if (args.Reason == TrackEndReason.Finished)
         {
-            if (queue.Count > 0)
+            var connection = sender;
+            
+            if (audioPlayerController.Queue.Count > 0)
             {
-                var connection = sender;
-
-                PlayCommand.CurrentSongData = queue.Peek();
-                var nextTrackInQueue = queue.Dequeue();
-
-                await channel.SendMessageAsync(
+                audioPlayerController.CurrentSongData = audioPlayerController.Queue.Peek();
+                var nextTrackInQueue = audioPlayerController.Queue.Dequeue();
+        
+                // Object reference not set to an instance of an object. Error Generating Embed.
+                channel.SendMessageAsync(
                     new DiscordMessageBuilder(audioEmbed.SongEmbedBuilder(nextTrackInQueue, sender)));
-
-                await connection.PlayAsync(nextTrackInQueue);
+                
+                Console.WriteLine("Next Song");
+                connection.PlayAsync(nextTrackInQueue);
             }
             else
             {
-                await channel.SendMessageAsync(
+                channel.SendMessageAsync(
                     new DiscordMessageBuilder().AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
-                PlayCommand.FirstSongInTrack = true;
+                
+                Console.WriteLine("No more songs :(");
+                
+                audioPlayerController.FirstSongInTrack = true;
             }
+        }
+
+        if (args.Reason == TrackEndReason.Stopped)
+        {
+            audioPlayerController.Volume = 50;
+            audioPlayerController.PauseInvoked = false;
+            audioPlayerController.MuteInvoked = false;
+            audioPlayerController.FirstSongInTrack = true;
+            audioPlayerController.Queue.Clear();
+            
+            Console.WriteLine("Stop has been used");
         }
         
         if (args.Reason == TrackEndReason.LoadFailed)
         {
-            await channel.SendMessageAsync(
+            // Error Generating Embed
+            channel.SendMessageAsync(
                 new DiscordMessageBuilder().AddEmbed(errorEmbed.TrackFailedToLoadEmbedBuilder()));
-            await Task.Delay(TimeSpan.FromSeconds(5));
+            Task.Delay(TimeSpan.FromSeconds(5));
 
-            if (queue.Count > 0)
+            if (audioPlayerController.Queue.Count > 0)
             {
                 var connection = sender;
 
-                PlayCommand.CurrentSongData = queue.Peek();
-                var nextTrackInQueue = queue.Dequeue();
+                audioPlayerController.CurrentSongData = audioPlayerController.Queue.Peek();
+                var nextTrackInQueue = audioPlayerController.Queue.Dequeue();
 
-                await channel.SendMessageAsync(
+                // Error Generating Embed
+                channel.SendMessageAsync(
                     new DiscordMessageBuilder(audioEmbed.SongEmbedBuilder(nextTrackInQueue, sender)));
 
-                await connection.PlayAsync(nextTrackInQueue);
+                connection.PlayAsync(nextTrackInQueue);
             }
 
             if (args.Reason == TrackEndReason.LoadFailed)
             {
-                await channel.SendMessageAsync(
+                // Error Generating Embed
+                channel.SendMessageAsync(
                     new DiscordMessageBuilder().AddEmbed(errorEmbed.CouldNotLoadTrackOnAttemptEmbedBuilder()));
-                ResetAudioPlayer.GeneralReset();
+                
+                audioPlayerController.Volume = 50;
+                audioPlayerController.PauseInvoked = false;
+                audioPlayerController.MuteInvoked = false;
+                audioPlayerController.FirstSongInTrack = true;
+                audioPlayerController.Queue.Clear();
             }
         }
+
+        return Task.CompletedTask;
     }
 }

@@ -14,6 +14,9 @@ public class RestartButton : IButton
     {
         var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
+        
+        var guildId = e.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
         var message = e.Interaction;
 
@@ -59,7 +62,7 @@ public class RestartButton : IButton
 
                     if (connection != null)
                     {
-                        if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
+                        if (audioPlayerController.PauseInvoked)
                         {
                             await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                                 new DiscordInteractionResponseBuilder()

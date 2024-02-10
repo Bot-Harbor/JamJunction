@@ -60,8 +60,6 @@ public class StopButton : IButton
                     if (connection != null)
                     {
                         await connection.StopAsync();
-                        
-                        ResetAudioPlayer.GeneralReset();
 
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.StopEmbedBuilder(e)));

@@ -11,7 +11,10 @@ public class AudioPlayerEmbed
 {
     public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, InteractionContext context)
     {
-        var currentTrack = PlayCommand.CurrentSongData;
+        var guildId = context.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+        
+        var currentTrack = audioPlayerController.CurrentSongData;
 
         var currentSongEmbed = new DiscordEmbedBuilder()
         {
@@ -26,7 +29,7 @@ public class AudioPlayerEmbed
             }
         };
 
-        var nextSongs = PlayCommand.Queue;
+        var nextSongs = audioPlayerController.Queue;
 
         foreach (var nextSong in nextSongs.Take(1))
         {
@@ -124,7 +127,10 @@ public class AudioPlayerEmbed
 
     public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, ComponentInteractionCreateEventArgs e)
     {
-        var currentTrack = PlayCommand.CurrentSongData;
+        var guildId = e.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+        
+        var currentTrack = audioPlayerController.CurrentSongData;
 
         var currentSongEmbed = new DiscordEmbedBuilder()
         {
@@ -139,7 +145,7 @@ public class AudioPlayerEmbed
             }
         };
 
-        var nextSongs = PlayCommand.Queue;
+        var nextSongs = audioPlayerController.Queue;
 
         foreach (var nextSong in nextSongs.Take(1))
         {
@@ -237,7 +243,10 @@ public class AudioPlayerEmbed
 
     public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, LavalinkGuildConnection sender)
     {
-        var currentTrack = PlayCommand.CurrentSongData;
+        var guildId = sender.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+        
+        var currentTrack = audioPlayerController.CurrentSongData;
 
         var currentSongEmbed = new DiscordEmbedBuilder()
         {
@@ -252,7 +261,7 @@ public class AudioPlayerEmbed
             }
         };
 
-        var nextSongs = PlayCommand.Queue;
+        var nextSongs = audioPlayerController.Queue;
 
         foreach (var nextSong in nextSongs.Take(1))
         {
@@ -570,7 +579,10 @@ public class AudioPlayerEmbed
 
     public DiscordEmbedBuilder ViewQueueBuilder(InteractionContext context)
     {
-        var songQueue = PlayCommand.Queue;
+        var guildId = context.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+        
+        var songQueue = audioPlayerController.Queue;
 
         var viewQueue = new DiscordEmbedBuilder()
         {
@@ -604,7 +616,10 @@ public class AudioPlayerEmbed
 
     public DiscordEmbedBuilder ViewQueueBuilder(ComponentInteractionCreateEventArgs e)
     {
-        var songQueue = PlayCommand.Queue;
+        var guildId = e.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+        
+        var songQueue = audioPlayerController.Queue;
 
         var viewQueue = new DiscordEmbedBuilder()
         {

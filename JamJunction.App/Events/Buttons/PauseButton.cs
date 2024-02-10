@@ -10,12 +10,13 @@ namespace JamJunction.App.Events.Buttons;
 
 public class PauseButton : IButton
 {
-    public static bool PauseCommandInvoked { get; set; }
-
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs e)
     {
         var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
+        
+        var guildId = e.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
         var message = e.Interaction;
 
@@ -66,7 +67,7 @@ public class PauseButton : IButton
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.PauseEmbedBuilder(e)));
                         
-                        PauseCommandInvoked = true;
+                        audioPlayerController.PauseInvoked = true;
                     }
                 }
                 else

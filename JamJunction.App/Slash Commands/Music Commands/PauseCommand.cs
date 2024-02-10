@@ -9,13 +9,14 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class PauseCommand : ApplicationCommandModule
 {
-    public static bool PauseCommandInvoked { get; set; }
-
     [SlashCommand("pause", "Pauses the current song.")]
     public async Task PauseCommandAsync(InteractionContext context)
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
+    
+        var guildId = context.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
         try
         {
@@ -51,7 +52,7 @@ public class PauseCommand : ApplicationCommandModule
                 {
                     await connection.PauseAsync();
                     
-                    PauseButton.PauseCommandInvoked = true;
+                    audioPlayerController.PauseInvoked = true;
 
                     await context.CreateResponseAsync(audioEmbed.PauseEmbedBuilder(context));
                 }

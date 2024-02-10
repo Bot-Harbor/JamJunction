@@ -8,15 +8,17 @@ namespace JamJunction.App.Events;
 
 public class TrackStuck
 {
-    public static async Task TrackStuckAsync(LavalinkGuildConnection sender, TrackStuckEventArgs args)
+    public static Task TrackIsStuck(LavalinkGuildConnection sender, TrackStuckEventArgs args)
     {
+        var guildId = sender.Guild.Id;
         var errorEmbed = new ErrorEmbed();
-        var channelId = PlayCommand.ChannelId;
-        var channel = sender.Guild.GetChannel(channelId);
+        var channel = sender.Channel.Guild.GetChannel(guildId);
         var connection = sender;
 
-        await connection.SeekAsync(TimeSpan.FromSeconds(0));
-        await channel.SendMessageAsync(
+        connection.SeekAsync(TimeSpan.FromSeconds(0));
+        channel.SendMessageAsync(
             new DiscordMessageBuilder().AddEmbed(errorEmbed.TrackStuckEmbedBuilder()));
+
+        return Task.CompletedTask;
     }
 }

@@ -13,6 +13,9 @@ public class SkipCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
+        
+        var guildId = context.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
         try
         {
@@ -46,13 +49,13 @@ public class SkipCommand : ApplicationCommandModule
 
                 if (connection != null)
                 {
-                    if (PlayCommand.Queue.Count != 0)
+                    if (audioPlayerController.Queue.Count != 0)
                     {
-                        var queue = PlayCommand.Queue;
+                        var queue = audioPlayerController.Queue;
 
-                        PlayCommand.CurrentSongData = queue.Peek();
+                        audioPlayerController.CurrentSongData = queue.Peek();
 
-                        var nextTrackInQueue = PlayCommand.Queue.Dequeue();
+                        var nextTrackInQueue = audioPlayerController.Queue.Dequeue();
 
                         await connection.PlayAsync(nextTrackInQueue);
                         

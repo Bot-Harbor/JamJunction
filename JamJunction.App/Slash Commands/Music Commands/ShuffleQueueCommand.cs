@@ -11,14 +11,17 @@ public class ShuffleQueueCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
-
+       
+        var guildId = context.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+        
         try
         {
             if (context.Member != null && (context.Member.Permissions & Permissions.ManageChannels) != 0)
             {
-                if (PlayCommand.Queue.Count != 0)
+                if (audioPlayerController.Queue.Count != 0)
                 {
-                    ShuffleQueue(PlayCommand.Queue);
+                    ShuffleQueue(audioPlayerController.Queue);
 
                     await context.CreateResponseAsync(audioEmbed.ShuffleQueueBuilder(context));
                 }

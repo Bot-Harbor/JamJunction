@@ -8,13 +8,14 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class MuteCommand : ApplicationCommandModule
 {
-    public static bool MuteCommandInvoked { get; set; }
-    
     [SlashCommand("mute", "Mute the volume.")]
     public async Task MuteCommandAsync(InteractionContext context)
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
+
+        var guildId = context.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
         try
         {
@@ -48,15 +49,14 @@ public class MuteCommand : ApplicationCommandModule
                 
                 if (connection != null)
                 {
-                    if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
+                    if (audioPlayerController.PauseInvoked)
                     {
                         await context.CreateResponseAsync(errorEmbed.NoMuteWhilePausedEmbedBuilder(context));
                     }
                     else
                     {
                         await connection.SetVolumeAsync(0);
-                        MuteCommandInvoked = true;
-                        MuteButton.MuteButtonInvoked = true;
+                        audioPlayerController.MuteInvoked = true;
                         await context.CreateResponseAsync(audioEmbed.MuteEmbedBuilder(context));
                     }
                 }

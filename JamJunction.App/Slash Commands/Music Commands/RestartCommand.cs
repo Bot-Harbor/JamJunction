@@ -13,6 +13,9 @@ public class RestartCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
+        
+        var guildId = context.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
         try
         {
@@ -46,7 +49,7 @@ public class RestartCommand : ApplicationCommandModule
 
                 if (connection != null)
                 {
-                    if (PauseCommand.PauseCommandInvoked || PauseButton.PauseCommandInvoked)
+                    if (audioPlayerController.PauseInvoked)
                     {
                         await context.CreateResponseAsync(errorEmbed.NoRestartWithPausedEmbedBuilder(context));
                     }

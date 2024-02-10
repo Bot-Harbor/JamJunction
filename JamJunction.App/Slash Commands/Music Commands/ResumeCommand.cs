@@ -13,6 +13,9 @@ public class ResumeCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
+        
+        var guildId = context.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
         try
         {
@@ -55,8 +58,7 @@ public class ResumeCommand : ApplicationCommandModule
                 await context.CreateResponseAsync(errorEmbed.NoResumePermissionEmbedBuilder());
             }
 
-            PauseCommand.PauseCommandInvoked = false;
-            PauseButton.PauseCommandInvoked = false;
+            audioPlayerController.PauseInvoked = false;
         }
         catch (Exception e)
         {

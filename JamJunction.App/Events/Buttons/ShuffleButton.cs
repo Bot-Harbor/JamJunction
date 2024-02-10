@@ -14,6 +14,9 @@ public class ShuffleButton : ShuffleQueueCommand, IButton
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
+        
+        var guildId = e.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
         var message = e.Interaction;
 
@@ -25,9 +28,9 @@ public class ShuffleButton : ShuffleQueueCommand, IButton
 
                 if (member != null && (e.Channel.PermissionsFor(member) & Permissions.ManageChannels) != 0)
                 {
-                    if (PlayCommand.Queue.Count != 0)
+                    if (audioPlayerController.Queue.Count != 0)
                     {
-                        ShuffleQueue(PlayCommand.Queue);
+                        ShuffleQueue(audioPlayerController.Queue);
 
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.ShuffleQueueBuilder(e)));

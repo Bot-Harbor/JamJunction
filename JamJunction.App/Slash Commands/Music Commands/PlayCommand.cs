@@ -3,18 +3,13 @@ using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
+using System.Collections.Concurrent;
+
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class PlayCommand : ApplicationCommandModule
 {
-    public static ulong ChannelId { get; set; }
-    public static Queue<LavalinkTrack> Queue { get; set; } = new Queue<LavalinkTrack>();
-    public static LavalinkTrack CurrentSongData { get; set; } = new LavalinkTrack();
-    public static int DefaultVolume { get; set; } = 50;
-    public static bool FirstTrackOnConnection { get; set; } = true;
-    public static bool FirstSongInTrack { get; set; } = true;
-
     [SlashCommand("play", "Queue a song.")]
     public async Task PlayAsync
     (
@@ -25,7 +20,10 @@ public class PlayCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
-        
+
+        var guildId = context.Guild.Id;
+        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+
         try
         {
             var userVc = context.Member?.VoiceState?.Channel;
@@ -45,6 +43,9 @@ public class PlayCommand : ApplicationCommandModule
                 }
 
                 await node.ConnectAsync(userVc);
+                
+                // Set to 1?
+                await Task.Delay(2);
 
                 var connection = node.GetGuildConnection(context.Guild);
 
@@ -65,24 +66,19 @@ public class PlayCommand : ApplicationCommandModule
 
                 if (connection != null)
                 {
-                    Queue.Enqueue(track);
-
-                    if (FirstTrackOnConnection)
+                    audioPlayerController.Queue.Enqueue(track);
+                    
+                    if (audioPlayerController.FirstSongInTrack)
                     {
-                        await connection.SetVolumeAsync(DefaultVolume);
-                        FirstTrackOnConnection = false;
-                    }
+                        audioPlayerController.CurrentSongData = audioPlayerController.Queue.Peek();
 
-                    if (FirstSongInTrack)
-                    {
-                        CurrentSongData = Queue.Peek();
-
-                        var nextTrackInQueue = Queue.Dequeue();
-
-                        ChannelId = context.Channel.Id;
-                        FirstSongInTrack = false;
-
+                        var nextTrackInQueue = audioPlayerController.Queue.Dequeue();
+                        
+                        audioPlayerController.FirstSongInTrack = false;
+                        
                         await connection.PlayAsync(track);
+                        
+                        await connection.SetVolumeAsync(audioPlayerController.Volume);
 
                         await context.CreateResponseAsync(
                             new DiscordInteractionResponseBuilder(

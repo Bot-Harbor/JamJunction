@@ -1,5 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Lavalink;
+using DSharpPlus.Lavalink.EventArgs;
 using DSharpPlus.Net;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events;
@@ -13,6 +14,13 @@ namespace JamJunction.App;
 
 public abstract class Bot
 {
+    // Fix VoiceStateUpdated Event
+    // Fix PlayCommand: Must Create New Instance When Invoked
+    // Fix Embeds For PlayBackFinished Event 
+    // Remove Testcases
+    // Remove Instances Of AudioPlayerController
+    
+    public static readonly Dictionary<ulong, AudioPlayerController> GuildAudioPlayers = new Dictionary<ulong, AudioPlayerController>();
     public static DiscordClient Client { get; set; }
 
     public static async Task RunBotAsync()
@@ -43,36 +51,38 @@ public abstract class Bot
         };
 
         Client = new DiscordClient(discordConfig);
-
-        Client.Ready += ClientReady.Client_Ready;
-
-        Client.VoiceStateUpdated += (sender, args) =>
-        {
-            ResetAudioPlayer.UserDisconnectsPlayer(sender, args);
-            return Task.CompletedTask;
-        };
-
+        
         var lavaLink = Client.UseLavalink();
-        lavaLink.NodeDisconnected += (sender, args) =>
-        {
-            ResetAudioPlayer.NodeDisconnected(sender, args);
-            return Task.CompletedTask;
-        };
-
+        
         await Client.ConnectAsync();
         await lavaLink.ConnectAsync(lavaLinkConfig);
 
         var nodeConnection = lavaLink.GetNodeConnection(endpoint);
-        nodeConnection.PlaybackFinished += PlayBackFinished.PlayBackFinishedAsync;
 
-        nodeConnection.TrackStuck += TrackStuck.TrackStuckAsync;
+        Client.Ready += ClientReady.Client_Ready;
+
+        nodeConnection.GuildConnectionCreated += GuildConnectionCreated.NodeConnectionOnGuildConnectionCreated;
         
+        nodeConnection.TrackStuck += TrackStuck.TrackIsStuck;
+
+        nodeConnection.PlaybackFinished += PlayBackFinished.PlayBackIsFinished;
+
+        nodeConnection.Disconnected += NodeDisconnected.Disconnected;
+
+        //nodeConnection.GuildConnectionRemoved += GuildConnectionRemoved.NodeConnectionOnGuildConnectionRemoved;
+        
+        Client.VoiceStateUpdated += (sender, args) =>
+        {
+            VoiceStateUpdated.UserDisconnectsPlayer(sender, args);
+            return Task.CompletedTask;
+        };
+
         ButtonEvents();
         SlashCommands();
 
         await Task.Delay(-1);
     }
-
+    
     private static void SlashCommands()
     {
         var slashCommands = Client.UseSlashCommands();
@@ -94,6 +104,8 @@ public abstract class Bot
         slashCommands.RegisterCommands<CurrentSongCommand>();
         slashCommands.RegisterCommands<SkipCommand>();
         slashCommands.RegisterCommands<HelpCommand>();
+        // Remove once done testing
+        slashCommands.RegisterCommands<ConnectCommand>();
     }
 
     private static void ButtonEvents()
