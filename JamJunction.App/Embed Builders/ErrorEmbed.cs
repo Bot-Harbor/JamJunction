@@ -38,8 +38,7 @@ public class ErrorEmbed
 
         return voiceChannelErrorEmbed;
     }
-
-    //Commit 
+    
     public DiscordEmbedBuilder NoConnectionErrorEmbedBuilder()
     {
         var noConnectionErrorEmbed = new DiscordEmbedBuilder
@@ -50,8 +49,7 @@ public class ErrorEmbed
 
         return noConnectionErrorEmbed;
     }
-
-    //Commit 
+    
     public DiscordEmbedBuilder LavaLinkErrorEmbedBuilder()
     {
         var lavaLinkErrorEmbed = new DiscordEmbedBuilder
