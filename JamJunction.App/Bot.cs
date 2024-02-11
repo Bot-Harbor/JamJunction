@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
 using DSharpPlus.Net;
 using DSharpPlus.SlashCommands;
@@ -13,8 +14,6 @@ namespace JamJunction.App;
 
 public abstract class Bot
 {
-    // Fix When You Right Click And Disconnect. Guild Is Null For Some reason
-    
     // Have Bot Remove Itself After 5 Mins Of Either An Empty Queue Or When Stop Is Invoked In Event
     
     // Remove Testcases
@@ -60,21 +59,18 @@ public abstract class Bot
         var nodeConnection = lavaLink.GetNodeConnection(endpoint);
 
         Client.Ready += ClientReady.Client_Ready;
+        Client.VoiceStateUpdated += VoiceStateUpdated.ClientOnVoiceStateUpdated;
 
         nodeConnection.GuildConnectionCreated += GuildConnectionCreated.NodeConnectionOnGuildConnectionCreated;
-        
         nodeConnection.TrackStuck += TrackStuck.TrackIsStuck;
-
-        nodeConnection.PlaybackFinished += PlayBackFinished.PlayBackIsFinished; 
-        
-        nodeConnection.GuildConnectionRemoved += GuildConnectionRemoved.NodeConnectionOnGuildConnectionRemoved;
+        nodeConnection.PlaybackFinished += PlayBackFinished.PlayBackIsFinished;
 
         ButtonEvents();
         SlashCommands();
 
         await Task.Delay(-1);
     }
-    
+
     private static void SlashCommands()
     {
         var slashCommands = Client.UseSlashCommands();
