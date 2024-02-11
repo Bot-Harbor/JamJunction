@@ -20,7 +20,7 @@ public class PlayCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
-        
+
         try
         {
             var userVc = context.Member?.VoiceState?.Channel;
@@ -40,7 +40,7 @@ public class PlayCommand : ApplicationCommandModule
                 }
 
                 await node.ConnectAsync(userVc);
-                
+
                 var connection = node.GetGuildConnection(context.Guild);
 
                 if (connection! == null)
@@ -62,7 +62,7 @@ public class PlayCommand : ApplicationCommandModule
                 {
                     var guildId = context.Guild.Id;
                     var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-                    
+
                     audioPlayerController.Queue.Enqueue(track);
 
                     if (audioPlayerController.FirstSongInTrack)
@@ -71,9 +71,12 @@ public class PlayCommand : ApplicationCommandModule
                         audioPlayerController.Queue.Dequeue();
                         audioPlayerController.ChannelId = context.Channel.Id;
                         audioPlayerController.FirstSongInTrack = false;
-                        
+
+                        audioPlayerController.CancellationTokenSource.Cancel();
+                        audioPlayerController.CancellationTokenSource.Dispose();
+
                         await connection.PlayAsync(track);
-                        
+
                         await connection.SetVolumeAsync(audioPlayerController.Volume);
 
                         await context.CreateResponseAsync(

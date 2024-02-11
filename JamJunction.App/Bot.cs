@@ -1,5 +1,4 @@
 ﻿using DSharpPlus;
-using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
 using DSharpPlus.Net;
 using DSharpPlus.SlashCommands;
@@ -14,8 +13,6 @@ namespace JamJunction.App;
 
 public abstract class Bot
 {
-    // Have Bot Remove Itself After 5 Mins Of Either An Empty Queue Or When Stop Is Invoked In Event
-    
     // Remove Testcases
     // Run Code Clean Up
     

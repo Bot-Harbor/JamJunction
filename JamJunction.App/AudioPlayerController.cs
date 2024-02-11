@@ -13,4 +13,5 @@ public class AudioPlayerController
     public bool FirstSongInTrack { get; set; } = true;
     public bool PauseInvoked { get; set; }
     public bool MuteInvoked { get; set; }
+    public CancellationTokenSource CancellationTokenSource { get; set; } = new CancellationTokenSource();
 }

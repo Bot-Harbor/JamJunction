@@ -2,14 +2,12 @@
 using DSharpPlus.Lavalink;
 using DSharpPlus.Lavalink.EventArgs;
 using JamJunction.App.Embed_Builders;
-using JamJunction.App.Events.Buttons;
-using JamJunction.App.Slash_Commands.Music_Commands;
 
 namespace JamJunction.App.Events;
 
 public class PlayBackFinished
 {
-    public static Task PlayBackIsFinished(LavalinkGuildConnection sender, TrackFinishEventArgs args)
+    public static async Task PlayBackIsFinished(LavalinkGuildConnection sender, TrackFinishEventArgs args)
     {
         var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
@@ -29,14 +27,14 @@ public class PlayBackFinished
                 audioPlayerController.CurrentSongData = audioPlayerController.Queue.Peek();
                 var nextTrackInQueue = audioPlayerController.Queue.Dequeue();
                 
-                channel.SendMessageAsync(
+                await channel.SendMessageAsync(
                     new DiscordMessageBuilder(audioEmbed.SongEmbedBuilder(sender)));
                 
-                connection.PlayAsync(nextTrackInQueue);
+                await connection.PlayAsync(nextTrackInQueue);
             }
             else
             {
-                channel.SendMessageAsync(
+                await channel.SendMessageAsync(
                     new DiscordMessageBuilder().AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
                 
                 audioPlayerController.Volume = 50;
@@ -44,6 +42,15 @@ public class PlayBackFinished
                 audioPlayerController.MuteInvoked = false;
                 audioPlayerController.FirstSongInTrack = true;
                 audioPlayerController.Queue.Clear();
+
+                var tokenSource = audioPlayerController.CancellationTokenSource = new CancellationTokenSource();
+                
+                await Task.Delay(TimeSpan.FromMinutes(10), tokenSource.Token);
+
+                if (!audioPlayerController.CancellationTokenSource.IsCancellationRequested)
+                {
+                    await sender.DisconnectAsync();   
+                }
             }
         }
 
@@ -54,13 +61,22 @@ public class PlayBackFinished
             audioPlayerController.MuteInvoked = false;
             audioPlayerController.FirstSongInTrack = true;
             audioPlayerController.Queue.Clear();
+            
+            var tokenSource = audioPlayerController.CancellationTokenSource = new CancellationTokenSource();
+                
+            await Task.Delay(TimeSpan.FromMinutes(10), tokenSource.Token);
+
+            if (!audioPlayerController.CancellationTokenSource.IsCancellationRequested)
+            {
+                await sender.DisconnectAsync();   
+            }
         }
         
         if (args.Reason == TrackEndReason.LoadFailed)
         {
-            channel.SendMessageAsync(
+            await channel.SendMessageAsync(
                 new DiscordMessageBuilder().AddEmbed(errorEmbed.TrackFailedToLoadEmbedBuilder()));
-            Task.Delay(TimeSpan.FromSeconds(5));
+            await Task.Delay(TimeSpan.FromSeconds(5));
 
             if (audioPlayerController.Queue.Count > 0)
             {
@@ -69,15 +85,15 @@ public class PlayBackFinished
                 audioPlayerController.CurrentSongData = audioPlayerController.Queue.Peek();
                 var nextTrackInQueue = audioPlayerController.Queue.Dequeue();
                 
-                channel.SendMessageAsync(
+                await channel.SendMessageAsync(
                     new DiscordMessageBuilder(audioEmbed.SongEmbedBuilder(sender)));
 
-                connection.PlayAsync(nextTrackInQueue);
+                await connection.PlayAsync(nextTrackInQueue);
             }
 
             if (args.Reason == TrackEndReason.LoadFailed)
             {
-                channel.SendMessageAsync(
+                await channel.SendMessageAsync(
                     new DiscordMessageBuilder().AddEmbed(errorEmbed.CouldNotLoadTrackOnAttemptEmbedBuilder()));
                 
                 audioPlayerController.Volume = 50;
@@ -85,9 +101,16 @@ public class PlayBackFinished
                 audioPlayerController.MuteInvoked = false;
                 audioPlayerController.FirstSongInTrack = true;
                 audioPlayerController.Queue.Clear();
+                
+                var tokenSource = audioPlayerController.CancellationTokenSource = new CancellationTokenSource();
+                
+                await Task.Delay(TimeSpan.FromMinutes(10), tokenSource.Token);
+
+                if (!audioPlayerController.CancellationTokenSource.IsCancellationRequested)
+                {
+                    await sender.DisconnectAsync();   
+                }
             }
         }
-
-        return Task.CompletedTask;
     }
 }

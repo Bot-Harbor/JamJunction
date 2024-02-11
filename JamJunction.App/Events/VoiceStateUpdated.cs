@@ -12,7 +12,7 @@ public class VoiceStateUpdated
             if (args.Before?.Channel != null && args.After?.Channel == null)
             {
                 var guildId = args.Guild.Id;
-                Bot.GuildAudioPlayers.Remove(guildId, out var audioPlayerController);
+                Bot.GuildAudioPlayers.Remove(guildId);
             }
         }
 
