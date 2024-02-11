@@ -2,6 +2,7 @@
 using System.Data;
 using DSharpPlus;
 using DSharpPlus.Entities;
+using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 
 namespace JamJunction.App.Embed_Builders;
@@ -30,9 +31,10 @@ public class HelpEmbed
             Color = DiscordColor.White,
             Description =
                 "Your go-to music bot for you and your friends! Type one of the commands below to get started. " +
-                $"Jam Junction powered by [DSharpPlus 4.4.5]" +
+                "Most of the music commands will require you to have ``Manage Channels Permission``. " +
+                $"Jam Junction powered by [DSharpPlus {botVersion}]" +
                 $"(https://dsharpplus.github.io/DSharpPlus/index.html), " +
-                $"[Lavalink 4.4.5](https://dsharpplus.github.io/DSharpPlus/articles/audio/lavalink/setup.html), " +
+                $"[Lavalink {botVersion}](https://github.com/lavalink-devs/Lavalink), " +
                 $"and [Docker](https://www.docker.com/).",
 
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
