@@ -15,9 +15,6 @@ public class SkipButton : IButton
         var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
         
-        var guildId = e.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
         var message = e.Interaction;
 
         try
@@ -62,6 +59,9 @@ public class SkipButton : IButton
 
                     if (connection != null)
                     {
+                        var guildId = e.Guild.Id;
+                        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+                        
                         if (audioPlayerController.Queue.Count != 0)
                         {
                             var queue = audioPlayerController.Queue;
@@ -74,7 +74,7 @@ public class SkipButton : IButton
 
                             await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                                 new DiscordInteractionResponseBuilder(
-                                    audioEmbed.SongEmbedBuilder(nextTrackInQueue, e)));
+                                    audioEmbed.SongEmbedBuilder(e)));
                         }
                         else
                         {

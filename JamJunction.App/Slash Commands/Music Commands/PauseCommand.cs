@@ -14,10 +14,7 @@ public class PauseCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
-    
-        var guildId = context.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
+        
         try
         {
             var userVc = context.Member?.VoiceState?.Channel;
@@ -50,6 +47,9 @@ public class PauseCommand : ApplicationCommandModule
 
                 if (connection != null)
                 {
+                    var guildId = context.Guild.Id;
+                    var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+                    
                     await connection.PauseAsync();
                     
                     audioPlayerController.PauseInvoked = true;

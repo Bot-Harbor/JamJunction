@@ -2,6 +2,7 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using DSharpPlus.Lavalink;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Interfaces;
 using JamJunction.App.Slash_Commands.Music_Commands;
@@ -15,9 +16,6 @@ public class ShuffleButton : ShuffleQueueCommand, IButton
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
         
-        var guildId = e.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
         var message = e.Interaction;
 
         try
@@ -25,20 +23,51 @@ public class ShuffleButton : ShuffleQueueCommand, IButton
             if (e.Interaction.Data.CustomId == "shuffle")
             {
                 var member = await e.Guild.GetMemberAsync(e.User.Id);
+                var userVc = member?.VoiceState?.Channel;
+                var lava = sender.GetLavalink();
+                var node = lava.ConnectedNodes.Values.First();
 
                 if (member != null && (e.Channel.PermissionsFor(member) & Permissions.ManageChannels) != 0)
                 {
-                    if (audioPlayerController.Queue.Count != 0)
+                    if (!lava.ConnectedNodes!.Any())
                     {
-                        ShuffleQueue(audioPlayerController.Queue);
-
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                            new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.ShuffleQueueBuilder(e)));
+                            new DiscordInteractionResponseBuilder().AddEmbed(
+                                errorEmbed.NoConnectionErrorEmbedBuilder()));
                     }
-                    else
+                    
+                    if (userVc == null || userVc.Type != ChannelType.Voice)
                     {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                            new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.QueueIsEmptyEmbedBuilder(e)));
+                            new DiscordInteractionResponseBuilder().AddEmbed(
+                                errorEmbed.ValidVoiceChannelBtnErrorEmbedBuilder(e)));
+                    }
+
+                    var connection = node.GetGuildConnection(e.Guild);
+
+                    if (connection! == null)
+                    {
+                        await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                            new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.LavaLinkErrorEmbedBuilder()));
+                    }
+
+                    if (connection != null)
+                    {
+                        var guildId = e.Guild.Id;
+                        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+                        
+                        if (audioPlayerController.Queue.Count != 0)
+                        {
+                            ShuffleQueue(audioPlayerController.Queue);
+
+                            await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.ShuffleQueueBuilder(e)));
+                        }
+                        else
+                        {
+                            await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.QueueIsEmptyEmbedBuilder(e)));
+                        }
                     }
                 }
                 else

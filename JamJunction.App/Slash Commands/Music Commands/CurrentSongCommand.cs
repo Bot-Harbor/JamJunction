@@ -14,9 +14,6 @@ namespace JamJunction.App.Slash_Commands.Music_Commands
             var errorEmbed = new ErrorEmbed();
             var audioEmbed = new AudioPlayerEmbed();
             
-            var guildId = context.Guild.Id;
-            var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
             try
             {
                 var userVc = context.Member?.VoiceState?.Channel;
@@ -47,10 +44,8 @@ namespace JamJunction.App.Slash_Commands.Music_Commands
 
                 if (connection != null)
                 {
-                    var currentSong = audioPlayerController.CurrentSongData;
-
                     await context.CreateResponseAsync(
-                        new DiscordInteractionResponseBuilder(audioEmbed.SongEmbedBuilder(currentSong, context)));
+                        new DiscordInteractionResponseBuilder(audioEmbed.SongEmbedBuilder(context)));
                 }
             }
             catch (Exception e)

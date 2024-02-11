@@ -14,9 +14,6 @@ public class SkipCommand : ApplicationCommandModule
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
         
-        var guildId = context.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
         try
         {
             var userVc = context.Member?.VoiceState?.Channel;
@@ -49,6 +46,9 @@ public class SkipCommand : ApplicationCommandModule
 
                 if (connection != null)
                 {
+                    var guildId = context.Guild.Id;
+                    var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+                    
                     if (audioPlayerController.Queue.Count != 0)
                     {
                         var queue = audioPlayerController.Queue;
@@ -61,7 +61,7 @@ public class SkipCommand : ApplicationCommandModule
                         
                         await context.CreateResponseAsync(
                             new DiscordInteractionResponseBuilder(
-                                audioEmbed.SongEmbedBuilder(nextTrackInQueue, context)));
+                                audioEmbed.SongEmbedBuilder(context)));
                     }
                     else
                     {

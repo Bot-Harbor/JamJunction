@@ -1,6 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using DSharpPlus.Lavalink;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Interfaces;
 using JamJunction.App.Slash_Commands.Music_Commands;
@@ -18,10 +19,40 @@ public class ViewQueueButton : IButton
 
         try
         {
-            if (e.Interaction.Data.CustomId == "viewqueue")
+            var member = await e.Guild.GetMemberAsync(e.User.Id);
+            var userVc = member?.VoiceState?.Channel;
+            var lava = sender.GetLavalink();
+            var node = lava.ConnectedNodes.Values.First();
+
+            if (!lava.ConnectedNodes!.Any())
             {
                 await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                    new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.ViewQueueBuilder(e)));
+                    new DiscordInteractionResponseBuilder().AddEmbed(
+                        errorEmbed.NoConnectionErrorEmbedBuilder()));
+            }
+
+            if (userVc == null || userVc.Type != ChannelType.Voice)
+            {
+                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                    new DiscordInteractionResponseBuilder().AddEmbed(
+                        errorEmbed.ValidVoiceChannelBtnErrorEmbedBuilder(e)));
+            }
+
+            var connection = node.GetGuildConnection(e.Guild);
+
+            if (connection! == null)
+            {
+                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                    new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.LavaLinkErrorEmbedBuilder()));
+            }
+
+            if (connection != null)
+            {
+                if (e.Interaction.Data.CustomId == "viewqueue")
+                {
+                    await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                        new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.ViewQueueBuilder(e)));
+                }
             }
         }
         catch (Exception exception)

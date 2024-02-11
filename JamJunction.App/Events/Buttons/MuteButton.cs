@@ -14,9 +14,6 @@ public class MuteButton : IButton
         var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
 
-        var guildId = e.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
         var message = e.Interaction;
 
         try
@@ -59,9 +56,11 @@ public class MuteButton : IButton
                                 errorEmbed.NoAudioTrackErrorEmbedBuilder()));
                     }
 
-
                     if (connection != null)
                     {
+                        var guildId = e.Guild.Id;
+                        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+
                         if (!audioPlayerController.MuteInvoked)
                         {
                             if (audioPlayerController.PauseInvoked)

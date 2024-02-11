@@ -20,10 +20,7 @@ public class PlayCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
-
-        var guildId = context.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
+        
         try
         {
             var userVc = context.Member?.VoiceState?.Channel;
@@ -44,9 +41,6 @@ public class PlayCommand : ApplicationCommandModule
 
                 await node.ConnectAsync(userVc);
                 
-                // Set to 1?
-                await Task.Delay(2);
-
                 var connection = node.GetGuildConnection(context.Guild);
 
                 if (connection! == null)
@@ -66,13 +60,16 @@ public class PlayCommand : ApplicationCommandModule
 
                 if (connection != null)
                 {
-                    audioPlayerController.Queue.Enqueue(track);
+                    var guildId = context.Guild.Id;
+                    var audioPlayerController = Bot.GuildAudioPlayers[guildId];
                     
+                    audioPlayerController.Queue.Enqueue(track);
+
                     if (audioPlayerController.FirstSongInTrack)
                     {
                         audioPlayerController.CurrentSongData = audioPlayerController.Queue.Peek();
 
-                        var nextTrackInQueue = audioPlayerController.Queue.Dequeue();
+                        audioPlayerController.Queue.Dequeue();
                         
                         audioPlayerController.FirstSongInTrack = false;
                         
@@ -82,7 +79,7 @@ public class PlayCommand : ApplicationCommandModule
 
                         await context.CreateResponseAsync(
                             new DiscordInteractionResponseBuilder(
-                                audioEmbed.SongEmbedBuilder(nextTrackInQueue, context)));
+                                audioEmbed.SongEmbedBuilder(context)));
                     }
                     else
                     {

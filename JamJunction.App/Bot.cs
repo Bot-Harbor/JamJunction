@@ -14,7 +14,6 @@ namespace JamJunction.App;
 public abstract class Bot
 {
     // Fix Embeds For PlayBackFinished Event
-    // Fix No Player In server
     // Fix When You Right Click And Disconnect. Guild Is Null For Some reason
     
     // Have Bot Remove Itself After 5 Mins Of Either An Empty Queue Or When Stop Is Invoked In Event
@@ -98,8 +97,6 @@ public abstract class Bot
         slashCommands.RegisterCommands<CurrentSongCommand>();
         slashCommands.RegisterCommands<SkipCommand>();
         slashCommands.RegisterCommands<HelpCommand>();
-        // Remove once done testing
-        slashCommands.RegisterCommands<ConnectCommand>();
     }
 
     private static void ButtonEvents()

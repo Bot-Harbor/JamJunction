@@ -15,9 +15,6 @@ public class PauseButton : IButton
         var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
         
-        var guildId = e.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
         var message = e.Interaction;
 
         try
@@ -62,6 +59,9 @@ public class PauseButton : IButton
 
                     if (connection != null)
                     {
+                        var guildId = e.Guild.Id;
+                        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+                        
                         await connection.PauseAsync();
 
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,

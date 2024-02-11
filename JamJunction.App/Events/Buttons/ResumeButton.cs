@@ -15,9 +15,6 @@ public class ResumeButton : IButton
         var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
         
-        var guildId = e.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
         var message = e.Interaction;
 
         try
@@ -62,10 +59,15 @@ public class ResumeButton : IButton
 
                     if (connection != null)
                     {
+                        var guildId = e.Guild.Id;
+                        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+                        
                         await connection.ResumeAsync();
 
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(audioEmbed.ResumeEmbedBuilder(e)));
+                        
+                        audioPlayerController.PauseInvoked = false;
                     }
                 }
                 else
@@ -73,8 +75,6 @@ public class ResumeButton : IButton
                     await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                         new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.NoResumePermissionEmbedBuilder()));
                 }
-
-                audioPlayerController.PauseInvoked = false;
             }
         }
         catch (Exception exception)
