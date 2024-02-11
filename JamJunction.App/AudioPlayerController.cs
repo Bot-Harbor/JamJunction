@@ -6,6 +6,7 @@ namespace JamJunction.App;
 
 public class AudioPlayerController
 {
+    public ulong ChannelId { get; set; }
     public Queue<LavalinkTrack> Queue { get; set; } = new Queue<LavalinkTrack>();
     public LavalinkTrack CurrentSongData { get; set; } = new LavalinkTrack();
     public int Volume { get; set; } = 50;

@@ -16,8 +16,9 @@ public class PlayBackFinished
 
         var guildId = sender.Guild.Id;
         var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-        
-        var channel = sender.Channel.Guild.GetChannel(guildId);
+
+        var channelId = audioPlayerController.ChannelId;
+        var channel = sender.Guild.GetChannel(channelId);
         
         if (args.Reason == TrackEndReason.Finished)
         {
@@ -27,12 +28,10 @@ public class PlayBackFinished
             {
                 audioPlayerController.CurrentSongData = audioPlayerController.Queue.Peek();
                 var nextTrackInQueue = audioPlayerController.Queue.Dequeue();
-        
-                // Object reference not set to an instance of an object. Error Generating Embed.
-                channel.SendMessageAsync(
-                    new DiscordMessageBuilder(audioEmbed.SongEmbedBuilder(nextTrackInQueue, sender)));
                 
-                Console.WriteLine("Next Song");
+                channel.SendMessageAsync(
+                    new DiscordMessageBuilder(audioEmbed.SongEmbedBuilder(sender)));
+                
                 connection.PlayAsync(nextTrackInQueue);
             }
             else
@@ -40,9 +39,11 @@ public class PlayBackFinished
                 channel.SendMessageAsync(
                     new DiscordMessageBuilder().AddEmbed(audioEmbed.QueueSomethingEmbedBuilder()));
                 
-                Console.WriteLine("No more songs :(");
-                
+                audioPlayerController.Volume = 50;
+                audioPlayerController.PauseInvoked = false;
+                audioPlayerController.MuteInvoked = false;
                 audioPlayerController.FirstSongInTrack = true;
+                audioPlayerController.Queue.Clear();
             }
         }
 
@@ -53,13 +54,10 @@ public class PlayBackFinished
             audioPlayerController.MuteInvoked = false;
             audioPlayerController.FirstSongInTrack = true;
             audioPlayerController.Queue.Clear();
-            
-            Console.WriteLine("Stop has been used");
         }
         
         if (args.Reason == TrackEndReason.LoadFailed)
         {
-            // Error Generating Embed
             channel.SendMessageAsync(
                 new DiscordMessageBuilder().AddEmbed(errorEmbed.TrackFailedToLoadEmbedBuilder()));
             Task.Delay(TimeSpan.FromSeconds(5));
@@ -70,17 +68,15 @@ public class PlayBackFinished
 
                 audioPlayerController.CurrentSongData = audioPlayerController.Queue.Peek();
                 var nextTrackInQueue = audioPlayerController.Queue.Dequeue();
-
-                // Error Generating Embed
+                
                 channel.SendMessageAsync(
-                    new DiscordMessageBuilder(audioEmbed.SongEmbedBuilder(nextTrackInQueue, sender)));
+                    new DiscordMessageBuilder(audioEmbed.SongEmbedBuilder(sender)));
 
                 connection.PlayAsync(nextTrackInQueue);
             }
 
             if (args.Reason == TrackEndReason.LoadFailed)
             {
-                // Error Generating Embed
                 channel.SendMessageAsync(
                     new DiscordMessageBuilder().AddEmbed(errorEmbed.CouldNotLoadTrackOnAttemptEmbedBuilder()));
                 

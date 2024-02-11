@@ -13,7 +13,6 @@ namespace JamJunction.App;
 
 public abstract class Bot
 {
-    // Fix Embeds For PlayBackFinished Event
     // Fix When You Right Click And Disconnect. Guild Is Null For Some reason
     
     // Have Bot Remove Itself After 5 Mins Of Either An Empty Queue Or When Stop Is Invoked In Event

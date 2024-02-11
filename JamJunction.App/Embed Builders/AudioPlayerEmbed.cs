@@ -9,7 +9,7 @@ namespace JamJunction.App.Embed_Builders;
 
 public class AudioPlayerEmbed
 {
-    public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, InteractionContext context)
+    public DiscordMessageBuilder SongEmbedBuilder(InteractionContext context)
     {
         var guildId = context.Guild.Id;
         var audioPlayerController = Bot.GuildAudioPlayers[guildId];
@@ -125,7 +125,7 @@ public class AudioPlayerEmbed
         return messageBuilder;
     }
 
-    public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, ComponentInteractionCreateEventArgs e)
+    public DiscordMessageBuilder SongEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var guildId = e.Guild.Id;
         var audioPlayerController = Bot.GuildAudioPlayers[guildId];
@@ -241,7 +241,7 @@ public class AudioPlayerEmbed
         return messageBuilder;
     }
 
-    public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, LavalinkGuildConnection sender)
+    public DiscordMessageBuilder SongEmbedBuilder(LavalinkGuildConnection sender)
     {
         var guildId = sender.Guild.Id;
         var audioPlayerController = Bot.GuildAudioPlayers[guildId];

@@ -68,9 +68,8 @@ public class PlayCommand : ApplicationCommandModule
                     if (audioPlayerController.FirstSongInTrack)
                     {
                         audioPlayerController.CurrentSongData = audioPlayerController.Queue.Peek();
-
                         audioPlayerController.Queue.Dequeue();
-                        
+                        audioPlayerController.ChannelId = context.Channel.Id;
                         audioPlayerController.FirstSongInTrack = false;
                         
                         await connection.PlayAsync(track);
