@@ -192,6 +192,17 @@ public class ErrorEmbed
 
         return noVolumeWhilePausedEmbed;
     }
+    
+    public DiscordEmbedBuilder NoVolumeWhilePausedEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    {
+        var noVolumeWhilePausedEmbed = new DiscordEmbedBuilder()
+        {
+            Description = $"🔊  •  You cannot set the volume while the player is paused ``{e.User.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return noVolumeWhilePausedEmbed;
+    }
 
     public DiscordEmbedBuilder NoSeekPermissionEmbedBuilder()
     {

@@ -15,9 +15,6 @@ public class VolumeDownButton : IButton
         var audioEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
 
-        var guildId = e.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
         var message = e.Interaction;
 
         try
@@ -59,32 +56,46 @@ public class VolumeDownButton : IButton
                             new DiscordInteractionResponseBuilder().AddEmbed(
                                 errorEmbed.NoAudioTrackErrorEmbedBuilder()));
                     }
-                    
+
                     if (connection != null)
                     {
-                        if (audioPlayerController.Volume == 0)
+                        var guildId = e.Guild.Id;
+                        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+
+                        if (audioPlayerController.PauseInvoked)
                         {
                             await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                                 new DiscordInteractionResponseBuilder().AddEmbed(
-                                    errorEmbed.MinVolumeEmbedBuilder(e)));
+                                    errorEmbed.NoVolumeWhilePausedEmbedBuilder(e)));
                         }
+                        else
+                        {
+                            if (audioPlayerController.Volume == 0)
+                            {
+                                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                    new DiscordInteractionResponseBuilder().AddEmbed(
+                                        errorEmbed.MinVolumeEmbedBuilder(e)));
+                            }
+                            else
+                            {
+                                var userVolume = audioPlayerController.Volume;
+                                var adjustedVolume = userVolume - 10;
 
-                        var userVolume = audioPlayerController.Volume;
-                        var adjustedVolume = userVolume - 10;
+                                adjustedVolume = Math.Max(adjustedVolume, 0);
 
-                        adjustedVolume = Math.Max(adjustedVolume, 0);
+                                await connection.SetVolumeAsync(adjustedVolume);
+                                audioPlayerController.Volume = adjustedVolume;
 
-                        await connection.SetVolumeAsync(adjustedVolume);
-                        audioPlayerController.Volume = adjustedVolume;
+                                audioPlayerController.MuteInvoked = false;
 
-                        audioPlayerController.MuteInvoked = false;
+                                // Test case
+                                Console.WriteLine(adjustedVolume);
 
-                        // Test case
-                        Console.WriteLine(adjustedVolume);
-
-                        await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
-                            new DiscordInteractionResponseBuilder().AddEmbed(
-                                audioEmbed.VolumeDecreaseEmbedBuilder(e)));
+                                await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
+                                    new DiscordInteractionResponseBuilder().AddEmbed(
+                                        audioEmbed.VolumeDecreaseEmbedBuilder(e)));
+                            }
+                        }
                     }
                 }
                 else
