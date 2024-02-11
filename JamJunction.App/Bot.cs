@@ -13,9 +13,6 @@ namespace JamJunction.App;
 
 public abstract class Bot
 {
-    // Remove Testcases
-    // Run Code Clean Up
-    
     public static readonly Dictionary<ulong, AudioPlayerController> GuildAudioPlayers = new Dictionary<ulong, AudioPlayerController>();
     public static DiscordClient Client { get; set; }
 

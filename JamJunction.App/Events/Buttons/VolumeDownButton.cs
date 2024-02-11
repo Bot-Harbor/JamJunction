@@ -87,10 +87,7 @@ public class VolumeDownButton : IButton
                                 audioPlayerController.Volume = adjustedVolume;
 
                                 audioPlayerController.MuteInvoked = false;
-
-                                // Test case
-                                Console.WriteLine(adjustedVolume);
-
+                                
                                 await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                                     new DiscordInteractionResponseBuilder().AddEmbed(
                                         audioEmbed.VolumeDecreaseEmbedBuilder(e)));

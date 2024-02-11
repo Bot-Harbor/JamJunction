@@ -87,10 +87,7 @@ public class VolumeUpButton : IButton
                                 audioPlayerController.Volume = adjustedVolume;
 
                                 audioPlayerController.MuteInvoked = false;
-
-                                // Test case
-                                Console.WriteLine(adjustedVolume);
-
+                                
                                 await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                                     new DiscordInteractionResponseBuilder().AddEmbed(
                                         audioEmbed.VolumeIncreaseEmbedBuilder(e)));   
