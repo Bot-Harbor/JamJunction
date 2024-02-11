@@ -12,37 +12,30 @@ public class ShuffleQueueCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
-        
+
         try
         {
             var userVc = context.Member?.VoiceState?.Channel;
             var lava = context.Client.GetLavalink();
             var node = lava.ConnectedNodes.Values.First();
-            
+
             if (context.Member != null && (context.Member.Permissions & Permissions.ManageChannels) != 0)
             {
                 if (!lava.ConnectedNodes!.Any())
-                {
                     await context.CreateResponseAsync(errorEmbed.NoConnectionErrorEmbedBuilder());
-                }
 
                 if (userVc == null || userVc.Type != ChannelType.Voice)
-                {
                     await context.CreateResponseAsync(errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context));
-                }
 
                 var connection = node.GetGuildConnection(context.Guild);
 
-                if (connection! == null)
-                {
-                    await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
-                }
+                if (connection! == null) await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
 
                 if (connection != null)
                 {
                     var guildId = context.Guild.Id;
                     var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-                    
+
                     if (audioPlayerController.Queue.Count != 0)
                     {
                         ShuffleQueue(audioPlayerController.Queue);
@@ -52,7 +45,7 @@ public class ShuffleQueueCommand : ApplicationCommandModule
                     else
                     {
                         await context.CreateResponseAsync(errorEmbed.QueueIsEmptyEmbedBuilder(context));
-                    }   
+                    }
                 }
             }
             else
@@ -62,7 +55,7 @@ public class ShuffleQueueCommand : ApplicationCommandModule
         }
         catch (Exception e)
         {
-            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), ephemeral: true);
+            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), true);
         }
     }
 
@@ -80,9 +73,6 @@ public class ShuffleQueueCommand : ApplicationCommandModule
         }
 
         queue.Clear();
-        foreach (var item in list)
-        {
-            queue.Enqueue(item);
-        }
+        foreach (var item in list) queue.Enqueue(item);
     }
 }

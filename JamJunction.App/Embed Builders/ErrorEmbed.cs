@@ -38,7 +38,7 @@ public class ErrorEmbed
 
         return voiceChannelErrorEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoConnectionErrorEmbedBuilder()
     {
         var noConnectionErrorEmbed = new DiscordEmbedBuilder
@@ -49,7 +49,7 @@ public class ErrorEmbed
 
         return noConnectionErrorEmbed;
     }
-    
+
     public DiscordEmbedBuilder LavaLinkErrorEmbedBuilder()
     {
         var lavaLinkErrorEmbed = new DiscordEmbedBuilder
@@ -65,7 +65,7 @@ public class ErrorEmbed
     {
         var audioTrackErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • Failed to find song!",
+            Description = "\ud83c\udfb5 • Failed to find song!",
             Color = DiscordColor.Red
         };
 
@@ -76,7 +76,7 @@ public class ErrorEmbed
     {
         var audioTrackErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • There are no tracks currently playing!",
+            Description = "\ud83c\udfb5 • There are no tracks currently playing!",
             Color = DiscordColor.Red
         };
 
@@ -87,7 +87,7 @@ public class ErrorEmbed
     {
         var noPlayPermissionEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • You do not have permission to play a song!",
+            Description = "\u274c • You do not have permission to play a song!",
             Color = DiscordColor.Red
         };
 
@@ -98,7 +98,7 @@ public class ErrorEmbed
     {
         var noPausePermissionEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • You do not have permission to pause a song!",
+            Description = "\u274c • You do not have permission to pause a song!",
             Color = DiscordColor.Red
         };
 
@@ -109,7 +109,7 @@ public class ErrorEmbed
     {
         var noResumePermissionEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • You do not have permission to resume a song!",
+            Description = "\u274c • You do not have permission to resume a song!",
             Color = DiscordColor.Red
         };
 
@@ -120,7 +120,7 @@ public class ErrorEmbed
     {
         var noStopPermissionEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • You do not have permission to stop a song!",
+            Description = "\u274c • You do not have permission to stop a song!",
             Color = DiscordColor.Red
         };
 
@@ -131,7 +131,7 @@ public class ErrorEmbed
     {
         var noVolumePermissionEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • You do not have permission to change the volume!",
+            Description = "\u274c • You do not have permission to change the volume!",
             Color = DiscordColor.Red
         };
 
@@ -140,7 +140,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder MaxVolumeEmbedBuilder(InteractionContext context)
     {
-        var maxVolumeEmbed = new DiscordEmbedBuilder()
+        var maxVolumeEmbed = new DiscordEmbedBuilder
         {
             Description = $"🔊  •  You cannot set the volume above 100 ``{context.Member.Username}``!",
             Color = DiscordColor.Red
@@ -151,7 +151,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder MaxVolumeEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
-        var maxVolumeEmbed = new DiscordEmbedBuilder()
+        var maxVolumeEmbed = new DiscordEmbedBuilder
         {
             Description = $"🔊  •  The volume is already at its maximum ``{e.User.Username}``!",
             Color = DiscordColor.Red
@@ -162,7 +162,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder MinVolumeEmbedBuilder(InteractionContext context)
     {
-        var minVolumeEmbed = new DiscordEmbedBuilder()
+        var minVolumeEmbed = new DiscordEmbedBuilder
         {
             Description = $"🔊  •  You cannot set the volume below 0 ``{context.Member.Username}``!",
             Color = DiscordColor.Red
@@ -173,7 +173,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder MinVolumeEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
-        var minVolumeEmbed = new DiscordEmbedBuilder()
+        var minVolumeEmbed = new DiscordEmbedBuilder
         {
             Description = $"🔊  •  The volume is already at its minimum ``{e.User.Username}``!",
             Color = DiscordColor.Red
@@ -184,7 +184,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder NoVolumeWhilePausedEmbedBuilder(InteractionContext context)
     {
-        var noVolumeWhilePausedEmbed = new DiscordEmbedBuilder()
+        var noVolumeWhilePausedEmbed = new DiscordEmbedBuilder
         {
             Description = $"🔊  •  You cannot set the volume while the player is paused ``{context.Member.Username}``!",
             Color = DiscordColor.Red
@@ -192,10 +192,10 @@ public class ErrorEmbed
 
         return noVolumeWhilePausedEmbed;
     }
-    
+
     public DiscordEmbedBuilder NoVolumeWhilePausedEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
-        var noVolumeWhilePausedEmbed = new DiscordEmbedBuilder()
+        var noVolumeWhilePausedEmbed = new DiscordEmbedBuilder
         {
             Description = $"🔊  •  You cannot set the volume while the player is paused ``{e.User.Username}``!",
             Color = DiscordColor.Red
@@ -208,7 +208,7 @@ public class ErrorEmbed
     {
         var noSeekPermissionEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • You do not have permission to change the position of a song!",
+            Description = "\u274c • You do not have permission to change the position of a song!",
             Color = DiscordColor.Red
         };
 
@@ -217,7 +217,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder NoSeekWhilePausedEmbedBuilder(InteractionContext context)
     {
-        var noSeekWhilePausedEmbed = new DiscordEmbedBuilder()
+        var noSeekWhilePausedEmbed = new DiscordEmbedBuilder
         {
             Description =
                 $"⌛  •  You cannot change the song position while the player is paused ``{context.Member.Username}``!",
@@ -229,7 +229,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder NoMuteWhilePausedEmbedBuilder(InteractionContext context)
     {
-        var noMuteWhilePausedEmbed = new DiscordEmbedBuilder()
+        var noMuteWhilePausedEmbed = new DiscordEmbedBuilder
         {
             Description = $"⌛  •  You cannot mute the song while the player is paused ``{context.Member.Username}``!",
             Color = DiscordColor.Red
@@ -240,7 +240,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder NoMuteWhilePausedEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
-        var noMuteWhilePausedEmbed = new DiscordEmbedBuilder()
+        var noMuteWhilePausedEmbed = new DiscordEmbedBuilder
         {
             Description = $"⌛  •  You cannot mute the song while the player is paused ``{e.User.Username}``!",
             Color = DiscordColor.Red
@@ -251,7 +251,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder NoUnMuteWhilePausedEmbedBuilder(InteractionContext context)
     {
-        var noUnMuteWhilePausedEmbed = new DiscordEmbedBuilder()
+        var noUnMuteWhilePausedEmbed = new DiscordEmbedBuilder
         {
             Description = $"⌛  •  You cannot unmute the song while the player is paused ``{context.Member.Username}``!",
             Color = DiscordColor.Red
@@ -262,7 +262,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder NoUnMuteWhilePausedEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
-        var noUnMuteWhilePausedEmbed = new DiscordEmbedBuilder()
+        var noUnMuteWhilePausedEmbed = new DiscordEmbedBuilder
         {
             Description = $"⌛  •  You cannot unmute the song while the player is paused ``{e.User.Username}``!",
             Color = DiscordColor.Red
@@ -275,7 +275,7 @@ public class ErrorEmbed
     {
         var noRestartPermissionEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • You do not have permission to restart a song!",
+            Description = "\u274c • You do not have permission to restart a song!",
             Color = DiscordColor.Red
         };
 
@@ -284,7 +284,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder NoRestartWithPausedEmbedBuilder(InteractionContext context)
     {
-        var noRestartWhilePausedEmbed = new DiscordEmbedBuilder()
+        var noRestartWhilePausedEmbed = new DiscordEmbedBuilder
         {
             Description = $"⌛  •  You cannot restart the song while player is paused ``{context.Member.Username}``!",
             Color = DiscordColor.Red
@@ -295,7 +295,7 @@ public class ErrorEmbed
 
     public DiscordEmbedBuilder NoRestartWithPausedEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
-        var noRestartWhilePausedEmbed = new DiscordEmbedBuilder()
+        var noRestartWhilePausedEmbed = new DiscordEmbedBuilder
         {
             Description = $"⌛  •  You cannot restart the song while player is paused ``{e.User.Username}``!",
             Color = DiscordColor.Red
@@ -308,7 +308,7 @@ public class ErrorEmbed
     {
         var noLeavePermissionEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • You do not have permission to disconnect the player!",
+            Description = "\u274c • You do not have permission to disconnect the player!",
             Color = DiscordColor.Red
         };
 
@@ -319,7 +319,7 @@ public class ErrorEmbed
     {
         var noShufflePermissionEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • You do not have permission to shuffle the queue!",
+            Description = "\u274c • You do not have permission to shuffle the queue!",
             Color = DiscordColor.Red
         };
 
@@ -331,7 +331,7 @@ public class ErrorEmbed
     {
         var noSkipPermissionEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • You do not have permission to skip a song!",
+            Description = "\u274c • You do not have permission to skip a song!",
             Color = DiscordColor.Red
         };
 
@@ -386,29 +386,29 @@ public class ErrorEmbed
     {
         var trackFailedToLoadEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • Track failed to load! Reattempting to connect in 5 seconds.",
+            Description = "\u274c • Track failed to load! Reattempting to connect in 5 seconds.",
             Color = DiscordColor.Red
         };
 
         return trackFailedToLoadEmbed;
     }
-    
+
     public DiscordEmbedBuilder CouldNotLoadTrackOnAttemptEmbedBuilder()
     {
         var couldNotLoadOnAttemptTrackEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • Attempt to load track again failed! The audio player has been reset.",
+            Description = "\u274c • Attempt to load track again failed! The audio player has been reset.",
             Color = DiscordColor.Red
         };
 
         return couldNotLoadOnAttemptTrackEmbed;
     }
-    
+
     public DiscordEmbedBuilder TrackStuckEmbedBuilder()
     {
         var trackStuckEmbed = new DiscordEmbedBuilder
         {
-            Description = $"❌ • Track was stuck! The audio player has restarted the song.",
+            Description = "\u274c • Track was stuck! The audio player has restarted the song.",
             Color = DiscordColor.Red
         };
 

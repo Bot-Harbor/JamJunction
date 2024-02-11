@@ -1,6 +1,5 @@
 ﻿using DSharpPlus;
 using DSharpPlus.EventArgs;
-using DSharpPlus.SlashCommands;
 using JamJunction.App.Interfaces;
 
 namespace JamJunction.App.Events.Buttons;

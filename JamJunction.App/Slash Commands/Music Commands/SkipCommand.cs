@@ -13,7 +13,7 @@ public class SkipCommand : ApplicationCommandModule
     {
         var errorEmbed = new ErrorEmbed();
         var audioEmbed = new AudioPlayerEmbed();
-        
+
         try
         {
             var userVc = context.Member?.VoiceState?.Channel;
@@ -23,32 +23,23 @@ public class SkipCommand : ApplicationCommandModule
             if (context.Member != null && (context.Member.Permissions & Permissions.ManageChannels) != 0)
             {
                 if (!lava.ConnectedNodes!.Any())
-                {
                     await context.CreateResponseAsync(errorEmbed.NoConnectionErrorEmbedBuilder());
-                }
 
                 if (userVc == null || userVc.Type != ChannelType.Voice)
-                {
                     await context.CreateResponseAsync(errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context));
-                }
 
                 var connection = node.GetGuildConnection(context.Guild);
 
-                if (connection! == null)
-                {
-                    await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
-                }
+                if (connection! == null) await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
 
                 if (connection != null && connection.CurrentState.CurrentTrack == null)
-                {
                     await context.CreateResponseAsync(errorEmbed.NoAudioTrackErrorEmbedBuilder());
-                }
 
                 if (connection != null)
                 {
                     var guildId = context.Guild.Id;
                     var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-                    
+
                     if (audioPlayerController.Queue.Count != 0)
                     {
                         var queue = audioPlayerController.Queue;
@@ -58,7 +49,7 @@ public class SkipCommand : ApplicationCommandModule
                         var nextTrackInQueue = audioPlayerController.Queue.Dequeue();
 
                         await connection.PlayAsync(nextTrackInQueue);
-                        
+
                         await context.CreateResponseAsync(
                             new DiscordInteractionResponseBuilder(
                                 audioEmbed.SongEmbedBuilder(context)));
@@ -76,7 +67,7 @@ public class SkipCommand : ApplicationCommandModule
         }
         catch (Exception e)
         {
-            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), ephemeral: true);
+            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), true);
         }
     }
 }

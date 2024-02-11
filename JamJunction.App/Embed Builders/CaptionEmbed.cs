@@ -1,5 +1,4 @@
 ﻿using DSharpPlus.Entities;
-using DSharpPlus.SlashCommands;
 using JamJunction.App.Enums;
 
 namespace JamJunction.App.Embed_Builders;
@@ -38,13 +37,13 @@ public class CaptionEmbed
             _ => DiscordColor.None
         };
 
-        var captionEmbed = new DiscordEmbedBuilder()
+        var captionEmbed = new DiscordEmbedBuilder
         {
             Title = caption,
             ImageUrl = image.Url,
             Color = discordColor
         };
-        
+
         return captionEmbed;
     }
 }

@@ -21,7 +21,7 @@ public class HelpCommand : ApplicationCommandModule
         {
             var errorEmbed = new ErrorEmbed();
 
-            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), ephemeral: true);
+            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), true);
         }
     }
 }

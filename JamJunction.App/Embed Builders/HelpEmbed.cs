@@ -1,8 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Data;
-using DSharpPlus;
+﻿using DSharpPlus;
 using DSharpPlus.Entities;
-using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 
 namespace JamJunction.App.Embed_Builders;
@@ -21,63 +18,63 @@ public class HelpEmbed
 
         var helpEmbed = new DiscordEmbedBuilder
         {
-            Author = new DiscordEmbedBuilder.EmbedAuthor()
+            Author = new DiscordEmbedBuilder.EmbedAuthor
             {
                 Name = $"{userName}",
                 Url = "https://github.com/Bot-Harbor/JamJunction",
                 IconUrl = userIcon
             },
-            Title = $"📝 Getting Started",
+            Title = "\ud83d\udcdd Getting Started",
             Color = DiscordColor.White,
             Description =
                 "Your go-to music bot for you and your friends! Type one of the commands below to get started. " +
                 "Most of the music commands will require you to have ``Manage Channels Permission``. " +
                 $"Jam Junction powered by [DSharpPlus {botVersion}]" +
-                $"(https://dsharpplus.github.io/DSharpPlus/index.html), " +
+                "(https://dsharpplus.github.io/DSharpPlus/index.html), " +
                 $"[Lavalink {botVersion}](https://github.com/lavalink-devs/Lavalink), " +
-                $"and [Docker](https://www.docker.com/).",
+                "and [Docker](https://www.docker.com/).",
 
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
                 Url = botIcon
             },
-            Footer = new DiscordEmbedBuilder.EmbedFooter()
+            Footer = new DiscordEmbedBuilder.EmbedFooter
             {
-                Text = ($"*Bot Info  •  " +
-                        $"Total Servers: {serverCount}  •  " +
-                        $"Shard: {shardCount}  •  " +
-                        $"Ping: {ping}  •  " +
-                        $"Version: {botVersion}")
-            },
+                Text = "*Bot Info  •  " +
+                       $"Total Servers: {serverCount}  •  " +
+                       $"Shard: {shardCount}  •  " +
+                       $"Ping: {ping}  •  " +
+                       $"Version: {botVersion}"
+            }
         };
 
         helpEmbed.AddField
         (
             "🎶  **Music Commands**",
-            $"▶️  </play:1181715791658360852>\n" +
-            $"⏸️  </pause:1185357127468986450>\n" +
-            $"▶️  </resume:1185412430055084052>\n" +
-            $"🔴  </stop:1185428654155636738>\n" +
-            $"🔀  </shuffle:1200625616244981821>\n" +
-            $"🔊  </volume:1185357127468986451>\n" +
-            $"🔇  </mute:1196919352222564453>\n" +
-            $"🔊  </unmute:1196933203806662706>\n" +
-            $"🎶  </viewqueue:1200604461941391370>\n" +
-            $"🔁  </restart:1186037012642418698>\n" +
-            $"⌛  </seek:1186000603273510952>\n" +
-            $"🎵  </currentsong:1201998662625153065>\n" +
-            $"⏭️  </skip:1204215826773835778>\n" +
-            $"🔌  </leave:1192206662468108438>\n",
-            inline: true
+            "\u25b6\ufe0f  </play:1181715791658360852>\n" +
+            "\u23f8\ufe0f  </pause:1185357127468986450>\n" +
+            "\u25b6\ufe0f  </resume:1185412430055084052>\n" +
+            "\ud83d\udd34  </stop:1185428654155636738>\n" +
+            "\ud83d\udd00  </shuffle:1200625616244981821>\n" +
+            "\ud83d\udd0a  </volume:1185357127468986451>\n" +
+            "\ud83d\udd07  </mute:1196919352222564453>\n" +
+            "\ud83d\udd0a  </unmute:1196933203806662706>\n" +
+            "\ud83c\udfb6  </viewqueue:1200604461941391370>\n" +
+            "\ud83d\udd01  </restart:1186037012642418698>\n" +
+            "\u231b  </seek:1186000603273510952>\n" +
+            "\ud83c\udfb5  </currentsong:1201998662625153065>\n" +
+            "\u23ed\ufe0f  </skip:1204215826773835778>\n" +
+            "\ud83d\udd0c  </leave:1192206662468108438>\n",
+            true
         );
 
         helpEmbed.AddField
         (
             "🛠️  **Other Commands**",
-            $"🆘  </help:1204525562954121257>\n" +
-            $"🏓  </ping:1181709713256239204>\n" +
-            $"🖼️  </caption:1182083902752444498>\n",
-            inline: true
+            "\ud83c\udd98  </help:1204525562954121257>\n" +
+            "\ud83c\udfd3  </ping:1181709713256239204>\n" +
+            "\ud83d\uddbc\ufe0f  </caption:1182083902752444498>\n",
+            true
         );
 
         var addBotBtn = new DiscordLinkButtonComponent

@@ -7,13 +7,13 @@ public class PingEmbed
 {
     public DiscordEmbedBuilder PingEmbedBuilder(InteractionContext context)
     {
-        var pingEmbed = new DiscordEmbedBuilder()
+        var pingEmbed = new DiscordEmbedBuilder
         {
             Title = $"Pong 🏓 ``{context.Member.Username}``",
             ImageUrl = "https://pbs.twimg.com/media/CijH1M7WgAE_3we.jpg",
-            Color = DiscordColor.Orange,
+            Color = DiscordColor.Orange
         };
-        
+
         return pingEmbed;
     }
 }

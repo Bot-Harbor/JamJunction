@@ -5,7 +5,8 @@ namespace JamJunction.App.Events;
 
 public class GuildConnectionCreated
 {
-    public static Task NodeConnectionOnGuildConnectionCreated(LavalinkGuildConnection sender, GuildConnectionCreatedEventArgs args)
+    public static Task NodeConnectionOnGuildConnectionCreated(LavalinkGuildConnection sender,
+        GuildConnectionCreatedEventArgs args)
     {
         if (sender.IsConnected)
         {
@@ -13,7 +14,7 @@ public class GuildConnectionCreated
             var audioPlayerController = new AudioPlayerController();
             Bot.GuildAudioPlayers.Add(guildId, audioPlayerController);
         }
-        
+
         return Task.CompletedTask;
     }
 }

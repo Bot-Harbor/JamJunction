@@ -28,33 +28,25 @@ public class MuteButton : IButton
                 if (member != null && (e.Channel.PermissionsFor(member) & Permissions.ManageChannels) != 0)
                 {
                     if (!lava.ConnectedNodes!.Any())
-                    {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(
                                 errorEmbed.NoConnectionErrorEmbedBuilder()));
-                    }
 
                     if (userVc == null || userVc.Type != ChannelType.Voice)
-                    {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(
                                 errorEmbed.ValidVoiceChannelBtnErrorEmbedBuilder(e)));
-                    }
 
                     var connection = node.GetGuildConnection(e.Guild);
 
                     if (connection! == null)
-                    {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(errorEmbed.LavaLinkErrorEmbedBuilder()));
-                    }
 
                     if (connection != null && connection.CurrentState.CurrentTrack == null)
-                    {
                         await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                             new DiscordInteractionResponseBuilder().AddEmbed(
                                 errorEmbed.NoAudioTrackErrorEmbedBuilder()));
-                    }
 
                     if (connection != null)
                     {

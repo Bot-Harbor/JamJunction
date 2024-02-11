@@ -13,13 +13,13 @@ public class PingCommand : ApplicationCommandModule
         {
             var pingEmbed = new PingEmbed();
 
-            await context.CreateResponseAsync(pingEmbed.PingEmbedBuilder(context), ephemeral: true);
+            await context.CreateResponseAsync(pingEmbed.PingEmbedBuilder(context), true);
         }
         catch (FormatException)
         {
             var errorEmbed = new ErrorEmbed();
-            
-            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), ephemeral: true);
+
+            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), true);
         }
     }
 }

@@ -8,13 +8,11 @@ public class VoiceStateUpdated
     public static Task ClientOnVoiceStateUpdated(DiscordClient sender, VoiceStateUpdateEventArgs args)
     {
         if (args.User?.Id == sender.CurrentUser?.Id)
-        {
             if (args.Before?.Channel != null && args.After?.Channel == null)
             {
                 var guildId = args.Guild.Id;
                 Bot.GuildAudioPlayers.Remove(guildId);
             }
-        }
 
         return Task.CompletedTask;
     }

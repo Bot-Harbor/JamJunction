@@ -15,7 +15,8 @@ public class CaptionCommand : ApplicationCommandModule
         string caption,
         [Option("image", "The image you want to upload.")]
         DiscordAttachment image,
-        [Option("color", "Pick the color you want the message embed to have.")] Color color
+        [Option("color", "Pick the color you want the message embed to have.")]
+        Color color
     )
     {
         try
@@ -28,7 +29,7 @@ public class CaptionCommand : ApplicationCommandModule
         {
             var errorEmbed = new ErrorEmbed();
 
-            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), ephemeral: true);
+            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), true);
         }
     }
 }

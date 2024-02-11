@@ -13,14 +13,14 @@ namespace JamJunction.App;
 
 public abstract class Bot
 {
-    public static readonly Dictionary<ulong, AudioPlayerController> GuildAudioPlayers = new Dictionary<ulong, AudioPlayerController>();
+    public static readonly Dictionary<ulong, AudioPlayerController> GuildAudioPlayers = new();
     public static DiscordClient Client { get; set; }
 
     public static async Task RunBotAsync()
     {
         var discord = new DiscordSecrets();
 
-        var discordConfig = new DiscordConfiguration()
+        var discordConfig = new DiscordConfiguration
         {
             Intents = DiscordIntents.All,
             Token = discord.BotToken,
@@ -40,13 +40,13 @@ public abstract class Bot
         {
             Password = discord.Password,
             RestEndpoint = endpoint,
-            SocketEndpoint = endpoint,
+            SocketEndpoint = endpoint
         };
 
         Client = new DiscordClient(discordConfig);
-        
+
         var lavaLink = Client.UseLavalink();
-        
+
         await Client.ConnectAsync();
         await lavaLink.ConnectAsync(lavaLinkConfig);
 
