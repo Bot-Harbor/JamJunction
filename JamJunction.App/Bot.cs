@@ -1,6 +1,5 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Lavalink;
-using DSharpPlus.Lavalink.EventArgs;
 using DSharpPlus.Net;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events;
@@ -14,11 +13,14 @@ namespace JamJunction.App;
 
 public abstract class Bot
 {
-    // Fix VoiceStateUpdated Event
-    // Fix PlayCommand: Must Create New Instance When Invoked
-    // Fix Embeds For PlayBackFinished Event 
+    // Fix Embeds For PlayBackFinished Event
+    // Fix No Player In server
+    // Fix When You Right Click And Disconnect. Guild Is Null For Some reason
+    
+    // Have Bot Remove Itself After 5 Mins Of Either An Empty Queue Or When Stop Is Invoked In Event
+    
     // Remove Testcases
-    // Remove Instances Of AudioPlayerController
+    // Run Code Clean Up
     
     public static readonly Dictionary<ulong, AudioPlayerController> GuildAudioPlayers = new Dictionary<ulong, AudioPlayerController>();
     public static DiscordClient Client { get; set; }
@@ -65,17 +67,9 @@ public abstract class Bot
         
         nodeConnection.TrackStuck += TrackStuck.TrackIsStuck;
 
-        nodeConnection.PlaybackFinished += PlayBackFinished.PlayBackIsFinished;
-
-        nodeConnection.Disconnected += NodeDisconnected.Disconnected;
-
-        //nodeConnection.GuildConnectionRemoved += GuildConnectionRemoved.NodeConnectionOnGuildConnectionRemoved;
+        nodeConnection.PlaybackFinished += PlayBackFinished.PlayBackIsFinished; 
         
-        Client.VoiceStateUpdated += (sender, args) =>
-        {
-            VoiceStateUpdated.UserDisconnectsPlayer(sender, args);
-            return Task.CompletedTask;
-        };
+        nodeConnection.GuildConnectionRemoved += GuildConnectionRemoved.NodeConnectionOnGuildConnectionRemoved;
 
         ButtonEvents();
         SlashCommands();
