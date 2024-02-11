@@ -39,22 +39,24 @@ public class ErrorEmbed
         return voiceChannelErrorEmbed;
     }
 
+    //Commit 
     public DiscordEmbedBuilder NoConnectionErrorEmbedBuilder()
     {
         var noConnectionErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = "🌋 🔗• Lavalink connection is not established!",
+            Description = "🌋 • Lavalink connection is not established!",
             Color = DiscordColor.Red
         };
 
         return noConnectionErrorEmbed;
     }
 
+    //Commit 
     public DiscordEmbedBuilder LavaLinkErrorEmbedBuilder()
     {
         var lavaLinkErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = "🌋 🔗• Lavalink failed to connect!",
+            Description = "🔊 • There is no player in the server!",
             Color = DiscordColor.Red
         };
 
