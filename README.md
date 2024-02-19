@@ -16,6 +16,12 @@ Want to invite Jam Junction to your server?
 
 ---
 
+Check out Jam Junction on Top.gg.
+
+[Top.gg](https://top.gg/bot/1181700334561796227)
+
+---
+
 Great and affordable resource for hosting images!
 
 [Digital Ocean](https://www.digitalocean.com/)
