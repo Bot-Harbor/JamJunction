@@ -40,7 +40,7 @@ public class HelpEmbed
             },
             Footer = new DiscordEmbedBuilder.EmbedFooter
             {
-                Text = "*Bot Info  •  " +
+                Text = "Bot Info  •  " +
                        $"Total Servers: {serverCount}  •  " +
                        $"Shard: {shardCount}  •  " +
                        $"Ping: {ping}  •  " +
@@ -86,8 +86,8 @@ public class HelpEmbed
 
         var viewRepoBtn = new DiscordLinkButtonComponent
         (
-            "https://github.com/Bot-Harbor/JamJunction",
-            "View Repository"
+            "https://top.gg/bot/1181700334561796227",
+            "View On Top.gg"
         );
 
         var messageBuilder =
