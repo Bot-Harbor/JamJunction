@@ -33,7 +33,6 @@ public abstract class Bot
         {
             Hostname = discord.HostName,
             Port = discord.Port,
-            Secured = false
         };
 
         var lavaLinkConfig = new LavalinkConfiguration
@@ -49,12 +48,11 @@ public abstract class Bot
 
         await Client.ConnectAsync();
         await lavaLink.ConnectAsync(lavaLinkConfig);
-
         var nodeConnection = lavaLink.GetNodeConnection(endpoint);
-
+        
         Client.Ready += ClientReady.Client_Ready;
         Client.VoiceStateUpdated += VoiceStateUpdated.ClientOnVoiceStateUpdated;
-
+        
         nodeConnection.GuildConnectionCreated += GuildConnectionCreated.NodeConnectionOnGuildConnectionCreated;
         nodeConnection.TrackStuck += TrackStuck.TrackIsStuck;
         nodeConnection.PlaybackFinished += PlayBackFinished.PlayBackIsFinished;
