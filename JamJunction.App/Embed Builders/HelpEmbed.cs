@@ -28,7 +28,6 @@ public class HelpEmbed
             Color = DiscordColor.White,
             Description =
                 "Your go-to music bot for you and your friends! Type one of the commands below to get started. " +
-                "Most of the music commands will require you to have ``Manage Channels Permission``. " +
                 $"Jam Junction powered by [DSharpPlus {botVersion}]" +
                 "(https://dsharpplus.github.io/DSharpPlus/index.html), " +
                 $"[Lavalink {botVersion}](https://github.com/lavalink-devs/Lavalink), " +
@@ -44,7 +43,7 @@ public class HelpEmbed
                        $"Total Servers: {serverCount}  •  " +
                        $"Shard: {shardCount}  •  " +
                        $"Ping: {ping}  •  " +
-                       $"Version: {botVersion}"
+                       $"Version: 1.1.0"
             }
         };
 
