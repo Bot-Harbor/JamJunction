@@ -19,38 +19,31 @@ public class ShuffleQueueCommand : ApplicationCommandModule
             var lava = context.Client.GetLavalink();
             var node = lava.ConnectedNodes.Values.First();
 
-            if (context.Member != null && (context.Member.Permissions & Permissions.ManageChannels) != 0)
+            if (!lava.ConnectedNodes!.Any())
+                await context.CreateResponseAsync(errorEmbed.NoConnectionErrorEmbedBuilder());
+
+            if (userVc == null || userVc.Type != ChannelType.Voice)
+                await context.CreateResponseAsync(errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context));
+
+            var connection = node.GetGuildConnection(context.Guild);
+
+            if (connection! == null) await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
+
+            if (connection != null)
             {
-                if (!lava.ConnectedNodes!.Any())
-                    await context.CreateResponseAsync(errorEmbed.NoConnectionErrorEmbedBuilder());
+                var guildId = context.Guild.Id;
+                var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
-                if (userVc == null || userVc.Type != ChannelType.Voice)
-                    await context.CreateResponseAsync(errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context));
-
-                var connection = node.GetGuildConnection(context.Guild);
-
-                if (connection! == null) await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
-
-                if (connection != null)
+                if (audioPlayerController.Queue.Count != 0)
                 {
-                    var guildId = context.Guild.Id;
-                    var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+                    ShuffleQueue(audioPlayerController.Queue);
 
-                    if (audioPlayerController.Queue.Count != 0)
-                    {
-                        ShuffleQueue(audioPlayerController.Queue);
-
-                        await context.CreateResponseAsync(audioEmbed.ShuffleQueueBuilder(context));
-                    }
-                    else
-                    {
-                        await context.CreateResponseAsync(errorEmbed.QueueIsEmptyEmbedBuilder(context));
-                    }
+                    await context.CreateResponseAsync(audioEmbed.ShuffleQueueBuilder(context));
                 }
-            }
-            else
-            {
-                await context.CreateResponseAsync(errorEmbed.NoShufflePermissionEmbedBuilder());
+                else
+                {
+                    await context.CreateResponseAsync(errorEmbed.QueueIsEmptyEmbedBuilder(context));
+                }
             }
         }
         catch (Exception e)

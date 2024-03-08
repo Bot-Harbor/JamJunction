@@ -25,62 +25,55 @@ public class PlayCommand : ApplicationCommandModule
             var lava = context.Client.GetLavalink();
             var node = lava.ConnectedNodes.Values.First();
 
-            if (context.Member != null && (context.Member.Permissions & Permissions.ManageChannels) != 0)
+            if (!lava.ConnectedNodes!.Any())
+                await context.CreateResponseAsync(errorEmbed.NoConnectionErrorEmbedBuilder());
+
+            if (userVc == null || userVc.Type != ChannelType.Voice)
+                await context.CreateResponseAsync(errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context));
+
+            await node.ConnectAsync(userVc);
+
+            var connection = node.GetGuildConnection(context.Guild);
+
+            if (connection! == null) await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
+
+            var loadResult = await node.Rest.GetTracksAsync(query);
+
+            if (loadResult.LoadResultType == LavalinkLoadResultType.LoadFailed
+                || loadResult.LoadResultType == LavalinkLoadResultType.NoMatches)
+                await context.CreateResponseAsync(errorEmbed.AudioTrackErrorEmbedBuilder());
+
+            var track = loadResult.Tracks.First();
+
+            if (connection != null)
             {
-                if (!lava.ConnectedNodes!.Any())
-                    await context.CreateResponseAsync(errorEmbed.NoConnectionErrorEmbedBuilder());
+                var guildId = context.Guild.Id;
+                var audioPlayerController = Bot.GuildAudioPlayers[guildId];
 
-                if (userVc == null || userVc.Type != ChannelType.Voice)
-                    await context.CreateResponseAsync(errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context));
+                audioPlayerController.Queue.Enqueue(track);
 
-                await node.ConnectAsync(userVc);
-
-                var connection = node.GetGuildConnection(context.Guild);
-
-                if (connection! == null) await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
-
-                var loadResult = await node.Rest.GetTracksAsync(query);
-
-                if (loadResult.LoadResultType == LavalinkLoadResultType.LoadFailed
-                    || loadResult.LoadResultType == LavalinkLoadResultType.NoMatches)
-                    await context.CreateResponseAsync(errorEmbed.AudioTrackErrorEmbedBuilder());
-
-                var track = loadResult.Tracks.First();
-
-                if (connection != null)
+                if (audioPlayerController.FirstSongInTrack)
                 {
-                    var guildId = context.Guild.Id;
-                    var audioPlayerController = Bot.GuildAudioPlayers[guildId];
+                    audioPlayerController.CurrentSongData = audioPlayerController.Queue.Peek();
+                    audioPlayerController.Queue.Dequeue();
+                    audioPlayerController.ChannelId = context.Channel.Id;
+                    audioPlayerController.FirstSongInTrack = false;
 
-                    audioPlayerController.Queue.Enqueue(track);
+                    audioPlayerController.CancellationTokenSource.Cancel();
+                    audioPlayerController.CancellationTokenSource.Dispose();
 
-                    if (audioPlayerController.FirstSongInTrack)
-                    {
-                        audioPlayerController.CurrentSongData = audioPlayerController.Queue.Peek();
-                        audioPlayerController.Queue.Dequeue();
-                        audioPlayerController.ChannelId = context.Channel.Id;
-                        audioPlayerController.FirstSongInTrack = false;
+                    await connection.PlayAsync(track);
 
-                        audioPlayerController.CancellationTokenSource.Cancel();
-                        audioPlayerController.CancellationTokenSource.Dispose();
+                    await connection.SetVolumeAsync(audioPlayerController.Volume);
 
-                        await connection.PlayAsync(track);
-
-                        await connection.SetVolumeAsync(audioPlayerController.Volume);
-
-                        await context.CreateResponseAsync(
-                            new DiscordInteractionResponseBuilder(
-                                audioEmbed.SongEmbedBuilder(context)));
-                    }
-                    else
-                    {
-                        await context.CreateResponseAsync(audioEmbed.QueueEmbedBuilder(track));
-                    }
+                    await context.CreateResponseAsync(
+                        new DiscordInteractionResponseBuilder(
+                            audioEmbed.SongEmbedBuilder(context)));
                 }
-            }
-            else
-            {
-                await context.CreateResponseAsync(errorEmbed.NoPlayPermissionEmbedBuilder());
+                else
+                {
+                    await context.CreateResponseAsync(audioEmbed.QueueEmbedBuilder(track));
+                }
             }
         }
         catch (Exception e)
