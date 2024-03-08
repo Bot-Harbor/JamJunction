@@ -56,7 +56,8 @@ public class SkipCommand : ApplicationCommandModule
                     }
                     else
                     {
-                        await context.CreateResponseAsync(errorEmbed.NoSongsToSkipEmbedBuilder(context));
+                        await connection.StopAsync();
+                        await context.CreateResponseAsync(audioEmbed.QueueSomethingEmbedBuilder());
                     }
                 }
             }

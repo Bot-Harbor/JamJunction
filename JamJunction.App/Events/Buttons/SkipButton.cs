@@ -69,9 +69,10 @@ public class SkipButton : IButton
                         }
                         else
                         {
+                            await connection.StopAsync();
                             await message.CreateResponseAsync(InteractionResponseType.ChannelMessageWithSource,
                                 new DiscordInteractionResponseBuilder().AddEmbed(
-                                    errorEmbed.NoSongsToSkipEmbedBuilder(e)));
+                                    audioEmbed.QueueSomethingEmbedBuilder()));
                         }
                     }
                 }
