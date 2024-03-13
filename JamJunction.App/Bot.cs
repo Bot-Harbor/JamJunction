@@ -1,5 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Lavalink;
+using Lavalink4NET;
 using DSharpPlus.Net;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events;
@@ -32,7 +33,7 @@ public abstract class Bot
         var endpoint = new ConnectionEndpoint
         {
             Hostname = discord.HostName,
-            Port = discord.Port,
+            Port = discord.Port
         };
 
         var lavaLinkConfig = new LavalinkConfiguration
@@ -47,11 +48,11 @@ public abstract class Bot
         var lavaLink = Client.UseLavalink();
 
         await Client.ConnectAsync();
+        
+        Client.VoiceStateUpdated += VoiceStateUpdated.ClientOnVoiceStateUpdated;
+        
         await lavaLink.ConnectAsync(lavaLinkConfig);
         var nodeConnection = lavaLink.GetNodeConnection(endpoint);
-        
-        Client.Ready += ClientReady.Client_Ready;
-        Client.VoiceStateUpdated += VoiceStateUpdated.ClientOnVoiceStateUpdated;
         
         nodeConnection.GuildConnectionCreated += GuildConnectionCreated.NodeConnectionOnGuildConnectionCreated;
         nodeConnection.TrackStuck += TrackStuck.TrackIsStuck;
@@ -84,6 +85,7 @@ public abstract class Bot
         slashCommands.RegisterCommands<CurrentSongCommand>();
         slashCommands.RegisterCommands<SkipCommand>();
         slashCommands.RegisterCommands<HelpCommand>();
+        slashCommands.RegisterCommands<SongPositionCommand>();
     }
 
     private static void ButtonEvents()
