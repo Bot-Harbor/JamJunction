@@ -12,8 +12,12 @@
         <PackageReference Include="DSharpPlus.CommandsNext" Version="5.0.0-nightly-02164" />
         <PackageReference Include="DSharpPlus.Lavalink" Version="5.0.0-nightly-02164" />
         <PackageReference Include="DSharpPlus.SlashCommands" Version="5.0.0-nightly-02164" />
-        <PackageReference Include="Lavalink4NET" Version="4.0.13" />
-        <PackageReference Include="Lavalink4NET.DSharpPlus" Version="4.0.8" />
+        <PackageReference Include="Lavalink4NET.DSharpPlus" Version="4.0.26-preview.4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0-rc.1.24431.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\JamJunction.App.Old\JamJunction.App.Old.csproj" />
     </ItemGroup>
 
 </Project>
