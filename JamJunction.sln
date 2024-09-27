@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JamJunction.App", "JamJunction.App\JamJunction.App.csproj", "{9643F379-F2C7-416E-97D5-B993DC78006B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{7D384347-E13D-4D83-B925-BDA830B3F0AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JamJunction.App.Old", "JamJunction.App.Old\JamJunction.App.Old.csproj", "{ABD3ED59-379F-4A90-B38D-C0FCEA35B7CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{9643F379-F2C7-416E-97D5-B993DC78006B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9643F379-F2C7-416E-97D5-B993DC78006B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9643F379-F2C7-416E-97D5-B993DC78006B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABD3ED59-379F-4A90-B38D-C0FCEA35B7CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABD3ED59-379F-4A90-B38D-C0FCEA35B7CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABD3ED59-379F-4A90-B38D-C0FCEA35B7CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABD3ED59-379F-4A90-B38D-C0FCEA35B7CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9643F379-F2C7-416E-97D5-B993DC78006B} = {7D384347-E13D-4D83-B925-BDA830B3F0AE}
+		{ABD3ED59-379F-4A90-B38D-C0FCEA35B7CA} = {7D384347-E13D-4D83-B925-BDA830B3F0AE}
 	EndGlobalSection
 EndGlobal
