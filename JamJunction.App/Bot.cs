@@ -1,8 +1,10 @@
 ﻿using DSharpPlus;
+using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events.Buttons;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
+using Lavalink4NET;
 using Microsoft.Extensions.Hosting;
 
 namespace JamJunction.App;
@@ -13,11 +15,13 @@ public class Bot : BackgroundService
 
     private readonly IServiceProvider _serviceProvider;
     private readonly DiscordClient _discordClient;
-
+    //private readonly IAudioService _audioService;
+    
     public Bot(IServiceProvider serviceProvider, DiscordClient discordClient)
     {
         _serviceProvider = serviceProvider;
         _discordClient = discordClient;
+        //_audioService = audioService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -25,6 +29,12 @@ public class Bot : BackgroundService
         await _discordClient
             .ConnectAsync()
             .ConfigureAwait(false);
+
+        /*_audioService.TrackEnded += (sender, args) =>
+        {   
+            Display message when track ends. Next song or if track is empty message. 
+            Give user 15 minutes to queue a song before leaving server. If user plays song, cancel
+        };*/
         
         ConfigSlashCommands();
         ButtonEvents();
@@ -57,18 +67,20 @@ public class Bot : BackgroundService
 
     private void ButtonEvents()
     {
+        var buttonHandler = new ButtonHandler();
+        
         _discordClient.ComponentInteractionCreated += async (sender, args) =>
         {
-            await ButtonHandler.Execute(new PauseButton(), sender, args);
-            await ButtonHandler.Execute(new ResumeButton(), sender, args);
-            await ButtonHandler.Execute(new StopButton(), sender, args);
-            await ButtonHandler.Execute(new ShuffleButton(), sender, args);
-            await ButtonHandler.Execute(new VolumeDownButton(), sender, args);
-            await ButtonHandler.Execute(new VolumeUpButton(), sender, args);
-            await ButtonHandler.Execute(new ViewQueueButton(), sender, args);
-            await ButtonHandler.Execute(new MuteButton(), sender, args);
-            await ButtonHandler.Execute(new RestartButton(), sender, args);
-            await ButtonHandler.Execute(new SkipButton(), sender, args);
+            await buttonHandler.Execute(new PauseButton(), sender, args);
+            await buttonHandler.Execute(new ResumeButton(), sender, args);
+            await buttonHandler.Execute(new StopButton(), sender, args);
+            await buttonHandler.Execute(new ShuffleButton(), sender, args);
+            await buttonHandler.Execute(new VolumeDownButton(), sender, args);
+            await buttonHandler.Execute(new VolumeUpButton(), sender, args);
+            await buttonHandler.Execute(new ViewQueueButton(), sender, args);
+            await buttonHandler.Execute(new MuteButton(), sender, args);
+            await buttonHandler.Execute(new RestartButton(), sender, args);
+            await buttonHandler.Execute(new SkipButton(), sender, args);
         };
     }
 }
