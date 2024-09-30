@@ -1,6 +1,6 @@
 ﻿using DSharpPlus.SlashCommands;
 
-namespace JamJunction.App.Slash_Commands.Other_Commands.Enums;
+namespace JamJunction.App.Enums;
 
 public enum Color
 {
