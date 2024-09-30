@@ -1,7 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.EventArgs;
 
-namespace JamJunction.App.Interfaces;
+namespace JamJunction.App.Events.Buttons.Interfaces;
 
 public interface IButton
 {
