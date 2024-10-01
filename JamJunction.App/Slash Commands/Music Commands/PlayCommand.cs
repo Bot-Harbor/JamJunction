@@ -15,12 +15,14 @@ public class PlayCommand : ApplicationCommandModule
 {
     private readonly IAudioService _audioService;
     private LavalinkTrack Track { get; set; }
+    private AudioPlayerEmbed AudioPlayerEmbed { get; set; } = new();
+    private ErrorEmbed ErrorEmbed { get; set; } = new();
 
     public PlayCommand(IAudioService audioService)
     {
         _audioService = audioService;
     }
-    
+
     [SlashCommand("play", "Queue a song.")]
     public async Task PlayAsync
     (
@@ -34,7 +36,7 @@ public class PlayCommand : ApplicationCommandModule
         await context.DeferAsync();
 
         var player = await GetPlayerAsync(context, connectToVoiceChannel: true);
-        
+
         switch (streamingPlatform)
         {
             case Platform.YouTube:
@@ -57,54 +59,34 @@ public class PlayCommand : ApplicationCommandModule
 
         if (Track is null)
         {
-            // Use audio player embed class
-            var errorResponse = new DiscordFollowupMessageBuilder()
-                .WithContent("😖 No results.");
-
             await context
-                .FollowUpAsync(errorResponse);
+                .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                    .AddEmbed(ErrorEmbed.AudioTrackErrorEmbedBuilder()));
         }
-        
-        var position = await player!.PlayAsync(Track);
-        
+
+        var position = await player!.PlayAsync(Track!);
+
         if (position == 0)
         {
-            // Use audio player embed class
-            var currentSongEmbed = new DiscordEmbedBuilder
-            {
-                Description = $"💿  •  **Now playing**: {Track.Title}\n" +
-                              $"🎙️  •  **Artist**: {Track.Author}\n" +
-                              $"⌛  •  **Song Duration** (HH:MM:SS): {RoundSeconds(Track.Duration)}\n" +
-                              $"🔴  •  **Is a Livestream**: {Track.IsLiveStream}",
-                Color = DiscordColor.Teal,
-                Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
-                {
-                    Url = Track.ArtworkUri!.AbsoluteUri
-                }
-            };
             await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder().AddEmbed(currentSongEmbed));
+                .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                    new DiscordInteractionResponseBuilder(AudioPlayerEmbed.SongEmbedBuilder(context, player, Track))));
         }
         else
         {
-            // Use audio player embed class
             await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder().WithContent($"🔈 Added to queue: {Track.Uri}"))
-                .ConfigureAwait(false);
+                .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                    .AddEmbed(AudioPlayerEmbed.QueueEmbedBuilder(Track)));
         }
     }
 
-    private TimeSpan RoundSeconds(TimeSpan  timespan)
-    {
-        return TimeSpan.FromSeconds(Math.Round(timespan.TotalSeconds));
-    }
-    
-    private async ValueTask<QueuedLavalinkPlayer?> GetPlayerAsync(InteractionContext interactionContext, bool connectToVoiceChannel = true)
+    private async ValueTask<QueuedLavalinkPlayer?> GetPlayerAsync(InteractionContext interactionContext,
+        bool connectToVoiceChannel = true)
     {
         var retrieveOptions = new PlayerRetrieveOptions(
             ChannelBehavior: connectToVoiceChannel ? PlayerChannelBehavior.Join : PlayerChannelBehavior.None);
-        
-        var playerOptions = new QueuedLavalinkPlayerOptions { HistoryCapacity = 10000 };
+
+        var playerOptions = new QueuedLavalinkPlayerOptions {HistoryCapacity = 10000};
 
         var result = await _audioService.Players
             .RetrieveAsync(interactionContext.Guild.Id, interactionContext.Member?.VoiceState.Channel!.Id,
@@ -112,20 +94,25 @@ public class PlayCommand : ApplicationCommandModule
 
         if (!result.IsSuccess)
         {
-            var errorMessage = result.Status switch
+            var errorMessage = result.Status;
+
+            if (errorMessage == PlayerRetrieveStatus.UserNotInVoiceChannel)
             {
-                // Use audio player embed class and move out of this method
-                PlayerRetrieveStatus.UserNotInVoiceChannel => "You are not connected to a voice channel.",
-                PlayerRetrieveStatus.BotNotConnected => "The bot is currently not connected.",
-                _ => "Unknown error.",
-            };
-
-            var errorResponse = new DiscordFollowupMessageBuilder()
-                .WithContent(errorMessage)
-                .AsEphemeral();
-
-            await interactionContext
-                .FollowUpAsync(errorResponse);
+                await interactionContext.FollowUpAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(
+                        ErrorEmbed.ValidVoiceChannelErrorEmbedBuilder(interactionContext)));
+            }
+            else if (errorMessage == PlayerRetrieveStatus.BotNotConnected)
+            {
+                await interactionContext.FollowUpAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(
+                        ErrorEmbed.LavaLinkErrorEmbedBuilder()));
+            }
+            else
+            {
+                await interactionContext.FollowUpAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(ErrorEmbed.UnknownErrorEmbedBuilder()));
+            }
         }
 
         return result.Player;

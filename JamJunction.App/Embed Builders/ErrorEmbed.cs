@@ -6,6 +6,7 @@ namespace JamJunction.App.Embed_Builders;
 
 public class ErrorEmbed
 {
+    // Remove
     public DiscordEmbedBuilder CommandFailedEmbedBuilder()
     {
         var commandErrorEmbed = new DiscordEmbedBuilder
@@ -15,6 +16,17 @@ public class ErrorEmbed
         };
 
         return commandErrorEmbed;
+    }
+
+    public DiscordEmbedBuilder UnknownErrorEmbedBuilder()
+    {
+        var unknownErrorEmbed = new DiscordEmbedBuilder
+        {
+            Description = "⚠️ • An unknown error occurred!",
+            Color = DiscordColor.Red
+        };
+
+        return unknownErrorEmbed;
     }
 
     public DiscordEmbedBuilder ValidVoiceChannelErrorEmbedBuilder(InteractionContext context)
@@ -82,62 +94,7 @@ public class ErrorEmbed
 
         return audioTrackErrorEmbed;
     }
-
-    public DiscordEmbedBuilder NoPlayPermissionEmbedBuilder()
-    {
-        var noPlayPermissionEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\u274c • You do not have permission to play a song!",
-            Color = DiscordColor.Red
-        };
-
-        return noPlayPermissionEmbed;
-    }
-
-    public DiscordEmbedBuilder NoPausePermissionEmbedBuilder()
-    {
-        var noPausePermissionEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\u274c • You do not have permission to pause a song!",
-            Color = DiscordColor.Red
-        };
-
-        return noPausePermissionEmbed;
-    }
-
-    public DiscordEmbedBuilder NoResumePermissionEmbedBuilder()
-    {
-        var noResumePermissionEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\u274c • You do not have permission to resume a song!",
-            Color = DiscordColor.Red
-        };
-
-        return noResumePermissionEmbed;
-    }
-
-    public DiscordEmbedBuilder NoStopPermissionEmbedBuilder()
-    {
-        var noStopPermissionEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\u274c • You do not have permission to stop a song!",
-            Color = DiscordColor.Red
-        };
-
-        return noStopPermissionEmbed;
-    }
-
-    public DiscordEmbedBuilder NoVolumePermissionEmbedBuilder()
-    {
-        var noVolumePermissionEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\u274c • You do not have permission to change the volume!",
-            Color = DiscordColor.Red
-        };
-
-        return noVolumePermissionEmbed;
-    }
-
+    
     public DiscordEmbedBuilder MaxVolumeEmbedBuilder(InteractionContext context)
     {
         var maxVolumeEmbed = new DiscordEmbedBuilder
@@ -203,17 +160,7 @@ public class ErrorEmbed
 
         return noVolumeWhilePausedEmbed;
     }
-
-    public DiscordEmbedBuilder NoSeekPermissionEmbedBuilder()
-    {
-        var noSeekPermissionEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\u274c • You do not have permission to change the position of a song!",
-            Color = DiscordColor.Red
-        };
-
-        return noSeekPermissionEmbed;
-    }
+    
 
     public DiscordEmbedBuilder NoSeekWhilePausedEmbedBuilder(InteractionContext context)
     {
@@ -270,17 +217,7 @@ public class ErrorEmbed
 
         return noUnMuteWhilePausedEmbed;
     }
-
-    public DiscordEmbedBuilder NoRestartPermissionEmbedBuilder()
-    {
-        var noRestartPermissionEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\u274c • You do not have permission to restart a song!",
-            Color = DiscordColor.Red
-        };
-
-        return noRestartPermissionEmbed;
-    }
+    
 
     public DiscordEmbedBuilder NoRestartWithPausedEmbedBuilder(InteractionContext context)
     {
@@ -303,41 +240,7 @@ public class ErrorEmbed
 
         return noRestartWhilePausedEmbed;
     }
-
-    public DiscordEmbedBuilder NoLeavePermissionEmbedBuilder()
-    {
-        var noLeavePermissionEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\u274c • You do not have permission to disconnect the player!",
-            Color = DiscordColor.Red
-        };
-
-        return noLeavePermissionEmbed;
-    }
-
-    public DiscordEmbedBuilder NoShufflePermissionEmbedBuilder()
-    {
-        var noShufflePermissionEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\u274c • You do not have permission to shuffle the queue!",
-            Color = DiscordColor.Red
-        };
-
-        return noShufflePermissionEmbed;
-    }
-
-
-    public DiscordEmbedBuilder NoSkipPermissionEmbedBuilder()
-    {
-        var noSkipPermissionEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\u274c • You do not have permission to skip a song!",
-            Color = DiscordColor.Red
-        };
-
-        return noSkipPermissionEmbed;
-    }
-
+    
     public DiscordEmbedBuilder NoSongsToSkipEmbedBuilder(InteractionContext context)
     {
         var noSongsToSkipEmbed = new DiscordEmbedBuilder
@@ -382,6 +285,7 @@ public class ErrorEmbed
         return queueIsEmptyEmbed;
     }
 
+    // Remove?
     public DiscordEmbedBuilder TrackFailedToLoadEmbedBuilder()
     {
         var trackFailedToLoadEmbed = new DiscordEmbedBuilder
@@ -393,6 +297,7 @@ public class ErrorEmbed
         return trackFailedToLoadEmbed;
     }
 
+    // Remove?
     public DiscordEmbedBuilder CouldNotLoadTrackOnAttemptEmbedBuilder()
     {
         var couldNotLoadOnAttemptTrackEmbed = new DiscordEmbedBuilder
