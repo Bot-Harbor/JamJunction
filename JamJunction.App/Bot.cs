@@ -13,6 +13,7 @@ public class Bot : BackgroundService
 {
     // Remove old dictionary
     public static readonly Dictionary<ulong, AudioPlayerController> GuildAudioPlayers = new();
+    public static readonly Dictionary<ulong, GuildData> GuildData = new();
     private readonly IServiceProvider _serviceProvider;
     private readonly DiscordClient _discordClient;
     private readonly IAudioService _audioService;
@@ -27,7 +28,6 @@ public class Bot : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await _discordClient.ConnectAsync();
-
         var trackStartedEvent = new TrackStartedEvent(_discordClient, _audioService);
         _audioService.TrackStarted += trackStartedEvent.TrackStarted;
 

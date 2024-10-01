@@ -24,17 +24,18 @@ public class TrackStartedEvent
 
     public async Task TrackStarted(object sender, TrackStartedEventArgs eventargs)
     {
-        // Add cancellation token to cancel task for leaving server.
-
         var guildId = eventargs.Player.GuildId;
         var voiceChannelId = eventargs.Player.VoiceChannelId;
         var guild = await _discordClient.GetGuildAsync(guildId);
-        var channel = guild.GetChannel(voiceChannelId);
-
+        
         var track = eventargs.Track;
         var player = await GetPlayerAsync(guildId, voiceChannelId, connectToVoiceChannel: true);
-        
-        if (player.Queue.Count == 0)
+
+        var guildController = Bot.GuildData[guildId];
+        var textChannelId = guildController.TextChannelId;
+        var channel = guild.GetChannel(textChannelId);
+
+        if (!guildController.FirstSongInQueue)
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
             await channel.SendMessageAsync(audioPlayerEmbed.SongEmbedBuilder(track, player));   

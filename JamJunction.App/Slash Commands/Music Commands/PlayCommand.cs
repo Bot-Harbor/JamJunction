@@ -64,10 +64,23 @@ public class PlayCommand : ApplicationCommandModule
                     .AddEmbed(ErrorEmbed.AudioTrackErrorEmbedBuilder()));
         }
 
-        var position = await player!.PlayAsync(Track!);
+        var guildId = context.Guild.Id;
+        var textChannelId = context.Channel.Id;
         
-        if (position == 0)
+        // Check to see if it already exists
+        if (!Bot.GuildData.ContainsKey(guildId))
         {
+            Bot.GuildData.Add(guildId, new GuildData());
+        }
+        
+        var guildController = Bot.GuildData[guildId];
+        guildController.TextChannelId = textChannelId;
+        
+        await player!.PlayAsync(Track!);
+        
+        if (guildController.FirstSongInQueue)
+        {
+            guildController.FirstSongInQueue = false;
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(AudioPlayerEmbed.SongEmbedBuilder(Track, player))));
@@ -79,7 +92,7 @@ public class PlayCommand : ApplicationCommandModule
                     .AddEmbed(AudioPlayerEmbed.QueueEmbedBuilder(Track)));
         }
     }
-
+    
     private async ValueTask<QueuedLavalinkPlayer> GetPlayerAsync(InteractionContext interactionContext,
         bool connectToVoiceChannel = true)
     {
