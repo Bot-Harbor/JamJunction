@@ -61,7 +61,6 @@ public class HelpEmbed
             "\ud83c\udfb6  </viewqueue:1200604461941391370>\n" +
             "\ud83d\udd01  </restart:1186037012642418698>\n" +
             "\u231b  </seek:1186000603273510952>\n" +
-            "\ud83c\udfb5  </currentsong:1201998662625153065>\n" +
             "\u23ed\ufe0f  </skip:1204215826773835778>\n" +
             "\ud83d\udd0c  </leave:1192206662468108438>\n",
             true
