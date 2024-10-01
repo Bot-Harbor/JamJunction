@@ -1,7 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
-using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using Lavalink4NET.Players.Queued;
 using LavalinkTrack = Lavalink4NET.Tracks.LavalinkTrack;
@@ -10,7 +9,7 @@ namespace JamJunction.App.Embed_Builders;
 
 public class AudioPlayerEmbed
 {
-    public DiscordMessageBuilder SongEmbedBuilder(InteractionContext context, QueuedLavalinkPlayer queuedLavalinkPlayer ,LavalinkTrack track)
+    public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var currentSongEmbed = new DiscordEmbedBuilder
         {
@@ -26,12 +25,22 @@ public class AudioPlayerEmbed
         };
 
         var queue = queuedLavalinkPlayer.Queue;
-            
-        foreach (var nextSong in queue.Take(1))
+
+        if (queue.Count == 0)
+        {
             currentSongEmbed.Footer = new DiscordEmbedBuilder.EmbedFooter
             {
-                Text = $"Next Song: {nextSong.Track!.Title}"
+                Text = "Queue is empty..."
             };
+        }
+        else
+        {
+            foreach (var nextSong in queue.Take(1))
+                currentSongEmbed.Footer = new DiscordEmbedBuilder.EmbedFooter
+                {
+                    Text = $"Next Song: {nextSong.Track!.Title}"
+                };
+        }
 
         var pauseButton = new DiscordButtonComponent
         (
@@ -112,7 +121,7 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-    
+
     private TimeSpan RoundSeconds(TimeSpan timespan)
     {
         return TimeSpan.FromSeconds(Math.Round(timespan.TotalSeconds));
@@ -225,7 +234,7 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-    
+
     public DiscordEmbedBuilder QueueEmbedBuilder(LavalinkTrack track)
     {
         var queueEmbed = new DiscordEmbedBuilder

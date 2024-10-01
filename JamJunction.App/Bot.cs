@@ -1,6 +1,6 @@
 ﻿using DSharpPlus;
-using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
+using JamJunction.App.Events;
 using JamJunction.App.Events.Buttons;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
@@ -11,31 +11,32 @@ namespace JamJunction.App;
 
 public class Bot : BackgroundService
 {
+    // Remove old dictionary
     public static readonly Dictionary<ulong, AudioPlayerController> GuildAudioPlayers = new();
-
     private readonly IServiceProvider _serviceProvider;
     private readonly DiscordClient _discordClient;
-    //private readonly IAudioService _audioService;
-    
-    public Bot(IServiceProvider serviceProvider, DiscordClient discordClient)
+    private readonly IAudioService _audioService;
+
+    public Bot(IServiceProvider serviceProvider, DiscordClient discordClient, IAudioService audioService)
     {
         _serviceProvider = serviceProvider;
         _discordClient = discordClient;
-        //_audioService = audioService;
+        _audioService = audioService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        await _discordClient
-            .ConnectAsync()
-            .ConfigureAwait(false);
+        await _discordClient.ConnectAsync();
 
-        /*_audioService.TrackEnded += (sender, args) =>
-        {   
-            Display message when track ends. Next song or if track is empty message. 
-            Give user 15 minutes to queue a song before leaving server. If user plays song, cancel
-        };*/
-        
+        var trackStartedEvent = new TrackStartedEvent(_discordClient, _audioService);
+        _audioService.TrackStarted += trackStartedEvent.TrackStarted;
+
+        // Track Ended Event: Begin task to leave server if queue is empty and reset first song in queue .
+
+        // Track Stuck/Event: If track gets stuck, reattempt to play it
+
+        // User Leaves VC Event: If there is only 1 user the bot, have bot leave VC and dispose guild from controller
+
         ConfigSlashCommands();
         ButtonEvents();
     }
@@ -59,7 +60,6 @@ public class Bot : BackgroundService
         slashCommands.RegisterCommands<UnmuteCommand>();
         slashCommands.RegisterCommands<ViewQueueCommand>();
         slashCommands.RegisterCommands<ShuffleQueueCommand>();
-        slashCommands.RegisterCommands<CurrentSongCommand>();
         slashCommands.RegisterCommands<SkipCommand>();
         slashCommands.RegisterCommands<HelpCommand>();
         slashCommands.RegisterCommands<SongPositionCommand>();
@@ -68,7 +68,7 @@ public class Bot : BackgroundService
     private void ButtonEvents()
     {
         var buttonHandler = new ButtonHandler();
-        
+
         _discordClient.ComponentInteractionCreated += async (sender, args) =>
         {
             await buttonHandler.Execute(new PauseButton(), sender, args);

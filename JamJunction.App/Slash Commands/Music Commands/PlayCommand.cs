@@ -34,7 +34,7 @@ public class PlayCommand : ApplicationCommandModule
     )
     {
         await context.DeferAsync();
-
+        
         var player = await GetPlayerAsync(context, connectToVoiceChannel: true);
 
         switch (streamingPlatform)
@@ -65,12 +65,12 @@ public class PlayCommand : ApplicationCommandModule
         }
 
         var position = await player!.PlayAsync(Track!);
-
+        
         if (position == 0)
         {
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                    new DiscordInteractionResponseBuilder(AudioPlayerEmbed.SongEmbedBuilder(context, player, Track))));
+                    new DiscordInteractionResponseBuilder(AudioPlayerEmbed.SongEmbedBuilder(Track, player))));
         }
         else
         {
@@ -80,7 +80,7 @@ public class PlayCommand : ApplicationCommandModule
         }
     }
 
-    private async ValueTask<QueuedLavalinkPlayer?> GetPlayerAsync(InteractionContext interactionContext,
+    private async ValueTask<QueuedLavalinkPlayer> GetPlayerAsync(InteractionContext interactionContext,
         bool connectToVoiceChannel = true)
     {
         var retrieveOptions = new PlayerRetrieveOptions(
@@ -98,18 +98,24 @@ public class PlayCommand : ApplicationCommandModule
 
             if (errorMessage == PlayerRetrieveStatus.UserNotInVoiceChannel)
             {
+                // Not sending
+                Console.WriteLine("User Not In Voice Channel");
                 await interactionContext.FollowUpAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         ErrorEmbed.ValidVoiceChannelErrorEmbedBuilder(interactionContext)));
             }
             else if (errorMessage == PlayerRetrieveStatus.BotNotConnected)
             {
+                // Not sending
+                Console.WriteLine("Bot Not Connected");
                 await interactionContext.FollowUpAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         ErrorEmbed.LavaLinkErrorEmbedBuilder()));
             }
             else
             {
+                // Not sending
+                Console.WriteLine("Unknown Error");
                 await interactionContext.FollowUpAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(ErrorEmbed.UnknownErrorEmbedBuilder()));
             }
