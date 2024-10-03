@@ -121,7 +121,7 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-    
+
     public DiscordMessageBuilder SongEmbedBuilder(ComponentInteractionCreateEventArgs e)
     {
         var guildId = e.Guild.Id;
@@ -546,8 +546,6 @@ public class AudioPlayerEmbed
 
     public DiscordEmbedBuilder SongPositionBuilder(TimeSpan timeSpan)
     {
-        
-        
         var songPosition = new DiscordEmbedBuilder
         {
             Description = $"🕒  • Current Song Position (HH:MM:SS): ``{RoundSeconds(timeSpan)}``",
@@ -556,7 +554,7 @@ public class AudioPlayerEmbed
 
         return songPosition;
     }
-    
+
     private TimeSpan RoundSeconds(TimeSpan timespan)
     {
         return TimeSpan.FromSeconds(Math.Round(timespan.TotalSeconds));
