@@ -33,7 +33,7 @@ public class ErrorEmbed
     {
         var voiceChannelErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊 • You must be in a valid voice channel ``{context.Member.Username}``!",
+            Description = $"🔊 • You must be in a valid voice channel ``{context.Member.DisplayName}``!",
             Color = DiscordColor.Red
         };
 
