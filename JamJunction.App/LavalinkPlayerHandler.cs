@@ -1,9 +1,4 @@
-﻿using System.Data;
-using DSharpPlus;
-using DSharpPlus.Entities;
-using DSharpPlus.Lavalink;
-using DSharpPlus.SlashCommands;
-using JamJunction.App.Embed_Builders;
+﻿using DSharpPlus.Entities;
 using Lavalink4NET;
 using Lavalink4NET.Players;
 using Lavalink4NET.Players.Queued;
@@ -21,15 +16,14 @@ public class LavalinkPlayerHandler
     }
 
     /// <summary>
-    /// Gets queued Lavalink player using interaction context.
+    /// Gets queued Lavalink player for commands.
     /// </summary>
-    /// <param name="interactionContext"></param>
     /// <param name="guildId"></param>
     /// <param name="voiceChannel"></param>
     /// <param name="connectToVoiceChannel"></param>
     /// <returns></returns>
-    public async ValueTask<QueuedLavalinkPlayer> GetPlayerAsync(InteractionContext interactionContext, ulong guildId,
-        DiscordChannel voiceChannel, bool connectToVoiceChannel = true)
+    public async ValueTask<QueuedLavalinkPlayer> GetPlayerAsync(ulong guildId, DiscordChannel voiceChannel,
+        bool connectToVoiceChannel = true)
     {
         try
         {
