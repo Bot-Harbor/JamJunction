@@ -79,6 +79,15 @@ public class PauseCommand : ApplicationCommandModule
             return;
         }
 
+        if (player.IsPaused)
+        {
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.AlreadyPausedEmbedBuilder(context)));
+            
+            return;
+        }
+
         await player!.PauseAsync();
 
         await context.FollowUpAsync(
