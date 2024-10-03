@@ -1,56 +1,88 @@
 ﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
+using Lavalink4NET;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class RestartCommand : ApplicationCommandModule
 {
+    private readonly IAudioService _audioService;
+
+    public RestartCommand(IAudioService audioService)
+    {
+        _audioService = audioService;
+    }
+    
     [SlashCommand("restart", "Restarts the current song.")]
     public async Task RestartCommandAsync(InteractionContext context)
     {
+      await context.DeferAsync();
+
+        var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
-        var audioEmbed = new AudioPlayerEmbed();
 
-        try
+        var guildId = context.Guild.Id;
+        var userVoiceChannel = context.Member?.VoiceState?.Channel;
+
+        if (userVoiceChannel == null)
         {
-            var userVc = context.Member?.VoiceState?.Channel;
-            var lava = context.Client.GetLavalink();
-            var node = lava.ConnectedNodes.Values.First();
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context)));
 
-            if (!lava.ConnectedNodes!.Any())
-                await context.CreateResponseAsync(errorEmbed.NoConnectionErrorEmbedBuilder());
-
-            if (userVc == null || userVc.Type != ChannelType.Voice)
-                await context.CreateResponseAsync(errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context));
-
-            var connection = node.GetGuildConnection(context.Guild);
-
-            if (connection! == null) await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
-
-            if (connection != null && connection.CurrentState.CurrentTrack == null)
-                await context.CreateResponseAsync(errorEmbed.NoAudioTrackErrorEmbedBuilder());
-
-            if (connection != null)
-            {
-                var guildId = context.Guild.Id;
-                var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
-                if (audioPlayerController.PauseInvoked)
-                {
-                    await context.CreateResponseAsync(errorEmbed.NoRestartWithPausedEmbedBuilder(context));
-                }
-                else
-                {
-                    await connection.SeekAsync(TimeSpan.FromSeconds(0));
-                    await context.CreateResponseAsync(audioEmbed.RestartEmbedBuilder(context));
-                }
-            }
+            return;
         }
-        catch (Exception e)
+
+        var botId = context.Client.CurrentUser.Id;
+        var botVoiceChannel = context.Guild.VoiceStates.TryGetValue(botId, out var botVoiceState);
+
+        if (botVoiceChannel == false)
         {
-            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), true);
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.NoPlayerErrorEmbedBuilder()));
+
+            return;
         }
+
+        if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
+        {
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.SameVoiceChannelErrorEmbedBuilder(context)));
+
+            return;
+        }
+
+        var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
+        var player =
+            await lavalinkPlayer.GetPlayerAsync(context, guildId, userVoiceChannel, connectToVoiceChannel: false);
+
+        if (player == null)
+        {
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.NoConnectionErrorEmbedBuilder()));
+
+            return;
+        }
+
+        if (player!.CurrentTrack == null)
+        {
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.NoAudioTrackErrorEmbedBuilder()));
+
+            return;
+        }
+
+        await player!.SeekAsync(new TimeSpan(0));
+
+        await context.FollowUpAsync(
+            new DiscordFollowupMessageBuilder().AddEmbed(
+                audioPlayerEmbed.RestartEmbedBuilder(context)));
     }
 }
