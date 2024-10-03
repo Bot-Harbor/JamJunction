@@ -5,11 +5,12 @@ using JamJunction.App.Events.Buttons;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Lavalink4NET;
+using Lavalink4NET.Events;
 using Microsoft.Extensions.Hosting;
 
 namespace JamJunction.App;
 
-public class Bot : BackgroundService
+internal sealed class Bot : BackgroundService
 {
     // Remove old dictionary
     public static readonly Dictionary<ulong, AudioPlayerController> GuildAudioPlayers = new();
@@ -28,19 +29,17 @@ public class Bot : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await _discordClient.ConnectAsync();
+        
         var trackStartedEvent = new TrackStartedEvent(_discordClient, _audioService);
         _audioService.TrackStarted += trackStartedEvent.TrackStarted;
-
-        // Track Ended Event: Begin task to leave server if queue is empty and reset first song in queue .
-
-        // Track Stuck/Event: If track gets stuck, reattempt to play it
-
-        // User Leaves VC Event: If there is only 1 user the bot, have bot leave VC and dispose guild from controller
-
+        
+        var trackEndedEvent = new TrackEndedEvent(_discordClient, _audioService);
+        _audioService.TrackEnded += trackEndedEvent.TrackEnded;
+        
         ConfigSlashCommands();
         ButtonEvents();
     }
-
+    
     private void ConfigSlashCommands()
     {
         var slashCommands =

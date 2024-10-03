@@ -18,17 +18,6 @@ public class ErrorEmbed
         return commandErrorEmbed;
     }
 
-    public DiscordEmbedBuilder UnknownErrorEmbedBuilder()
-    {
-        var unknownErrorEmbed = new DiscordEmbedBuilder
-        {
-            Description = "⚠️ • An unknown error occurred!",
-            Color = DiscordColor.Red
-        };
-
-        return unknownErrorEmbed;
-    }
-
     public DiscordEmbedBuilder ValidVoiceChannelErrorEmbedBuilder(InteractionContext context)
     {
         var voiceChannelErrorEmbed = new DiscordEmbedBuilder
@@ -50,6 +39,17 @@ public class ErrorEmbed
 
         return voiceChannelErrorEmbed;
     }
+    
+    public DiscordEmbedBuilder SameVoiceChannelErrorEmbedBuilder(InteractionContext context)
+    {
+        var voiceChannelErrorEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🔊 • You must be in the same voice channel as the bot ``{context.Member.DisplayName}``!",
+            Color = DiscordColor.Red
+        };
+
+        return voiceChannelErrorEmbed;
+    }
 
     public DiscordEmbedBuilder NoConnectionErrorEmbedBuilder()
     {
@@ -62,11 +62,11 @@ public class ErrorEmbed
         return noConnectionErrorEmbed;
     }
 
-    public DiscordEmbedBuilder LavaLinkErrorEmbedBuilder()
+    public DiscordEmbedBuilder NoPlayerErrorEmbedBuilder()
     {
         var lavaLinkErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = "🔊 • There is no player in the server!",
+            Description = "🔊 • There is no player in the voice channel!",
             Color = DiscordColor.Red
         };
 

@@ -16,7 +16,7 @@ builder.Services.AddSingleton(new DiscordConfiguration
     TokenType = TokenType.Bot,
     Token = DiscordSecrets.BotToken,
     Intents = DiscordIntents.All,
-    MinimumLogLevel = LogLevel.Information,
+    MinimumLogLevel = LogLevel.Debug,
     AutoReconnect = true,
 });
 

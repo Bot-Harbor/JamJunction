@@ -39,16 +39,16 @@ public class PlayCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context)));
+            
+            return;
         }
 
         var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
         var player = await lavalinkPlayer.GetPlayerAsync(context, guildId, voiceChannel, connectToVoiceChannel: true);
 
-        if (player == null && voiceChannel != null)
+        if (player == null)
         {
-            await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionErrorEmbedBuilder()));
+            return;
         }
 
         var track = streamingPlatform switch
@@ -81,9 +81,7 @@ public class PlayCommand : ApplicationCommandModule
         {
             Console.WriteLine($"Play Command: {guildData.FirstSongInQueue}");
             guildData.FirstSongInQueue = false;
-            await guildData.CancellationTokenSource.CancelAsync();
-            guildData.CancellationTokenSource.Dispose();
-
+          
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(audioPlayerEmbed.SongEmbedBuilder(track, player))));
