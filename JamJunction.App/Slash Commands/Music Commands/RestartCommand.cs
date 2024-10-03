@@ -1,6 +1,4 @@
-﻿using DSharpPlus;
-using DSharpPlus.Entities;
-using DSharpPlus.Lavalink;
+﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
 using Lavalink4NET;
@@ -19,7 +17,7 @@ public class RestartCommand : ApplicationCommandModule
     [SlashCommand("restart", "Restarts the current song.")]
     public async Task RestartCommandAsync(InteractionContext context)
     {
-      await context.DeferAsync();
+        await context.DeferAsync();
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
