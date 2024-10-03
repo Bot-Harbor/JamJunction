@@ -29,12 +29,12 @@ public class PlayCommand : ApplicationCommandModule
         await context.DeferAsync();
 
         var guildId = context.Guild.Id;
-        var voiceChannel = context.Member?.VoiceState?.Channel;
+        var userVoiceChannel = context.Member?.VoiceState?.Channel;
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
 
-        if (voiceChannel == null)
+        if (userVoiceChannel == null)
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
@@ -44,10 +44,26 @@ public class PlayCommand : ApplicationCommandModule
         }
 
         var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
-        var player = await lavalinkPlayer.GetPlayerAsync(context, guildId, voiceChannel, connectToVoiceChannel: true);
+        var player = await lavalinkPlayer.GetPlayerAsync(context, guildId, userVoiceChannel, connectToVoiceChannel: true);
 
         if (player == null)
         {
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.NoConnectionErrorEmbedBuilder()));
+            
+            return;
+        }
+        
+        var botId = context.Client.CurrentUser.Id;
+        context.Guild.VoiceStates.TryGetValue(botId, out var botVoiceState);
+        
+        if (userVoiceChannel.Id != botVoiceState!.Channel!.Id)
+        {
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.SameVoiceChannelErrorEmbedBuilder(context)));
+            
             return;
         }
 
@@ -59,11 +75,13 @@ public class PlayCommand : ApplicationCommandModule
             _ => await _audioService.Tracks.LoadTrackAsync(query, TrackSearchMode.SoundCloud)
         };
 
-        if (track == null && voiceChannel != null && player != null)
+        if (track == null)
         {
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
                     .AddEmbed(errorEmbed.AudioTrackErrorEmbedBuilder()));
+            
+            return;
         }
         
         if (!Bot.GuildData.ContainsKey(guildId))
