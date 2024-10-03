@@ -139,6 +139,17 @@ public class ErrorEmbed
         return minVolumeEmbed;
     }
 
+    public DiscordEmbed AlreadyPausedEmbedBuilder(InteractionContext context)
+    {
+        var alreadyPausedEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🟡  •  The player is already paused ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return alreadyPausedEmbed;
+    }
+    
     public DiscordEmbedBuilder NoVolumeWhilePausedEmbedBuilder(InteractionContext context)
     {
         var noVolumeWhilePausedEmbed = new DiscordEmbedBuilder
