@@ -450,13 +450,8 @@ public class AudioPlayerEmbed
         return leaveEmbed;
     }
 
-    public DiscordEmbedBuilder ViewQueueBuilder(InteractionContext context)
+    public DiscordEmbedBuilder ViewQueueBuilder(InteractionContext context, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
-        var guildId = context.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
-        var songQueue = audioPlayerController.Queue;
-
         var viewQueue = new DiscordEmbedBuilder
         {
             Title = " 🎵  Queue List:",
@@ -467,7 +462,7 @@ public class AudioPlayerEmbed
             }
         };
 
-        if (!songQueue.ToList().Any())
+        if (queuedLavalinkPlayer.Queue.IsEmpty)
         {
             viewQueue.Description = "There are no songs currently in the queue.";
         }
@@ -477,9 +472,11 @@ public class AudioPlayerEmbed
 
             viewQueue.Description = "• Only shows first **25** songs due to Discord's API rate limit";
 
-            foreach (var song in songQueue.Take(25))
-                viewQueue.AddField($"{i++}. {song.Title}",
-                    $"**Song Duration** (HH:MM:SS): {song.Length}");
+            foreach (var queue in queuedLavalinkPlayer.Queue)
+            {
+                viewQueue.AddField($"{i++}. {queue.Track!.Title}",
+                    $"**Song Duration** (HH:MM:SS): {RoundSeconds(queue.Track!.Duration)}");
+            }
         }
 
         return viewQueue;
