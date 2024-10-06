@@ -318,14 +318,14 @@ public class AudioPlayerEmbed
             {
                 Width = 50,
                 Height = 50,
-                Url = "https://lordicon.com/icons/wired/gradient/29-play-pause-circle.gif"
+                Url = "https://media.lordicon.com/icons/wired/gradient/29-play-pause-circle.gif"
             }
         };
 
         return queueSomethingEmbed;
     }
 
-    public DiscordEmbedBuilder VolumeEmbedBuilder(int volume, InteractionContext context)
+    public DiscordEmbedBuilder VolumeEmbedBuilder(double volume, InteractionContext context)
     {
         var volumeEmbed = new DiscordEmbedBuilder
         {

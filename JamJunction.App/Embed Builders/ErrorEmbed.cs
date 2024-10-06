@@ -94,6 +94,17 @@ public class ErrorEmbed
 
         return audioTrackErrorEmbed;
     }
+
+    public DiscordEmbedBuilder VolumeNotAnIntegerEmbedBuilder(InteractionContext context)
+    {
+        var volumeNotAnIntegerEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🔊  •  The number for the volume must be a whole number ``{context.Member.Username}``!",
+            Color = DiscordColor.Red
+        };
+
+        return volumeNotAnIntegerEmbed;
+    }
     
     public DiscordEmbedBuilder MaxVolumeEmbedBuilder(InteractionContext context)
     {
