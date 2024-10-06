@@ -48,4 +48,38 @@ public class LavalinkPlayerHandler
             return null;
         }
     }
+
+    /// <summary>
+    /// Gets queued Lavalink player for events.
+    /// </summary>
+    /// <param name="guildId"></param>
+    /// <param name="voiceChannelId"></param>
+    /// <param name="connectToVoiceChannel"></param>
+    /// <returns></returns>
+    public async ValueTask<QueuedLavalinkPlayer> GetPlayerAsync(ulong guildId, ulong voiceChannelId,
+        bool connectToVoiceChannel = true)
+    {
+        try
+        {
+            var retrieveOptions = new PlayerRetrieveOptions(
+                ChannelBehavior: connectToVoiceChannel ? PlayerChannelBehavior.Join : PlayerChannelBehavior.None);
+
+            var playerOptions = new QueuedLavalinkPlayerOptions {HistoryCapacity = 10000};
+
+            var result = await _audioService.Players
+                .RetrieveAsync(guildId, voiceChannelId,
+                    playerFactory: PlayerFactory.Queued, Options.Create(playerOptions), retrieveOptions);
+
+            if (!result.IsSuccess)
+            {
+                throw new Exception();
+            }
+
+            return result.Player;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
 }

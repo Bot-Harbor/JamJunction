@@ -94,12 +94,9 @@ public class PlayCommand : ApplicationCommandModule
         guildData.TextChannelId = textChannelId;
 
         await player!.PlayAsync(track!);
-
-        if (guildData.FirstSongInQueue)
+        
+        if (player.Queue.IsEmpty)
         {
-            Console.WriteLine($"Play Command: {guildData.FirstSongInQueue}");
-            guildData.FirstSongInQueue = false;
-          
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(audioPlayerEmbed.SongEmbedBuilder(track, player))));

@@ -1,29 +1,26 @@
-﻿using System.Threading.Channels;
-using DSharpPlus;
-using DSharpPlus.Entities;
-using DSharpPlus.SlashCommands;
+﻿using DSharpPlus;
 using JamJunction.App.Embed_Builders;
 using Lavalink4NET;
 using Lavalink4NET.Events.Players;
 using Lavalink4NET.Players;
 using Lavalink4NET.Players.Queued;
+using Lavalink4NET.Protocol.Payloads.Events;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
 
 namespace JamJunction.App.Events;
 
-public class TrackStartedEvent
+public class TrackEndedEvent
 {
     private readonly DiscordClient _discordClient;
     private readonly IAudioService _audioService;
 
-    public TrackStartedEvent(DiscordClient discordClient, IAudioService audioService)
+    public TrackEndedEvent(DiscordClient discordClient, IAudioService audioService)
     {
         _discordClient = discordClient;
         _audioService = audioService;
     }
 
-    public async Task TrackStarted(object sender, TrackStartedEventArgs eventargs)
+    public async Task TrackEnded(object sender, TrackEndedEventArgs eventargs)
     {
         var guildId = eventargs.Player.GuildId;
         var voiceChannel = eventargs.Player.VoiceChannelId;
@@ -33,19 +30,14 @@ public class TrackStartedEvent
         var textChannelId = guildData.TextChannelId;
         var channel = guild.GetChannel(textChannelId);
 
-        var track = eventargs.Track;
-
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
         var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, connectToVoiceChannel: true);
-
-        if (guildData.FirstSongInQueue == false)
+        
+        if (player.State == PlayerState.NotPlaying)
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
-            await channel.SendMessageAsync(audioPlayerEmbed.SongEmbedBuilder(track, player));
-        }
-        else
-        {
-            guildData.FirstSongInQueue = false;
+            await channel.SendMessageAsync(audioPlayerEmbed.QueueSomethingEmbedBuilder());
+            Bot.GuildData.Remove(guildId);
         }
     }
 }
