@@ -5,7 +5,6 @@ using JamJunction.App.Events.Buttons;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Lavalink4NET;
-using Lavalink4NET.Events;
 using Microsoft.Extensions.Hosting;
 
 namespace JamJunction.App;
@@ -55,8 +54,6 @@ internal sealed class Bot : BackgroundService
         slashCommands.RegisterCommands<SeekCommand>();
         slashCommands.RegisterCommands<RestartCommand>();
         slashCommands.RegisterCommands<LeaveCommand>();
-        slashCommands.RegisterCommands<MuteCommand>();
-        slashCommands.RegisterCommands<UnmuteCommand>();
         slashCommands.RegisterCommands<ViewQueueCommand>();
         slashCommands.RegisterCommands<ShuffleQueueCommand>();
         slashCommands.RegisterCommands<SkipCommand>();
