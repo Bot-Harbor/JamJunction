@@ -289,7 +289,7 @@ public class ErrorEmbed
     {
         var queueIsEmptyEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🎶 • There are no songs in the queue to shuffle ``{context.User.Username}``!",
+            Description = $"🎶 • There are no songs in the queue to shuffle ``{context.Member.DisplayName}``!",
             Color = DiscordColor.Red
         };
 

@@ -1,71 +1,86 @@
-﻿using DSharpPlus;
-using DSharpPlus.Lavalink;
+﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
+using Lavalink4NET;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class ShuffleQueueCommand : ApplicationCommandModule
 {
+    private readonly IAudioService _audioService;
+
+    public ShuffleQueueCommand(IAudioService audioService)
+    {
+        _audioService = audioService;
+    }
+
     [SlashCommand("shuffle", "Shuffles the queue.")]
     public async Task ShuffleQueueCommandAsync(InteractionContext context)
     {
+        await context.DeferAsync();
+
+        var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
-        var audioEmbed = new AudioPlayerEmbed();
 
-        try
+        var guildId = context.Guild.Id;
+        var userVoiceChannel = context.Member?.VoiceState?.Channel;
+
+        if (userVoiceChannel == null)
         {
-            var userVc = context.Member?.VoiceState?.Channel;
-            var lava = context.Client.GetLavalink();
-            var node = lava.ConnectedNodes.Values.First();
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context)));
 
-            if (!lava.ConnectedNodes!.Any())
-                await context.CreateResponseAsync(errorEmbed.NoConnectionErrorEmbedBuilder());
-
-            if (userVc == null || userVc.Type != ChannelType.Voice)
-                await context.CreateResponseAsync(errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context));
-
-            var connection = node.GetGuildConnection(context.Guild);
-
-            if (connection! == null) await context.CreateResponseAsync(errorEmbed.LavaLinkErrorEmbedBuilder());
-
-            if (connection != null)
-            {
-                var guildId = context.Guild.Id;
-                var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
-                if (audioPlayerController.Queue.Count != 0)
-                {
-                    ShuffleQueue(audioPlayerController.Queue);
-
-                    await context.CreateResponseAsync(audioEmbed.ShuffleQueueBuilder(context));
-                }
-                else
-                {
-                    await context.CreateResponseAsync(errorEmbed.QueueIsEmptyEmbedBuilder(context));
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), true);
-        }
-    }
-
-    protected void ShuffleQueue<T>(Queue<T> queue)
-    {
-        var list = new List<T>(queue);
-        var random = new Random();
-
-        var n = list.Count;
-        while (n > 1)
-        {
-            n--;
-            var k = random.Next(n + 1);
-            (list[k], list[n]) = (list[n], list[k]);
+            return;
         }
 
-        queue.Clear();
-        foreach (var item in list) queue.Enqueue(item);
+        var botId = context.Client.CurrentUser.Id;
+        var botVoiceChannel = context.Guild.VoiceStates.TryGetValue(botId, out var botVoiceState);
+
+        if (botVoiceChannel == false)
+        {
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.NoPlayerErrorEmbedBuilder()));
+
+            return;
+        }
+
+        if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
+        {
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.SameVoiceChannelErrorEmbedBuilder(context)));
+
+            return;
+        }
+
+        var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
+        var player =
+            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, connectToVoiceChannel: false);
+
+        if (player == null)
+        {
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.NoConnectionErrorEmbedBuilder()));
+
+            return;
+        }
+
+        if (!player.Queue.IsEmpty)
+        {
+            await player.Queue.ShuffleAsync();
+
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    audioPlayerEmbed.ShuffleQueueBuilder(context)));
+            
+            return;
+        }
+
+        await context.FollowUpAsync(
+            new DiscordFollowupMessageBuilder().AddEmbed(
+                errorEmbed.QueueIsEmptyEmbedBuilder(context)));
     }
 }
