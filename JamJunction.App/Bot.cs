@@ -46,6 +46,7 @@ internal sealed class Bot : BackgroundService
 
         slashCommands.RegisterCommands<PingCommand>();
         slashCommands.RegisterCommands<CaptionCommand>();
+        slashCommands.RegisterCommands<CurrentSongCommand>();
         slashCommands.RegisterCommands<PlayCommand>();
         slashCommands.RegisterCommands<PauseCommand>();
         slashCommands.RegisterCommands<ResumeCommand>();
