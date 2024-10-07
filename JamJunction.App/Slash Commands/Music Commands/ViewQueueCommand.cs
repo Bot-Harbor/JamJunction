@@ -16,7 +16,7 @@ public class ViewQueueCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
-    [SlashCommand("viewqueue", "Displays what is currently in the queue.")]
+    [SlashCommand("view-queue", "Displays what is currently in the queue.")]
     public async Task ViewQueueCommandAsync(InteractionContext context)
     {
         await context.DeferAsync();

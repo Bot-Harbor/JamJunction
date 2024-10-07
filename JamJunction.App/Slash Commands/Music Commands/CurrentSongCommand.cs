@@ -14,7 +14,7 @@ public class CurrentSongCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
-    [SlashCommand("currentsong", "Shows details about the current song playing.")]
+    [SlashCommand("current-song", "Shows details about the current song playing.")]
     public async Task CurrentSongCommandAsync(InteractionContext context)
     {
         await context.DeferAsync();

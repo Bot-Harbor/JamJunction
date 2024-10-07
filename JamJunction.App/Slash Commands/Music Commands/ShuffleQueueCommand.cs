@@ -15,7 +15,7 @@ public class ShuffleQueueCommand : ApplicationCommandModule
     }
 
     [SlashCommand("shuffle", "Shuffles the queue.")]
-    public async Task ShuffleQueueCommandAsync(InteractionContext context)
+    public async Task ShuffleCommandAsync(InteractionContext context)
     {
         await context.DeferAsync();
 
