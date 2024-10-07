@@ -11,7 +11,7 @@ public class ErrorEmbed
     {
         var commandErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = "⚠️ • Command failed to execute!",
+            Description = "⚠️ • Command failed to execute.",
             Color = DiscordColor.Red
         };
 
@@ -22,7 +22,7 @@ public class ErrorEmbed
     {
         var voiceChannelErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊 • You must be in a valid voice channel ``{context.Member.DisplayName}``!",
+            Description = $"🔊 • You must be in a valid voice channel ``{context.Member.DisplayName}``.",
             Color = DiscordColor.Red
         };
 
@@ -33,7 +33,7 @@ public class ErrorEmbed
     {
         var voiceChannelErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊 • You must be in a valid voice channel ``{e.User.Username}``!",
+            Description = $"🔊 • You must be in a valid voice channel ``{e.User.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -44,7 +44,7 @@ public class ErrorEmbed
     {
         var voiceChannelErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊 • You must be in the same voice channel as the bot ``{context.Member.DisplayName}``!",
+            Description = $"🔊 • You must be in the same voice channel as the bot ``{context.Member.DisplayName}``.",
             Color = DiscordColor.Red
         };
 
@@ -55,7 +55,7 @@ public class ErrorEmbed
     {
         var noConnectionErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = "🌋 • Lavalink connection is not established!",
+            Description = "🌋 • Lavalink connection is not established.",
             Color = DiscordColor.Red
         };
 
@@ -66,7 +66,7 @@ public class ErrorEmbed
     {
         var lavaLinkErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = "🔊 • There is no player in the voice channel!",
+            Description = "🔊 • There is no player in the voice channel.",
             Color = DiscordColor.Red
         };
 
@@ -77,7 +77,7 @@ public class ErrorEmbed
     {
         var audioTrackErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = "\ud83c\udfb5 • Failed to find song!",
+            Description = "\ud83c\udfb5 • Failed to find song.",
             Color = DiscordColor.Red
         };
 
@@ -88,7 +88,7 @@ public class ErrorEmbed
     {
         var audioTrackErrorEmbed = new DiscordEmbedBuilder
         {
-            Description = "\ud83c\udfb5 • There are no tracks currently playing!",
+            Description = "\ud83c\udfb5 • There are no tracks currently playing.",
             Color = DiscordColor.Red
         };
 
@@ -99,7 +99,7 @@ public class ErrorEmbed
     {
         var volumeNotAnIntegerEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  The number for the volume must be a whole number ``{context.Member.Username}``!",
+            Description = $"🔊  •  The number for the volume must be a whole number ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -110,7 +110,7 @@ public class ErrorEmbed
     {
         var maxVolumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  You cannot set the volume above 100 ``{context.Member.Username}``!",
+            Description = $"🔊  •  You cannot set the volume above 100 ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -121,7 +121,7 @@ public class ErrorEmbed
     {
         var maxVolumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  The volume is already at its maximum ``{e.User.Username}``!",
+            Description = $"🔊  •  The volume is already at its maximum ``{e.User.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -132,7 +132,7 @@ public class ErrorEmbed
     {
         var minVolumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  You cannot set the volume below 0 ``{context.Member.Username}``!",
+            Description = $"🔊  •  You cannot set the volume below 0 ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -143,7 +143,7 @@ public class ErrorEmbed
     {
         var minVolumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  The volume is already at its minimum ``{e.User.Username}``!",
+            Description = $"🔊  •  The volume is already at its minimum ``{e.User.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -154,7 +154,7 @@ public class ErrorEmbed
     {
         var alreadyPausedEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟡  •  The player is already paused ``{context.Member.Username}``!",
+            Description = $"🟡  •  The player is already paused ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -165,7 +165,7 @@ public class ErrorEmbed
     {
         var noVolumeWhilePausedEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  You cannot set the volume while the player is paused ``{context.Member.Username}``!",
+            Description = $"🔊  •  You cannot set the volume while the player is paused ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -176,7 +176,7 @@ public class ErrorEmbed
     {
         var noVolumeWhilePausedEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  You cannot set the volume while the player is paused ``{e.User.Username}``!",
+            Description = $"🔊  •  You cannot set the volume while the player is paused ``{e.User.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -184,12 +184,34 @@ public class ErrorEmbed
     }
     
 
+    public DiscordEmbedBuilder SeekNotAnIntegerEmbedBuilder(InteractionContext context)
+    {
+        var volumeNotAnIntegerEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🔊  •  The number for the time must be a whole number ``{context.Member.DisplayName}``.",
+            Color = DiscordColor.Red
+        };
+
+        return volumeNotAnIntegerEmbed;
+    }
+    
+    public DiscordEmbedBuilder SeekLargerThanDuration(InteractionContext context)
+    {
+        var maxVolumeEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🔊  •  The time you are seeking for is larger than the duration of the song ``{context.Member.DisplayName}``.",
+            Color = DiscordColor.Red
+        };
+
+        return maxVolumeEmbed;
+    }
+    
     public DiscordEmbedBuilder NoSeekWhilePausedEmbedBuilder(InteractionContext context)
     {
         var noSeekWhilePausedEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"⌛  •  You cannot change the song position while the player is paused ``{context.Member.Username}``!",
+                $"⌛  •  You cannot change the song position while the player is paused ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -200,7 +222,7 @@ public class ErrorEmbed
     {
         var noMuteWhilePausedEmbed = new DiscordEmbedBuilder
         {
-            Description = $"⌛  •  You cannot mute the song while the player is paused ``{context.Member.Username}``!",
+            Description = $"⌛  •  You cannot mute the song while the player is paused ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -211,7 +233,7 @@ public class ErrorEmbed
     {
         var noMuteWhilePausedEmbed = new DiscordEmbedBuilder
         {
-            Description = $"⌛  •  You cannot mute the song while the player is paused ``{e.User.Username}``!",
+            Description = $"⌛  •  You cannot mute the song while the player is paused ``{e.User.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -222,7 +244,7 @@ public class ErrorEmbed
     {
         var noUnMuteWhilePausedEmbed = new DiscordEmbedBuilder
         {
-            Description = $"⌛  •  You cannot unmute the song while the player is paused ``{context.Member.Username}``!",
+            Description = $"⌛  •  You cannot unmute the song while the player is paused ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -233,7 +255,7 @@ public class ErrorEmbed
     {
         var noUnMuteWhilePausedEmbed = new DiscordEmbedBuilder
         {
-            Description = $"⌛  •  You cannot unmute the song while the player is paused ``{e.User.Username}``!",
+            Description = $"⌛  •  You cannot unmute the song while the player is paused ``{e.User.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -245,7 +267,7 @@ public class ErrorEmbed
     {
         var noRestartWhilePausedEmbed = new DiscordEmbedBuilder
         {
-            Description = $"⌛  •  You cannot restart the song while player is paused ``{context.Member.Username}``!",
+            Description = $"⌛  •  You cannot restart the song while player is paused ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -256,7 +278,7 @@ public class ErrorEmbed
     {
         var noRestartWhilePausedEmbed = new DiscordEmbedBuilder
         {
-            Description = $"⌛  •  You cannot restart the song while player is paused ``{e.User.Username}``!",
+            Description = $"⌛  •  You cannot restart the song while player is paused ``{e.User.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -267,7 +289,7 @@ public class ErrorEmbed
     {
         var noSongsToSkipEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • There are no songs to skip to ``{context.Member.Username}``!",
+            Description = $"🎵 • There are no songs to skip to ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -278,7 +300,7 @@ public class ErrorEmbed
     {
         var noSongsToSkipEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • There are no songs to skip to ``{e.User.Username}``!",
+            Description = $"🎵 • There are no songs to skip to ``{e.User.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -289,7 +311,7 @@ public class ErrorEmbed
     {
         var queueIsEmptyEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🎶 • There are no songs in the queue to shuffle ``{context.Member.DisplayName}``!",
+            Description = $"🎶 • There are no songs in the queue to shuffle ``{context.Member.DisplayName}``.",
             Color = DiscordColor.Red
         };
 
@@ -300,7 +322,7 @@ public class ErrorEmbed
     {
         var queueIsEmptyEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🎶 • There are no songs in the queue to shuffle ``{e.User.Username}``!",
+            Description = $"🎶 • There are no songs in the queue to shuffle ``{e.User.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -312,7 +334,7 @@ public class ErrorEmbed
     {
         var trackFailedToLoadEmbed = new DiscordEmbedBuilder
         {
-            Description = "\u274c • Track failed to load! Reattempting to connect in 5 seconds.",
+            Description = "\u274c • Track failed to load. Reattempting to connect in 5 seconds.",
             Color = DiscordColor.Red
         };
 
@@ -324,7 +346,7 @@ public class ErrorEmbed
     {
         var couldNotLoadOnAttemptTrackEmbed = new DiscordEmbedBuilder
         {
-            Description = "\u274c • Attempt to load track again failed! The audio player has been reset.",
+            Description = "\u274c • Attempt to load track again failed. The audio player has been reset.",
             Color = DiscordColor.Red
         };
 
@@ -335,7 +357,7 @@ public class ErrorEmbed
     {
         var trackStuckEmbed = new DiscordEmbedBuilder
         {
-            Description = "\u274c • Track was stuck! The audio player has restarted the song.",
+            Description = "\u274c • Track was stuck. The audio player has restarted the song.",
             Color = DiscordColor.Red
         };
 
