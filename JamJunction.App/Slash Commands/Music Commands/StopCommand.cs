@@ -78,7 +78,6 @@ public class StopCommand : ApplicationCommandModule
         }
         
         await player!.StopAsync();
-        Bot.GuildData.Remove(context.Guild.Id);
 
         await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(

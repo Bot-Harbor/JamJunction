@@ -32,6 +32,12 @@ public class TrackEndedEvent
 
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
         var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, connectToVoiceChannel: true);
+
+        if (eventargs.Reason == TrackEndReason.Stopped)
+        {
+            Bot.GuildData.Remove(guildId);
+            return;
+        }
         
         if (player.State == PlayerState.NotPlaying)
         {
