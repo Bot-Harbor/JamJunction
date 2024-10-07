@@ -245,7 +245,7 @@ public class AudioPlayerEmbed
     {
         var pauseEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟡  • ``{context.Member.DisplayName}`` paused the track!",
+            Description = $"🟡  • ``{context.Member.DisplayName}`` paused the track.",
             Color = DiscordColor.Yellow
         };
 
@@ -256,7 +256,7 @@ public class AudioPlayerEmbed
     {
         var pauseButtonEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟡  • ``{e.User.Username}`` paused the track!",
+            Description = $"🟡  • ``{e.User.Username}`` paused the track.",
             Color = DiscordColor.Yellow
         };
 
@@ -267,7 +267,7 @@ public class AudioPlayerEmbed
     {
         var resumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟢  • ``{context.Member.DisplayName}`` resumed the track!",
+            Description = $"🟢  • ``{context.Member.DisplayName}`` resumed the track.",
             Color = DiscordColor.Green
         };
 
@@ -278,7 +278,7 @@ public class AudioPlayerEmbed
     {
         var resumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟢  • ``{e.User.Username}`` resumed the track!",
+            Description = $"🟢  • ``{e.User.Username}`` resumed the track.",
             Color = DiscordColor.Green
         };
 
@@ -289,7 +289,7 @@ public class AudioPlayerEmbed
     {
         var stopEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔴   • ``{context.Member.DisplayName}`` stopped the player!",
+            Description = $"🔴   • ``{context.Member.DisplayName}`` stopped the player.",
             Color = DiscordColor.Red
         };
 
@@ -300,7 +300,7 @@ public class AudioPlayerEmbed
     {
         var stopEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔴   • ``{e.User.Username}`` stopped the player!",
+            Description = $"🔴   • ``{e.User.Username}`` stopped the player.",
             Color = DiscordColor.Red
         };
 
@@ -329,7 +329,7 @@ public class AudioPlayerEmbed
     {
         var volumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{context.Member.DisplayName}`` changed the volume to ``{volume}``!",
+            Description = $"🔊  •  ``{context.Member.DisplayName}`` changed the volume to ``{volume}``.",
             Color = DiscordColor.Teal
         };
 
@@ -340,7 +340,7 @@ public class AudioPlayerEmbed
     {
         var volumeDecreaseEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{e.User.Username}`` has decreased the volume!",
+            Description = $"🔊  •  ``{e.User.Username}`` has decreased the volume.",
             Color = DiscordColor.Teal
         };
 
@@ -351,7 +351,7 @@ public class AudioPlayerEmbed
     {
         var volumeIncreaseEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{e.User.Username}`` has increased the volume!",
+            Description = $"🔊  •  ``{e.User.Username}`` has increased the volume.",
             Color = DiscordColor.Teal
         };
 
@@ -362,7 +362,7 @@ public class AudioPlayerEmbed
     {
         var muteEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{context.Member.DisplayName}`` has muted the volume!",
+            Description = $"🔊  •  ``{context.Member.DisplayName}`` has muted the volume.",
             Color = DiscordColor.Teal
         };
 
@@ -373,7 +373,7 @@ public class AudioPlayerEmbed
     {
         var muteEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{e.User.Username}`` has muted the volume!",
+            Description = $"🔊  •  ``{e.User.Username}`` has muted the volume.",
             Color = DiscordColor.Teal
         };
 
@@ -384,7 +384,7 @@ public class AudioPlayerEmbed
     {
         var unmuteEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{context.Member.DisplayName}`` has unmuted the volume!",
+            Description = $"🔊  •  ``{context.Member.DisplayName}`` has unmuted the volume.",
             Color = DiscordColor.Teal
         };
 
@@ -395,7 +395,7 @@ public class AudioPlayerEmbed
     {
         var unmuteEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{e.User.Username}`` has unmuted the volume!",
+            Description = $"🔊  •  ``{e.User.Username}`` has unmuted the volume.",
             Color = DiscordColor.Teal
         };
 
@@ -407,7 +407,7 @@ public class AudioPlayerEmbed
         var seekEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"⌛   • ``{context.Member.DisplayName}`` changed the song position to ``{time}`` seconds!",
+                $"⌛   • ``{context.Member.DisplayName}`` changed the song position to ``{time}`` seconds.",
             Color = DiscordColor.Teal
         };
 
@@ -419,7 +419,7 @@ public class AudioPlayerEmbed
         var restartEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"⌛   • ``{context.Member.DisplayName}`` restarted the song!",
+                $"⌛   • ``{context.Member.DisplayName}`` restarted the song.",
             Color = DiscordColor.Orange
         };
 
@@ -431,7 +431,7 @@ public class AudioPlayerEmbed
         var restartEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"⌛   • ``{e.User.Username}`` restarted the song!",
+                $"⌛   • ``{e.User.Username}`` restarted the song.",
             Color = DiscordColor.Orange
         };
 
@@ -443,7 +443,7 @@ public class AudioPlayerEmbed
         var leaveEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"🔌   • ``{context.Member.DisplayName}`` has disconnected Jam Junction!",
+                $"🔌   • ``{context.Member.DisplayName}`` has disconnected Jam Junction.",
             Color = DiscordColor.DarkRed
         };
 
@@ -522,7 +522,7 @@ public class AudioPlayerEmbed
         var shuffleQueue = new DiscordEmbedBuilder
         {
             Description =
-                $"🔀  • ``{context.Member.DisplayName}`` has shuffled the queue!",
+                $"🔀  • ``{context.Member.DisplayName}`` has shuffled the queue.",
             Color = DiscordColor.Cyan
         };
 
@@ -534,11 +534,23 @@ public class AudioPlayerEmbed
         var shuffleQueue = new DiscordEmbedBuilder
         {
             Description =
-                $"🔀  • ``{e.User.Username}`` has shuffled the queue!",
+                $"🔀  • ``{e.User.Username}`` has shuffled the queue.",
             Color = DiscordColor.Cyan
         };
 
         return shuffleQueue;
+    }
+    
+    public DiscordEmbedBuilder SkipEmbedBuilder(InteractionContext context)
+    {
+        var skipEmbed = new DiscordEmbedBuilder
+        {
+            Description =
+                $"⏭️  • ``{context.Member.DisplayName}`` has skipped to the next song.",
+            Color = DiscordColor.Cyan
+        };
+
+        return skipEmbed;
     }
 
     public DiscordEmbedBuilder SongPositionBuilder(TimeSpan timeSpan)
