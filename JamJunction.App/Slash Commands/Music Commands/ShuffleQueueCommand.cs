@@ -68,19 +68,19 @@ public class ShuffleQueueCommand : ApplicationCommandModule
             return;
         }
 
-        if (!player.Queue.IsEmpty)
+        if (player.Queue.IsEmpty)
         {
-            await player.Queue.ShuffleAsync();
-
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.ShuffleQueueBuilder(context)));
+                    errorEmbed.QueueIsEmptyEmbedBuilder(context)));
             
             return;
         }
+        
+        await player.Queue.ShuffleAsync();
 
         await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
-                errorEmbed.QueueIsEmptyEmbedBuilder(context)));
+                audioPlayerEmbed.ShuffleQueueBuilder(context)));
     }
 }
