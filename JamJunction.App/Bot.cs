@@ -11,8 +11,6 @@ namespace JamJunction.App;
 
 internal sealed class Bot : BackgroundService
 {
-    // Remove old dictionary
-    public static readonly Dictionary<ulong, AudioPlayerController> GuildAudioPlayers = new();
     public static readonly Dictionary<ulong, GuildData> GuildData = new();
     private readonly IServiceProvider _serviceProvider;
     private readonly DiscordClient _discordClient;
@@ -75,7 +73,6 @@ internal sealed class Bot : BackgroundService
             await buttonHandler.Execute(new VolumeDownButton(), sender, args);
             await buttonHandler.Execute(new VolumeUpButton(), sender, args);
             await buttonHandler.Execute(new ViewQueueButton(), sender, args);
-            await buttonHandler.Execute(new MuteButton(), sender, args);
             await buttonHandler.Execute(new RestartButton(), sender, args);
             await buttonHandler.Execute(new SkipButton(), sender, args);
         };
