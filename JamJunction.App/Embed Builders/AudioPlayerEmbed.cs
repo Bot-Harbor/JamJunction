@@ -133,18 +133,18 @@ public class AudioPlayerEmbed
     {
         var pauseEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟡  • ``{context.Member.DisplayName}`` paused the track.",
+            Description = $"🟡  • ``{context.Member.Username}`` paused the track.",
             Color = DiscordColor.Yellow
         };
 
         return pauseEmbed;
     }
 
-    public DiscordEmbedBuilder PauseEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    public DiscordEmbedBuilder PauseEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var pauseButtonEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟡  • ``{e.User.Username}`` paused the track.",
+            Description = $"🟡  • ``{btnInteractionArgs.User.Username}`` paused the track.",
             Color = DiscordColor.Yellow
         };
 
@@ -155,18 +155,18 @@ public class AudioPlayerEmbed
     {
         var resumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟢  • ``{context.Member.DisplayName}`` resumed the track.",
+            Description = $"🟢  • ``{context.Member.Username}`` resumed the track.",
             Color = DiscordColor.Green
         };
 
         return resumeEmbed;
     }
 
-    public DiscordEmbedBuilder ResumeEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    public DiscordEmbedBuilder ResumeEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var resumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟢  • ``{e.User.Username}`` resumed the track.",
+            Description = $"🟢  • ``{btnInteractionArgs.User.Username}`` resumed the track.",
             Color = DiscordColor.Green
         };
 
@@ -177,18 +177,18 @@ public class AudioPlayerEmbed
     {
         var stopEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔴   • ``{context.Member.DisplayName}`` stopped the player.",
+            Description = $"🔴   • ``{context.Member.Username}`` stopped the player.",
             Color = DiscordColor.Red
         };
 
         return stopEmbed;
     }
 
-    public DiscordEmbedBuilder StopEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    public DiscordEmbedBuilder StopEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var stopEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔴   • ``{e.User.Username}`` stopped the player.",
+            Description = $"🔴   • ``{btnInteractionArgs.User.Username}`` stopped the player.",
             Color = DiscordColor.Red
         };
 
@@ -217,29 +217,29 @@ public class AudioPlayerEmbed
     {
         var volumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{context.Member.DisplayName}`` changed the volume to ``{volume}``.",
+            Description = $"🔊  •  ``{context.Member.Username}`` changed the volume to ``{volume}``.",
             Color = DiscordColor.Teal
         };
 
         return volumeEmbed;
     }
 
-    public DiscordEmbedBuilder VolumeDecreaseEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    public DiscordEmbedBuilder VolumeDecreaseEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var volumeDecreaseEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{e.User.Username}`` has decreased the volume.",
+            Description = $"🔊  •  ``{btnInteractionArgs.User.Username}`` has decreased the volume.",
             Color = DiscordColor.Teal
         };
 
         return volumeDecreaseEmbed;
     }
 
-    public DiscordEmbedBuilder VolumeIncreaseEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    public DiscordEmbedBuilder VolumeIncreaseEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var volumeIncreaseEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{e.User.Username}`` has increased the volume.",
+            Description = $"🔊  •  ``{btnInteractionArgs.User.Username}`` has increased the volume.",
             Color = DiscordColor.Teal
         };
 
@@ -250,18 +250,18 @@ public class AudioPlayerEmbed
     {
         var muteEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{context.Member.DisplayName}`` has muted the volume.",
+            Description = $"🔊  •  ``{context.Member.Username}`` has muted the volume.",
             Color = DiscordColor.Teal
         };
 
         return muteEmbed;
     }
 
-    public DiscordEmbedBuilder MuteEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    public DiscordEmbedBuilder MuteEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var muteEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{e.User.Username}`` has muted the volume.",
+            Description = $"🔊  •  ``{btnInteractionArgs.User.Username}`` has muted the volume.",
             Color = DiscordColor.Teal
         };
 
@@ -272,18 +272,18 @@ public class AudioPlayerEmbed
     {
         var unmuteEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{context.Member.DisplayName}`` has unmuted the volume.",
+            Description = $"🔊  •  ``{context.Member.Username}`` has unmuted the volume.",
             Color = DiscordColor.Teal
         };
 
         return unmuteEmbed;
     }
 
-    public DiscordEmbedBuilder UnmuteEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    public DiscordEmbedBuilder UnmuteEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var unmuteEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{e.User.Username}`` has unmuted the volume.",
+            Description = $"🔊  •  ``{btnInteractionArgs.User.Username}`` has unmuted the volume.",
             Color = DiscordColor.Teal
         };
 
@@ -295,7 +295,7 @@ public class AudioPlayerEmbed
         var seekEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"⌛   • ``{context.Member.DisplayName}`` changed the song position to ``{time}`` seconds.",
+                $"⌛   • ``{context.Member.Username}`` changed the song position to ``{time}`` seconds.",
             Color = DiscordColor.Teal
         };
 
@@ -307,19 +307,19 @@ public class AudioPlayerEmbed
         var restartEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"⌛   • ``{context.Member.DisplayName}`` restarted the song.",
+                $"⌛   • ``{context.Member.Username}`` restarted the song.",
             Color = DiscordColor.Orange
         };
 
         return restartEmbed;
     }
 
-    public DiscordEmbedBuilder RestartEmbedBuilder(ComponentInteractionCreateEventArgs e)
+    public DiscordEmbedBuilder RestartEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var restartEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"⌛   • ``{e.User.Username}`` restarted the song.",
+                $"⌛   • ``{btnInteractionArgs.User.Username}`` restarted the song.",
             Color = DiscordColor.Orange
         };
 
@@ -331,7 +331,7 @@ public class AudioPlayerEmbed
         var leaveEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"🔌   • ``{context.Member.DisplayName}`` has disconnected Jam Junction.",
+                $"🔌   • ``{context.Member.Username}`` has disconnected Jam Junction.",
             Color = DiscordColor.DarkRed
         };
 
@@ -370,7 +370,7 @@ public class AudioPlayerEmbed
         return viewQueue;
     }
 
-    public DiscordEmbedBuilder ViewQueueBuilder(ComponentInteractionCreateEventArgs e)
+    public DiscordEmbedBuilder ViewQueueBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         return new DiscordEmbedBuilder();
     }
@@ -380,19 +380,19 @@ public class AudioPlayerEmbed
         var shuffleQueue = new DiscordEmbedBuilder
         {
             Description =
-                $"🔀  • ``{context.Member.DisplayName}`` has shuffled the queue.",
+                $"🔀  • ``{context.Member.Username}`` has shuffled the queue.",
             Color = DiscordColor.Cyan
         };
 
         return shuffleQueue;
     }
 
-    public DiscordEmbedBuilder ShuffleQueueBuilder(ComponentInteractionCreateEventArgs e)
+    public DiscordEmbedBuilder ShuffleQueueBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var shuffleQueue = new DiscordEmbedBuilder
         {
             Description =
-                $"🔀  • ``{e.User.Username}`` has shuffled the queue.",
+                $"🔀  • ``{btnInteractionArgs.User.Username}`` has shuffled the queue.",
             Color = DiscordColor.Cyan
         };
 
@@ -404,7 +404,7 @@ public class AudioPlayerEmbed
         var skipEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"⏭️  • ``{context.Member.DisplayName}`` has skipped to the next song.",
+                $"⏭️  • ``{context.Member.Username}`` has skipped to the next song.",
             Color = DiscordColor.Cyan
         };
 

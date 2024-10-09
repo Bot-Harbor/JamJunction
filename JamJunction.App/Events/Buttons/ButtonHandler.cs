@@ -1,13 +1,13 @@
 ﻿using DSharpPlus;
 using DSharpPlus.EventArgs;
-using JamJunction.App.Interfaces;
+using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
 namespace JamJunction.App.Events.Buttons;
 
 public class ButtonHandler
 {
-    public static Task Execute(IButton button, DiscordClient sender, ComponentInteractionCreateEventArgs e)
+    public Task Execute(IButton button, DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        return button.Execute(sender, e);
+        return button.Execute(sender, btnInteractionArgs);
     }
 }

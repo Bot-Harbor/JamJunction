@@ -66,7 +66,7 @@ internal sealed class Bot : BackgroundService
 
         _discordClient.ComponentInteractionCreated += async (sender, args) =>
         {
-            await buttonHandler.Execute(new PauseButton(), sender, args);
+            await buttonHandler.Execute(new PauseButton(_audioService, _discordClient), sender, args);
             await buttonHandler.Execute(new ResumeButton(), sender, args);
             await buttonHandler.Execute(new StopButton(), sender, args);
             await buttonHandler.Execute(new ShuffleButton(), sender, args);
