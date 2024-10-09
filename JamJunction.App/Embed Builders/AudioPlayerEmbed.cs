@@ -16,7 +16,8 @@ public class AudioPlayerEmbed
             Description = $"💿  •  **Now playing**: {track.Title}\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
                           $"⌛  •  **Song Duration** (HH:MM:SS): {RoundSeconds(track.Duration)}\n" +
-                          $"🔴  •  **Is a Livestream**: {track.IsLiveStream}",
+                          $"🔴  •  **Is a Livestream**: {track.IsLiveStream}\n" +
+                          $"🔗  •  **Url**: {track.Uri}",
             Color = DiscordColor.Teal,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
@@ -64,17 +65,12 @@ public class AudioPlayerEmbed
 
         var volumeDownButton = new DiscordButtonComponent
         (
-            ButtonStyle.Success, "volumedown", "🔉 -"
+            ButtonStyle.Success, "volumedown", "🔉 Volume -"
         );
-
-        var muteVolumeButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Secondary, "mute", "🔇 Mute"
-        );
-
+        
         var volumeUpButton = new DiscordButtonComponent
         (
-            ButtonStyle.Success, "volumeup", "🔊 +"
+            ButtonStyle.Success, "volumeup", "🔊 Volume +"
         );
 
         var viewQueueButton = new DiscordButtonComponent
@@ -95,7 +91,7 @@ public class AudioPlayerEmbed
         var buttons = new List<DiscordComponent>
         {
             pauseButton, resumeButton, skipButton, stopButton, shuffleButton,
-            volumeDownButton, volumeUpButton, muteVolumeButton, viewQueueButton, restartButton
+            volumeDownButton, volumeUpButton, viewQueueButton, restartButton
         };
 
         var componentsRows = new List<List<DiscordComponent>>();
@@ -121,115 +117,7 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-
-    public DiscordMessageBuilder SongEmbedBuilder(ComponentInteractionCreateEventArgs e)
-    {
-        var guildId = e.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
-        var currentTrack = audioPlayerController.CurrentSongData;
-
-        var currentSongEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"💿  •  **Now playing**: {currentTrack.Title}\n" +
-                          $"🎙️  •  **Artist**: {currentTrack.Author}\n" +
-                          $"🔗  •  **Link:** {currentTrack.Uri.AbsoluteUri}\n" +
-                          $"⌛  •  **Song Duration** (HH:MM:SS): {currentTrack.Length}",
-            Color = DiscordColor.Teal,
-            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
-            {
-                Url = e.Guild.IconUrl
-            }
-        };
-
-        var nextSongs = audioPlayerController.Queue;
-
-        foreach (var nextSong in nextSongs.Take(1))
-            currentSongEmbed.Footer = new DiscordEmbedBuilder.EmbedFooter
-            {
-                Text = $"Next Song: {nextSong.Title}"
-            };
-
-        var pauseButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Primary, "pause", "⏸ Pause"
-        );
-
-        var resumeButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Success, "resume", "▶️ Resume"
-        );
-
-        var skipButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Primary, "skip", "⏭ Skip"
-        );
-
-        var stopButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Danger, "stop", "⬜ Stop"
-        );
-
-        var volumeDownButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Success, "volumedown", "🔉 -"
-        );
-
-        var muteVolumeButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Secondary, "mute", "🔇 Mute"
-        );
-
-        var volumeUpButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Success, "volumeup", "🔊 +"
-        );
-
-        var viewQueueButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Primary, "viewqueue", "🎶 View Queue"
-        );
-
-        var restartButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Primary, "restart", "🔁 Restart"
-        );
-
-        var shuffleButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Success, "shuffle", "🔀 Shuffle"
-        );
-
-        var buttons = new List<DiscordComponent>
-        {
-            pauseButton, resumeButton, skipButton, stopButton, shuffleButton,
-            volumeDownButton, volumeUpButton, muteVolumeButton, viewQueueButton, restartButton
-        };
-
-        var componentsRows = new List<List<DiscordComponent>>();
-        var currentRow = new List<DiscordComponent>();
-
-        foreach (var button in buttons)
-        {
-            if (currentRow.Count == 5)
-            {
-                componentsRows.Add(currentRow);
-                currentRow = new List<DiscordComponent>();
-            }
-
-            currentRow.Add(button);
-        }
-
-        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-        var messageBuilder = new DiscordMessageBuilder();
-        messageBuilder.AddEmbed(currentSongEmbed);
-
-        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
-
-        return messageBuilder;
-    }
-
+    
     public DiscordEmbedBuilder QueueEmbedBuilder(LavalinkTrack track)
     {
         var queueEmbed = new DiscordEmbedBuilder
@@ -484,37 +372,7 @@ public class AudioPlayerEmbed
 
     public DiscordEmbedBuilder ViewQueueBuilder(ComponentInteractionCreateEventArgs e)
     {
-        var guildId = e.Guild.Id;
-        var audioPlayerController = Bot.GuildAudioPlayers[guildId];
-
-        var songQueue = audioPlayerController.Queue;
-
-        var viewQueue = new DiscordEmbedBuilder
-        {
-            Title = " 🎵  Queue List:",
-            Color = DiscordColor.Cyan,
-            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
-            {
-                Url = e.Guild.IconUrl
-            }
-        };
-
-        if (!songQueue.ToList().Any())
-        {
-            viewQueue.Description = "There are no songs currently in the queue.";
-        }
-        else
-        {
-            var i = 1;
-
-            viewQueue.Description = "• Only shows first **25** songs due to Discord's API rate limit";
-
-            foreach (var song in songQueue.Take(25))
-                viewQueue.AddField($"{i++}. {song.Title}",
-                    $"**Song Duration** (HH:MM:SS): {song.Length}");
-        }
-
-        return viewQueue;
+        return new DiscordEmbedBuilder();
     }
 
     public DiscordEmbedBuilder ShuffleQueueBuilder(InteractionContext context)
