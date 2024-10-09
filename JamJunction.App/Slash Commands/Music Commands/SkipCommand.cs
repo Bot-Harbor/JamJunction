@@ -73,6 +73,7 @@ public class SkipCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoSongsToSkipEmbedBuilder(context)));
+            
             return;
         }
 

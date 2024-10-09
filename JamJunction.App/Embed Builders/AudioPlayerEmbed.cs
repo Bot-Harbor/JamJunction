@@ -75,7 +75,7 @@ public class AudioPlayerEmbed
 
         var viewQueueButton = new DiscordButtonComponent
         (
-            ButtonStyle.Primary, "viewqueue", "🎶 View Queue"
+            ButtonStyle.Primary, "viewqueue", "🎵 View Queue"
         );
 
         var restartButton = new DiscordButtonComponent
@@ -133,7 +133,7 @@ public class AudioPlayerEmbed
     {
         var pauseEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟡  • ``{context.Member.Username}`` paused the track.",
+            Description = $"⏸  • ``{context.Member.Username}`` paused the track.",
             Color = DiscordColor.Yellow
         };
 
@@ -144,7 +144,7 @@ public class AudioPlayerEmbed
     {
         var pauseButtonEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟡  • ``{btnInteractionArgs.User.Username}`` paused the track.",
+            Description = $"⏸  • ``{btnInteractionArgs.User.Username}`` paused the track.",
             Color = DiscordColor.Yellow
         };
 
@@ -155,7 +155,7 @@ public class AudioPlayerEmbed
     {
         var resumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟢  • ``{context.Member.Username}`` resumed the track.",
+            Description = $"▶  • ``{context.Member.Username}`` resumed the track.",
             Color = DiscordColor.Green
         };
 
@@ -166,7 +166,7 @@ public class AudioPlayerEmbed
     {
         var resumeEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟢  • ``{btnInteractionArgs.User.Username}`` resumed the track.",
+            Description = $"▶  • ``{btnInteractionArgs.User.Username}`` resumed the track.",
             Color = DiscordColor.Green
         };
 
@@ -177,7 +177,7 @@ public class AudioPlayerEmbed
     {
         var stopEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔴   • ``{context.Member.Username}`` stopped the player.",
+            Description = $"⬜   • ``{context.Member.Username}`` stopped the player.",
             Color = DiscordColor.Red
         };
 
@@ -188,7 +188,7 @@ public class AudioPlayerEmbed
     {
         var stopEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔴   • ``{btnInteractionArgs.User.Username}`` stopped the player.",
+            Description = $"⬜   • ``{btnInteractionArgs.User.Username}`` stopped the player.",
             Color = DiscordColor.Red
         };
 
@@ -228,7 +228,7 @@ public class AudioPlayerEmbed
     {
         var volumeDecreaseEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{btnInteractionArgs.User.Username}`` has decreased the volume.",
+            Description = $"🔉  •  ``{btnInteractionArgs.User.Username}`` has decreased the volume.",
             Color = DiscordColor.Teal
         };
 
@@ -307,7 +307,7 @@ public class AudioPlayerEmbed
         var restartEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"⌛   • ``{context.Member.Username}`` restarted the song.",
+                $"🔁   • ``{context.Member.Username}`` restarted the song.",
             Color = DiscordColor.Orange
         };
 
@@ -319,7 +319,7 @@ public class AudioPlayerEmbed
         var restartEmbed = new DiscordEmbedBuilder
         {
             Description =
-                $"⌛   • ``{btnInteractionArgs.User.Username}`` restarted the song.",
+                $"🔁   • ``{btnInteractionArgs.User.Username}`` restarted the song.",
             Color = DiscordColor.Orange
         };
 
@@ -405,6 +405,18 @@ public class AudioPlayerEmbed
         {
             Description =
                 $"⏭️  • ``{context.Member.Username}`` has skipped to the next song.",
+            Color = DiscordColor.Cyan
+        };
+
+        return skipEmbed;
+    }
+    
+    public DiscordEmbedBuilder SkipEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    {
+        var skipEmbed = new DiscordEmbedBuilder
+        {
+            Description =
+                $"⏭️  • ``{btnInteractionArgs.User.Username}`` has skipped to the next song.",
             Color = DiscordColor.Cyan
         };
 

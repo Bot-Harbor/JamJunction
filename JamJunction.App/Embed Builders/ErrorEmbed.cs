@@ -165,7 +165,7 @@ public class ErrorEmbed
     {
         var alreadyPausedEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟡  •  The player is already paused ``{context.Member.Username}``.",
+            Description = $"⏸  •  The player is already paused ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -176,7 +176,7 @@ public class ErrorEmbed
     {
         var alreadyPausedEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🟡  •  The player is already paused ``{btnInteractionArgs.User.Username}``.",
+            Description = $"⏸  •  The player is already paused ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -317,8 +317,19 @@ public class ErrorEmbed
 
         return noSongsToSkipEmbed;
     }
-
+    
     public DiscordEmbedBuilder NoSongsToSkipEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    {
+        var noSongsToSkipEmbed = new DiscordEmbedBuilder
+        {
+            Description = $"🎵 • There are no songs to skip to ``{btnInteractionArgs.User.Username}``.",
+            Color = DiscordColor.Red
+        };
+
+        return noSongsToSkipEmbed;
+    }
+
+    public DiscordEmbedBuilder NoSongsPToSkipEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var noSongsToSkipEmbed = new DiscordEmbedBuilder
         {
@@ -333,7 +344,7 @@ public class ErrorEmbed
     {
         var queueIsEmptyEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🎶 • There are no songs in the queue to shuffle ``{context.Member.Username}``.",
+            Description = $"🔀 • There are no songs in the queue to shuffle ``{context.Member.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -344,7 +355,7 @@ public class ErrorEmbed
     {
         var queueIsEmptyEmbed = new DiscordEmbedBuilder
         {
-            Description = $"🎶 • There are no songs in the queue to shuffle ``{btnInteractionArgs.User.Username}``.",
+            Description = $"🔀 • There are no songs in the queue to shuffle ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
