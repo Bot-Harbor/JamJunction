@@ -67,7 +67,7 @@ public class AudioPlayerEmbed
         (
             ButtonStyle.Success, "volume-down", "🔉 Volume -"
         );
-        
+
         var volumeUpButton = new DiscordButtonComponent
         (
             ButtonStyle.Success, "volume-up", "🔊 Volume +"
@@ -117,7 +117,7 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-    
+
     public DiscordEmbedBuilder QueueEmbedBuilder(LavalinkTrack track)
     {
         var queueEmbed = new DiscordEmbedBuilder
@@ -370,9 +370,37 @@ public class AudioPlayerEmbed
         return viewQueue;
     }
 
-    public DiscordEmbedBuilder ViewQueueBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder ViewQueueBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs,
+        QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
-        return new DiscordEmbedBuilder();
+        var viewQueue = new DiscordEmbedBuilder
+        {
+            Title = " 🎵  Queue List:",
+            Color = DiscordColor.Cyan,
+            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
+            {
+                Url = btnInteractionArgs.Guild.IconUrl
+            }
+        };
+
+        if (queuedLavalinkPlayer.Queue.IsEmpty)
+        {
+            viewQueue.Description = "There are no songs currently in the queue.";
+        }
+        else
+        {
+            var i = 1;
+
+            viewQueue.Description = "• Only shows first **25** songs due to Discord's API rate limit";
+
+            foreach (var queue in queuedLavalinkPlayer.Queue)
+            {
+                viewQueue.AddField($"{i++}. {queue.Track!.Title}",
+                    $"**Song Duration** (HH:MM:SS): {RoundSeconds(queue.Track!.Duration)}");
+            }
+        }
+
+        return viewQueue;
     }
 
     public DiscordEmbedBuilder ShuffleQueueBuilder(InteractionContext context)
@@ -398,7 +426,7 @@ public class AudioPlayerEmbed
 
         return shuffleQueue;
     }
-    
+
     public DiscordEmbedBuilder SkipEmbedBuilder(InteractionContext context)
     {
         var skipEmbed = new DiscordEmbedBuilder
@@ -410,7 +438,7 @@ public class AudioPlayerEmbed
 
         return skipEmbed;
     }
-    
+
     public DiscordEmbedBuilder SkipEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var skipEmbed = new DiscordEmbedBuilder
