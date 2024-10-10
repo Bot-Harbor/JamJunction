@@ -104,6 +104,7 @@ public class VolumeDownButton : IButton
             }
             
             var currentVolume = player.Volume;
+            Console.WriteLine($"Current Volume: {currentVolume}");
             
             if (currentVolume == 0)
             {
@@ -113,9 +114,10 @@ public class VolumeDownButton : IButton
                 
                 return;
             }
-            
-            var decreasedVolume = Math.Round(currentVolume - 0.10, 2);
+
+            var decreasedVolume = Math.Max(Math.Round(currentVolume - 0.10, 2), 0);
             await player!.SetVolumeAsync((float) decreasedVolume);
+            Console.WriteLine($"Decreased Volume: {decreasedVolume}");
 
             await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(

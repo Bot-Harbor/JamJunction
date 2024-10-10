@@ -38,14 +38,15 @@ public class TrackStartedEvent
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
         var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, connectToVoiceChannel: true);
 
-        if (guildData.FirstSongInQueue == false)
+        if (guildData.FirstSongInQueue)
         {
-            var audioPlayerEmbed = new AudioPlayerEmbed();
-            await channel.SendMessageAsync(audioPlayerEmbed.SongEmbedBuilder(track, player));
-        }
-        else
-        {
+            await player.SetVolumeAsync((float) 0.5);
             guildData.FirstSongInQueue = false;
+            
+            return;
         }
+
+        var audioPlayerEmbed = new AudioPlayerEmbed();
+        await channel.SendMessageAsync(audioPlayerEmbed.SongEmbedBuilder(track, player));
     }
 }
