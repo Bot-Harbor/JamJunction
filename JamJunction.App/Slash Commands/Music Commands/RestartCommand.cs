@@ -77,7 +77,7 @@ public class RestartCommand : ApplicationCommandModule
             return;
         }
 
-        await player!.SeekAsync(new TimeSpan(0));
+        await player!.SeekAsync(TimeSpan.FromSeconds(0));
 
         await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
