@@ -138,18 +138,7 @@ public class ErrorEmbed
 
         return maxVolumeEmbed;
     }
-
-    public DiscordEmbedBuilder MinVolumeEmbedBuilder(InteractionContext context)
-    {
-        var minVolumeEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"🔊  •  You cannot set the volume below 0 ``{context.Member.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return minVolumeEmbed;
-    }
-
+    
     public DiscordEmbedBuilder MinVolumeEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var minVolumeEmbed = new DiscordEmbedBuilder

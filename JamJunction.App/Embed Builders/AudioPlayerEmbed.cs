@@ -65,17 +65,17 @@ public class AudioPlayerEmbed
 
         var volumeDownButton = new DiscordButtonComponent
         (
-            ButtonStyle.Success, "volumedown", "🔉 Volume -"
+            ButtonStyle.Success, "volume-down", "🔉 Volume -"
         );
         
         var volumeUpButton = new DiscordButtonComponent
         (
-            ButtonStyle.Success, "volumeup", "🔊 Volume +"
+            ButtonStyle.Success, "volume-up", "🔊 Volume +"
         );
 
         var viewQueueButton = new DiscordButtonComponent
         (
-            ButtonStyle.Primary, "viewqueue", "🎵 View Queue"
+            ButtonStyle.Primary, "view-queue", "🎵 View Queue"
         );
 
         var restartButton = new DiscordButtonComponent

@@ -27,17 +27,17 @@ internal sealed class Bot : BackgroundService
     {
         await _discordClient.ConnectAsync();
         
+        SlashCommands();
+        ButtonEvents();
+        
         var trackStartedEvent = new TrackStartedEvent(_discordClient, _audioService);
         _audioService.TrackStarted += trackStartedEvent.TrackStarted;
         
         var trackEndedEvent = new TrackEndedEvent(_discordClient, _audioService);
         _audioService.TrackEnded += trackEndedEvent.TrackEnded;
-        
-        ConfigSlashCommands();
-        ButtonEvents();
     }
     
-    private void ConfigSlashCommands()
+    private void SlashCommands()
     {
         var slashCommands =
             _discordClient.UseSlashCommands(new SlashCommandsConfiguration {Services = _serviceProvider});
@@ -71,7 +71,7 @@ internal sealed class Bot : BackgroundService
             await buttonHandler.Execute(new SkipButton(_audioService, _discordClient), sender, args);
             await buttonHandler.Execute(new StopButton(_audioService, _discordClient), sender, args);
             await buttonHandler.Execute(new ShuffleButton(_audioService, _discordClient), sender, args);
-            await buttonHandler.Execute(new VolumeDownButton(), sender, args);
+            await buttonHandler.Execute(new VolumeDownButton(_audioService, _discordClient), sender, args);
             await buttonHandler.Execute(new VolumeUpButton(), sender, args);
             await buttonHandler.Execute(new ViewQueueButton(), sender, args);
             await buttonHandler.Execute(new RestartButton(), sender, args);

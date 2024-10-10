@@ -11,15 +11,13 @@ public class ShuffleButton : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
-
+    private DiscordChannel UserVoiceChannel { get; set; }
+    
     public ShuffleButton(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
     }
-
-    private DiscordChannel UserVoiceChannel { get; set; }
-    
     
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {

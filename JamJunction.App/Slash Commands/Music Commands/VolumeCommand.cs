@@ -16,7 +16,7 @@ public class VolumeCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
-    [SlashCommand("volume", "Adjust the volume 0-100. Default volume is 100.")]
+    [SlashCommand("volume", "Adjust the volume 0-100. Default volume is 50.")]
     public async Task VolumeCommandAsync(InteractionContext context,
         [Option("level", "How loud do you want the music to be?")]
         double volume)
@@ -100,12 +100,12 @@ public class VolumeCommand : ApplicationCommandModule
 
             return;
         }
-
+        
         volume /= 100;
         await player!.SetVolumeAsync((float) volume);
 
         await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
-                audioPlayerEmbed.VolumeEmbedBuilder(volume * 100, context)));
+                audioPlayerEmbed.VolumeEmbedBuilder(Math.Round(volume * 100), context)));
     }
 }
