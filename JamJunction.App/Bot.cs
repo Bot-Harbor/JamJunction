@@ -35,6 +35,9 @@ internal sealed class Bot : BackgroundService
         
         var trackEndedEvent = new TrackEndedEvent(_discordClient, _audioService);
         _audioService.TrackEnded += trackEndedEvent.TrackEnded;
+        
+        var connectionClosedEvent = new ConnectionClosedEvent();
+        _audioService.ConnectionClosed += connectionClosedEvent.AudioServiceOnConnectionClosed;
     }
     
     private void SlashCommands()
