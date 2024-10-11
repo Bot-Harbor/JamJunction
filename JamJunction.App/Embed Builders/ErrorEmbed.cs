@@ -351,7 +351,6 @@ public class ErrorEmbed
         return queueIsEmptyEmbed;
     }
 
-    // Remove?
     public DiscordEmbedBuilder TrackFailedToLoadEmbedBuilder()
     {
         var trackFailedToLoadEmbed = new DiscordEmbedBuilder
@@ -363,7 +362,6 @@ public class ErrorEmbed
         return trackFailedToLoadEmbed;
     }
 
-    // Remove?
     public DiscordEmbedBuilder CouldNotLoadTrackOnAttemptEmbedBuilder()
     {
         var couldNotLoadOnAttemptTrackEmbed = new DiscordEmbedBuilder
@@ -373,16 +371,5 @@ public class ErrorEmbed
         };
 
         return couldNotLoadOnAttemptTrackEmbed;
-    }
-
-    public DiscordEmbedBuilder TrackStuckEmbedBuilder()
-    {
-        var trackStuckEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\u274c • Track was stuck. The audio player has restarted the song.",
-            Color = DiscordColor.Red
-        };
-
-        return trackStuckEmbed;
     }
 }

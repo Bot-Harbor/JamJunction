@@ -5,6 +5,7 @@ using JamJunction.App.Events.Buttons;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Lavalink4NET;
+using Lavalink4NET.Events.Players;
 using Microsoft.Extensions.Hosting;
 
 namespace JamJunction.App;
@@ -35,11 +36,15 @@ internal sealed class Bot : BackgroundService
         
         var trackEndedEvent = new TrackEndedEvent(_discordClient, _audioService);
         _audioService.TrackEnded += trackEndedEvent.TrackEnded;
+
+        var trackStuckEvent = new TrackStuckEvent(_discordClient, _audioService);
+        _audioService.TrackStuck += trackStuckEvent.TrackStuck;
         
         var connectionClosedEvent = new ConnectionClosedEvent();
-        _audioService.ConnectionClosed += connectionClosedEvent.AudioServiceOnConnectionClosed;
+        _audioService.ConnectionClosed += connectionClosedEvent.ConnectionClosed;
     }
     
+
     private void SlashCommands()
     {
         var slashCommands =
