@@ -245,12 +245,14 @@ public class AudioPlayerEmbed
         return embed;
     }
     
-    public DiscordEmbedBuilder Seek(InteractionContext context, double time)
+    public DiscordEmbedBuilder Seek(InteractionContext context, double position)
     {
+        var time = TimeSpan.FromSeconds(position);
+        
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🕒   • ``{context.Member.Username}`` changed the song position to ``{time}`` seconds.",
+                $"🕒   • ``{context.Member.Username}`` changed the song position to ``{time:hh:mm:tt}`` seconds.",
             Color = DiscordColor.Cyan
         };
 
