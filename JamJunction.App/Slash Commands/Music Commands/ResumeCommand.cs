@@ -31,7 +31,7 @@ public class ResumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context)));
+                    errorEmbed.ValidVoiceChannelError(context)));
 
             return;
         }
@@ -43,7 +43,7 @@ public class ResumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerErrorEmbedBuilder()));
+                    errorEmbed.NoPlayerError(context)));
 
             return;
         }
@@ -52,7 +52,7 @@ public class ResumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelErrorEmbedBuilder(context)));
+                    errorEmbed.SameVoiceChannelError(context)));
 
             return;
         }
@@ -65,7 +65,7 @@ public class ResumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionErrorEmbedBuilder()));
+                    errorEmbed.NoConnectionError(context)));
 
             return;
         }
@@ -74,7 +74,7 @@ public class ResumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoAudioTrackErrorEmbedBuilder()));
+                    errorEmbed.NoAudioTrackError(context)));
 
             return;
         }
@@ -83,6 +83,6 @@ public class ResumeCommand : ApplicationCommandModule
 
         await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
-                audioPlayerEmbed.ResumeEmbedBuilder(context)));
+                audioPlayerEmbed.Resume(context)));
     }
 }

@@ -19,17 +19,7 @@ public class CaptionCommand : ApplicationCommandModule
         Color color
     )
     {
-        try
-        {
-            var captionEmbed = new CaptionEmbed();
-
-            await context.CreateResponseAsync(captionEmbed.CaptionEmbedBuilder(caption, image, color));
-        }
-        catch (FormatException)
-        {
-            var errorEmbed = new ErrorEmbed();
-
-            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), true);
-        }
+        var captionEmbed = new CaptionEmbed();
+        await context.CreateResponseAsync(captionEmbed.Caption(caption, image, color));
     }
 }

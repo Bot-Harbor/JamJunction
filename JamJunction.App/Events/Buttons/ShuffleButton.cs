@@ -43,7 +43,7 @@ public class ShuffleButton : IButton
                 {
                     await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.ValidVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                            errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
 
                     return;
                 }
@@ -52,7 +52,7 @@ public class ShuffleButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.ValidVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                        errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
 
                 return;
             }
@@ -65,7 +65,7 @@ public class ShuffleButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoPlayerErrorEmbedBuilder()));
+                        errorEmbed.NoPlayerError(btnInteractionArgs)));
 
                 return;
             }
@@ -76,7 +76,7 @@ public class ShuffleButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.SameVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                        errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
 
                 return;
             }
@@ -89,7 +89,7 @@ public class ShuffleButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoConnectionErrorEmbedBuilder()));
+                        errorEmbed.NoConnectionError(btnInteractionArgs)));
 
                 return;
             }
@@ -98,7 +98,7 @@ public class ShuffleButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoSongsToSkipEmbedBuilder(btnInteractionArgs)));
+                        errorEmbed.NoSongsToShuffleError(btnInteractionArgs)));
                 
                 return;
             }
@@ -107,7 +107,7 @@ public class ShuffleButton : IButton
 
             await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.ShuffleQueueBuilder(btnInteractionArgs)));
+                    audioPlayerEmbed.ShuffleQueue(btnInteractionArgs)));
         }
     }
 }

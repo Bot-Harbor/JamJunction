@@ -9,16 +9,15 @@ namespace JamJunction.App.Embed_Builders;
 
 public class AudioPlayerEmbed
 {
-    public DiscordMessageBuilder SongEmbedBuilder(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordMessageBuilder SongInformation(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
-        var currentSongEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"💿  •  **Now playing**: {track.Title}\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
                           $"⌛  •  **Song Duration** (HH:MM:SS): {RoundSeconds(track.Duration)}\n" +
-                          $"🔴  •  **Is a Livestream**: {track.IsLiveStream}\n" +
                           $"🔗  •  **Url**: {track.Uri}",
-            Color = DiscordColor.Teal,
+            Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
                 Url = track.ArtworkUri!.AbsoluteUri
@@ -29,7 +28,7 @@ public class AudioPlayerEmbed
 
         if (queue.Count == 0)
         {
-            currentSongEmbed.Footer = new DiscordEmbedBuilder.EmbedFooter
+            embed.Footer = new DiscordEmbedBuilder.EmbedFooter
             {
                 Text = "Queue is empty..."
             };
@@ -37,7 +36,7 @@ public class AudioPlayerEmbed
         else
         {
             foreach (var nextSong in queue.Take(1))
-                currentSongEmbed.Footer = new DiscordEmbedBuilder.EmbedFooter
+                embed.Footer = new DiscordEmbedBuilder.EmbedFooter
                 {
                     Text = $"Next Song: {nextSong.Track!.Title}"
                 };
@@ -111,96 +110,96 @@ public class AudioPlayerEmbed
         if (currentRow.Count > 0) componentsRows.Add(currentRow);
 
         var messageBuilder = new DiscordMessageBuilder();
-        messageBuilder.AddEmbed(currentSongEmbed);
+        messageBuilder.AddEmbed(embed);
 
         foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
         return messageBuilder;
     }
 
-    public DiscordEmbedBuilder QueueEmbedBuilder(LavalinkTrack track)
+    public DiscordEmbedBuilder SongAddedToQueue(LavalinkTrack track)
     {
-        var queueEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"✅  •  **{track.Title}** has been added to the queue.",
             Color = DiscordColor.Green
         };
 
-        return queueEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder PauseEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder Pause(InteractionContext context)
     {
-        var pauseEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"⏸  • ``{context.Member.Username}`` paused the track.",
             Color = DiscordColor.Yellow
         };
 
-        return pauseEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder PauseEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder Pause(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var pauseButtonEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"⏸  • ``{btnInteractionArgs.User.Username}`` paused the track.",
             Color = DiscordColor.Yellow
         };
 
-        return pauseButtonEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder ResumeEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder Resume(InteractionContext context)
     {
-        var resumeEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"▶  • ``{context.Member.Username}`` resumed the track.",
             Color = DiscordColor.Green
         };
 
-        return resumeEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder ResumeEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder Resume(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var resumeEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"▶  • ``{btnInteractionArgs.User.Username}`` resumed the track.",
             Color = DiscordColor.Green
         };
 
-        return resumeEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder StopEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder Stop(InteractionContext context)
     {
-        var stopEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"⬜   • ``{context.Member.Username}`` stopped the player.",
             Color = DiscordColor.Red
         };
 
-        return stopEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder StopEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder Stop(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var stopEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"⬜   • ``{btnInteractionArgs.User.Username}`` stopped the player.",
             Color = DiscordColor.Red
         };
 
-        return stopEmbed;
+        return embed;
     }
-
-    public DiscordEmbedBuilder QueueSomethingEmbedBuilder()
+    
+    public DiscordEmbedBuilder QueueSomething()
     {
-        var queueSomethingEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = "**Nothing is playing.**\n" +
-                          "Please use the ``/play`` command to queue something.",
+                          "Please use the </play:1181715791658360852> command to queue something.",
             Color = DiscordColor.Orange,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
@@ -210,137 +209,93 @@ public class AudioPlayerEmbed
             }
         };
 
-        return queueSomethingEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder VolumeEmbedBuilder(double volume, InteractionContext context)
+    public DiscordEmbedBuilder Volume(double volume, InteractionContext context)
     {
-        var volumeEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"🔊  •  ``{context.Member.Username}`` changed the volume to ``{volume}``.",
-            Color = DiscordColor.Teal
+            Color = DiscordColor.Cyan
         };
 
-        return volumeEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder VolumeDecreaseEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder VolumeDecreased(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var volumeDecreaseEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"🔉  •  ``{btnInteractionArgs.User.Username}`` has decreased the volume.",
-            Color = DiscordColor.Teal
+            Color = DiscordColor.Cyan
         };
 
-        return volumeDecreaseEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder VolumeIncreaseEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder VolumeIncreased(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var volumeIncreaseEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"🔊  •  ``{btnInteractionArgs.User.Username}`` has increased the volume.",
-            Color = DiscordColor.Teal
+            Color = DiscordColor.Cyan
         };
 
-        return volumeIncreaseEmbed;
+        return embed;
     }
-
-    public DiscordEmbedBuilder MuteEmbedBuilder(InteractionContext context)
+    
+    public DiscordEmbedBuilder Seek(InteractionContext context, double time)
     {
-        var muteEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"🔊  •  ``{context.Member.Username}`` has muted the volume.",
-            Color = DiscordColor.Teal
-        };
-
-        return muteEmbed;
-    }
-
-    public DiscordEmbedBuilder MuteEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var muteEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"🔊  •  ``{btnInteractionArgs.User.Username}`` has muted the volume.",
-            Color = DiscordColor.Teal
-        };
-
-        return muteEmbed;
-    }
-
-    public DiscordEmbedBuilder UnmuteEmbedBuilder(InteractionContext context)
-    {
-        var unmuteEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"🔊  •  ``{context.Member.Username}`` has unmuted the volume.",
-            Color = DiscordColor.Teal
-        };
-
-        return unmuteEmbed;
-    }
-
-    public DiscordEmbedBuilder UnmuteEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var unmuteEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"🔊  •  ``{btnInteractionArgs.User.Username}`` has unmuted the volume.",
-            Color = DiscordColor.Teal
-        };
-
-        return unmuteEmbed;
-    }
-
-    public DiscordEmbedBuilder SeekEmbedBuilder(InteractionContext context, double time)
-    {
-        var seekEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"⌛   • ``{context.Member.Username}`` changed the song position to ``{time}`` seconds.",
-            Color = DiscordColor.Teal
+                $"🕒   • ``{context.Member.Username}`` changed the song position to ``{time}`` seconds.",
+            Color = DiscordColor.Cyan
         };
 
-        return seekEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder RestartEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder Restart(InteractionContext context)
     {
-        var restartEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description =
                 $"🔁   • ``{context.Member.Username}`` restarted the song.",
             Color = DiscordColor.Orange
         };
 
-        return restartEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder RestartEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder Restart(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var restartEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description =
                 $"🔁   • ``{btnInteractionArgs.User.Username}`` restarted the song.",
             Color = DiscordColor.Orange
         };
 
-        return restartEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder LeaveEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder Leave(InteractionContext context)
     {
-        var leaveEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description =
                 $"🔌   • ``{context.Member.Username}`` has disconnected Jam Junction.",
             Color = DiscordColor.DarkRed
         };
 
-        return leaveEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder ViewQueueBuilder(InteractionContext context, QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordEmbedBuilder ViewQueue(InteractionContext context, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
-        var viewQueue = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Title = " 🎵  Queue List:",
             Color = DiscordColor.Cyan,
@@ -352,28 +307,28 @@ public class AudioPlayerEmbed
 
         if (queuedLavalinkPlayer.Queue.IsEmpty)
         {
-            viewQueue.Description = "There are no songs currently in the queue.";
+            embed.Description = "There are no songs currently in the queue.";
         }
         else
         {
             var i = 1;
 
-            viewQueue.Description = "• Only shows first **25** songs due to Discord's API rate limit";
+            embed.Description = "• Only shows first **25** songs due to Discord's API rate limit";
 
             foreach (var queue in queuedLavalinkPlayer.Queue)
             {
-                viewQueue.AddField($"{i++}. {queue.Track!.Title}",
+                embed.AddField($"{i++}. {queue.Track!.Title}",
                     $"**Song Duration** (HH:MM:SS): {RoundSeconds(queue.Track!.Duration)}");
             }
         }
 
-        return viewQueue;
+        return embed;
     }
 
-    public DiscordEmbedBuilder ViewQueueBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs,
+    public DiscordEmbedBuilder ViewQueue(ComponentInteractionCreateEventArgs btnInteractionArgs,
         QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
-        var viewQueue = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Title = " 🎵  Queue List:",
             Color = DiscordColor.Cyan,
@@ -385,81 +340,81 @@ public class AudioPlayerEmbed
 
         if (queuedLavalinkPlayer.Queue.IsEmpty)
         {
-            viewQueue.Description = "There are no songs currently in the queue.";
+            embed.Description = "There are no songs currently in the queue.";
         }
         else
         {
             var i = 1;
 
-            viewQueue.Description = "• Only shows first **25** songs due to Discord's API rate limit";
+            embed.Description = "• Only shows first **25** songs due to Discord's API rate limit";
 
             foreach (var queue in queuedLavalinkPlayer.Queue)
             {
-                viewQueue.AddField($"{i++}. {queue.Track!.Title}",
+                embed.AddField($"{i++}. {queue.Track!.Title}",
                     $"**Song Duration** (HH:MM:SS): {RoundSeconds(queue.Track!.Duration)}");
             }
         }
 
-        return viewQueue;
+        return embed;
     }
 
-    public DiscordEmbedBuilder ShuffleQueueBuilder(InteractionContext context)
+    public DiscordEmbedBuilder ShuffleQueue(InteractionContext context)
     {
-        var shuffleQueue = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description =
                 $"🔀  • ``{context.Member.Username}`` has shuffled the queue.",
             Color = DiscordColor.Cyan
         };
 
-        return shuffleQueue;
+        return embed;
     }
 
-    public DiscordEmbedBuilder ShuffleQueueBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder ShuffleQueue(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var shuffleQueue = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description =
                 $"🔀  • ``{btnInteractionArgs.User.Username}`` has shuffled the queue.",
             Color = DiscordColor.Cyan
         };
 
-        return shuffleQueue;
+        return embed;
     }
 
-    public DiscordEmbedBuilder SkipEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder Skip(InteractionContext context)
     {
-        var skipEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description =
                 $"⏭️  • ``{context.Member.Username}`` has skipped to the next song.",
             Color = DiscordColor.Cyan
         };
 
-        return skipEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder SkipEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder Skip(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var skipEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description =
                 $"⏭️  • ``{btnInteractionArgs.User.Username}`` has skipped to the next song.",
             Color = DiscordColor.Cyan
         };
 
-        return skipEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder SongPositionBuilder(TimeSpan timeSpan)
+    public DiscordEmbedBuilder SongPosition(TimeSpan timeSpan)
     {
-        var songPosition = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"🕒  • Current Song Position (HH:MM:SS): ``{RoundSeconds(timeSpan)}``",
-            Color = DiscordColor.White
+            Color = DiscordColor.Cyan
         };
 
-        return songPosition;
+        return embed;
     }
 
     private TimeSpan RoundSeconds(TimeSpan timespan)

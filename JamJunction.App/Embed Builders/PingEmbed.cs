@@ -5,15 +5,15 @@ namespace JamJunction.App.EmbedBuilders;
 
 public class PingEmbed
 {
-    public DiscordEmbedBuilder PingEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder Ping(InteractionContext context)
     {
-        var pingEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Title = $"Pong 🏓 ``{context.Member.Username}``",
             ImageUrl = "https://pbs.twimg.com/media/CijH1M7WgAE_3we.jpg",
             Color = DiscordColor.Orange
         };
 
-        return pingEmbed;
+        return embed;
     }
 }

@@ -9,7 +9,7 @@ public class HelpEmbed
 {
     private readonly IAudioService _audioService;
     
-    public DiscordMessageBuilder HelpEmbedBuilder(InteractionContext context)
+    public DiscordMessageBuilder Help(InteractionContext context)
     {
         var userIcon = context.User.GetAvatarUrl(ImageFormat.Png);
         var userName = context.Client.CurrentUser.Username;

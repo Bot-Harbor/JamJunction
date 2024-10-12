@@ -9,17 +9,7 @@ public class PingCommand : ApplicationCommandModule
     [SlashCommand("ping", "Will pong back to the server.")]
     public async Task PingAsync(InteractionContext context)
     {
-        try
-        {
-            var pingEmbed = new PingEmbed();
-
-            await context.CreateResponseAsync(pingEmbed.PingEmbedBuilder(context), true);
-        }
-        catch (FormatException)
-        {
-            var errorEmbed = new ErrorEmbed();
-
-            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), true);
-        }
+        var pingEmbed = new PingEmbed();
+        await context.CreateResponseAsync(pingEmbed.Ping(context), true);
     }
 }

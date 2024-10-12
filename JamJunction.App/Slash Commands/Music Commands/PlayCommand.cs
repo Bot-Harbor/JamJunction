@@ -1,8 +1,11 @@
-﻿using DSharpPlus.Entities;
+﻿using System.Collections.Immutable;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Slash_Commands.Music_Commands.Enums;
 using Lavalink4NET;
+using Lavalink4NET.Integrations.Lavasearch;
+using Lavalink4NET.Integrations.Lavasearch.Extensions;
 using Lavalink4NET.Rest.Entities.Tracks;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
@@ -38,8 +41,8 @@ public class PlayCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context)));
-            
+                    errorEmbed.ValidVoiceChannelError(context)));
+
             return;
         }
 
@@ -50,21 +53,32 @@ public class PlayCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionErrorEmbedBuilder()));
-            
+                    errorEmbed.NoConnectionError(context)));
+
             return;
         }
-        
+
         var botId = context.Client.CurrentUser.Id;
         context.Guild.VoiceStates.TryGetValue(botId, out var botVoiceState);
-        
+
         if (userVoiceChannel.Id != botVoiceState!.Channel!.Id)
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelErrorEmbedBuilder(context)));
-            
+                    errorEmbed.SameVoiceChannelError(context)));
+
             return;
+        }
+
+        // Maybe move switch to this? 
+        if (streamingPlatform == Platform.Spotify)
+        {
+            var searchResult = await _audioService.Tracks.SearchAsync(
+                query: "[...]",
+                loadOptions: new TrackLoadOptions(SearchMode: TrackSearchMode.Spotify),
+                categories: ImmutableArray.Create(SearchCategory.Track));
+
+            await player!.PlayAsync(searchResult!.Tracks.First()!);
         }
 
         var track = streamingPlatform switch
@@ -79,11 +93,11 @@ public class PlayCommand : ApplicationCommandModule
         {
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(errorEmbed.AudioTrackErrorEmbedBuilder()));
-            
+                    .AddEmbed(errorEmbed.AudioTrackError(context)));
+
             return;
         }
-        
+
         if (!Bot.GuildData.ContainsKey(guildId))
         {
             Bot.GuildData.Add(guildId, new GuildData());
@@ -93,19 +107,19 @@ public class PlayCommand : ApplicationCommandModule
         var textChannelId = context.Channel.Id;
         guildData.TextChannelId = textChannelId;
 
-        await player!.PlayAsync(track!);
-        
+        await player.PlayAsync(track!);
+
         if (player.Queue.IsEmpty)
         {
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                    new DiscordInteractionResponseBuilder(audioPlayerEmbed.SongEmbedBuilder(track, player))));
+                    new DiscordInteractionResponseBuilder(audioPlayerEmbed.SongInformation(track, player))));
+
+            return;
         }
-        else
-        {
-            await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(audioPlayerEmbed.QueueEmbedBuilder(track)));
-        }
+        
+        await context
+            .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                .AddEmbed(audioPlayerEmbed.SongAddedToQueue(track)));
     }
 }

@@ -43,7 +43,7 @@ public class ViewQueueButton : IButton
                 {
                     await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.ValidVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                            errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
 
                     return;
                 }
@@ -52,7 +52,7 @@ public class ViewQueueButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.ValidVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                        errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
 
                 return;
             }
@@ -65,7 +65,7 @@ public class ViewQueueButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoPlayerErrorEmbedBuilder()));
+                        errorEmbed.NoPlayerError(btnInteractionArgs)));
 
                 return;
             }
@@ -76,7 +76,7 @@ public class ViewQueueButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.SameVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                        errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
 
                 return;
             }
@@ -89,14 +89,14 @@ public class ViewQueueButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoConnectionErrorEmbedBuilder()));
+                        errorEmbed.NoConnectionError(btnInteractionArgs)));
 
                 return;
             }
             
             await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.ViewQueueBuilder(btnInteractionArgs, player)));
+                    audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
         }
     }
 }

@@ -5,7 +5,7 @@ namespace JamJunction.App.Embed_Builders;
 
 public class CaptionEmbed
 {
-    public DiscordEmbedBuilder CaptionEmbedBuilder(string caption, DiscordAttachment image, Color color)
+    public DiscordEmbedBuilder Caption(string caption, DiscordAttachment image, Color color)
     {
         var discordColor = color switch
         {

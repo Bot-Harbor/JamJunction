@@ -6,370 +6,278 @@ namespace JamJunction.App.Embed_Builders;
 
 public class ErrorEmbed
 {
-    // Remove
-    public DiscordEmbedBuilder CommandFailedEmbedBuilder()
+    public DiscordEmbedBuilder ValidVoiceChannelError(InteractionContext context)
     {
-        var commandErrorEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
-            Description = "⚠️ • Command failed to execute.",
+            Description = $"🔊 • You must be in a valid voice channel ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return commandErrorEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder ValidVoiceChannelErrorEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder ValidVoiceChannelError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var voiceChannelErrorEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"🔊 • You must be in a valid voice channel ``{context.Member.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return voiceChannelErrorEmbed;
-    }
-
-    public DiscordEmbedBuilder ValidVoiceChannelErrorEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var voiceChannelErrorEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"🔊 • You must be in a valid voice channel ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return voiceChannelErrorEmbed;
+        return embed;
     }
     
-    public DiscordEmbedBuilder SameVoiceChannelErrorEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder SameVoiceChannelError(InteractionContext context)
     {
-        var voiceChannelErrorEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊 • You must be in the same voice channel as the bot ``{context.Member.Username}``.",
+            Description = $"🔊 • You must be in the same voice channel as the bot ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return voiceChannelErrorEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder SameVoiceChannelErrorEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder SameVoiceChannelError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var voiceChannelErrorEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"🔊 • You must be in the same voice channel as the bot ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return voiceChannelErrorEmbed;
+        return embed;
     }
     
-    public DiscordEmbedBuilder NoConnectionErrorEmbedBuilder()
+    public DiscordEmbedBuilder NoConnectionError(InteractionContext context)
     {
-        var noConnectionErrorEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
-            Description = "🌋 • Lavalink connection is not established.",
+            Description = $"🌋 • Lavalink connection is not established ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return noConnectionErrorEmbed;
-    }
-
-    public DiscordEmbedBuilder NoPlayerErrorEmbedBuilder()
-    {
-        var lavaLinkErrorEmbed = new DiscordEmbedBuilder
-        {
-            Description = "🔊 • There is no player in the voice channel.",
-            Color = DiscordColor.Red
-        };
-
-        return lavaLinkErrorEmbed;
-    }
-
-    public DiscordEmbedBuilder AudioTrackErrorEmbedBuilder()
-    {
-        var audioTrackErrorEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\ud83c\udfb5 • Failed to find song.",
-            Color = DiscordColor.Red
-        };
-
-        return audioTrackErrorEmbed;
-    }
-
-    public DiscordEmbedBuilder NoAudioTrackErrorEmbedBuilder()
-    {
-        var audioTrackErrorEmbed = new DiscordEmbedBuilder
-        {
-            Description = "\ud83c\udfb5 • There are no tracks currently playing.",
-            Color = DiscordColor.Red
-        };
-
-        return audioTrackErrorEmbed;
-    }
-
-    public DiscordEmbedBuilder VolumeNotAnIntegerEmbedBuilder(InteractionContext context)
-    {
-        var volumeNotAnIntegerEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"🔊  •  The number for the volume must be a whole number ``{context.Member.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return volumeNotAnIntegerEmbed;
+        return embed;
     }
     
-    public DiscordEmbedBuilder MaxVolumeEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder NoConnectionError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var maxVolumeEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  You cannot set the volume above 100 ``{context.Member.Username}``.",
+            Description = $"🌋 • Lavalink connection is not established ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return maxVolumeEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder MaxVolumeEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder NoPlayerError(InteractionContext context)
     {
-        var maxVolumeEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"🔊 • There is no player in the voice channel ``{context.User.Username}``.",
+            Color = DiscordColor.Red
+        };
+
+        return embed;
+    }
+    
+    public DiscordEmbedBuilder NoPlayerError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"🔊 • There is no player in the voice channel ``{btnInteractionArgs.User.Username}``.",
+            Color = DiscordColor.Red
+        };
+
+        return embed;
+    }
+    
+    public DiscordEmbedBuilder NoAudioTrackError(InteractionContext context)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"\ud83c\udfb5 • There are no tracks currently playing ``{context.User.Username}``.",
+            Color = DiscordColor.Red
+        };
+
+        return embed;
+    }
+    
+    public DiscordEmbedBuilder NoAudioTrackError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"\ud83c\udfb5 • There are no tracks currently playing ``{btnInteractionArgs.User.Username}``.",
+            Color = DiscordColor.Red
+        };
+
+        return embed;
+    }
+    
+    public DiscordEmbedBuilder AudioTrackError(InteractionContext context)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"\ud83c\udfb5 • Failed to find song ``{context.User.Username}``.",
+            Color = DiscordColor.Red
+        };
+
+        return embed;
+    }
+
+    public DiscordEmbedBuilder VolumeNotAnIntegerError(InteractionContext context)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"🔊  •  The number for the volume must be a whole number ``{context.User.Username}``.",
+            Color = DiscordColor.Red
+        };
+
+        return embed;
+    }
+    
+    public DiscordEmbedBuilder NoVolumeOver100Error(InteractionContext context)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"🔊  •  You cannot set the volume above 100 ``{context.User.Username}``.",
+            Color = DiscordColor.Red
+        };
+
+        return embed;
+    }
+
+    public DiscordEmbedBuilder MaxVolumeError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    {
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"🔊  •  The volume is already at its maximum ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return maxVolumeEmbed;
+        return embed;
     }
     
-    public DiscordEmbedBuilder MinVolumeEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder MinVolumeError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var minVolumeEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"🔊  •  The volume is already at its minimum ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return minVolumeEmbed;
+        return embed;
     }
 
-    public DiscordEmbed AlreadyPausedEmbedBuilder(InteractionContext context)
+    public DiscordEmbed AlreadyPausedError(InteractionContext context)
     {
-        var alreadyPausedEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
-            Description = $"⏸  •  The player is already paused ``{context.Member.Username}``.",
+            Description = $"⏸  •  The player is already paused ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return alreadyPausedEmbed;
+        return embed;
     }
     
-    public DiscordEmbed AlreadyPausedEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbed AlreadyPausedError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var alreadyPausedEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"⏸  •  The player is already paused ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return alreadyPausedEmbed;
+        return embed;
     }
     
-    public DiscordEmbedBuilder NoVolumeWhilePausedEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder SeekNotAnIntegerError(InteractionContext context)
     {
-        var noVolumeWhilePausedEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  You cannot set the volume while the player is paused ``{context.Member.Username}``.",
+            Description = $"🔊  •  The number for the time must be a whole number ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return noVolumeWhilePausedEmbed;
-    }
-
-    public DiscordEmbedBuilder NoVolumeWhilePausedEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var noVolumeWhilePausedEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"🔊  •  You cannot set the volume while the player is paused ``{btnInteractionArgs.User.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return noVolumeWhilePausedEmbed;
+        return embed;
     }
     
-
-    public DiscordEmbedBuilder SeekNotAnIntegerEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder SeekLargerThanDurationError(InteractionContext context)
     {
-        var volumeNotAnIntegerEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  The number for the time must be a whole number ``{context.Member.Username}``.",
+            Description = $"🔊  •  The time you are seeking for is larger than the duration of the song ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return volumeNotAnIntegerEmbed;
+        return embed;
     }
     
-    public DiscordEmbedBuilder SeekLargerThanDuration(InteractionContext context)
+    public DiscordEmbedBuilder NoSongsToSkipToError(InteractionContext context)
     {
-        var maxVolumeEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  The time you are seeking for is larger than the duration of the song ``{context.Member.Username}``.",
+            Description = $"🎵 • There are no songs to skip to ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return maxVolumeEmbed;
+        return embed;
     }
     
-    public DiscordEmbedBuilder NoSeekWhilePausedEmbedBuilder(InteractionContext context)
+    public DiscordEmbedBuilder NoSongsToSkipToError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var noSeekWhilePausedEmbed = new DiscordEmbedBuilder
-        {
-            Description =
-                $"⌛  •  You cannot change the song position while the player is paused ``{context.Member.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return noSeekWhilePausedEmbed;
-    }
-
-    public DiscordEmbedBuilder NoMuteWhilePausedEmbedBuilder(InteractionContext context)
-    {
-        var noMuteWhilePausedEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"⌛  •  You cannot mute the song while the player is paused ``{context.Member.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return noMuteWhilePausedEmbed;
-    }
-
-    public DiscordEmbedBuilder NoMuteWhilePausedEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var noMuteWhilePausedEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"⌛  •  You cannot mute the song while the player is paused ``{btnInteractionArgs.User.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return noMuteWhilePausedEmbed;
-    }
-
-    public DiscordEmbedBuilder NoUnMuteWhilePausedEmbedBuilder(InteractionContext context)
-    {
-        var noUnMuteWhilePausedEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"⌛  •  You cannot unmute the song while the player is paused ``{context.Member.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return noUnMuteWhilePausedEmbed;
-    }
-
-    public DiscordEmbedBuilder NoUnMuteWhilePausedEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var noUnMuteWhilePausedEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"⌛  •  You cannot unmute the song while the player is paused ``{btnInteractionArgs.User.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return noUnMuteWhilePausedEmbed;
-    }
-    
-
-    public DiscordEmbedBuilder NoRestartWithPausedEmbedBuilder(InteractionContext context)
-    {
-        var noRestartWhilePausedEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"⌛  •  You cannot restart the song while player is paused ``{context.Member.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return noRestartWhilePausedEmbed;
-    }
-
-    public DiscordEmbedBuilder NoRestartWithPausedEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var noRestartWhilePausedEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"⌛  •  You cannot restart the song while player is paused ``{btnInteractionArgs.User.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return noRestartWhilePausedEmbed;
-    }
-    
-    public DiscordEmbedBuilder NoSongsToSkipEmbedBuilder(InteractionContext context)
-    {
-        var noSongsToSkipEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"🎵 • There are no songs to skip to ``{context.Member.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return noSongsToSkipEmbed;
-    }
-    
-    public DiscordEmbedBuilder NoSongsToSkipEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var noSongsToSkipEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"🎵 • There are no songs to skip to ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return noSongsToSkipEmbed;
+        return embed;
     }
-
-    public DiscordEmbedBuilder NoSongsPToSkipEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    
+    public DiscordEmbedBuilder NoSongsToShuffleError(InteractionContext context)
     {
-        var noSongsToSkipEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • There are no songs to skip to ``{btnInteractionArgs.User.Username}``.",
+            Description = $"🔀 • There are no songs in the queue to shuffle ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return noSongsToSkipEmbed;
+        return embed;
     }
-
-    public DiscordEmbedBuilder QueueIsEmptyEmbedBuilder(InteractionContext context)
+    
+    public DiscordEmbedBuilder NoSongsToShuffleError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        var queueIsEmptyEmbed = new DiscordEmbedBuilder
-        {
-            Description = $"🔀 • There are no songs in the queue to shuffle ``{context.Member.Username}``.",
-            Color = DiscordColor.Red
-        };
-
-        return queueIsEmptyEmbed;
-    }
-
-    public DiscordEmbedBuilder QueueIsEmptyEmbedBuilder(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var queueIsEmptyEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = $"🔀 • There are no songs in the queue to shuffle ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
-        return queueIsEmptyEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder TrackFailedToLoadEmbedBuilder()
+    public DiscordEmbedBuilder TrackFailedToLoadError()
     {
-        var trackFailedToLoadEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = "\u274c • Track failed to load. Reattempting to connect in 5 seconds.",
             Color = DiscordColor.Red
         };
 
-        return trackFailedToLoadEmbed;
+        return embed;
     }
 
-    public DiscordEmbedBuilder CouldNotLoadTrackOnAttemptEmbedBuilder()
+    public DiscordEmbedBuilder CouldNotLoadTrackOnAttemptError()
     {
-        var couldNotLoadOnAttemptTrackEmbed = new DiscordEmbedBuilder
+        var embed = new DiscordEmbedBuilder
         {
             Description = "\u274c • Attempt to load track again failed. The audio player has been reset.",
             Color = DiscordColor.Red
         };
 
-        return couldNotLoadOnAttemptTrackEmbed;
+        return embed;
     }
 }

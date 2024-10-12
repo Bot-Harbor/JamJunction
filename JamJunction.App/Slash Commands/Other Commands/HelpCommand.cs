@@ -9,19 +9,9 @@ public class HelpCommand : ApplicationCommandModule
     [SlashCommand("help", "Gives information about the bot & available commands.")]
     public async Task HelpCommandAsync(InteractionContext context)
     {
-        try
-        {
-            var helpEmbed = new HelpEmbed();
-
-            await context.CreateResponseAsync(
-                new DiscordInteractionResponseBuilder(helpEmbed.HelpEmbedBuilder(context)).AsEphemeral()
-            );
-        }
-        catch (FormatException)
-        {
-            var errorEmbed = new ErrorEmbed();
-
-            await context.CreateResponseAsync(errorEmbed.CommandFailedEmbedBuilder(), true);
-        }
+        var helpEmbed = new HelpEmbed();
+        await context.CreateResponseAsync(
+            new DiscordInteractionResponseBuilder(helpEmbed.Help(context)).AsEphemeral()
+        );
     }
 }

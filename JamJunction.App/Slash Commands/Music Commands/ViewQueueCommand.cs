@@ -31,7 +31,7 @@ public class ViewQueueCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context)));
+                    errorEmbed.ValidVoiceChannelError(context)));
 
             return;
         }
@@ -43,7 +43,7 @@ public class ViewQueueCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerErrorEmbedBuilder()));
+                    errorEmbed.NoPlayerError(context)));
 
             return;
         }
@@ -52,7 +52,7 @@ public class ViewQueueCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelErrorEmbedBuilder(context)));
+                    errorEmbed.SameVoiceChannelError(context)));
 
             return;
         }
@@ -65,13 +65,13 @@ public class ViewQueueCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionErrorEmbedBuilder()));
+                    errorEmbed.NoConnectionError(context)));
 
             return;
         }
 
         await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
-                audioPlayerEmbed.ViewQueueBuilder(context, player)));
+                audioPlayerEmbed.ViewQueue(context, player)));
     }
 }

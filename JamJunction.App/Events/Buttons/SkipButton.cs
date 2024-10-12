@@ -44,7 +44,7 @@ public class SkipButton : IButton
                 {
                     await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.ValidVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                            errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
 
                     return;
                 }
@@ -53,7 +53,7 @@ public class SkipButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.ValidVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                        errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
 
                 return;
             }
@@ -66,7 +66,7 @@ public class SkipButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoPlayerErrorEmbedBuilder()));
+                        errorEmbed.NoPlayerError(btnInteractionArgs)));
 
                 return;
             }
@@ -77,7 +77,7 @@ public class SkipButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.SameVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                        errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
 
                 return;
             }
@@ -90,7 +90,7 @@ public class SkipButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoConnectionErrorEmbedBuilder()));
+                        errorEmbed.NoConnectionError(btnInteractionArgs)));
 
                 return;
             }
@@ -99,7 +99,7 @@ public class SkipButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoSongsToSkipEmbedBuilder(btnInteractionArgs)));
+                        errorEmbed.NoSongsToSkipToError(btnInteractionArgs)));
                 
                 return;
             }
@@ -108,7 +108,7 @@ public class SkipButton : IButton
 
             await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.SkipEmbedBuilder(btnInteractionArgs)));
+                    audioPlayerEmbed.Skip(btnInteractionArgs)));
         }
     }
 }

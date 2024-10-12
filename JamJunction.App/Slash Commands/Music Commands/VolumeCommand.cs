@@ -33,7 +33,7 @@ public class VolumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelErrorEmbedBuilder(context)));
+                    errorEmbed.ValidVoiceChannelError(context)));
 
             return;
         }
@@ -45,7 +45,7 @@ public class VolumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerErrorEmbedBuilder()));
+                    errorEmbed.NoPlayerError(context)));
 
             return;
         }
@@ -54,7 +54,7 @@ public class VolumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelErrorEmbedBuilder(context)));
+                    errorEmbed.SameVoiceChannelError(context)));
 
             return;
         }
@@ -67,7 +67,7 @@ public class VolumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionErrorEmbedBuilder()));
+                    errorEmbed.NoConnectionError(context)));
 
             return;
         }
@@ -76,7 +76,7 @@ public class VolumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoAudioTrackErrorEmbedBuilder()));
+                    errorEmbed.NoAudioTrackError(context)));
 
             return;
         }
@@ -87,7 +87,7 @@ public class VolumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.VolumeNotAnIntegerEmbedBuilder(context)));
+                    errorEmbed.VolumeNotAnIntegerError(context)));
             
             return;
         }
@@ -96,7 +96,7 @@ public class VolumeCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.MaxVolumeEmbedBuilder(context)));
+                    errorEmbed.NoVolumeOver100Error(context)));
 
             return;
         }
@@ -106,6 +106,6 @@ public class VolumeCommand : ApplicationCommandModule
 
         await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
-                audioPlayerEmbed.VolumeEmbedBuilder(Math.Round(volume * 100), context)));
+                audioPlayerEmbed.Volume(Math.Round(volume * 100), context)));
     }
 }

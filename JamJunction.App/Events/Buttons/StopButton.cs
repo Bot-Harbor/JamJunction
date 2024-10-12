@@ -45,7 +45,7 @@ public class StopButton : IButton
                 {
                     await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.ValidVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                            errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
 
                     return;
                 }
@@ -54,7 +54,7 @@ public class StopButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.ValidVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                        errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
 
                 return;
             }
@@ -67,7 +67,7 @@ public class StopButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoPlayerErrorEmbedBuilder()));
+                        errorEmbed.NoPlayerError(btnInteractionArgs)));
 
                 return;
             }
@@ -78,7 +78,7 @@ public class StopButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.SameVoiceChannelErrorEmbedBuilder(btnInteractionArgs)));
+                        errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
 
                 return;
             }
@@ -91,7 +91,7 @@ public class StopButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoConnectionErrorEmbedBuilder()));
+                        errorEmbed.NoConnectionError(btnInteractionArgs)));
 
                 return;
             }
@@ -100,7 +100,7 @@ public class StopButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoAudioTrackErrorEmbedBuilder()));
+                        errorEmbed.NoAudioTrackError(btnInteractionArgs)));
 
                 return;
             }
@@ -109,7 +109,7 @@ public class StopButton : IButton
 
             await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.StopEmbedBuilder(btnInteractionArgs)));
+                    audioPlayerEmbed.Stop(btnInteractionArgs)));
         }
     }
 }

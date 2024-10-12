@@ -42,7 +42,7 @@ public class TrackEndedEvent
         if (player.State == PlayerState.NotPlaying)
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
-            await channel.SendMessageAsync(audioPlayerEmbed.QueueSomethingEmbedBuilder());
+            await channel.SendMessageAsync(audioPlayerEmbed.QueueSomething());
             Bot.GuildData.Remove(guildId);
         }
     }
