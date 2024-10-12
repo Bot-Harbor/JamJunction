@@ -31,7 +31,7 @@ public class HelpEmbed
             Color = DiscordColor.White,
             Description =
                 "Your go-to music bot for you and your friends! Type one of the commands below to get started. " +
-                $"Jam Junction powered by [DSharpPlus {dSharpPlusVersion}]" +
+                $"Jam Junction is powered by [DSharpPlus {dSharpPlusVersion}]" +
                 "(https://github.com/DSharpPlus/DSharpPlus), " +
                 $"[Lavalink4NET 4.0.26](https://github.com/angelobreuer/Lavalink4NET), " +
                 "and [Docker](https://www.docker.com/).",
@@ -56,10 +56,11 @@ public class HelpEmbed
             "\u25b6\ufe0f  </play:1181715791658360852>\n" +
             "\u23f8\ufe0f  </pause:1185357127468986450>\n" +
             "\u25b6\ufe0f  </resume:1185412430055084052>\n" +
-            "\ud83d\udd34  </stop:1185428654155636738>\n" +
+            "\u2b1c        </stop:1185428654155636738>\n" +
             "\ud83d\udd00  </shuffle:1200625616244981821>\n" +
             "\ud83d\udd0a  </volume:1185357127468986451>\n" +
             "\ud83c\udfb6  </view-queue:1292956075032576070>\n" +
+            "\ud83d\udcc4  </current-song:1292954242264600739>\n" +
             "\ud83d\udd52  </position:1215802163658358795>\n" +
             "\ud83d\udd01  </restart:1186037012642418698>\n" +
             "\ud83d\udd52 </seek:1186000603273510952>\n" +
