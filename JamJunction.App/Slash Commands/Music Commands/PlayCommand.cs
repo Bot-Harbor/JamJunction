@@ -98,11 +98,20 @@ public class PlayCommand : ApplicationCommandModule
             return;
         }
 
+        if (track.IsLiveStream)
+        {
+            await context
+                .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                    .AddEmbed(errorEmbed.LiveSteamError(context)));
+            
+            return;
+        }
+        
         if (!Bot.GuildData.ContainsKey(guildId))
         {
             Bot.GuildData.Add(guildId, new GuildData());
         }
-
+        
         var guildData = Bot.GuildData[guildId];
         var textChannelId = context.Channel.Id;
         guildData.TextChannelId = textChannelId;

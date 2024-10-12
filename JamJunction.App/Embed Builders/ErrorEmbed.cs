@@ -126,6 +126,17 @@ public class ErrorEmbed
 
         return embed;
     }
+    
+    public DiscordEmbedBuilder LiveSteamError(InteractionContext context)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"\ud83d\udd34 • You can not play a livestream ``{context.User.Username}``.",
+            Color = DiscordColor.Red
+        };
+
+        return embed;
+    }
 
     public DiscordEmbedBuilder VolumeNotAnIntegerError(InteractionContext context)
     {
