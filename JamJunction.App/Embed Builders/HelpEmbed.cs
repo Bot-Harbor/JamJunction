@@ -1,11 +1,14 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
+using Lavalink4NET;
 
 namespace JamJunction.App.Embed_Builders;
 
 public class HelpEmbed
 {
+    private readonly IAudioService _audioService;
+    
     public DiscordMessageBuilder HelpEmbedBuilder(InteractionContext context)
     {
         var userIcon = context.User.GetAvatarUrl(ImageFormat.Png);
@@ -14,7 +17,7 @@ public class HelpEmbed
         var serverCount = context.Client.Guilds.Count;
         var shardCount = context.Client.ShardCount;
         var ping = context.Client.Ping;
-        var botVersion = context.Client.VersionString.Substring(0, 5);
+        var dSharpPlusVersion = context.Client.VersionString.Substring(0, 5);
 
         var helpEmbed = new DiscordEmbedBuilder
         {
@@ -28,9 +31,9 @@ public class HelpEmbed
             Color = DiscordColor.White,
             Description =
                 "Your go-to music bot for you and your friends! Type one of the commands below to get started. " +
-                $"Jam Junction powered by [DSharpPlus {botVersion}]" +
-                "(https://dsharpplus.github.io/DSharpPlus/index.html), " +
-                $"[Lavalink {botVersion}](https://github.com/lavalink-devs/Lavalink), " +
+                $"Jam Junction powered by [DSharpPlus {dSharpPlusVersion}]" +
+                "(https://github.com/DSharpPlus/DSharpPlus), " +
+                $"[Lavalink4NET 4.0.26](https://github.com/angelobreuer/Lavalink4NET), " +
                 "and [Docker](https://www.docker.com/).",
 
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
@@ -40,10 +43,10 @@ public class HelpEmbed
             Footer = new DiscordEmbedBuilder.EmbedFooter
             {
                 Text = "Bot Info  •  " +
+                       $"Version: 1.1.0  •  " +
                        $"Total Servers: {serverCount}  •  " +
                        $"Shard: {shardCount}  •  " +
-                       $"Ping: {ping}  •  " +
-                       $"Version: 1.1.0"
+                       $"Ping: {ping}"
             }
         };
 
@@ -56,11 +59,10 @@ public class HelpEmbed
             "\ud83d\udd34  </stop:1185428654155636738>\n" +
             "\ud83d\udd00  </shuffle:1200625616244981821>\n" +
             "\ud83d\udd0a  </volume:1185357127468986451>\n" +
-            "\ud83d\udd07  </mute:1196919352222564453>\n" +
-            "\ud83d\udd0a  </unmute:1196933203806662706>\n" +
-            "\ud83c\udfb6  </viewqueue:1200604461941391370>\n" +
+            "\ud83c\udfb6  </view-queue:1292956075032576070>\n" +
+            "\ud83d\udd52  </position:1215802163658358795>\n" +
             "\ud83d\udd01  </restart:1186037012642418698>\n" +
-            "\u231b  </seek:1186000603273510952>\n" +
+            "\ud83d\udd52 </seek:1186000603273510952>\n" +
             "\u23ed\ufe0f  </skip:1204215826773835778>\n" +
             "\ud83d\udd0c  </leave:1192206662468108438>\n",
             true
