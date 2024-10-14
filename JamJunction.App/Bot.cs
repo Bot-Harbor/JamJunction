@@ -42,8 +42,13 @@ internal sealed class Bot : BackgroundService
         
         var connectionClosedEvent = new ConnectionClosedEvent();
         _audioService.ConnectionClosed += connectionClosedEvent.ConnectionClosed;
+
+        var playerDestroyedEvent = new PlayerDestroyedEvent();
+        _audioService.Players.PlayerDestroyed += playerDestroyedEvent.PlayerDestroyed;
+
+        var voiceStateUpdatedEvent = new VoiceStateUpdatedEvent(_discordClient, _audioService);
+        _discordClient.VoiceStateUpdated += voiceStateUpdatedEvent.VoiceStateUpdated;
     }
-    
 
     private void SlashCommands()
     {

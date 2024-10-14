@@ -74,7 +74,6 @@ public class LeaveCommand : ApplicationCommandModule
         }
         
         await player!.DisconnectAsync();
-        Bot.GuildData.Remove(guildId);
 
         await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
