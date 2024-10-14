@@ -244,20 +244,6 @@ public class AudioPlayerEmbed
 
         return embed;
     }
-    
-    public DiscordEmbedBuilder Seek(InteractionContext context, double position)
-    {
-        var time = TimeSpan.FromSeconds(position);
-        
-        var embed = new DiscordEmbedBuilder
-        {
-            Description =
-                $"🕒   • ``{context.Member.Username}`` changed the song position to ``{time:hh:mm:tt}`` seconds.",
-            Color = DiscordColor.Cyan
-        };
-
-        return embed;
-    }
 
     public DiscordEmbedBuilder Restart(InteractionContext context)
     {
@@ -408,11 +394,25 @@ public class AudioPlayerEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder SongPosition(TimeSpan timeSpan)
+    public DiscordEmbedBuilder Seek(InteractionContext context, double seekedPosition)
+    {
+        var time = TimeSpan.FromSeconds(seekedPosition);
+        
+        var embed = new DiscordEmbedBuilder
+        {
+            Description =
+                $"🕒   • ``{context.Member.Username}`` changed the song position to ``{time}``.",
+            Color = DiscordColor.Cyan
+        };
+
+        return embed;
+    }
+    
+    public DiscordEmbedBuilder SongPosition(TimeSpan position)
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🕒  • Current Song Position (HH:MM:SS): ``{RoundSeconds(timeSpan)}``",
+            Description = $"🕒  • Current Song Position (HH:MM:SS): ``{RoundSeconds(position)}``.",
             Color = DiscordColor.Cyan
         };
 
