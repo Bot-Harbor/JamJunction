@@ -5,7 +5,6 @@ using JamJunction.App.Events.Buttons;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Lavalink4NET;
-using Lavalink4NET.Events.Players;
 using Microsoft.Extensions.Hosting;
 
 namespace JamJunction.App;
@@ -46,7 +45,7 @@ internal sealed class Bot : BackgroundService
         var playerDestroyedEvent = new PlayerDestroyedEvent();
         _audioService.Players.PlayerDestroyed += playerDestroyedEvent.PlayerDestroyed;
 
-        var voiceStateUpdatedEvent = new VoiceStateUpdatedEvent(_discordClient, _audioService);
+        var voiceStateUpdatedEvent = new VoiceStateUpdatedEvent(_audioService);
         _discordClient.VoiceStateUpdated += voiceStateUpdatedEvent.VoiceStateUpdated;
     }
 
