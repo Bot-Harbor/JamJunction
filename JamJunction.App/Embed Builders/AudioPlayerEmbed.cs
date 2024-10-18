@@ -1,7 +1,9 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
+using Lavalink4NET.Integrations.Lavasrc;
 using Lavalink4NET.Players.Queued;
 using LavalinkTrack = Lavalink4NET.Tracks.LavalinkTrack;
 
@@ -23,6 +25,164 @@ public class AudioPlayerEmbed
                 Url = track.ArtworkUri!.AbsoluteUri
             }
         };
+
+        if (track.Uri!.ToString().ToLower().Contains("soundcloud"))
+        {
+            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+            {
+                Name = "Platform: Soundcloud",
+                IconUrl = "https://static-00.iconduck.com/assets.00/soundcloud-icon-2048x2048-j8bxnm2n.png"
+            };
+        }
+        
+        if (track.Uri!.ToString().ToLower().Contains("youtube"))
+        {
+            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+            {
+                Name = "Platform: Youtube",
+                IconUrl =
+                    "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-youtube-circle-512.png"
+            };
+        }
+
+        if (track.Uri!.ToString().ToLower().Contains("spotify"))
+        {
+            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+            {
+                Name = "Platform: Spotify",
+                IconUrl =
+                    "https://p7.hiclipart.com/preview/158/639/798/spotify-streaming-media-logo-playlist-spotify-app-icon.jpg"
+            };
+        }
+
+        var queue = queuedLavalinkPlayer.Queue;
+
+        if (queue.Count == 0)
+        {
+            embed.Footer = new DiscordEmbedBuilder.EmbedFooter
+            {
+                Text = "Queue is empty..."
+            };
+        }
+        else
+        {
+            foreach (var nextSong in queue.Take(1))
+                embed.Footer = new DiscordEmbedBuilder.EmbedFooter
+                {
+                    Text = $"Next Song: {nextSong.Track!.Title}"
+                };
+        }
+
+        var pauseButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "pause", "⏸ Pause"
+        );
+
+        var resumeButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "resume", "▶️ Resume"
+        );
+
+        var skipButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "skip", "⏭ Skip"
+        );
+
+        var stopButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Danger, "stop", "⬜ Stop"
+        );
+
+        var volumeDownButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "volume-down", "🔉 Volume -"
+        );
+
+        var volumeUpButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "volume-up", "🔊 Volume +"
+        );
+
+        var viewQueueButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "view-queue", "🎵 View Queue"
+        );
+
+        var restartButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Primary, "restart", "🔁 Restart"
+        );
+
+        var shuffleButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Success, "shuffle", "🔀 Shuffle"
+        );
+
+        var buttons = new List<DiscordComponent>
+        {
+            pauseButton, resumeButton, skipButton, stopButton, shuffleButton,
+            volumeDownButton, volumeUpButton, viewQueueButton, restartButton
+        };
+
+        var componentsRows = new List<List<DiscordComponent>>();
+        var currentRow = new List<DiscordComponent>();
+
+        foreach (var button in buttons)
+        {
+            if (currentRow.Count == 5)
+            {
+                componentsRows.Add(currentRow);
+                currentRow = new List<DiscordComponent>();
+            }
+
+            currentRow.Add(button);
+        }
+
+        if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+        var messageBuilder = new DiscordMessageBuilder();
+        messageBuilder.AddEmbed(embed);
+
+        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+
+        return messageBuilder;
+    }
+
+    // For Lavalink Integration
+    public DiscordMessageBuilder SongInformation(ExtendedLavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"💿  •  **Now playing**: {track.Title}\n" +
+                          $"🎙️  •  **Artist**: {track.Author}\n" +
+                          $"⌛  •  **Song Duration** (HH:MM:SS): {RoundSeconds(track.Duration)}\n" +
+                          $"🔗  •  **Url**: {track.Uri}",
+            Color = DiscordColor.Cyan,
+            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
+            {
+                Url = track.ArtworkUri!.AbsoluteUri
+            }
+        };
+
+        if (track.Uri!.ToString().ToLower().Contains("youtube"))
+        {
+            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+            {
+                Name = "Platform: Youtube",
+                IconUrl =
+                    "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-youtube-circle-512.png"
+            };
+        }
+
+        if (track.Uri!.ToString().ToLower().Contains("spotify"))
+        {
+            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+            {
+                Name = "Platform: Spotify",
+                IconUrl =
+                    "https://p7.hiclipart.com/preview/158/639/798/spotify-streaming-media-logo-playlist-spotify-app-icon.jpg"
+            };
+        }
 
         var queue = queuedLavalinkPlayer.Queue;
 
@@ -128,6 +288,18 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    // For Lavalink Integration
+    public DiscordEmbedBuilder SongAddedToQueue(ExtendedLavalinkTrack track)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"✅  •  **{track.Title}** has been added to the queue.",
+            Color = DiscordColor.Green
+        };
+
+        return embed;
+    }
+
     public DiscordEmbedBuilder Pause(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -193,7 +365,7 @@ public class AudioPlayerEmbed
 
         return embed;
     }
-    
+
     public DiscordEmbedBuilder QueueSomething()
     {
         var embed = new DiscordEmbedBuilder
@@ -397,7 +569,7 @@ public class AudioPlayerEmbed
     public DiscordEmbedBuilder Seek(InteractionContext context, double seekedPosition)
     {
         var time = TimeSpan.FromSeconds(seekedPosition);
-        
+
         var embed = new DiscordEmbedBuilder
         {
             Description =
@@ -407,7 +579,7 @@ public class AudioPlayerEmbed
 
         return embed;
     }
-    
+
     public DiscordEmbedBuilder SongPosition(TimeSpan position)
     {
         var embed = new DiscordEmbedBuilder
