@@ -42,7 +42,7 @@ public class PlayCommand : ApplicationCommandModule
 
         var guildId = context.Guild.Id;
         var userVoiceChannel = context.Member?.VoiceState?.Channel;
-        
+
         if (userVoiceChannel == null)
         {
             await context.FollowUpAsync(
@@ -76,70 +76,57 @@ public class PlayCommand : ApplicationCommandModule
             return;
         }
 
-        SearchResult spotifyTrack = null;
-        LavalinkTrack youtubeTrack = null;
-
-        switch (streamingPlatform)
-        {
-            // Use Youtube Explode
-            case Platform.YouTube:
-
-                Console.WriteLine("TEST");
-                var youtube = new YoutubeClient();
-                var video = await youtube.Videos.GetAsync("https://youtube.com/watch?v=u_yIGGhubZs");
-                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(video.Id);
-                var audioStreamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
-
-                var audioStreamUrl = audioStreamInfo.Url;
-
-                Console.WriteLine(audioStreamUrl);
-                Console.WriteLine(video.Id);
-                Console.WriteLine(video.Title);
-                Console.WriteLine(video.Author.ToString());
-                Console.WriteLine(video.Duration);
-
-                await player.PlayAsync(new LavalinkTrack
-                {
-                    Identifier = video.Id,
-                    Title = video.Title,
-                    Author = video.Author.ToString(),
-                    Duration = (TimeSpan) video.Duration!,
-                    Uri = new Uri("https://youtube.com/watch?v=u_yIGGhubZs")
-                });
-                break;
-            case Platform.Spotify: // Add condition for checking if an album
-                spotifyTrack = await _audioService.Tracks.SearchAsync(
-                    query,
-                    loadOptions: new TrackLoadOptions(SearchMode: TrackSearchMode.Spotify),
-                    categories: ImmutableArray.Create(SearchCategory.Track));
-                break;
-            case Platform.SoundCloud:
-                break;
-            default:
-                // Use Youtube Explode
-                spotifyTrack = await _audioService.Tracks.SearchAsync(
-                    query,
-                    loadOptions: new TrackLoadOptions(SearchMode: TrackSearchMode.YouTube),
-                    categories: ImmutableArray.Create(SearchCategory.Track));
-                break;
-        }
-
-        
         if (streamingPlatform == Platform.YouTube || query.Contains("youtube"))
         {
+            Console.WriteLine("TEST");
+            var youtube = new YoutubeClient();
+            var video = await youtube.Videos.GetAsync("https://youtube.com/watch?v=u_yIGGhubZs");
+            var streamManifest = await youtube.Videos.Streams.GetManifestAsync(video.Id);
+            var audioStreamInfo = streamManifest.GetAudioOnlyStreams().GetWithHighestBitrate();
+
+            var audioStreamUrl = audioStreamInfo.Url;
+
+            Console.WriteLine(audioStreamUrl);
+            Console.WriteLine(video.Id);
+            Console.WriteLine(video.Title);
+            Console.WriteLine(video.Author.ToString());
+            Console.WriteLine(video.Duration);
+
+            await player.PlayAsync(new LavalinkTrack
+            {
+                Identifier = video.Id,
+                Title = video.Title,
+                Author = video.Author.ToString(),
+                Duration = (TimeSpan) video.Duration!,
+                Uri = new Uri("https://youtube.com/watch?v=u_yIGGhubZs")
+            });
         }
         else if (streamingPlatform == Platform.Spotify || query.Contains("spotify"))
         {
+            var spotifyTrack = await _audioService.Tracks.SearchAsync(
+                query,
+                loadOptions: new TrackLoadOptions(SearchMode: TrackSearchMode.Spotify),
+                categories: ImmutableArray.Create(SearchCategory.Track));
             
+            await PlayFromSpotify(player, spotifyTrack, context, guildId);
         }
         else if (streamingPlatform == Platform.SoundCloud || query.Contains("soundcloud"))
         {
             var soundcloudTrack = await _audioService.Tracks.LoadTrackAsync(query, TrackSearchMode.SoundCloud);
             await PlayFromSoundcloud(player, soundcloudTrack, context, guildId);
-            return;
         }
-        
-        if (spotifyTrack == null)
+        else
+        {
+            Console.WriteLine("Default");
+        }
+
+       
+    }
+
+    private async Task PlayFromSpotify(QueuedLavalinkPlayer player, SearchResult spotifySearchResult,
+        InteractionContext context, ulong guildId)
+    {
+        if (spotifySearchResult == null)
         {
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -147,13 +134,8 @@ public class PlayCommand : ApplicationCommandModule
 
             return;
         }
-
-        foreach (var result in spotifyTrack.Texts)
-        {
-            Console.WriteLine($"Value: {result.Text}");
-        }
-
-        var track = new ExtendedLavalinkTrack(spotifyTrack!.Tracks[0]);
+        
+        var track = new ExtendedLavalinkTrack(spotifySearchResult!.Tracks[0]);
 
         if (track.IsLiveStream)
         {
@@ -187,8 +169,9 @@ public class PlayCommand : ApplicationCommandModule
             .FollowUpAsync(new DiscordFollowupMessageBuilder()
                 .AddEmbed(AudioPlayerEmbed.SongAddedToQueue(track)));
     }
-    
-    private async Task PlayFromSoundcloud(QueuedLavalinkPlayer player, LavalinkTrack soundcloudTrack, InteractionContext context, ulong guildId)
+
+    private async Task PlayFromSoundcloud(QueuedLavalinkPlayer player, LavalinkTrack soundcloudTrack,
+        InteractionContext context, ulong guildId)
     {
         if (soundcloudTrack == null)
         {
