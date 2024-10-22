@@ -120,7 +120,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"\ud83c\udfb5 • Failed to find song ``{context.User.Username}``.",
+            Description = $"\ud83c\udfb5 • Failed to find music data ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 

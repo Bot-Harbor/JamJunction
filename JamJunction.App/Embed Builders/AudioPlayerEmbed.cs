@@ -17,8 +17,8 @@ public class AudioPlayerEmbed
         {
             Description = $"💿  •  **Now playing**: {track.Title}\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"⌛  •  **Song Duration** (HH:MM:SS): {RoundSeconds(track.Duration)}\n" +
-                          $"🔗  •  **Url**: {track.Uri}",
+                          $"🕒  •  **Song Duration**: {RoundSeconds(track.Duration)}\n" +
+                          $"🔗  •  **Url:** {track.Uri}",
             Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
@@ -34,7 +34,7 @@ public class AudioPlayerEmbed
                 IconUrl = "https://static-00.iconduck.com/assets.00/soundcloud-icon-2048x2048-j8bxnm2n.png"
             };
         }
-        
+
         if (track.Uri!.ToString().ToLower().Contains("youtube"))
         {
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
@@ -54,17 +54,23 @@ public class AudioPlayerEmbed
                     "https://p7.hiclipart.com/preview/158/639/798/spotify-streaming-media-logo-playlist-spotify-app-icon.jpg"
             };
         }
-
+        
+        var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
         var queue = queuedLavalinkPlayer.Queue;
 
-        if (queue.Count == 0)
-        {
-            embed.Footer = new DiscordEmbedBuilder.EmbedFooter
-            {
-                Text = "Queue is empty..."
-            };
-        }
-        else
+        var queueFull = queue.Count >= 25;
+        
+        embed.AddField(
+            "Player Status",
+            $"Volume: `{queuedLavalinkPlayer.Volume * 100}` \n" +
+            $"Paused: `{playerState}`", inline: true);
+        
+        embed.AddField(
+            "Queue Status",
+            $"Number of Songs: `{queue.Count}` \n" +
+            $"Queue Full: `{queueFull}`", inline: true);
+        
+        if (queue.Count != 0)
         {
             foreach (var nextSong in queue.Take(1))
                 embed.Footer = new DiscordEmbedBuilder.EmbedFooter
@@ -148,15 +154,14 @@ public class AudioPlayerEmbed
         return messageBuilder;
     }
 
-    // For Lavalink Integration
     public DiscordMessageBuilder SongInformation(ExtendedLavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = $"💿  •  **Now playing**: {track.Title}\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"⌛  •  **Song Duration** (HH:MM:SS): {RoundSeconds(track.Duration)}\n" +
-                          $"🔗  •  **Url**: {track.Uri}",
+                          $"🕒  •  **Song Duration**: {RoundSeconds(track.Duration)}\n" +
+                          $"🔗  •  **Url:** {track.Uri}",
             Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
@@ -164,6 +169,15 @@ public class AudioPlayerEmbed
             }
         };
 
+        if (track.Uri!.ToString().ToLower().Contains("soundcloud"))
+        {
+            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+            {
+                Name = "Platform: Soundcloud",
+                IconUrl = "https://static-00.iconduck.com/assets.00/soundcloud-icon-2048x2048-j8bxnm2n.png"
+            };
+        }
+
         if (track.Uri!.ToString().ToLower().Contains("youtube"))
         {
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
@@ -183,17 +197,23 @@ public class AudioPlayerEmbed
                     "https://p7.hiclipart.com/preview/158/639/798/spotify-streaming-media-logo-playlist-spotify-app-icon.jpg"
             };
         }
-
+        
+        var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
         var queue = queuedLavalinkPlayer.Queue;
 
-        if (queue.Count == 0)
-        {
-            embed.Footer = new DiscordEmbedBuilder.EmbedFooter
-            {
-                Text = "Queue is empty..."
-            };
-        }
-        else
+        var queueFull = queue.Count >= 25;
+        
+        embed.AddField(
+            "Player Status",
+            $"Volume: `{queuedLavalinkPlayer.Volume * 100}` \n" +
+            $"Paused: `{playerState}`", inline: true);
+        
+        embed.AddField(
+            "Queue Status",
+            $"Number of Songs: `{queue.Count}` \n" +
+            $"Queue Full: `{queueFull}`", inline: true);
+        
+        if (queue.Count != 0)
         {
             foreach (var nextSong in queue.Take(1))
                 embed.Footer = new DiscordEmbedBuilder.EmbedFooter
@@ -276,7 +296,7 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-
+    
     public DiscordEmbedBuilder SongAddedToQueue(LavalinkTrack track)
     {
         var embed = new DiscordEmbedBuilder
@@ -287,8 +307,6 @@ public class AudioPlayerEmbed
 
         return embed;
     }
-
-    // For Lavalink Integration
     public DiscordEmbedBuilder SongAddedToQueue(ExtendedLavalinkTrack track)
     {
         var embed = new DiscordEmbedBuilder
@@ -473,12 +491,13 @@ public class AudioPlayerEmbed
         {
             var i = 1;
 
-            embed.Description = "• Only shows first **25** songs due to Discord's API rate limit";
-
             foreach (var queue in queuedLavalinkPlayer.Queue)
             {
-                embed.AddField($"{i++}. {queue.Track!.Title}",
-                    $"**Song Duration** (HH:MM:SS): {RoundSeconds(queue.Track!.Duration)}");
+                embed.AddField
+                (
+                    "\u200B",
+                    $"`{i++}.` [{queue.Track!.Title.Substring(0, 20)}...]({queue.Track.Uri}) - By **{queue.Track.Author}**"
+                );
             }
         }
 
@@ -506,12 +525,13 @@ public class AudioPlayerEmbed
         {
             var i = 1;
 
-            embed.Description = "• Only shows first **25** songs due to Discord's API rate limit";
-
             foreach (var queue in queuedLavalinkPlayer.Queue)
             {
-                embed.AddField($"{i++}. {queue.Track!.Title}",
-                    $"**Song Duration** (HH:MM:SS): {RoundSeconds(queue.Track!.Duration)}");
+                embed.AddField
+                (
+                    "\u200B",
+                    $"`{i++}.` [{queue.Track!.Title.Substring(0, 20)}...]({queue.Track.Uri}) - By **{queue.Track.Author}**"
+                );
             }
         }
 
@@ -584,7 +604,7 @@ public class AudioPlayerEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🕒  • Current Song Position (HH:MM:SS): ``{RoundSeconds(position)}``.",
+            Description = $"🕒  • Current Song Position: ``{RoundSeconds(position)}``.",
             Color = DiscordColor.Cyan
         };
 

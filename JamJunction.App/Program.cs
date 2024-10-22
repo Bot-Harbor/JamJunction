@@ -23,7 +23,6 @@ builder.Services.AddSingleton(new DiscordConfiguration
 builder.Services.ConfigureLavalink(config =>
 {
     config.BaseAddress = new Uri($"http://{DiscordSecrets.HostName}:{DiscordSecrets.Port}");
-    config.WebSocketUri = new Uri($"ws://{DiscordSecrets.HostName}:{DiscordSecrets.Port}/v4/websocket");
     config.Passphrase = DiscordSecrets.Password;
     config.ResumptionOptions = new LavalinkSessionResumptionOptions(TimeSpan.FromSeconds(15));
     config.ReadyTimeout = TimeSpan.FromSeconds(15);
