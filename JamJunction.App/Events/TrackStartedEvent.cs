@@ -3,6 +3,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
+using JamJunction.App.Lavalink;
 using Lavalink4NET;
 using Lavalink4NET.Events.Players;
 using Lavalink4NET.Players;

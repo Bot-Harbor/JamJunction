@@ -1,6 +1,6 @@
 ﻿using DSharpPlus.SlashCommands;
 
-namespace JamJunction.App.Slash_Commands.Music_Commands.Enums;
+namespace JamJunction.App.Lavalink.Enums;
 
 public enum Platform
 {

@@ -1,5 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.EventArgs;
+using JamJunction.App.Lavalink;
 using Lavalink4NET;
 
 namespace JamJunction.App.Events;

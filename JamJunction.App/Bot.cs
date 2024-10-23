@@ -2,6 +2,7 @@
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events;
 using JamJunction.App.Events.Buttons;
+using JamJunction.App.Lavalink;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Lavalink4NET;

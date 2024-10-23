@@ -1,4 +1,4 @@
-﻿namespace JamJunction.App;
+﻿namespace JamJunction.App.Lavalink;
 
 public class GuildData
 {

@@ -4,7 +4,7 @@ using Lavalink4NET.Players;
 using Lavalink4NET.Players.Queued;
 using Microsoft.Extensions.Options;
 
-namespace JamJunction.App;
+namespace JamJunction.App.Lavalink;
 
 public class LavalinkPlayerHandler
 {

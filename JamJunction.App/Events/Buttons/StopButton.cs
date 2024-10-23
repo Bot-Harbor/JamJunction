@@ -4,6 +4,7 @@ using DSharpPlus.EventArgs;
 using DSharpPlus.Lavalink;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Interfaces;
+using JamJunction.App.Lavalink;
 using Lavalink4NET;
 using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
