@@ -54,22 +54,22 @@ public class AudioPlayerEmbed
                     "https://p7.hiclipart.com/preview/158/639/798/spotify-streaming-media-logo-playlist-spotify-app-icon.jpg"
             };
         }
-        
+
         var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
         var queue = queuedLavalinkPlayer.Queue;
 
         var queueFull = queue.Count >= 25;
-        
+
         embed.AddField(
             "Player Status",
             $"Volume: `{queuedLavalinkPlayer.Volume * 100}` \n" +
             $"Paused: `{playerState}`", inline: true);
-        
+
         embed.AddField(
             "Queue Status",
             $"Number of Songs: `{queue.Count}` \n" +
             $"Queue Full: `{queueFull}`", inline: true);
-        
+
         if (queue.Count != 0)
         {
             foreach (var nextSong in queue.Take(1))
@@ -197,22 +197,22 @@ public class AudioPlayerEmbed
                     "https://p7.hiclipart.com/preview/158/639/798/spotify-streaming-media-logo-playlist-spotify-app-icon.jpg"
             };
         }
-        
+
         var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
         var queue = queuedLavalinkPlayer.Queue;
 
         var queueFull = queue.Count >= 25;
-        
+
         embed.AddField(
             "Player Status",
             $"Volume: `{queuedLavalinkPlayer.Volume * 100}` \n" +
             $"Paused: `{playerState}`", inline: true);
-        
+
         embed.AddField(
             "Queue Status",
             $"Number of Songs: `{queue.Count}` \n" +
             $"Queue Full: `{queueFull}`", inline: true);
-        
+
         if (queue.Count != 0)
         {
             foreach (var nextSong in queue.Take(1))
@@ -296,7 +296,7 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-    
+
     public DiscordEmbedBuilder SongAddedToQueue(LavalinkTrack track)
     {
         var embed = new DiscordEmbedBuilder
@@ -308,6 +308,7 @@ public class AudioPlayerEmbed
 
         return embed;
     }
+
     public DiscordEmbedBuilder SongAddedToQueue(ExtendedLavalinkTrack track)
     {
         var embed = new DiscordEmbedBuilder
@@ -495,11 +496,15 @@ public class AudioPlayerEmbed
 
             foreach (var queue in queuedLavalinkPlayer.Queue)
             {
-                embed.AddField
-                (
+                var title = queue.Track!.Title;
+                var url = queue.Track.Uri;
+                var author = queue.Track.Author;
+                
+                embed.AddField(
                     "\u200B",
-                    $"`{i++}.` [{queue.Track!.Title.Substring(0, 20)}...]({queue.Track.Uri}) - By **{queue.Track.Author}**"
-                );
+                    title.Length > 20
+                        ? $"`{i++}.` [{queue.Track!.Title.Substring(0, 20)}...]({url}) - By **{author}**"
+                        : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**");
             }
         }
 
@@ -529,11 +534,15 @@ public class AudioPlayerEmbed
 
             foreach (var queue in queuedLavalinkPlayer.Queue)
             {
-                embed.AddField
-                (
+                var title = queue.Track!.Title;
+                var url = queue.Track.Uri;
+                var author = queue.Track.Author;
+                
+                embed.AddField(
                     "\u200B",
-                    $"`{i++}.` [{queue.Track!.Title.Substring(0, 20)}...]({queue.Track.Uri}) - By **{queue.Track.Author}**"
-                );
+                    title.Length > 20
+                        ? $"`{i++}.` [{queue.Track!.Title.Substring(0, 20)}...]({url}) - By **{author}**"
+                        : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**");
             }
         }
 
