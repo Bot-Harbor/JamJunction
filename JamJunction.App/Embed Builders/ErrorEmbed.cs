@@ -269,6 +269,17 @@ public class ErrorEmbed
 
         return embed;
     }
+    
+    public DiscordEmbedBuilder QueueIsFullError(InteractionContext context)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"🎵 • The queue is full. The max capacity is 25 songs ``{context.User.Username}``.",
+            Color = DiscordColor.Red
+        };
+
+        return embed;
+    }
 
     public DiscordEmbedBuilder TrackFailedToLoadError()
     {

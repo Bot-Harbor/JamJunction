@@ -301,8 +301,9 @@ public class AudioPlayerEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"✅  •  **{track.Title}** has been added to the queue.",
-            Color = DiscordColor.Green
+            Title = "Added To The Queue 🎵",
+            Description = $"ılı   •  [{track!.Title}]({track.Uri}) - By **{track.Author}**",
+            Color = DiscordColor.Cyan
         };
 
         return embed;
@@ -311,8 +312,9 @@ public class AudioPlayerEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"✅  •  **{track.Title}** has been added to the queue.",
-            Color = DiscordColor.Green
+            Title = "Added To The Queue 🎵",
+            Description = $"ılı   •  [{track!.Title}]({track.Uri}) - By **{track.Author}**",
+            Color = DiscordColor.Cyan
         };
 
         return embed;

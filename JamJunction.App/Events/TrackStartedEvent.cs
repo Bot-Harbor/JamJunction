@@ -41,9 +41,7 @@ public class TrackStartedEvent
 
         if (guildData.FirstSongInQueue)
         {
-            await player.SetVolumeAsync((float) 0.5);
             guildData.FirstSongInQueue = false;
-            
             return;
         }
 

@@ -22,12 +22,12 @@ public class PlatformHandler
     private GuildData GuildData { get; set; }
     private AudioPlayerEmbed AudioPlayerEmbed { get; set; } = new();
     private ErrorEmbed ErrorEmbed { get; set; } = new();
-    
+
     public PlatformHandler(IAudioService audioService)
     {
         _audioService = audioService;
     }
-    
+
     public async Task PlayFromYoutube(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
     {
@@ -36,7 +36,7 @@ public class PlatformHandler
         if (query.Contains("youtube.com"))
         {
             Video video;
-            
+
             try
             {
                 video = await youtube.Videos.GetAsync(query);
@@ -45,7 +45,7 @@ public class PlatformHandler
             {
                 video = null;
             }
-            
+
             if (video == null)
             {
                 await context
@@ -108,13 +108,8 @@ public class PlatformHandler
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
                     .AddEmbed(AudioPlayerEmbed.SongAddedToQueue(youtubeTrack)));
         }
-        else if (query.Contains("youtube.com/playlist?list"))
-        {
-            
-        }
         else
         {
-
             IReadOnlyList<VideoSearchResult> videos;
 
             try
@@ -125,7 +120,7 @@ public class PlatformHandler
             {
                 videos = null;
             }
-            
+
             if (videos == null)
             {
                 await context
@@ -133,14 +128,12 @@ public class PlatformHandler
                         .AddEmbed(ErrorEmbed.AudioTrackError(context)));
                 return;
             }
-            
+
             var video = videos.FirstOrDefault();
 
-            Console.WriteLine($"Title {video!.Title}");
-            
             var seekable = true;
             var liveStream = false;
-
+            
             if (video!.Duration == TimeSpan.Zero)
             {
                 seekable = false;
@@ -209,7 +202,7 @@ public class PlatformHandler
                     .AddEmbed(ErrorEmbed.AudioTrackError(context)));
             return;
         }
-
+        
         var spotifyTrack = new ExtendedLavalinkTrack(searchResult!.Tracks[0]);
 
         if (spotifyTrack.IsLiveStream)
@@ -256,7 +249,7 @@ public class PlatformHandler
                     .AddEmbed(ErrorEmbed.AudioTrackError(context)));
             return;
         }
-
+        
         if (soundcloudTrack.IsLiveStream)
         {
             await context

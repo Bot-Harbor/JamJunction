@@ -37,7 +37,6 @@ public class PlayCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     ErrorEmbed.ValidVoiceChannelError(context)));
-
             return;
         }
 
@@ -49,7 +48,6 @@ public class PlayCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     ErrorEmbed.NoConnectionError(context)));
-
             return;
         }
 
@@ -61,10 +59,17 @@ public class PlayCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     ErrorEmbed.SameVoiceChannelError(context)));
-
             return;
         }
 
+        if (player.Queue.Count >= 25)
+        {
+            await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    ErrorEmbed.QueueIsFullError(context)));
+            return;
+        }
+        
         if (streamingPlatform == default)
         {
             streamingPlatform = CheckForUrl(query);

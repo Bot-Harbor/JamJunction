@@ -17,7 +17,7 @@ public class VolumeCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
-    [SlashCommand("volume", "Adjust the volume 0-100. Default volume is 50.")]
+    [SlashCommand("volume", "Adjust the volume 0-100.")]
     public async Task VolumeCommandAsync(InteractionContext context,
         [Option("level", "How loud do you want the music to be?")]
         double volume)
