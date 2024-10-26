@@ -7,8 +7,6 @@ namespace JamJunction.App.Embed_Builders;
 
 public class HelpEmbed
 {
-    private readonly IAudioService _audioService;
-    
     public DiscordMessageBuilder Help(InteractionContext context)
     {
         var userIcon = context.User.GetAvatarUrl(ImageFormat.Png);
@@ -81,7 +79,7 @@ public class HelpEmbed
         var addBotBtn = new DiscordLinkButtonComponent
         (
             "https://discord.com/api/oauth2/authorize?client_id=11817003345617" +
-            "96227&permissions=8&scope=bot+applications.commands",
+            "96227&permissions=415122181184&scope=bot+applications.commands",
             "Add To A Server"
         );
 

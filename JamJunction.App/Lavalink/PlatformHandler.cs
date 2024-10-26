@@ -1,7 +1,9 @@
 ﻿using System.Collections.Immutable;
+using System.Text.RegularExpressions;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
+using JamJunction.App.Secrets;
 using Lavalink4NET;
 using Lavalink4NET.Integrations.Lavasearch;
 using Lavalink4NET.Integrations.Lavasearch.Extensions;
@@ -9,6 +11,7 @@ using Lavalink4NET.Integrations.Lavasrc;
 using Lavalink4NET.Players.Queued;
 using Lavalink4NET.Rest.Entities.Tracks;
 using Lavalink4NET.Tracks;
+using SpotifyAPI.Web;
 using YoutubeExplode;
 using YoutubeExplode.Common;
 using YoutubeExplode.Search;
@@ -63,6 +66,8 @@ public class PlatformHandler
                 liveStream = true;
             }
 
+            var artworkUri = video.Thumbnails.FirstOrDefault()?.Url!;
+
             var youtubeTrack = new LavalinkTrack
             {
                 SourceName = "youtube",
@@ -74,7 +79,7 @@ public class PlatformHandler
                 StartPosition = TimeSpan.Zero,
                 Duration = (TimeSpan) video.Duration!,
                 Uri = new Uri(video.Url),
-                ArtworkUri = new Uri(video.Thumbnails.FirstOrDefault()?.Url!),
+                ArtworkUri = new Uri(artworkUri!),
             };
 
             if (youtubeTrack.IsLiveStream)
@@ -133,12 +138,14 @@ public class PlatformHandler
 
             var seekable = true;
             var liveStream = false;
-            
+
             if (video!.Duration == TimeSpan.Zero)
             {
                 seekable = false;
                 liveStream = true;
             }
+
+            var artworkUri = video.Thumbnails.FirstOrDefault()?.Url!;
 
             var youtubeTrack = new LavalinkTrack
             {
@@ -151,7 +158,7 @@ public class PlatformHandler
                 StartPosition = TimeSpan.Zero,
                 Duration = (TimeSpan) video.Duration!,
                 Uri = new Uri(video.Url),
-                ArtworkUri = new Uri(video.Thumbnails.FirstOrDefault()?.Url!),
+                ArtworkUri = new Uri(artworkUri!),
             };
 
             if (youtubeTrack.IsLiveStream)
@@ -190,51 +197,140 @@ public class PlatformHandler
     public async Task PlayFromSpotify(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
     {
-        var searchResult = await _audioService.Tracks.SearchAsync(
-            query,
-            loadOptions: new TrackLoadOptions(SearchMode: TrackSearchMode.Spotify),
-            categories: ImmutableArray.Create(SearchCategory.Track));
-
-        if (searchResult == null)
+        if (query.Contains("spotify.com"))
         {
+            FullTrack fullTrack;
+
+            try
+            {
+                var config = SpotifyClientConfig.CreateDefault().WithAuthenticator(
+                    new ClientCredentialsAuthenticator(SpotifySecrets.ClientId, SpotifySecrets.ClientSecret));
+
+                var spotify = new SpotifyClient(config);
+                
+                var trackId = Regex.Match(query, @"(?<=track/)[^?]+").Value;
+                fullTrack = await spotify.Tracks.Get(trackId);
+            }
+            catch (Exception)
+            {
+                fullTrack = null;
+            }
+
+            if (fullTrack == null)
+            {
+                await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                        .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                return;
+            }
+
+            var seekable = true;
+            var liveStream = false;
+
+            if (fullTrack.DurationMs == 0)
+            {
+                seekable = false;
+                liveStream = true;
+            }
+
+            var author = fullTrack.Artists.FirstOrDefault()!.Name;
+            var duration = TimeSpan.FromMilliseconds(fullTrack.DurationMs);
+            var uri = $"https://open.spotify.com/track/{fullTrack.Id}";
+            var artworkUri = fullTrack.Album.Images.FirstOrDefault()!.Url;
+
+            var youtubeTrack = new LavalinkTrack
+            {
+                SourceName = "spotify",
+                Identifier = fullTrack.Id,
+                IsSeekable = seekable,
+                IsLiveStream = liveStream,
+                Title = fullTrack.Name,
+                Author = author,
+                StartPosition = TimeSpan.Zero,
+                Duration = duration,
+                Uri = new Uri(uri),
+                ArtworkUri = new Uri(artworkUri),
+            };
+
+            if (youtubeTrack.IsLiveStream)
+            {
+                await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                        .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                return;
+            }
+
+            if (!Bot.GuildData.ContainsKey(guildId))
+            {
+                Bot.GuildData.Add(guildId, new GuildData());
+            }
+
+            GuildData = Bot.GuildData[guildId];
+            GuildData.TextChannelId = context.Channel.Id;
+
+            await player.PlayAsync(youtubeTrack);
+
+            if (player.Queue.IsEmpty)
+            {
+                await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                        new DiscordInteractionResponseBuilder(AudioPlayerEmbed.SongInformation(youtubeTrack, player))));
+
+                return;
+            }
+
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(ErrorEmbed.AudioTrackError(context)));
-            return;
+                    .AddEmbed(AudioPlayerEmbed.SongAddedToQueue(youtubeTrack)));
         }
-        
-        var spotifyTrack = new ExtendedLavalinkTrack(searchResult!.Tracks[0]);
-
-        if (spotifyTrack.IsLiveStream)
+        else
         {
+            var searchResult = await _audioService.Tracks.SearchAsync(
+                query,
+                loadOptions: new TrackLoadOptions(SearchMode: TrackSearchMode.Spotify),
+                categories: ImmutableArray.Create(SearchCategory.Track));
+
+            if (searchResult == null)
+            {
+                await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                        .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                return;
+            }
+
+            var spotifyTrack = new ExtendedLavalinkTrack(searchResult!.Tracks[0]);
+
+            if (spotifyTrack.IsLiveStream)
+            {
+                await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                        .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+
+                return;
+            }
+
+            if (!Bot.GuildData.ContainsKey(guildId))
+            {
+                Bot.GuildData.Add(guildId, new GuildData());
+            }
+
+            GuildData = Bot.GuildData[guildId];
+            GuildData.TextChannelId = context.Channel.Id;
+
+            await player!.PlayAsync(spotifyTrack.Track);
+
+            if (player.Queue.IsEmpty)
+            {
+                await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                        new DiscordInteractionResponseBuilder(AudioPlayerEmbed.SongInformation(spotifyTrack, player))));
+                return;
+            }
+
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(ErrorEmbed.LiveSteamError(context)));
-
-            return;
+                    .AddEmbed(AudioPlayerEmbed.SongAddedToQueue(spotifyTrack)));
         }
-
-        if (!Bot.GuildData.ContainsKey(guildId))
-        {
-            Bot.GuildData.Add(guildId, new GuildData());
-        }
-
-        GuildData = Bot.GuildData[guildId];
-        GuildData.TextChannelId = context.Channel.Id;
-
-        await player!.PlayAsync(spotifyTrack.Track);
-
-        if (player.Queue.IsEmpty)
-        {
-            await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                    new DiscordInteractionResponseBuilder(AudioPlayerEmbed.SongInformation(spotifyTrack, player))));
-            return;
-        }
-
-        await context
-            .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                .AddEmbed(AudioPlayerEmbed.SongAddedToQueue(spotifyTrack)));
     }
 
     public async Task PlayFromSoundCloud(QueuedLavalinkPlayer player, string query,
@@ -249,7 +345,7 @@ public class PlatformHandler
                     .AddEmbed(ErrorEmbed.AudioTrackError(context)));
             return;
         }
-        
+
         if (soundcloudTrack.IsLiveStream)
         {
             await context
