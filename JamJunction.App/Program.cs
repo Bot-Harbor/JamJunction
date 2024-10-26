@@ -22,15 +22,14 @@ builder.Services.AddSingleton(new DiscordConfiguration
 
 builder.Services.ConfigureLavalink(config =>
 {
-    config.BaseAddress = new Uri($"http://{DiscordSecrets.HostName}:{DiscordSecrets.Port}");
-    config.Passphrase = DiscordSecrets.Password;
+    config.BaseAddress = new Uri($"http://{LavalinkSecrets.HostName}:{LavalinkSecrets.Port}");
+    config.Passphrase = LavalinkSecrets.Password;
     config.ResumptionOptions = new LavalinkSessionResumptionOptions(TimeSpan.FromSeconds(15));
     config.ReadyTimeout = TimeSpan.FromSeconds(15);
 });
 
 builder.Services.AddLavalink();
 
-// Change to information when done
-builder.Services.AddLogging(s => s.AddConsole().SetMinimumLevel(LogLevel.Trace));
+builder.Services.AddLogging(s => s.AddConsole().SetMinimumLevel(LogLevel.Information));
 
 builder.Build().Run();
