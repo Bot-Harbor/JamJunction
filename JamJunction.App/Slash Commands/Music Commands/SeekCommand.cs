@@ -15,12 +15,12 @@ public class SeekCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
-    [SlashCommand("seek", "Sets the position of the song.")]
+    [SlashCommand("seek", "Sets the position of the track.")]
     public async Task SeekCommandAsync(InteractionContext context,
-        [Option("time", "Change the current position of the song in seconds.")]
+        [Option("time", "Change the current position of the track in seconds.")]
         double time)
     {
-         await context.DeferAsync();
+        await context.DeferAsync();
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
@@ -33,7 +33,6 @@ public class SeekCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
-
             return;
         }
 
@@ -45,7 +44,6 @@ public class SeekCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
-
             return;
         }
 
@@ -54,29 +52,26 @@ public class SeekCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
-
             return;
         }
 
         var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
         var player =
-            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, connectToVoiceChannel: false);
-        
+            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, false);
+
         if (player == null)
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
-
             return;
         }
-       
+
         if (player!.CurrentTrack == null)
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoAudioTrackError(context)));
-
             return;
         }
 
@@ -87,23 +82,21 @@ public class SeekCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SeekNotAnIntegerError(context)));
-            
             return;
         }
-        
+
         var duration = Math.Round(player.CurrentTrack.Duration.TotalSeconds);
-        
+
         if (time > duration)
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SeekLargerThanDurationError(context)));
-            
             return;
         }
-        
+
         await player.SeekAsync(TimeSpan.FromSeconds(time));
-        
+
         await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Seek(context, time)));

@@ -23,14 +23,14 @@ public class VoiceStateUpdatedEvent
             return;
 
         var users = voiceChannel.Users;
-        
+
         if (users.Count == 1 && users.First().Id == sender.CurrentUser.Id)
         {
             var guildId = guild.Id;
             var voiceChannelId = voiceChannel.Id;
-            
+
             var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
-            var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannelId, connectToVoiceChannel: true);
+            var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannelId, true);
 
             await player.DisconnectAsync();
         }

@@ -6,17 +6,17 @@ using Lavalink4NET;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
-public class CurrentSongCommand : ApplicationCommandModule
+public class CurrentTrackCommand : ApplicationCommandModule
 {
     private readonly IAudioService _audioService;
 
-    public CurrentSongCommand(IAudioService audioService)
+    public CurrentTrackCommand(IAudioService audioService)
     {
         _audioService = audioService;
     }
 
-    [SlashCommand("current-song", "Shows details about the current song playing.")]
-    public async Task CurrentSongCommandAsync(InteractionContext context)
+    [SlashCommand("current-track", "Shows details about the current track playing.")]
+    public async Task CurrentTrackCommandAsync(InteractionContext context)
     {
         await context.DeferAsync();
 
@@ -31,7 +31,6 @@ public class CurrentSongCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
-
             return;
         }
 
@@ -43,7 +42,6 @@ public class CurrentSongCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
-
             return;
         }
 
@@ -52,20 +50,18 @@ public class CurrentSongCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
-
             return;
         }
 
         var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
         var player =
-            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, connectToVoiceChannel: false);
+            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, false);
 
         if (player == null)
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
-
             return;
         }
 
@@ -74,7 +70,6 @@ public class CurrentSongCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoAudioTrackError(context)));
-
             return;
         }
 

@@ -15,7 +15,7 @@ public class SkipCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
-    [SlashCommand("skip", "Skips to the next song in the queue.")]
+    [SlashCommand("skip", "Skips to the next track in the queue.")]
     public async Task SkipCommandAsync(InteractionContext context)
     {
         await context.DeferAsync();
@@ -31,7 +31,6 @@ public class SkipCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
-
             return;
         }
 
@@ -43,7 +42,6 @@ public class SkipCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
-
             return;
         }
 
@@ -52,20 +50,18 @@ public class SkipCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
-
             return;
         }
 
         var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
         var player =
-            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, connectToVoiceChannel: false);
+            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, false);
 
         if (player == null)
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
-
             return;
         }
 
@@ -74,12 +70,11 @@ public class SkipCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoTracksToSkipToError(context)));
-            
             return;
         }
 
         await player.SkipAsync();
-        
+
         await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Skip(context)));

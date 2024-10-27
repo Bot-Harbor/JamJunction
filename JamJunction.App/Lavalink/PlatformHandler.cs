@@ -22,15 +22,16 @@ namespace JamJunction.App.Lavalink;
 public class PlatformHandler
 {
     private readonly IAudioService _audioService;
-    private GuildData GuildData { get; set; }
-    private AudioPlayerEmbed AudioPlayerEmbed { get; set; } = new();
-    private ErrorEmbed ErrorEmbed { get; set; } = new();
 
     public PlatformHandler(IAudioService audioService)
     {
         _audioService = audioService;
     }
-    
+
+    private GuildData GuildData { get; set; }
+    private AudioPlayerEmbed AudioPlayerEmbed { get; } = new();
+    private ErrorEmbed ErrorEmbed { get; } = new();
+
     public async Task PlayFromSpotify(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
     {
@@ -44,7 +45,7 @@ public class PlatformHandler
                     new ClientCredentialsAuthenticator(SpotifySecrets.ClientId, SpotifySecrets.ClientSecret));
 
                 var spotify = new SpotifyClient(config);
-                
+
                 var trackId = Regex.Match(query, @"(?<=track/)[^?]+").Value;
                 fullTrack = await spotify.Tracks.Get(trackId);
             }
@@ -86,7 +87,7 @@ public class PlatformHandler
                 StartPosition = TimeSpan.Zero,
                 Duration = duration,
                 Uri = new Uri(uri),
-                ArtworkUri = new Uri(artworkUri),
+                ArtworkUri = new Uri(artworkUri)
             };
 
             if (youtubeTrack.IsLiveStream)
@@ -97,10 +98,7 @@ public class PlatformHandler
                 return;
             }
 
-            if (!Bot.GuildData.ContainsKey(guildId))
-            {
-                Bot.GuildData.Add(guildId, new GuildData());
-            }
+            if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
 
             GuildData = Bot.GuildData[guildId];
             GuildData.TextChannelId = context.Channel.Id;
@@ -111,8 +109,8 @@ public class PlatformHandler
             {
                 await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(AudioPlayerEmbed.TrackInformation(youtubeTrack, player))));
-
+                        new DiscordInteractionResponseBuilder(
+                            AudioPlayerEmbed.TrackInformation(youtubeTrack, player))));
                 return;
             }
 
@@ -124,7 +122,7 @@ public class PlatformHandler
         {
             var searchResult = await _audioService.Tracks.SearchAsync(
                 query,
-                loadOptions: new TrackLoadOptions(SearchMode: TrackSearchMode.Spotify),
+                loadOptions: new TrackLoadOptions(TrackSearchMode.Spotify),
                 categories: ImmutableArray.Create(SearchCategory.Track));
 
             if (searchResult == null)
@@ -142,14 +140,10 @@ public class PlatformHandler
                 await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.LiveSteamError(context)));
-
                 return;
             }
 
-            if (!Bot.GuildData.ContainsKey(guildId))
-            {
-                Bot.GuildData.Add(guildId, new GuildData());
-            }
+            if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
 
             GuildData = Bot.GuildData[guildId];
             GuildData.TextChannelId = context.Channel.Id;
@@ -160,7 +154,8 @@ public class PlatformHandler
             {
                 await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(AudioPlayerEmbed.TrackInformation(spotifyTrack, player))));
+                        new DiscordInteractionResponseBuilder(
+                            AudioPlayerEmbed.TrackInformation(spotifyTrack, player))));
                 return;
             }
 
@@ -218,7 +213,7 @@ public class PlatformHandler
                 StartPosition = TimeSpan.Zero,
                 Duration = (TimeSpan) video.Duration!,
                 Uri = new Uri(video.Url),
-                ArtworkUri = new Uri(artworkUri!),
+                ArtworkUri = new Uri(artworkUri!)
             };
 
             if (youtubeTrack.IsLiveStream)
@@ -229,10 +224,7 @@ public class PlatformHandler
                 return;
             }
 
-            if (!Bot.GuildData.ContainsKey(guildId))
-            {
-                Bot.GuildData.Add(guildId, new GuildData());
-            }
+            if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
 
             GuildData = Bot.GuildData[guildId];
             GuildData.TextChannelId = context.Channel.Id;
@@ -243,8 +235,8 @@ public class PlatformHandler
             {
                 await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(AudioPlayerEmbed.TrackInformation(youtubeTrack, player))));
-
+                        new DiscordInteractionResponseBuilder(
+                            AudioPlayerEmbed.TrackInformation(youtubeTrack, player))));
                 return;
             }
 
@@ -297,7 +289,7 @@ public class PlatformHandler
                 StartPosition = TimeSpan.Zero,
                 Duration = (TimeSpan) video.Duration!,
                 Uri = new Uri(video.Url),
-                ArtworkUri = new Uri(artworkUri!),
+                ArtworkUri = new Uri(artworkUri!)
             };
 
             if (youtubeTrack.IsLiveStream)
@@ -308,10 +300,7 @@ public class PlatformHandler
                 return;
             }
 
-            if (!Bot.GuildData.ContainsKey(guildId))
-            {
-                Bot.GuildData.Add(guildId, new GuildData());
-            }
+            if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
 
             GuildData = Bot.GuildData[guildId];
             GuildData.TextChannelId = context.Channel.Id;
@@ -322,8 +311,8 @@ public class PlatformHandler
             {
                 await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(AudioPlayerEmbed.TrackInformation(youtubeTrack, player))));
-
+                        new DiscordInteractionResponseBuilder(
+                            AudioPlayerEmbed.TrackInformation(youtubeTrack, player))));
                 return;
             }
 
@@ -332,7 +321,7 @@ public class PlatformHandler
                     .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeTrack)));
         }
     }
-    
+
     public async Task PlayFromSoundCloud(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
     {
@@ -354,10 +343,7 @@ public class PlatformHandler
             return;
         }
 
-        if (!Bot.GuildData.ContainsKey(guildId))
-        {
-            Bot.GuildData.Add(guildId, new GuildData());
-        }
+        if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
 
         GuildData = Bot.GuildData[guildId];
         GuildData.TextChannelId = context.Channel.Id;

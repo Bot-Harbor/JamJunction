@@ -1,6 +1,4 @@
-﻿using DSharpPlus;
-using DSharpPlus.Entities;
-using DSharpPlus.Lavalink;
+﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Lavalink;
@@ -17,10 +15,10 @@ public class ResumeCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
-    [SlashCommand("resume", "Resumes the current song.")]
+    [SlashCommand("resume", "Resumes the current track.")]
     public async Task ResumeCommandAsync(InteractionContext context)
     {
-       await context.DeferAsync();
+        await context.DeferAsync();
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
@@ -33,7 +31,6 @@ public class ResumeCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
-
             return;
         }
 
@@ -45,7 +42,6 @@ public class ResumeCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
-
             return;
         }
 
@@ -54,20 +50,18 @@ public class ResumeCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
-
             return;
         }
 
         var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
         var player =
-            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, connectToVoiceChannel: false);
+            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, false);
 
         if (player == null)
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
-
             return;
         }
 
@@ -76,7 +70,6 @@ public class ResumeCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoAudioTrackError(context)));
-
             return;
         }
 

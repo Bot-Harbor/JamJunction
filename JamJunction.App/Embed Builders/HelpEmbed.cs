@@ -1,7 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using Lavalink4NET;
 
 namespace JamJunction.App.Embed_Builders;
 
@@ -31,7 +30,7 @@ public class HelpEmbed
                 "Your go-to music bot for you and your friends! Type one of the commands below to get started. " +
                 $"Jam Junction is powered by [DSharpPlus {dSharpPlusVersion}]" +
                 "(https://github.com/DSharpPlus/DSharpPlus), " +
-                $"[Lavalink4NET 4.0.26](https://github.com/angelobreuer/Lavalink4NET), " +
+                "[Lavalink4NET 4.0.26](https://github.com/angelobreuer/Lavalink4NET), " +
                 "and [Docker](https://www.docker.com/).",
 
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
@@ -41,7 +40,7 @@ public class HelpEmbed
             Footer = new DiscordEmbedBuilder.EmbedFooter
             {
                 Text = "Bot Info  •  " +
-                       $"Version: 1.1.0  •  " +
+                       "Version: 1.1.0  •  " +
                        $"Total Servers: {serverCount}  •  " +
                        $"Shard: {shardCount}  •  " +
                        $"Ping: {ping}"

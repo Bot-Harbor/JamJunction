@@ -18,7 +18,7 @@ public class StopCommand : ApplicationCommandModule
     [SlashCommand("stop", "Stops the playback.")]
     public async Task StopCommandAsync(InteractionContext context)
     {
-      await context.DeferAsync();
+        await context.DeferAsync();
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
@@ -31,7 +31,6 @@ public class StopCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
-
             return;
         }
 
@@ -43,7 +42,6 @@ public class StopCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
-
             return;
         }
 
@@ -52,20 +50,18 @@ public class StopCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
-
             return;
         }
 
         var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
         var player =
-            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, connectToVoiceChannel: false);
+            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, false);
 
         if (player == null)
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
-
             return;
         }
 
@@ -74,10 +70,9 @@ public class StopCommand : ApplicationCommandModule
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoAudioTrackError(context)));
-
             return;
         }
-        
+
         await player!.StopAsync();
 
         await context.FollowUpAsync(

@@ -12,14 +12,14 @@ public class SkipButton : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
-    private DiscordChannel UserVoiceChannel { get; set; }
-
-
+    
     public SkipButton(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
     }
+
+    private DiscordChannel UserVoiceChannel { get; set; }
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
@@ -46,7 +46,6 @@ public class SkipButton : IButton
                     await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
                             errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
-
                     return;
                 }
             }
@@ -55,7 +54,6 @@ public class SkipButton : IButton
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
-
                 return;
             }
 
@@ -68,7 +66,6 @@ public class SkipButton : IButton
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoPlayerError(btnInteractionArgs)));
-
                 return;
             }
 
@@ -79,20 +76,18 @@ public class SkipButton : IButton
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
-
                 return;
             }
 
             var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
             var player =
-                await lavalinkPlayer.GetPlayerAsync(guildId, UserVoiceChannel, connectToVoiceChannel: false);
+                await lavalinkPlayer.GetPlayerAsync(guildId, UserVoiceChannel, false);
 
             if (player == null)
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoConnectionError(btnInteractionArgs)));
-
                 return;
             }
 
@@ -101,7 +96,6 @@ public class SkipButton : IButton
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoTracksToSkipToError(btnInteractionArgs)));
-                
                 return;
             }
 

@@ -16,7 +16,7 @@ public class LavalinkPlayerHandler
     }
 
     /// <summary>
-    /// Gets queued Lavalink player for commands.
+    ///     Gets queued Lavalink player for commands.
     /// </summary>
     /// <param name="guildId"></param>
     /// <param name="voiceChannel"></param>
@@ -28,18 +28,15 @@ public class LavalinkPlayerHandler
         try
         {
             var retrieveOptions = new PlayerRetrieveOptions(
-                ChannelBehavior: connectToVoiceChannel ? PlayerChannelBehavior.Join : PlayerChannelBehavior.None);
+                connectToVoiceChannel ? PlayerChannelBehavior.Join : PlayerChannelBehavior.None);
 
             var playerOptions = new QueuedLavalinkPlayerOptions {HistoryCapacity = 10000};
 
             var result = await _audioService.Players
                 .RetrieveAsync(guildId, voiceChannel.Id,
-                    playerFactory: PlayerFactory.Queued, Options.Create(playerOptions), retrieveOptions);
+                    PlayerFactory.Queued, Options.Create(playerOptions), retrieveOptions);
 
-            if (!result.IsSuccess)
-            {
-                throw new Exception();
-            }
+            if (!result.IsSuccess) throw new Exception();
 
             return result.Player;
         }
@@ -50,7 +47,7 @@ public class LavalinkPlayerHandler
     }
 
     /// <summary>
-    /// Gets queued Lavalink player for events.
+    ///     Gets queued Lavalink player for events.
     /// </summary>
     /// <param name="guildId"></param>
     /// <param name="voiceChannelId"></param>
@@ -62,18 +59,15 @@ public class LavalinkPlayerHandler
         try
         {
             var retrieveOptions = new PlayerRetrieveOptions(
-                ChannelBehavior: connectToVoiceChannel ? PlayerChannelBehavior.Join : PlayerChannelBehavior.None);
+                connectToVoiceChannel ? PlayerChannelBehavior.Join : PlayerChannelBehavior.None);
 
             var playerOptions = new QueuedLavalinkPlayerOptions {HistoryCapacity = 10000};
 
             var result = await _audioService.Players
                 .RetrieveAsync(guildId, voiceChannelId,
-                    playerFactory: PlayerFactory.Queued, Options.Create(playerOptions), retrieveOptions);
+                    PlayerFactory.Queued, Options.Create(playerOptions), retrieveOptions);
 
-            if (!result.IsSuccess)
-            {
-                throw new Exception();
-            }
+            if (!result.IsSuccess) throw new Exception();
 
             return result.Player;
         }

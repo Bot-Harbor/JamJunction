@@ -13,9 +13,9 @@ namespace JamJunction.App;
 internal sealed class Bot : BackgroundService
 {
     public static readonly Dictionary<ulong, GuildData> GuildData = new();
-    private readonly IServiceProvider _serviceProvider;
-    private readonly DiscordClient _discordClient;
     private readonly IAudioService _audioService;
+    private readonly DiscordClient _discordClient;
+    private readonly IServiceProvider _serviceProvider;
 
     public Bot(IServiceProvider serviceProvider, DiscordClient discordClient, IAudioService audioService)
     {
@@ -27,19 +27,19 @@ internal sealed class Bot : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await _discordClient.ConnectAsync();
-        
+
         SlashCommands();
         ButtonEvents();
-        
+
         var trackStartedEvent = new TrackStartedEvent(_discordClient, _audioService);
         _audioService.TrackStarted += trackStartedEvent.TrackStarted;
-        
+
         var trackEndedEvent = new TrackEndedEvent(_discordClient, _audioService);
         _audioService.TrackEnded += trackEndedEvent.TrackEnded;
 
         var trackStuckEvent = new TrackStuckEvent(_discordClient, _audioService);
         _audioService.TrackStuck += trackStuckEvent.TrackStuck;
-        
+
         var connectionClosedEvent = new ConnectionClosedEvent();
         _audioService.ConnectionClosed += connectionClosedEvent.ConnectionClosed;
 
@@ -57,7 +57,7 @@ internal sealed class Bot : BackgroundService
 
         slashCommands.RegisterCommands<PingCommand>();
         slashCommands.RegisterCommands<CaptionCommand>();
-        slashCommands.RegisterCommands<CurrentSongCommand>();
+        slashCommands.RegisterCommands<CurrentTrackCommand>();
         slashCommands.RegisterCommands<PlayCommand>();
         slashCommands.RegisterCommands<PauseCommand>();
         slashCommands.RegisterCommands<ResumeCommand>();

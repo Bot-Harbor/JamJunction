@@ -17,7 +17,7 @@ builder.Services.AddSingleton(new DiscordConfiguration
     Token = DiscordSecrets.BotToken,
     Intents = DiscordIntents.All,
     MinimumLogLevel = LogLevel.Debug,
-    AutoReconnect = true,
+    AutoReconnect = true
 });
 
 builder.Services.ConfigureLavalink(config =>

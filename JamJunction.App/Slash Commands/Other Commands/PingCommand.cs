@@ -1,6 +1,4 @@
 ﻿using DSharpPlus.SlashCommands;
-using JamJunction.App.Embed_Builders;
-using JamJunction.App.EmbedBuilders;
 using PingEmbed = JamJunction.App.Embed_Builders.PingEmbed;
 
 namespace JamJunction.App.Slash_Commands.Other_Commands;

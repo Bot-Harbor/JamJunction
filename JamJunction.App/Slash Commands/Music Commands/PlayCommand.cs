@@ -10,13 +10,14 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 public class PlayCommand : ApplicationCommandModule
 {
     private readonly IAudioService _audioService;
-    private ErrorEmbed ErrorEmbed { get; set; } = new();
 
     public PlayCommand(IAudioService audioService)
     {
         _audioService = audioService;
     }
-    
+
+    private ErrorEmbed ErrorEmbed { get; } = new();
+
     [SlashCommand("play", "Queue a track.")]
     public async Task PlayAsync
     (
@@ -41,7 +42,7 @@ public class PlayCommand : ApplicationCommandModule
         }
 
         var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
-        var player = await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, connectToVoiceChannel: true);
+        var player = await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel);
 
         if (player == null)
         {
@@ -69,14 +70,11 @@ public class PlayCommand : ApplicationCommandModule
                     ErrorEmbed.QueueIsFullError(context)));
             return;
         }
-        
-        if (streamingPlatform == default)
-        {
-            streamingPlatform = CheckForUrl(query);
-        }
+
+        if (streamingPlatform == default) streamingPlatform = CheckForUrl(query);
 
         var platformHandler = new PlatformHandler(_audioService);
-        
+
         switch (streamingPlatform)
         {
             case Platform.Spotify:

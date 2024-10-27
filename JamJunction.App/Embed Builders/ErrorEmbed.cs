@@ -13,7 +13,6 @@ public class ErrorEmbed
             Description = $"🔊 • You must be in a valid voice channel ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
 
@@ -24,10 +23,9 @@ public class ErrorEmbed
             Description = $"🔊 • You must be in a valid voice channel ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder SameVoiceChannelError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -35,7 +33,6 @@ public class ErrorEmbed
             Description = $"🔊 • You must be in the same voice channel as the bot ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
 
@@ -43,13 +40,13 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊 • You must be in the same voice channel as the bot ``{btnInteractionArgs.User.Username}``.",
+            Description =
+                $"🔊 • You must be in the same voice channel as the bot ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoConnectionError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -57,10 +54,9 @@ public class ErrorEmbed
             Description = $"🌋 • Lavalink connection is not established ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoConnectionError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -68,7 +64,6 @@ public class ErrorEmbed
             Description = $"🌋 • Lavalink connection is not established ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
 
@@ -79,10 +74,9 @@ public class ErrorEmbed
             Description = $"🔊 • There is no player in the voice channel ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoPlayerError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -90,10 +84,9 @@ public class ErrorEmbed
             Description = $"🔊 • There is no player in the voice channel ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoAudioTrackError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -101,21 +94,20 @@ public class ErrorEmbed
             Description = $"\ud83c\udfb5 • There are no tracks currently playing ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoAudioTrackError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"\ud83c\udfb5 • There are no tracks currently playing ``{btnInteractionArgs.User.Username}``.",
+            Description =
+                $"\ud83c\udfb5 • There are no tracks currently playing ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder AudioTrackError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -123,10 +115,9 @@ public class ErrorEmbed
             Description = $"\ud83c\udfb5 • Failed to find music data ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder LiveSteamError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -134,7 +125,6 @@ public class ErrorEmbed
             Description = $"\ud83d\udd34 • You can not play a livestream ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
 
@@ -145,10 +135,9 @@ public class ErrorEmbed
             Description = $"🔊  •  The number for the volume must be a whole number ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoVolumeOver100Error(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -156,7 +145,6 @@ public class ErrorEmbed
             Description = $"🔊  •  You cannot set the volume above 100 ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
 
@@ -167,10 +155,9 @@ public class ErrorEmbed
             Description = $"🔊  •  The volume is already at its maximum ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder MinVolumeError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -178,7 +165,6 @@ public class ErrorEmbed
             Description = $"🔊  •  The volume is already at its minimum ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
 
@@ -189,10 +175,9 @@ public class ErrorEmbed
             Description = $"⏸  •  The player is already paused ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbed AlreadyPausedError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -200,10 +185,9 @@ public class ErrorEmbed
             Description = $"⏸  •  The player is already paused ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder SeekNotAnIntegerError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -211,21 +195,20 @@ public class ErrorEmbed
             Description = $"🔊  •  The number for the time must be a whole number ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder SeekLargerThanDurationError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  The time you are seeking for is larger than the duration of the track ``{context.User.Username}``.",
+            Description =
+                $"🔊  •  The time you are seeking for is larger than the duration of the track ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoTracksToSkipToError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -233,10 +216,9 @@ public class ErrorEmbed
             Description = $"🎵 • There are no tracks to skip to ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoTracksToSkipToError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -244,10 +226,9 @@ public class ErrorEmbed
             Description = $"🎵 • There are no tracks to skip to ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoTracksToShuffleError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -255,10 +236,9 @@ public class ErrorEmbed
             Description = $"🔀 • There are no tracks in the queue to shuffle ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoTracksToShuffleError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -266,10 +246,9 @@ public class ErrorEmbed
             Description = $"🔀 • There are no tracks in the queue to shuffle ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
-    
+
     public DiscordEmbedBuilder QueueIsFullError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -277,7 +256,6 @@ public class ErrorEmbed
             Description = $"🎵 • The queue is full. The max capacity is 25 tracks ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
 
@@ -288,7 +266,6 @@ public class ErrorEmbed
             Description = "\u274c • Track failed to load. Reattempting to connect in 5 seconds.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
 
@@ -299,7 +276,6 @@ public class ErrorEmbed
             Description = "\u274c • Attempt to load track again failed. The audio player has been reset.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
 }

@@ -4,16 +4,14 @@ using JamJunction.App.Lavalink;
 using Lavalink4NET;
 using Lavalink4NET.Events.Players;
 using Lavalink4NET.Players;
-using Lavalink4NET.Players.Queued;
 using Lavalink4NET.Protocol.Payloads.Events;
-using Microsoft.Extensions.Options;
 
 namespace JamJunction.App.Events;
 
 public class TrackEndedEvent
 {
-    private readonly DiscordClient _discordClient;
     private readonly IAudioService _audioService;
+    private readonly DiscordClient _discordClient;
 
     public TrackEndedEvent(DiscordClient discordClient, IAudioService audioService)
     {
@@ -32,14 +30,14 @@ public class TrackEndedEvent
         var channel = guild.GetChannel(textChannelId);
 
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
-        var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, connectToVoiceChannel: true);
+        var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, true);
 
         if (eventargs.Reason == TrackEndReason.Stopped)
         {
             Bot.GuildData.Remove(guildId);
             return;
         }
-        
+
         if (player.State == PlayerState.NotPlaying)
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();

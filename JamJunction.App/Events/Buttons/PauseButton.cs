@@ -12,13 +12,14 @@ public class PauseButton : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
-    private DiscordChannel UserVoiceChannel { get; set; }
 
     public PauseButton(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
     }
+
+    private DiscordChannel UserVoiceChannel { get; set; }
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
@@ -39,13 +40,12 @@ public class PauseButton : IButton
             try
             {
                 UserVoiceChannel = member.VoiceState.Channel;
-                
+
                 if (UserVoiceChannel == null)
                 {
                     await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
                             errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
-                
                     return;
                 }
             }
@@ -54,10 +54,9 @@ public class PauseButton : IButton
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
-                
                 return;
             }
-            
+
             var botId = _discordClient.CurrentUser.Id;
             var bot = await btnInteractionArgs.Guild.GetMemberAsync(botId);
             var botVoiceChannel = bot.Guild.VoiceStates.TryGetValue(botId, out var botVoiceState);
@@ -67,31 +66,28 @@ public class PauseButton : IButton
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoPlayerError(btnInteractionArgs)));
-
                 return;
             }
 
             UserVoiceChannel = member.VoiceState.Channel;
-            
+
             if (UserVoiceChannel!.Id != botVoiceState.Channel!.Id)
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
-
                 return;
             }
 
             var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
             var player =
-                await lavalinkPlayer.GetPlayerAsync(guildId, UserVoiceChannel, connectToVoiceChannel: false);
+                await lavalinkPlayer.GetPlayerAsync(guildId, UserVoiceChannel, false);
 
             if (player == null)
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoConnectionError(btnInteractionArgs)));
-
                 return;
             }
 
@@ -100,7 +96,6 @@ public class PauseButton : IButton
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoAudioTrackError(btnInteractionArgs)));
-
                 return;
             }
 
@@ -109,12 +104,11 @@ public class PauseButton : IButton
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.AlreadyPausedError(btnInteractionArgs)));
-
                 return;
             }
 
             await player!.PauseAsync();
-            
+
             await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.Pause(btnInteractionArgs)));

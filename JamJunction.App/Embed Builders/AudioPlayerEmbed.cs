@@ -1,7 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
-using DSharpPlus.Lavalink;
 using DSharpPlus.SlashCommands;
 using Lavalink4NET.Integrations.Lavasrc;
 using Lavalink4NET.Players.Queued;
@@ -14,12 +13,9 @@ public class AudioPlayerEmbed
     public DiscordMessageBuilder TrackInformation(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var uri = track.Uri!.AbsoluteUri;
-        
-        if (track.Uri.AbsoluteUri.Contains("spotify.com"))
-        {
-            uri = track.Uri!.AbsoluteUri.Replace("https://", "");
-        }
-        
+
+        if (track.Uri.AbsoluteUri.Contains("spotify.com")) uri = track.Uri!.AbsoluteUri.Replace("https://", "");
+
         var embed = new DiscordEmbedBuilder
         {
             Description = $"💿  •  **Title**: {track.Title}\n" +
@@ -34,33 +30,27 @@ public class AudioPlayerEmbed
         };
 
         if (track.Uri!.ToString().ToLower().Contains("soundcloud"))
-        {
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
                 Name = "Platform: Soundcloud",
                 IconUrl = "https://static-00.iconduck.com/assets.00/soundcloud-icon-2048x2048-j8bxnm2n.png"
             };
-        }
 
         if (track.Uri!.ToString().ToLower().Contains("youtube"))
-        {
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
                 Name = "Platform: Youtube",
                 IconUrl =
                     "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-youtube-circle-512.png"
             };
-        }
 
         if (track.Uri!.ToString().ToLower().Contains("spotify"))
-        {
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
                 Name = "Platform: Spotify",
                 IconUrl =
                     "https://p7.hiclipart.com/preview/158/639/798/spotify-streaming-media-logo-playlist-spotify-app-icon.jpg"
             };
-        }
 
         var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
         var queue = queuedLavalinkPlayer.Queue;
@@ -70,21 +60,19 @@ public class AudioPlayerEmbed
         embed.AddField(
             "Player Status",
             $"Volume: `{queuedLavalinkPlayer.Volume * 100}` \n" +
-            $"Paused: `{playerState}`", inline: true);
+            $"Paused: `{playerState}`", true);
 
         embed.AddField(
             "Queue Status",
             $"Number of Tracks: `{queue.Count}` \n" +
-            $"Queue Full: `{queueFull}`", inline: true);
+            $"Queue Full: `{queueFull}`", true);
 
         if (queue.Count != 0)
-        {
             foreach (var nextTrack in queue.Take(1))
                 embed.Footer = new DiscordEmbedBuilder.EmbedFooter
                 {
                     Text = $"Next Track: {nextTrack.Track!.Title}"
                 };
-        }
 
         var pauseButton = new DiscordButtonComponent
         (
@@ -161,15 +149,13 @@ public class AudioPlayerEmbed
         return messageBuilder;
     }
 
-    public DiscordMessageBuilder TrackInformation(ExtendedLavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordMessageBuilder TrackInformation(ExtendedLavalinkTrack track,
+        QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var uri = track.Uri!.AbsoluteUri;
-        
-        if (track.Uri.AbsoluteUri.Contains("spotify.com"))
-        {
-            uri = track.Uri!.AbsoluteUri.Replace("https://", "");
-        }
-        
+
+        if (track.Uri.AbsoluteUri.Contains("spotify.com")) uri = track.Uri!.AbsoluteUri.Replace("https://", "");
+
         var embed = new DiscordEmbedBuilder
         {
             Description = $"💿  •  **Title**: {track.Title}\n" +
@@ -184,33 +170,27 @@ public class AudioPlayerEmbed
         };
 
         if (track.Uri!.ToString().ToLower().Contains("soundcloud"))
-        {
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
                 Name = "Platform: Soundcloud",
                 IconUrl = "https://static-00.iconduck.com/assets.00/soundcloud-icon-2048x2048-j8bxnm2n.png"
             };
-        }
 
         if (track.Uri!.ToString().ToLower().Contains("youtube"))
-        {
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
                 Name = "Platform: Youtube",
                 IconUrl =
                     "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-youtube-circle-512.png"
             };
-        }
 
         if (track.Uri!.ToString().ToLower().Contains("spotify"))
-        {
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
                 Name = "Platform: Spotify",
                 IconUrl =
                     "https://p7.hiclipart.com/preview/158/639/798/spotify-streaming-media-logo-playlist-spotify-app-icon.jpg"
             };
-        }
 
         var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
         var queue = queuedLavalinkPlayer.Queue;
@@ -220,21 +200,19 @@ public class AudioPlayerEmbed
         embed.AddField(
             "Player Status",
             $"Volume: `{queuedLavalinkPlayer.Volume * 100}` \n" +
-            $"Paused: `{playerState}`", inline: true);
+            $"Paused: `{playerState}`", true);
 
         embed.AddField(
             "Queue Status",
             $"Number of Tracks: `{queue.Count}` \n" +
-            $"Queue Full: `{queueFull}`", inline: true);
+            $"Queue Full: `{queueFull}`", true);
 
         if (queue.Count != 0)
-        {
             foreach (var nextTrack in queue.Take(1))
                 embed.Footer = new DiscordEmbedBuilder.EmbedFooter
                 {
                     Text = $"Next Track: {nextTrack.Track!.Title}"
                 };
-        }
 
         var pauseButton = new DiscordButtonComponent
         (
@@ -319,7 +297,6 @@ public class AudioPlayerEmbed
             Description = $"ılı   •  [{track!.Title}]({track.Uri}) - By **{track.Author}**",
             Color = DiscordColor.Cyan
         };
-
         return embed;
     }
 
@@ -331,7 +308,6 @@ public class AudioPlayerEmbed
             Description = $"ılı   •  [{track!.Title}]({track.Uri}) - By **{track.Author}**",
             Color = DiscordColor.Cyan
         };
-
         return embed;
     }
 
@@ -342,7 +318,6 @@ public class AudioPlayerEmbed
             Description = $"⏸  • ``{context.Member.Username}`` paused the track.",
             Color = DiscordColor.Yellow
         };
-
         return embed;
     }
 
@@ -353,7 +328,6 @@ public class AudioPlayerEmbed
             Description = $"⏸  • ``{btnInteractionArgs.User.Username}`` paused the track.",
             Color = DiscordColor.Yellow
         };
-
         return embed;
     }
 
@@ -364,7 +338,6 @@ public class AudioPlayerEmbed
             Description = $"▶  • ``{context.Member.Username}`` resumed the track.",
             Color = DiscordColor.Green
         };
-
         return embed;
     }
 
@@ -375,7 +348,6 @@ public class AudioPlayerEmbed
             Description = $"▶  • ``{btnInteractionArgs.User.Username}`` resumed the track.",
             Color = DiscordColor.Green
         };
-
         return embed;
     }
 
@@ -386,7 +358,6 @@ public class AudioPlayerEmbed
             Description = $"⬜   • ``{context.Member.Username}`` stopped the player.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
 
@@ -397,7 +368,6 @@ public class AudioPlayerEmbed
             Description = $"⬜   • ``{btnInteractionArgs.User.Username}`` stopped the player.",
             Color = DiscordColor.Red
         };
-
         return embed;
     }
 
@@ -415,7 +385,6 @@ public class AudioPlayerEmbed
                 Url = "https://media.lordicon.com/icons/wired/gradient/29-play-pause-circle.gif"
             }
         };
-
         return embed;
     }
 
@@ -426,7 +395,6 @@ public class AudioPlayerEmbed
             Description = $"🔊  •  ``{context.Member.Username}`` changed the volume to ``{volume}``.",
             Color = DiscordColor.Cyan
         };
-
         return embed;
     }
 
@@ -437,7 +405,6 @@ public class AudioPlayerEmbed
             Description = $"🔉  •  ``{btnInteractionArgs.User.Username}`` has decreased the volume.",
             Color = DiscordColor.Cyan
         };
-
         return embed;
     }
 
@@ -448,7 +415,6 @@ public class AudioPlayerEmbed
             Description = $"🔊  •  ``{btnInteractionArgs.User.Username}`` has increased the volume.",
             Color = DiscordColor.Cyan
         };
-
         return embed;
     }
 
@@ -460,7 +426,6 @@ public class AudioPlayerEmbed
                 $"🔁   • ``{context.Member.Username}`` restarted the track.",
             Color = DiscordColor.Orange
         };
-
         return embed;
     }
 
@@ -472,7 +437,6 @@ public class AudioPlayerEmbed
                 $"🔁   • ``{btnInteractionArgs.User.Username}`` restarted the track.",
             Color = DiscordColor.Orange
         };
-
         return embed;
     }
 
@@ -484,7 +448,6 @@ public class AudioPlayerEmbed
                 $"🔌   • ``{context.Member.Username}`` has disconnected Jam Junction.",
             Color = DiscordColor.DarkRed
         };
-
         return embed;
     }
 
@@ -513,7 +476,7 @@ public class AudioPlayerEmbed
                 var title = queue.Track!.Title;
                 var url = queue.Track.Uri;
                 var author = queue.Track.Author;
-                
+
                 embed.AddField(
                     "\u200B",
                     title.Length > 20
@@ -521,7 +484,6 @@ public class AudioPlayerEmbed
                         : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**");
             }
         }
-
         return embed;
     }
 
@@ -551,7 +513,7 @@ public class AudioPlayerEmbed
                 var title = queue.Track!.Title;
                 var url = queue.Track.Uri;
                 var author = queue.Track.Author;
-                
+
                 embed.AddField(
                     "\u200B",
                     title.Length > 20
@@ -559,7 +521,6 @@ public class AudioPlayerEmbed
                         : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**");
             }
         }
-
         return embed;
     }
 
@@ -571,7 +532,6 @@ public class AudioPlayerEmbed
                 $"🔀  • ``{context.Member.Username}`` has shuffled the queue.",
             Color = DiscordColor.Cyan
         };
-
         return embed;
     }
 
@@ -583,7 +543,6 @@ public class AudioPlayerEmbed
                 $"🔀  • ``{btnInteractionArgs.User.Username}`` has shuffled the queue.",
             Color = DiscordColor.Cyan
         };
-
         return embed;
     }
 
@@ -595,7 +554,6 @@ public class AudioPlayerEmbed
                 $"⏭️  • ``{context.Member.Username}`` has skipped to the next track.",
             Color = DiscordColor.Cyan
         };
-
         return embed;
     }
 
@@ -607,7 +565,6 @@ public class AudioPlayerEmbed
                 $"⏭️  • ``{btnInteractionArgs.User.Username}`` has skipped to the next track.",
             Color = DiscordColor.Cyan
         };
-
         return embed;
     }
 
@@ -621,7 +578,6 @@ public class AudioPlayerEmbed
                 $"🕒   • ``{context.Member.Username}`` changed the track position to ``{time}``.",
             Color = DiscordColor.Cyan
         };
-
         return embed;
     }
 
@@ -632,7 +588,6 @@ public class AudioPlayerEmbed
             Description = $"🕒  • Current Track Position: ``{RoundSeconds(position)}``.",
             Color = DiscordColor.Cyan
         };
-
         return embed;
     }
 

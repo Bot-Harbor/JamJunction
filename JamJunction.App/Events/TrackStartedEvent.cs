@@ -1,22 +1,15 @@
-﻿using System.Threading.Channels;
-using DSharpPlus;
-using DSharpPlus.Entities;
-using DSharpPlus.SlashCommands;
+﻿using DSharpPlus;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Lavalink;
 using Lavalink4NET;
 using Lavalink4NET.Events.Players;
-using Lavalink4NET.Players;
-using Lavalink4NET.Players.Queued;
-using Microsoft.Extensions.Options;
-using Microsoft.VisualBasic;
 
 namespace JamJunction.App.Events;
 
 public class TrackStartedEvent
 {
-    private readonly DiscordClient _discordClient;
     private readonly IAudioService _audioService;
+    private readonly DiscordClient _discordClient;
 
     public TrackStartedEvent(DiscordClient discordClient, IAudioService audioService)
     {
@@ -37,7 +30,7 @@ public class TrackStartedEvent
         var track = eventargs.Track;
 
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
-        var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, connectToVoiceChannel: true);
+        var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, true);
 
         if (guildData.FirstSongInQueue)
         {

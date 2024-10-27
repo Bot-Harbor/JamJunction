@@ -9,8 +9,8 @@ namespace JamJunction.App.Events;
 
 public class TrackStuckEvent
 {
-    private readonly DiscordClient _discordClient;
     private readonly IAudioService _audioService;
+    private readonly DiscordClient _discordClient;
 
     public TrackStuckEvent(DiscordClient discordClient, IAudioService audioService)
     {
@@ -27,24 +27,24 @@ public class TrackStuckEvent
         var guildData = Bot.GuildData[guildId];
         var textChannelId = guildData.TextChannelId;
         var channel = guild.GetChannel(textChannelId);
-        
+
         var errorEmbed = new ErrorEmbed();
         await channel.SendMessageAsync(errorEmbed.TrackFailedToLoadError());
-        
+
         await Task.Delay(TimeSpan.FromSeconds(5));
-        
+
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
-        var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, connectToVoiceChannel: true);
-        
+        var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, true);
+
         var track = eventargs.Track;
         await player.PlayAsync(track);
 
         await Task.Delay(TimeSpan.FromSeconds(3));
-        
+
         if (player.State == PlayerState.NotPlaying)
         {
             await channel.SendMessageAsync(errorEmbed.CouldNotLoadTrackOnAttemptError());
             Bot.GuildData.Remove(guildId);
         }
-    } 
+    }
 }
