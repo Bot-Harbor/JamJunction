@@ -6,7 +6,7 @@
 
 A Discord bot that allows you to play music for you and your friends.
 
-Powered by [DSharpPlus 5.0.0](https://dsharpplus.github.io/DSharpPlus/), [Lavalink4NET 4.0.26](https://github.com/angelobreuer/Lavalink4NET), .NET 8, and [Docker](https://www.docker.com/).
+Powered by [DSharpPlus 5.0.0](https://github.com/DSharpPlus/DSharpPlus), [Lavalink4NET 4.0.26](https://github.com/angelobreuer/Lavalink4NET), .NET 8, and [Docker](https://www.docker.com/).
 
 ---
 
