@@ -4,7 +4,7 @@ namespace JamJunction.App.Lavalink.Enums;
 
 public enum Platform
 {
-    [ChoiceName("YouTube")] YouTube,
     [ChoiceName("Spotify")] Spotify,
+    [ChoiceName("YouTube")] YouTube,
     [ChoiceName("SoundCloud")] SoundCloud,
 }

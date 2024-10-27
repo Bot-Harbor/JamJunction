@@ -99,7 +99,7 @@ public class ShuffleButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoSongsToShuffleError(btnInteractionArgs)));
+                        errorEmbed.NoTracksToShuffleError(btnInteractionArgs)));
                 
                 return;
             }

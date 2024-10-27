@@ -11,14 +11,21 @@ namespace JamJunction.App.Embed_Builders;
 
 public class AudioPlayerEmbed
 {
-    public DiscordMessageBuilder SongInformation(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordMessageBuilder TrackInformation(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
+        var uri = track.Uri!.AbsoluteUri;
+        
+        if (track.Uri.AbsoluteUri.Contains("spotify.com"))
+        {
+            uri = track.Uri!.AbsoluteUri.Replace("https://", "");
+        }
+        
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"💿  •  **Now playing**: {track.Title}\n" +
+            Description = $"💿  •  **Title**: {track.Title}\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"🕒  •  **Song Duration**: {RoundSeconds(track.Duration)}\n" +
-                          $"🔗  •  **Url:** {track.Uri}",
+                          $"🕒  •  **Duration**: {RoundSeconds(track.Duration)}\n" +
+                          $"🔗  •  **Url:** {uri}",
             Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
@@ -67,15 +74,15 @@ public class AudioPlayerEmbed
 
         embed.AddField(
             "Queue Status",
-            $"Number of Songs: `{queue.Count}` \n" +
+            $"Number of Tracks: `{queue.Count}` \n" +
             $"Queue Full: `{queueFull}`", inline: true);
 
         if (queue.Count != 0)
         {
-            foreach (var nextSong in queue.Take(1))
+            foreach (var nextTrack in queue.Take(1))
                 embed.Footer = new DiscordEmbedBuilder.EmbedFooter
                 {
-                    Text = $"Next Song: {nextSong.Track!.Title}"
+                    Text = $"Next Track: {nextTrack.Track!.Title}"
                 };
         }
 
@@ -154,14 +161,21 @@ public class AudioPlayerEmbed
         return messageBuilder;
     }
 
-    public DiscordMessageBuilder SongInformation(ExtendedLavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordMessageBuilder TrackInformation(ExtendedLavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
+        var uri = track.Uri!.AbsoluteUri;
+        
+        if (track.Uri.AbsoluteUri.Contains("spotify.com"))
+        {
+            uri = track.Uri!.AbsoluteUri.Replace("https://", "");
+        }
+        
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"💿  •  **Now playing**: {track.Title}\n" +
+            Description = $"💿  •  **Title**: {track.Title}\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"🕒  •  **Song Duration**: {RoundSeconds(track.Duration)}\n" +
-                          $"🔗  •  **Url:** {track.Uri}",
+                          $"🕒  •  **Duration**: {RoundSeconds(track.Duration)}\n" +
+                          $"🔗  •  **Url:** {uri}",
             Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
@@ -210,15 +224,15 @@ public class AudioPlayerEmbed
 
         embed.AddField(
             "Queue Status",
-            $"Number of Songs: `{queue.Count}` \n" +
+            $"Number of Tracks: `{queue.Count}` \n" +
             $"Queue Full: `{queueFull}`", inline: true);
 
         if (queue.Count != 0)
         {
-            foreach (var nextSong in queue.Take(1))
+            foreach (var nextTrack in queue.Take(1))
                 embed.Footer = new DiscordEmbedBuilder.EmbedFooter
                 {
-                    Text = $"Next Song: {nextSong.Track!.Title}"
+                    Text = $"Next Track: {nextTrack.Track!.Title}"
                 };
         }
 
@@ -297,7 +311,7 @@ public class AudioPlayerEmbed
         return messageBuilder;
     }
 
-    public DiscordEmbedBuilder SongAddedToQueue(LavalinkTrack track)
+    public DiscordEmbedBuilder TrackAddedToQueue(LavalinkTrack track)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -309,7 +323,7 @@ public class AudioPlayerEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder SongAddedToQueue(ExtendedLavalinkTrack track)
+    public DiscordEmbedBuilder TrackAddedToQueue(ExtendedLavalinkTrack track)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -443,7 +457,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🔁   • ``{context.Member.Username}`` restarted the song.",
+                $"🔁   • ``{context.Member.Username}`` restarted the track.",
             Color = DiscordColor.Orange
         };
 
@@ -455,7 +469,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🔁   • ``{btnInteractionArgs.User.Username}`` restarted the song.",
+                $"🔁   • ``{btnInteractionArgs.User.Username}`` restarted the track.",
             Color = DiscordColor.Orange
         };
 
@@ -488,7 +502,7 @@ public class AudioPlayerEmbed
 
         if (queuedLavalinkPlayer.Queue.IsEmpty)
         {
-            embed.Description = "There are no songs currently in the queue.";
+            embed.Description = "There are no tracks currently in the queue.";
         }
         else
         {
@@ -526,7 +540,7 @@ public class AudioPlayerEmbed
 
         if (queuedLavalinkPlayer.Queue.IsEmpty)
         {
-            embed.Description = "There are no songs currently in the queue.";
+            embed.Description = "There are no tracks currently in the queue.";
         }
         else
         {
@@ -578,7 +592,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"⏭️  • ``{context.Member.Username}`` has skipped to the next song.",
+                $"⏭️  • ``{context.Member.Username}`` has skipped to the next track.",
             Color = DiscordColor.Cyan
         };
 
@@ -590,7 +604,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"⏭️  • ``{btnInteractionArgs.User.Username}`` has skipped to the next song.",
+                $"⏭️  • ``{btnInteractionArgs.User.Username}`` has skipped to the next track.",
             Color = DiscordColor.Cyan
         };
 
@@ -604,18 +618,18 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🕒   • ``{context.Member.Username}`` changed the song position to ``{time}``.",
+                $"🕒   • ``{context.Member.Username}`` changed the track position to ``{time}``.",
             Color = DiscordColor.Cyan
         };
 
         return embed;
     }
 
-    public DiscordEmbedBuilder SongPosition(TimeSpan position)
+    public DiscordEmbedBuilder TrackPosition(TimeSpan position)
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🕒  • Current Song Position: ``{RoundSeconds(position)}``.",
+            Description = $"🕒  • Current Track Position: ``{RoundSeconds(position)}``.",
             Color = DiscordColor.Cyan
         };
 

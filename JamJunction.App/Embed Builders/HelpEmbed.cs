@@ -26,7 +26,7 @@ public class HelpEmbed
                 IconUrl = userIcon
             },
             Title = "\ud83d\udcdd Getting Started",
-            Color = DiscordColor.White,
+            Color = DiscordColor.Cyan,
             Description =
                 "Your go-to music bot for you and your friends! Type one of the commands below to get started. " +
                 $"Jam Junction is powered by [DSharpPlus {dSharpPlusVersion}]" +
@@ -78,8 +78,7 @@ public class HelpEmbed
 
         var addBotBtn = new DiscordLinkButtonComponent
         (
-            "https://discord.com/api/oauth2/authorize?client_id=11817003345617" +
-            "96227&permissions=415122181184&scope=bot+applications.commands",
+            "https://discord.com/oauth2/authorize?client_id=1181700334561796227\n",
             "Add To A Server"
         );
 

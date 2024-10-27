@@ -73,7 +73,7 @@ public class ShuffleQueueCommand : ApplicationCommandModule
         {
             await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoSongsToShuffleError(context)));
+                    errorEmbed.NoTracksToShuffleError(context)));
             
             return;
         }

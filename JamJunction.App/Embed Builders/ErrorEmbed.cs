@@ -219,51 +219,51 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  The time you are seeking for is larger than the duration of the song ``{context.User.Username}``.",
+            Description = $"🔊  •  The time you are seeking for is larger than the duration of the track ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 
         return embed;
     }
     
-    public DiscordEmbedBuilder NoSongsToSkipToError(InteractionContext context)
+    public DiscordEmbedBuilder NoTracksToSkipToError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • There are no songs to skip to ``{context.User.Username}``.",
+            Description = $"🎵 • There are no tracks to skip to ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 
         return embed;
     }
     
-    public DiscordEmbedBuilder NoSongsToSkipToError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder NoTracksToSkipToError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • There are no songs to skip to ``{btnInteractionArgs.User.Username}``.",
+            Description = $"🎵 • There are no tracks to skip to ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
         return embed;
     }
     
-    public DiscordEmbedBuilder NoSongsToShuffleError(InteractionContext context)
+    public DiscordEmbedBuilder NoTracksToShuffleError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔀 • There are no songs in the queue to shuffle ``{context.User.Username}``.",
+            Description = $"🔀 • There are no tracks in the queue to shuffle ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 
         return embed;
     }
     
-    public DiscordEmbedBuilder NoSongsToShuffleError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder NoTracksToShuffleError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔀 • There are no songs in the queue to shuffle ``{btnInteractionArgs.User.Username}``.",
+            Description = $"🔀 • There are no tracks in the queue to shuffle ``{btnInteractionArgs.User.Username}``.",
             Color = DiscordColor.Red
         };
 
@@ -274,7 +274,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • The queue is full. The max capacity is 25 songs ``{context.User.Username}``.",
+            Description = $"🎵 • The queue is full. The max capacity is 25 tracks ``{context.User.Username}``.",
             Color = DiscordColor.Red
         };
 

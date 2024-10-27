@@ -34,7 +34,7 @@ public class CaptionEmbed
             Color.Teal => DiscordColor.Teal,
             Color.White => DiscordColor.White,
             Color.Yellow => DiscordColor.Yellow,
-            _ => DiscordColor.None
+            _ => DiscordColor.Cyan
         };
 
         var captionEmbed = new DiscordEmbedBuilder

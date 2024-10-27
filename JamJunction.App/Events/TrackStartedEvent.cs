@@ -46,6 +46,6 @@ public class TrackStartedEvent
         }
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
-        await channel.SendMessageAsync(audioPlayerEmbed.SongInformation(track, player));
+        await channel.SendMessageAsync(audioPlayerEmbed.TrackInformation(track, player));
     }
 }

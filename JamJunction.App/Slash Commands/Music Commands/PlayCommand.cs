@@ -16,14 +16,14 @@ public class PlayCommand : ApplicationCommandModule
     {
         _audioService = audioService;
     }
-
-    [SlashCommand("play", "Queue a song.")]
+    
+    [SlashCommand("play", "Queue a track.")]
     public async Task PlayAsync
     (
         InteractionContext context,
         [Option("Input", "Enter a keyword or url to search.")]
         string query,
-        [Option("Platform", "Pick a streaming platform. Default platform is Youtube.")]
+        [Option("Platform", "Pick a streaming platform. Default platform for keywords is Spotify.")]
         Platform streamingPlatform = default
     )
     {
@@ -79,17 +79,17 @@ public class PlayCommand : ApplicationCommandModule
         
         switch (streamingPlatform)
         {
-            case Platform.YouTube:
-                await platformHandler.PlayFromYoutube(player, query, context, guildId);
-                return;
             case Platform.Spotify:
                 await platformHandler.PlayFromSpotify(player, query, context, guildId);
+                return;
+            case Platform.YouTube:
+                await platformHandler.PlayFromYoutube(player, query, context, guildId);
                 return;
             case Platform.SoundCloud:
                 await platformHandler.PlayFromSoundCloud(player, query, context, guildId);
                 return;
             default:
-                await platformHandler.PlayFromYoutube(player, query, context, guildId);
+                await platformHandler.PlayFromSpotify(player, query, context, guildId);
                 return;
         }
     }

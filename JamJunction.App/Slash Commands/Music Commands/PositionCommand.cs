@@ -82,6 +82,6 @@ public class PositionCommand : ApplicationCommandModule
         
         await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
-                audioPlayerEmbed.SongPosition(position)));
+                audioPlayerEmbed.TrackPosition(position)));
     }
 }

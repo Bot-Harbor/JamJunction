@@ -1,7 +1,7 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 
-namespace JamJunction.App.EmbedBuilders;
+namespace JamJunction.App.Embed_Builders;
 
 public class PingEmbed
 {
@@ -11,7 +11,7 @@ public class PingEmbed
         {
             Title = $"Pong 🏓 ``{context.Member.Username}``",
             ImageUrl = "https://pbs.twimg.com/media/CijH1M7WgAE_3we.jpg",
-            Color = DiscordColor.Orange
+            Color = DiscordColor.Cyan
         };
 
         return embed;

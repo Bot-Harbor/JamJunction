@@ -82,6 +82,6 @@ public class CurrentSongCommand : ApplicationCommandModule
 
         await context
             .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                new DiscordInteractionResponseBuilder(audioPlayerEmbed.SongInformation(track, player))));
+                new DiscordInteractionResponseBuilder(audioPlayerEmbed.TrackInformation(track, player))));
     }
 }

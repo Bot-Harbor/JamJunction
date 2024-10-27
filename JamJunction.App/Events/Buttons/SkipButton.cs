@@ -100,7 +100,7 @@ public class SkipButton : IButton
             {
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoSongsToSkipToError(btnInteractionArgs)));
+                        errorEmbed.NoTracksToSkipToError(btnInteractionArgs)));
                 
                 return;
             }
