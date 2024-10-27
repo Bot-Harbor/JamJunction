@@ -57,7 +57,7 @@ public class HelpEmbed
             "\ud83d\udd00  </shuffle:1200625616244981821>\n" +
             "\ud83d\udd0a  </volume:1185357127468986451>\n" +
             "\ud83c\udfb6  </view-queue:1292956075032576070>\n" +
-            "\ud83d\udcc4  </current-song:1292954242264600739>\n" +
+            "\ud83d\udcc4  </current-track:1300139412553859085>\n" +
             "\ud83d\udd52  </position:1215802163658358795>\n" +
             "\ud83d\udd01  </restart:1186037012642418698>\n" +
             "\ud83d\udd52 </seek:1186000603273510952>\n" +
