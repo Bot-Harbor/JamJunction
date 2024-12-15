@@ -71,6 +71,7 @@ internal sealed class Bot : BackgroundService
         slashCommands.RegisterCommands<SkipCommand>();
         slashCommands.RegisterCommands<HelpCommand>();
         slashCommands.RegisterCommands<PositionCommand>();
+        slashCommands.RegisterCommands<RepeatCommand>();
     }
 
     private void ButtonEvents()
