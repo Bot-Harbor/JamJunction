@@ -35,45 +35,6 @@ public class FiltersCommand : ApplicationCommandModule
             return;
         }
 
-        var botId = context.Client.CurrentUser.Id;
-        var botVoiceChannel = context.Guild.VoiceStates.TryGetValue(botId, out var botVoiceState);
-
-        if (botVoiceChannel == false)
-        {
-            await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerError(context)));
-            return;
-        }
-
-        if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
-        {
-            await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelError(context)));
-            return;
-        }
-
-        var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
-        var player =
-            await lavalinkPlayer.GetPlayerAsync(guildId, userVoiceChannel, false);
-
-        if (player == null)
-        {
-            await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionError(context)));
-            return;
-        }
-
-        if (player!.CurrentTrack == null)
-        {
-            await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoAudioTrackError(context)));
-            return;
-        }
-
         await context.FollowUpAsync(new DiscordFollowupMessageBuilder(audioPlayerMenu.Filters()));
     }
 }
