@@ -1,7 +1,6 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
-using JamJunction.App.Lavalink;
 using JamJunction.App.Menu_Builders;
 using Lavalink4NET;
 
@@ -24,7 +23,6 @@ public class FiltersCommand : ApplicationCommandModule
         var audioPlayerMenu = new AudioPlayerMenu();
         var errorEmbed = new ErrorEmbed();
 
-        var guildId = context.Guild.Id;
         var userVoiceChannel = context.Member?.VoiceState?.Channel;
 
         if (userVoiceChannel == null)
