@@ -2,19 +2,11 @@
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Menu_Builders;
-using Lavalink4NET;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class FiltersCommand : ApplicationCommandModule
 {
-    private readonly IAudioService _audioService;
-
-    public FiltersCommand(IAudioService audioService)
-    {
-        _audioService = audioService;
-    }
-
     [SlashCommand("filters", "Change filter for the player.")]
     public async Task FiltersCommandAsync(InteractionContext context)
     {
