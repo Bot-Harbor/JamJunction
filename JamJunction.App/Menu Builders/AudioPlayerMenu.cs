@@ -8,20 +8,20 @@ public class AudioPlayerMenu
     {
         var options = new List<DiscordSelectComponentOption>
         {
-            new DiscordSelectComponentOption("🔄 Reset", "reset"),
-            new DiscordSelectComponentOption("🌙 Nightcore", "nightcore"),
-            new DiscordSelectComponentOption("8️⃣ 8D", "8d"), 
-            new DiscordSelectComponentOption("🌊 Vaporwave", "vapor-wave"),
-            new DiscordSelectComponentOption("🎤 Karaoke", "karaoke"),
-            new DiscordSelectComponentOption("🕒 Slow Motion", "slow-motion"),
+            new("🔄 Reset", "reset"),
+            new("🌙 Nightcore", "nightcore"),
+            new("8️⃣ 8D", "8d"),
+            new("🌊 Vaporwave", "vapor-wave"),
+            new("🎤 Karaoke", "karaoke"),
+            new("🕒 Slow Motion", "slow-motion")
         };
-        
+
         var menu = new DiscordSelectComponent("filters-menu", "Select filter to apply", options);
-        
+
         var builder = new DiscordMessageBuilder()
-            .WithContent($" ")
+            .WithContent(" ")
             .AddComponents(menu);
-        
+
         return builder;
     }
 }

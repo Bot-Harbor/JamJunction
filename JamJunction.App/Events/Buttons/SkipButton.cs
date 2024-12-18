@@ -12,7 +12,7 @@ public class SkipButton : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
-    
+
     public SkipButton(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;

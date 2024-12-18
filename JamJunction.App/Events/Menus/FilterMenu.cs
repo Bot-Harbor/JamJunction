@@ -19,7 +19,7 @@ public class FilterMenu : IMenu
         _audioService = audioService;
         _discordClient = discordClient;
     }
-    
+
     private DiscordChannel UserVoiceChannel { get; set; }
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs menuInteractionArgs)
@@ -37,8 +37,8 @@ public class FilterMenu : IMenu
             var channel = menuInteractionArgs.Interaction;
 
             await channel.DeferAsync();
-            
-             try
+
+            try
             {
                 UserVoiceChannel = member.VoiceState.Channel;
 
@@ -99,31 +99,30 @@ public class FilterMenu : IMenu
                         errorEmbed.NoAudioTrackError(menuInteractionArgs)));
                 return;
             }
-            
+
             foreach (var value in menuInteractionArgs.Values)
-            {
                 switch (value)
                 {
                     case "reset":
                         player.Filters.Clear();
                         await player!.Filters.CommitAsync();
-                        
+
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
                     case "nightcore":
                     {
                         player.Filters.Clear();
-                        var nightcore = new TimescaleFilterOptions()
+                        var nightcore = new TimescaleFilterOptions
                         {
-                            Speed = (float?) 1.25,
-                            Pitch = (float?) 1.2,
-                            Rate = (float?) 1.0,
+                            Speed = 1.25f,
+                            Pitch = 1.2f,
+                            Rate = 1.0f
                         };
-                    
+
                         player.Filters.Timescale = nightcore;
                         await player!.Filters.CommitAsync();
-                        
+
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
@@ -131,14 +130,14 @@ public class FilterMenu : IMenu
                     case "8d":
                     {
                         player.Filters.Clear();
-                        var eightDFilter = new RotationFilterOptions()
+                        var eightDFilter = new RotationFilterOptions
                         {
-                           Frequency = 0.2f
+                            Frequency = 0.2f
                         };
-                    
+
                         player.Filters.Rotation = eightDFilter;
                         await player!.Filters.CommitAsync();
-                        
+
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
@@ -148,14 +147,14 @@ public class FilterMenu : IMenu
                         player.Filters.Clear();
                         var vaporwaveFilter = new TimescaleFilterOptions
                         {
-                            Speed = 0.8f, 
-                            Pitch = 0.85f, 
-                            Rate = 1.0f   
+                            Speed = 0.8f,
+                            Pitch = 0.85f,
+                            Rate = 1.0f
                         };
-                    
+
                         player.Filters.Timescale = vaporwaveFilter;
                         await player!.Filters.CommitAsync();
-                        
+
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
@@ -163,17 +162,17 @@ public class FilterMenu : IMenu
                     case "karaoke":
                     {
                         player.Filters.Clear();
-                        var karaokeFilter = new KaraokeFilterOptions()
+                        var karaokeFilter = new KaraokeFilterOptions
                         {
-                            Level = 0.2f,         
-                            MonoLevel = 0.1f,     
-                            FilterBand = 220.0f,  
-                            FilterWidth = 100.0f 
+                            Level = 0.2f,
+                            MonoLevel = 0.1f,
+                            FilterBand = 220.0f,
+                            FilterWidth = 100.0f
                         };
-                    
+
                         player.Filters.Karaoke = karaokeFilter;
                         await player!.Filters.CommitAsync();
-                        
+
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
@@ -183,12 +182,12 @@ public class FilterMenu : IMenu
                         player.Filters.Clear();
                         var slowMotionFilter = new TimescaleFilterOptions
                         {
-                            Speed = (float?) 0.5, 
+                            Speed = 0.5f
                         };
-                    
+
                         player.Filters.Timescale = slowMotionFilter;
                         await player!.Filters.CommitAsync();
-                        
+
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
@@ -196,12 +195,11 @@ public class FilterMenu : IMenu
                     default:
                         player.Filters.Clear();
                         await player!.Filters.CommitAsync();
-                        
+
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
                 }
-            }
         }
     }
 }

@@ -18,5 +18,5 @@
         <PackageReference Include="SpotifyAPI.Web" Version="7.2.1"/>
         <PackageReference Include="YoutubeExplode" Version="6.4.3"/>
     </ItemGroup>
-    
+
 </Project>
