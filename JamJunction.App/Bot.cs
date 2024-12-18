@@ -2,6 +2,7 @@
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events;
 using JamJunction.App.Events.Buttons;
+using JamJunction.App.Events.Menus;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
@@ -30,6 +31,7 @@ internal sealed class Bot : BackgroundService
 
         SlashCommands();
         ButtonEvents();
+        MenuEvents();
 
         var trackStartedEvent = new TrackStartedEvent(_discordClient, _audioService);
         _audioService.TrackStarted += trackStartedEvent.TrackStarted;
@@ -90,6 +92,16 @@ internal sealed class Bot : BackgroundService
             await buttonHandler.Execute(new VolumeUpButton(_audioService, _discordClient), sender, args);
             await buttonHandler.Execute(new ViewQueueButton(_audioService, _discordClient), sender, args);
             await buttonHandler.Execute(new RestartButton(_audioService, _discordClient), sender, args);
+        };
+    }
+
+    private void MenuEvents()
+    {
+        var menuHandler = new MenuHandler();
+
+        _discordClient.ComponentInteractionCreated += async (sender, args) =>
+        {
+            await menuHandler.Execute(new FilterMenu(_audioService, _discordClient), sender, args);
         };
     }
 }

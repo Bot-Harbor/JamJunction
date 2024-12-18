@@ -631,6 +631,16 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    public DiscordEmbedBuilder Filter()
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"🎵  • Filter applied. (It may take a few seconds to apply).",
+            Color = DiscordColor.Cyan
+        };
+        return embed;
+    }
+    
     private TimeSpan RoundSeconds(TimeSpan timespan)
     {
         return TimeSpan.FromSeconds(Math.Round(timespan.TotalSeconds));
