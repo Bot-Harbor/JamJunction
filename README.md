@@ -37,13 +37,15 @@ Great and affordable resource for hosting images!
 | `▶️ /play` | Queue a track. |
 | `⏸️ /pause` | Pauses the current track. |
 | `▶️ /resume` | Resumes the current track. |
-| `⬜ /stop` | Stops the playback.  |
+| `🛑 /stop` | Stops the playback.  |
 | `🔀 /shuffle` | Shuffles the queue. |
 | `🔊 /volume` | Adjusts the volume 0-100. |
+| `🎵 /filters` | Change filter for the player. |
 | `🎶 /view-queue` | Displays what is currently in the queue. |
 | `📄 /current-track` | Shows details about the current track playing. |
 | `🕒 /position` | Gets the current track position. |
-| `🔁 /restart` | Restarts the current track |
+| `🔄 /restart` | Restarts the current track. |
+| `🔁 /repeating-mode` | Change the repeating mode. |
 | `🕒 /seek` | Sets the position of the track. |
 | `⏭️ /skip` | Skips to the next track in the queue. |
 | `🔌 /leave` | Disconnects the player. |
