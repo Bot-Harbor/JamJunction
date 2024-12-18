@@ -62,7 +62,7 @@ public class HelpEmbed
             "\ud83d\udd52  </position:1215802163658358795>\n" +
             "\ud83d\udd04  </restart:1186037012642418698>\n" +
             "\ud83d\udd01  </repeating-mode:1319060173561659555>\n" +
-            "\ud83d\udd52 </seek:1186000603273510952>\n" +
+            "\ud83d\udd52  </seek:1186000603273510952>\n" +
             "\u23ed\ufe0f  </skip:1204215826773835778>\n" +
             "\ud83d\udd0c  </leave:1192206662468108438>\n",
             true
