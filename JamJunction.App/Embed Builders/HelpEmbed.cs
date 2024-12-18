@@ -53,13 +53,15 @@ public class HelpEmbed
             "\u25b6\ufe0f  </play:1181715791658360852>\n" +
             "\u23f8\ufe0f  </pause:1185357127468986450>\n" +
             "\u25b6\ufe0f  </resume:1185412430055084052>\n" +
-            "\u2b1c        </stop:1185428654155636738>\n" +
+            "\ud83d\uded1  </stop:1185428654155636738>\n" +
             "\ud83d\udd00  </shuffle:1200625616244981821>\n" +
             "\ud83d\udd0a  </volume:1185357127468986451>\n" +
+            "\ud83d\udd0a  </filters:1319060173561659557>\n" +
             "\ud83c\udfb6  </view-queue:1292956075032576070>\n" +
             "\ud83d\udcc4  </current-track:1300139412553859085>\n" +
             "\ud83d\udd52  </position:1215802163658358795>\n" +
-            "\ud83d\udd01  </restart:1186037012642418698>\n" +
+            "\ud83d\udd04  </restart:1186037012642418698>\n" +
+            "\ud83d\udd01  </repeating-mode:1319060173561659555>\n" +
             "\ud83d\udd52 </seek:1186000603273510952>\n" +
             "\u23ed\ufe0f  </skip:1204215826773835778>\n" +
             "\ud83d\udd0c  </leave:1192206662468108438>\n",
