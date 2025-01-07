@@ -45,4 +45,24 @@ public class AudioPlayerMenu
 
         return builder;
     }
+
+    public DiscordMessageBuilder Remove(QueuedLavalinkPlayer queuedLavalinkPlayer)
+    {
+        var options = new List<DiscordSelectComponentOption>();
+
+        var id = 1;
+        foreach (var queue in queuedLavalinkPlayer.Queue)
+        {
+            options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
+                $"By {queue.Track!.Author}"));
+        }
+
+        var menu = new DiscordSelectComponent("remove", "Select track to remove", options);
+
+        var builder = new DiscordMessageBuilder()
+            .WithContent(" ")
+            .AddComponents(menu);
+
+        return builder;
+    }
 }
