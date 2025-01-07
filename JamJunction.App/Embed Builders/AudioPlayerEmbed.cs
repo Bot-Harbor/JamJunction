@@ -484,7 +484,7 @@ public class AudioPlayerEmbed
                     "\u200B",
                     title.Length > 20
                         ? $"`{i++}.` [{queue.Track!.Title.Substring(0, 20)}...]({url}) - By **{author}**"
-                        : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**");
+                        : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**", inline: true);
             }
         }
 
@@ -522,7 +522,7 @@ public class AudioPlayerEmbed
                     "\u200B",
                     title.Length > 20
                         ? $"`{i++}.` [{queue.Track!.Title.Substring(0, 20)}...]({url}) - By **{author}**"
-                        : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**");
+                        : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**", inline: true);
             }
         }
 
