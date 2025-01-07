@@ -1,4 +1,5 @@
 ﻿using DSharpPlus.Entities;
+using Lavalink4NET.Players.Queued;
 
 namespace JamJunction.App.Menu_Builders;
 
@@ -17,6 +18,25 @@ public class AudioPlayerMenu
         };
 
         var menu = new DiscordSelectComponent("filters-menu", "Select filter to apply", options);
+
+        var builder = new DiscordMessageBuilder()
+            .WithContent(" ")
+            .AddComponents(menu);
+
+        return builder;
+    }
+
+    public DiscordMessageBuilder Queue(QueuedLavalinkPlayer queuedLavalinkPlayer)
+    {
+        var options = new List<DiscordSelectComponentOption>();
+
+        foreach (var queue in queuedLavalinkPlayer.Queue)
+        {
+            options.Add(new DiscordSelectComponentOption(queue.Track!.Title, queue.Track.Identifier,
+                $"By {queue.Track!.Author}"));
+        }
+
+        var menu = new DiscordSelectComponent("queue-menu", "Select track to skip to", options);
 
         var builder = new DiscordMessageBuilder()
             .WithContent(" ")
