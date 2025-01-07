@@ -258,6 +258,16 @@ public class ErrorEmbed
         };
         return embed;
     }
+    
+    public DiscordEmbedBuilder RemoveError(InteractionContext context)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = $"🎵 • There are no tracks in the queue to remove ``{context.User.Username}``.",
+            Color = DiscordColor.Red
+        };
+        return embed;
+    }
 
     public DiscordEmbedBuilder TrackFailedToLoadError()
     {
