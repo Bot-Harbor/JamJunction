@@ -30,9 +30,10 @@ public class AudioPlayerMenu
     {
         var options = new List<DiscordSelectComponentOption>();
 
+        var id = 1;
         foreach (var queue in queuedLavalinkPlayer.Queue)
         {
-            options.Add(new DiscordSelectComponentOption(queue.Track!.Title, queue.Track.Identifier,
+            options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
                 $"By {queue.Track!.Author}"));
         }
 

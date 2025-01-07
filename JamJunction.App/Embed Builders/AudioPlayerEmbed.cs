@@ -573,6 +573,19 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    public DiscordEmbedBuilder SkipTo(ComponentInteractionCreateEventArgs menuInteractionArgs, QueuedLavalinkPlayer queuedLavalinkPlayer)
+    {
+        var track = queuedLavalinkPlayer.CurrentItem;
+        
+        var embed = new DiscordEmbedBuilder
+        {
+            Description =
+                $"⏭️  • ``{menuInteractionArgs.User.Username}`` has skipped to ``{track!.Track!.Title}``.",
+            Color = DiscordColor.Cyan
+        };
+        return embed;
+    }
+    
     public DiscordEmbedBuilder Seek(InteractionContext context, double seekedPosition)
     {
         var time = TimeSpan.FromSeconds(seekedPosition);

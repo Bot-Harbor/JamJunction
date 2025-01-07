@@ -103,6 +103,7 @@ internal sealed class Bot : BackgroundService
         _discordClient.ComponentInteractionCreated += async (sender, args) =>
         {
             await menuHandler.Execute(new FilterMenu(_audioService, _discordClient), sender, args);
+            await menuHandler.Execute(new QueueMenu(_audioService, _discordClient), sender, args);
         };
     }
 }

@@ -98,25 +98,13 @@ public class QueueMenu : IMenu
                         errorEmbed.NoAudioTrackError(menuInteractionArgs)));
                 return;
             }
-
-            var queue = player.Queue;
             
-            // Breaking due to identifiers in menu being the same if the same track is queued more than once
             foreach (var value in menuInteractionArgs.Values)
             {
-                for (var i = 0; i < queue.Count; i++)
-                {
-                    var track = queue[i];
-                    if (track.Identifier != value)
-                    {
-                        continue;
-                    }
-
-                    await player.SkipAsync(i);
-                    await channel.CreateFollowupMessageAsync(
-                        new DiscordFollowupMessageBuilder().WithContent("Skipping to next track..."));
-                    break;
-                }
+                await player.SkipAsync(Convert.ToInt32(value));
+                await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.SkipTo(menuInteractionArgs, player)));
+                break;
             }
         }
     }
