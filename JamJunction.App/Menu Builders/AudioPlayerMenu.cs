@@ -32,10 +32,8 @@ public class AudioPlayerMenu
 
         var id = 1;
         foreach (var queue in queuedLavalinkPlayer.Queue)
-        {
             options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
                 $"By {queue.Track!.Author}"));
-        }
 
         var menu = new DiscordSelectComponent("queue-menu", "Select track to skip to", options);
 
@@ -52,10 +50,8 @@ public class AudioPlayerMenu
 
         var id = 0;
         foreach (var queue in queuedLavalinkPlayer.Queue)
-        {
             options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
                 $"By {queue.Track!.Author}"));
-        }
 
         var menu = new DiscordSelectComponent("remove", "Select track to remove", options);
 

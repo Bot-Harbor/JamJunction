@@ -9,7 +9,7 @@ namespace JamJunction.App.Slash_Commands.Music_Commands;
 
 public class RemoveCommand : ApplicationCommandModule
 {
-     private readonly IAudioService _audioService;
+    private readonly IAudioService _audioService;
 
     public RemoveCommand(IAudioService audioService)
     {

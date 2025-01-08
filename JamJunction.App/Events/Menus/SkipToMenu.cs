@@ -90,7 +90,7 @@ public class SkipToMenu : IMenu
                         errorEmbed.NoConnectionError(menuInteractionArgs)));
                 return;
             }
-            
+
             foreach (var value in menuInteractionArgs.Values)
             {
                 await player.SkipAsync(Convert.ToInt32(value));

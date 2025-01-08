@@ -15,7 +15,7 @@ public class FiltersCommand : ApplicationCommandModule
     {
         _audioService = audioService;
     }
-    
+
     [SlashCommand("filters", "Change filter for the player.")]
     public async Task FiltersCommandAsync(InteractionContext context)
     {
@@ -66,7 +66,7 @@ public class FiltersCommand : ApplicationCommandModule
                     errorEmbed.NoConnectionError(context)));
             return;
         }
-        
+
         await context.FollowUpAsync(new DiscordFollowupMessageBuilder(audioPlayerMenu.Filters()));
     }
 }

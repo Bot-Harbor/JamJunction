@@ -258,7 +258,7 @@ public class ErrorEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder RemoveError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder

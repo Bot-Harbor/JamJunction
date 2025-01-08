@@ -20,7 +20,7 @@ public class RemoveMenu : IMenu
     }
 
     private DiscordChannel UserVoiceChannel { get; set; }
-    
+
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs menuInteractionArgs)
     {
         if (menuInteractionArgs.Interaction.Data.CustomId == "remove")
@@ -90,7 +90,7 @@ public class RemoveMenu : IMenu
                         errorEmbed.NoConnectionError(menuInteractionArgs)));
                 return;
             }
-            
+
             foreach (var value in menuInteractionArgs.Values)
             {
                 await player.Queue.RemoveAtAsync(Convert.ToInt32(value));

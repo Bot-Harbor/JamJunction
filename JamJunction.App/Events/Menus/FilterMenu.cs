@@ -172,7 +172,7 @@ public class FilterMenu : IMenu
 
                         player.Filters.Karaoke = karaokeFilter;
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);    
+                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;

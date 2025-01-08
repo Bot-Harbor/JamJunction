@@ -484,7 +484,7 @@ public class AudioPlayerEmbed
                     "\u200B",
                     title.Length > 20
                         ? $"`{i++}.` [{queue.Track!.Title.Substring(0, 20)}...]({url}) - By **{author}**"
-                        : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**", inline: true);
+                        : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**", true);
             }
         }
 
@@ -522,7 +522,7 @@ public class AudioPlayerEmbed
                     "\u200B",
                     title.Length > 20
                         ? $"`{i++}.` [{queue.Track!.Title.Substring(0, 20)}...]({url}) - By **{author}**"
-                        : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**", inline: true);
+                        : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**", true);
             }
         }
 
@@ -573,10 +573,11 @@ public class AudioPlayerEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder SkipTo(ComponentInteractionCreateEventArgs menuInteractionArgs, QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordEmbedBuilder SkipTo(ComponentInteractionCreateEventArgs menuInteractionArgs,
+        QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var track = queuedLavalinkPlayer.CurrentItem;
-        
+
         var embed = new DiscordEmbedBuilder
         {
             Description =
@@ -585,7 +586,7 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder Seek(InteractionContext context, double seekedPosition)
     {
         var time = TimeSpan.FromSeconds(seekedPosition);
@@ -613,33 +614,27 @@ public class AudioPlayerEmbed
     {
         DiscordEmbedBuilder embed;
 
-        if  (queuedLavalinkPlayer.RepeatMode == TrackRepeatMode.Track)
-        {
+        if (queuedLavalinkPlayer.RepeatMode == TrackRepeatMode.Track)
             embed = new DiscordEmbedBuilder
             {
                 Description =
                     $" 🔁  • ``{context.Member.Username}`` has enabled repeat track mode.",
                 Color = DiscordColor.Cyan
             };
-        }
         else if (queuedLavalinkPlayer.RepeatMode == TrackRepeatMode.Queue)
-        {
             embed = new DiscordEmbedBuilder
             {
                 Description =
                     $" 🔁  • ``{context.Member.Username}`` has enabled repeat queue mode.",
                 Color = DiscordColor.Cyan
             };
-        }
         else
-        {
             embed = new DiscordEmbedBuilder
             {
                 Description =
                     $" 🔁  • ``{context.Member.Username}`` has turned off repeat mode.",
                 Color = DiscordColor.Cyan
             };
-        }
 
         return embed;
     }
@@ -648,16 +643,17 @@ public class AudioPlayerEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🎵  • Filter applied. (It may take a few seconds to apply).",
+            Description = "\ud83c\udfb5  • Filter applied. (It may take a few seconds to apply).",
             Color = DiscordColor.Cyan
         };
         return embed;
     }
-    
-    public DiscordEmbedBuilder Remove(ComponentInteractionCreateEventArgs menuInteractionArgs, QueuedLavalinkPlayer queuedLavalinkPlayer)
+
+    public DiscordEmbedBuilder Remove(ComponentInteractionCreateEventArgs menuInteractionArgs,
+        QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var track = queuedLavalinkPlayer.CurrentItem;
-        
+
         var embed = new DiscordEmbedBuilder
         {
             Description =
@@ -666,7 +662,7 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-    
+
     private TimeSpan RoundSeconds(TimeSpan timespan)
     {
         return TimeSpan.FromSeconds(Math.Round(timespan.TotalSeconds));
