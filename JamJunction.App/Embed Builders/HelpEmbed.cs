@@ -40,7 +40,7 @@ public class HelpEmbed
             Footer = new DiscordEmbedBuilder.EmbedFooter
             {
                 Text = "Bot Info  •  " +
-                       "Version: 2.1.0  •  " +
+                       "Version: 2.2.0  •  " +
                        $"Total Servers: {serverCount}  •  " +
                        $"Shard: {shardCount}  •  " +
                        $"Ping: {ping}"
@@ -64,6 +64,8 @@ public class HelpEmbed
             "\ud83d\udd01  </repeating-mode:1319060173561659555>\n" +
             "\ud83d\udd52  </seek:1186000603273510952>\n" +
             "\u23ed\ufe0f  </skip:1204215826773835778>\n" +
+            "\u23ed\ufe0f  </skip-to:1326355880069042187>\n" +
+            "\ud83d\uddd1  </remove:1326355880069042188>\n" +
             "\ud83d\udd0c  </leave:1192206662468108438>\n",
             true
         );
