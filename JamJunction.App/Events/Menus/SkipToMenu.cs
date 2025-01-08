@@ -8,12 +8,12 @@ using Lavalink4NET;
 
 namespace JamJunction.App.Events.Menus;
 
-public class QueueMenu : IMenu
+public class SkipToMenu : IMenu
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public QueueMenu(IAudioService audioService, DiscordClient discordClient)
+    public SkipToMenu(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
@@ -88,14 +88,6 @@ public class QueueMenu : IMenu
                 await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoConnectionError(menuInteractionArgs)));
-                return;
-            }
-
-            if (player!.CurrentTrack == null)
-            {
-                await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoAudioTrackError(menuInteractionArgs)));
                 return;
             }
             
