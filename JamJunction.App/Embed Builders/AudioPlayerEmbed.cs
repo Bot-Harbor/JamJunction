@@ -661,7 +661,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"⏭️  • ``{menuInteractionArgs.User.Username}`` has removed a track from the queue.",
+                $"🗑️  • ``{menuInteractionArgs.User.Username}`` has removed a track from the queue.",
             Color = DiscordColor.Cyan
         };
         return embed;
