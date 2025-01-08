@@ -48,4 +48,6 @@ Great and affordable resource for hosting images!
 | `🔁 /repeating-mode` | Change the repeating mode. |
 | `🕒 /seek` | Sets the position of the track. |
 | `⏭️ /skip` | Skips to the next track in the queue. |
+| `⏭️ /skip-to` | Skips to the desired track in the queue. |
+| `🗑️ /remove` | Removes a track from the queue. |
 | `🔌 /leave` | Disconnects the player. |
