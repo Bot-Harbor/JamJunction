@@ -106,7 +106,7 @@ public class FilterMenu : IMenu
                     case "reset":
                         player.Filters.Clear();
                         await player!.Filters.CommitAsync();
-
+                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
@@ -122,7 +122,7 @@ public class FilterMenu : IMenu
 
                         player.Filters.Timescale = nightcore;
                         await player!.Filters.CommitAsync();
-
+                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
@@ -137,7 +137,7 @@ public class FilterMenu : IMenu
 
                         player.Filters.Rotation = eightDFilter;
                         await player!.Filters.CommitAsync();
-
+                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
@@ -154,7 +154,7 @@ public class FilterMenu : IMenu
 
                         player.Filters.Timescale = vaporwaveFilter;
                         await player!.Filters.CommitAsync();
-
+                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
@@ -172,7 +172,7 @@ public class FilterMenu : IMenu
 
                         player.Filters.Karaoke = karaokeFilter;
                         await player!.Filters.CommitAsync();
-
+                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);    
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
@@ -187,7 +187,7 @@ public class FilterMenu : IMenu
 
                         player.Filters.Timescale = slowMotionFilter;
                         await player!.Filters.CommitAsync();
-
+                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
@@ -195,7 +195,7 @@ public class FilterMenu : IMenu
                     default:
                         player.Filters.Clear();
                         await player!.Filters.CommitAsync();
-
+                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
                         await channel.CreateFollowupMessageAsync(
                             new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
                         break;
