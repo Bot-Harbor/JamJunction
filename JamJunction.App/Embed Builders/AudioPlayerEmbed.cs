@@ -654,6 +654,19 @@ public class AudioPlayerEmbed
         return embed;
     }
     
+    public DiscordEmbedBuilder Remove(ComponentInteractionCreateEventArgs menuInteractionArgs, QueuedLavalinkPlayer queuedLavalinkPlayer)
+    {
+        var track = queuedLavalinkPlayer.CurrentItem;
+        
+        var embed = new DiscordEmbedBuilder
+        {
+            Description =
+                $"⏭️  • ``{menuInteractionArgs.User.Username}`` has removed a track from the queue.",
+            Color = DiscordColor.Cyan
+        };
+        return embed;
+    }
+    
     private TimeSpan RoundSeconds(TimeSpan timespan)
     {
         return TimeSpan.FromSeconds(Math.Round(timespan.TotalSeconds));

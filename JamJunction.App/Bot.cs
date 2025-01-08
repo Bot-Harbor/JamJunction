@@ -105,6 +105,7 @@ internal sealed class Bot : BackgroundService
         {
             await menuHandler.Execute(new FilterMenu(_audioService, _discordClient), sender, args);
             await menuHandler.Execute(new QueueMenu(_audioService, _discordClient), sender, args);
+            await menuHandler.Execute(new RemoveMenu(_audioService, _discordClient), sender, args);
         };
     }
 }
