@@ -112,7 +112,6 @@ public class VolumeDownButton : IButton
 
             var decreasedVolume = Math.Max(Math.Round(currentVolume - 0.10, 2), 0);
             await player!.SetVolumeAsync((float) decreasedVolume);
-            Console.WriteLine($"Decreased Volume: {decreasedVolume}");
 
             await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
