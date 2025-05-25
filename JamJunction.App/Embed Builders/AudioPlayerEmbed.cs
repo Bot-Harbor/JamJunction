@@ -59,9 +59,10 @@ public class AudioPlayerEmbed
 
         embed.AddField(
             "Player Status",
-            $"Volume: `{queuedLavalinkPlayer.Volume * 100}` \n" +
+            $"Volume: `{Math.Round(queuedLavalinkPlayer.Volume * 100)}` \n" +
             $"Paused: `{playerState}` \n" +
-            $"Repeating Mode: `{queuedLavalinkPlayer.RepeatMode}` ", true);
+            $"Repeating Mode: `{queuedLavalinkPlayer.RepeatMode}` \n" +
+            $"Applied Filter: `{AppliedFilter(queuedLavalinkPlayer)}`", true);
 
         embed.AddField(
             "Queue Status",
@@ -200,9 +201,10 @@ public class AudioPlayerEmbed
 
         embed.AddField(
             "Player Status",
-            $"Volume: `{queuedLavalinkPlayer.Volume * 100}` \n" +
+            $"Volume: `{Math.Round(queuedLavalinkPlayer.Volume * 100)}` \n" +
             $"Paused: `{playerState}` \n" +
-            $"Repeating Mode: `{queuedLavalinkPlayer.RepeatMode}` ", true);
+            $"Repeating Mode: `{queuedLavalinkPlayer.RepeatMode}` \n" +
+            $"Applied Filter: `{AppliedFilter(queuedLavalinkPlayer)}`", true);
 
 
         embed.AddField(
@@ -666,5 +668,37 @@ public class AudioPlayerEmbed
     private TimeSpan RoundSeconds(TimeSpan timespan)
     {
         return TimeSpan.FromSeconds(Math.Round(timespan.TotalSeconds));
+    }
+
+    private string AppliedFilter(QueuedLavalinkPlayer queuedLavalinkPlayer)
+    {
+        if (queuedLavalinkPlayer.Filters.Timescale != null)
+        {
+            switch (queuedLavalinkPlayer.Filters.Timescale.Speed)
+            {
+                case 1.25f when
+                    queuedLavalinkPlayer.Filters.Timescale.Pitch == 1.2f &&
+                    queuedLavalinkPlayer.Filters.Timescale.Rate == 1.0f:
+                    return "Nightcore";
+                case 0.8f when
+                    queuedLavalinkPlayer.Filters.Timescale.Pitch == 0.85f &&
+                    queuedLavalinkPlayer.Filters.Timescale.Rate == 1.0f:
+                    return "Vaporwave";
+                case 0.5f:
+                    return "Slow Motion";
+            }
+        }
+        
+        if (queuedLavalinkPlayer.Filters.Karaoke != null)
+        {
+            return "Karaoke";
+        }
+        
+        if (queuedLavalinkPlayer.Filters.Rotation != null)
+        {
+            return "8D";
+        }
+        
+        return "None";
     }
 }
