@@ -37,86 +37,181 @@ public class PlatformHandler
     {
         if (query.Contains("spotify.com"))
         {
-            FullTrack fullTrack;
-
-            try
+            if (query.Contains("/album"))
             {
-                var config = SpotifyClientConfig.CreateDefault().WithAuthenticator(
-                    new ClientCredentialsAuthenticator(SpotifySecrets.ClientId, SpotifySecrets.ClientSecret));
+                FullAlbum fullAlbum;
 
-                var spotify = new SpotifyClient(config);
+                try
+                {
+                    var config = SpotifyClientConfig.CreateDefault().WithAuthenticator(
+                        new ClientCredentialsAuthenticator(SpotifySecrets.ClientId, SpotifySecrets.ClientSecret));
 
-                var trackId = Regex.Match(query, @"(?<=track/)[^?]+").Value;
-                fullTrack = await spotify.Tracks.Get(trackId);
-            }
-            catch (Exception)
-            {
-                fullTrack = null;
-            }
+                    var spotify = new SpotifyClient(config);
 
-            if (fullTrack == null)
-            {
+                    var albumId = Regex.Match(query, @"(?<=album/)[^?]+").Value;
+                    fullAlbum = await spotify.Albums.Get(albumId);
+                }
+                catch (Exception)
+                {
+                    fullAlbum = null;
+                }
+
+                if (fullAlbum == null)
+                {
+                    await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                            .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                    return;
+                }
+
+                foreach (var track in fullAlbum.Tracks.Items!.Take(25))
+                {
+                    var seekable = true;
+                    var liveStream = false;
+
+                    if (track.DurationMs == 0)
+                    {
+                        seekable = false;
+                        liveStream = true;
+                    }
+
+                    var author = track.Artists.FirstOrDefault()!.Name;
+                    var duration = TimeSpan.FromMilliseconds(track.DurationMs);
+                    var uri = $"https://open.spotify.com/track/{track.Id}";
+                    var artworkUri = fullAlbum.Images.FirstOrDefault()!.Url;
+
+                    var spotifyTrack = new LavalinkTrack()
+                    {
+                        SourceName = "spotify",
+                        Identifier = track.Id,
+                        IsSeekable = seekable,
+                        IsLiveStream = liveStream,
+                        Title = track.Name,
+                        Author = author,
+                        StartPosition = TimeSpan.Zero,
+                        Duration = duration,
+                        Uri = new Uri(uri),
+                        ArtworkUri = new Uri(artworkUri)
+                    };
+
+                    if (spotifyTrack.IsLiveStream)
+                    {
+                        await context
+                            .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                                .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                        return;
+                    }
+
+                    if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
+
+                    GuildData = Bot.GuildData[guildId];
+                    GuildData.TextChannelId = context.Channel.Id;
+
+                    await player.Queue.AddAsync(new TrackQueueItem(spotifyTrack));
+                }
+
+                if (GuildData.FirstSongInQueue)
+                {
+                    var firstTrack = player.Queue.FirstOrDefault()!.Track;
+                    await player.PlayAsync(firstTrack!, false);
+                    await player.Queue.RemoveAtAsync(0);
+
+                    await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                            new DiscordInteractionResponseBuilder(
+                                AudioPlayerEmbed.TrackInformation(firstTrack, player))));
+                    return;
+                }
+
+                var albumUrl = $"https://open.spotify.com/album/{fullAlbum.Id}";
                 await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.AudioTrackError(context)));
-                return;
+                        .AddEmbed(AudioPlayerEmbed
+                            .AlbumAddedToQueue(fullAlbum, albumUrl)));
             }
-
-            var seekable = true;
-            var liveStream = false;
-
-            if (fullTrack.DurationMs == 0)
+            else
             {
-                seekable = false;
-                liveStream = true;
-            }
+                FullTrack fullTrack;
 
-            var author = fullTrack.Artists.FirstOrDefault()!.Name;
-            var duration = TimeSpan.FromMilliseconds(fullTrack.DurationMs);
-            var uri = $"https://open.spotify.com/track/{fullTrack.Id}";
-            var artworkUri = fullTrack.Album.Images.FirstOrDefault()!.Url;
+                try
+                {
+                    var config = SpotifyClientConfig.CreateDefault().WithAuthenticator(
+                        new ClientCredentialsAuthenticator(SpotifySecrets.ClientId, SpotifySecrets.ClientSecret));
 
-            var youtubeTrack = new LavalinkTrack
-            {
-                SourceName = "spotify",
-                Identifier = fullTrack.Id,
-                IsSeekable = seekable,
-                IsLiveStream = liveStream,
-                Title = fullTrack.Name,
-                Author = author,
-                StartPosition = TimeSpan.Zero,
-                Duration = duration,
-                Uri = new Uri(uri),
-                ArtworkUri = new Uri(artworkUri)
-            };
+                    var spotify = new SpotifyClient(config);
 
-            if (youtubeTrack.IsLiveStream)
-            {
+                    var trackId = Regex.Match(query, @"(?<=track/)[^?]+").Value;
+                    fullTrack = await spotify.Tracks.Get(trackId);
+                }
+                catch (Exception)
+                {
+                    fullTrack = null;
+                }
+
+                if (fullTrack == null)
+                {
+                    await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                            .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                    return;
+                }
+
+                var seekable = true;
+                var liveStream = false;
+
+                if (fullTrack.DurationMs == 0)
+                {
+                    seekable = false;
+                    liveStream = true;
+                }
+
+                var author = fullTrack.Artists.FirstOrDefault()!.Name;
+                var duration = TimeSpan.FromMilliseconds(fullTrack.DurationMs);
+                var uri = $"https://open.spotify.com/track/{fullTrack.Id}";
+                var artworkUri = fullTrack.Album.Images.FirstOrDefault()!.Url;
+
+                var spotifyTrack = new LavalinkTrack
+                {
+                    SourceName = "spotify",
+                    Identifier = fullTrack.Id,
+                    IsSeekable = seekable,
+                    IsLiveStream = liveStream,
+                    Title = fullTrack.Name,
+                    Author = author,
+                    StartPosition = TimeSpan.Zero,
+                    Duration = duration,
+                    Uri = new Uri(uri),
+                    ArtworkUri = new Uri(artworkUri)
+                };
+
+                if (spotifyTrack.IsLiveStream)
+                {
+                    await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                            .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                    return;
+                }
+
+                if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
+
+                GuildData = Bot.GuildData[guildId];
+                GuildData.TextChannelId = context.Channel.Id;
+
+                await player.PlayAsync(spotifyTrack);
+
+                if (player.Queue.IsEmpty)
+                {
+                    await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                            new DiscordInteractionResponseBuilder(
+                                AudioPlayerEmbed.TrackInformation(spotifyTrack, player))));
+                    return;
+                }
+
                 await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.LiveSteamError(context)));
-                return;
+                        .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(spotifyTrack)));
             }
-
-            if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
-
-            GuildData = Bot.GuildData[guildId];
-            GuildData.TextChannelId = context.Channel.Id;
-
-            await player.PlayAsync(youtubeTrack);
-
-            if (player.Queue.IsEmpty)
-            {
-                await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(
-                            AudioPlayerEmbed.TrackInformation(youtubeTrack, player))));
-                return;
-            }
-
-            await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeTrack)));
         }
         else
         {
@@ -178,9 +273,10 @@ public class PlatformHandler
             {
                 video = await youtube.Videos.GetAsync(query);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 video = null;
+                Console.WriteLine(e);
             }
 
             if (video == null)
@@ -211,7 +307,7 @@ public class PlatformHandler
                 Title = video.Title,
                 Author = video.Author.ToString(),
                 StartPosition = TimeSpan.Zero,
-                Duration = (TimeSpan) video.Duration!,
+                Duration = (TimeSpan)video.Duration!,
                 Uri = new Uri(video.Url),
                 ArtworkUri = new Uri(artworkUri!)
             };
@@ -287,7 +383,7 @@ public class PlatformHandler
                 Title = video.Title,
                 Author = video.Author.ToString(),
                 StartPosition = TimeSpan.Zero,
-                Duration = (TimeSpan) video.Duration!,
+                Duration = (TimeSpan)video.Duration!,
                 Uri = new Uri(video.Url),
                 ArtworkUri = new Uri(artworkUri!)
             };
