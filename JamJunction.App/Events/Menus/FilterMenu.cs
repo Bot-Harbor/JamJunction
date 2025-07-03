@@ -106,9 +106,7 @@ public class FilterMenu : IMenu
                     case "reset":
                         player.Filters.Clear();
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-                        await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
+                        await channel.DeleteOriginalResponseAsync();
                         break;
                     case "nightcore":
                     {
@@ -122,9 +120,7 @@ public class FilterMenu : IMenu
 
                         player.Filters.Timescale = nightcore;
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-                        await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
+                        await channel.DeleteOriginalResponseAsync();
                         break;
                     }
                     case "8d":
@@ -137,9 +133,7 @@ public class FilterMenu : IMenu
 
                         player.Filters.Rotation = eightDFilter;
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-                        await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
+                        await channel.DeleteOriginalResponseAsync();
                         break;
                     }
                     case "vapor-wave":
@@ -154,9 +148,7 @@ public class FilterMenu : IMenu
 
                         player.Filters.Timescale = vaporwaveFilter;
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-                        await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
+                        await channel.DeleteOriginalResponseAsync();
                         break;
                     }
                     case "karaoke":
@@ -172,9 +164,7 @@ public class FilterMenu : IMenu
 
                         player.Filters.Karaoke = karaokeFilter;
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-                        await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
+                        await channel.DeleteOriginalResponseAsync();
                         break;
                     }
                     case "slow-motion":
@@ -187,17 +177,13 @@ public class FilterMenu : IMenu
 
                         player.Filters.Timescale = slowMotionFilter;
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-                        await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
+                        await channel.DeleteOriginalResponseAsync();
                         break;
                     }
                     default:
                         player.Filters.Clear();
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-                        await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Filter()));
+                        await channel.DeleteOriginalResponseAsync();
                         break;
                 }
         }
