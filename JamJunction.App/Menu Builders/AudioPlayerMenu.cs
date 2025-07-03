@@ -5,7 +5,7 @@ namespace JamJunction.App.Menu_Builders;
 
 public class AudioPlayerMenu
 {
-    public DiscordMessageBuilder Filters()
+    public DiscordSelectComponent Filters()
     {
         var options = new List<DiscordSelectComponentOption>
         {
@@ -18,15 +18,10 @@ public class AudioPlayerMenu
         };
 
         var menu = new DiscordSelectComponent("filters-menu", "Select filter to apply", options);
-
-        var builder = new DiscordMessageBuilder()
-            .WithContent(" ")
-            .AddComponents(menu);
-
-        return builder;
+        return menu;
     }
 
-    public DiscordMessageBuilder Queue(QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordSelectComponent SkipTo(QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var options = new List<DiscordSelectComponentOption>();
 
@@ -36,15 +31,10 @@ public class AudioPlayerMenu
                 $"By {queue.Track!.Author}"));
 
         var menu = new DiscordSelectComponent("queue-menu", "Select track to skip to", options);
-
-        var builder = new DiscordMessageBuilder()
-            .WithContent(" ")
-            .AddComponents(menu);
-
-        return builder;
+        return menu;
     }
 
-    public DiscordMessageBuilder Remove(QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordSelectComponent Remove(QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var options = new List<DiscordSelectComponentOption>();
 
@@ -54,11 +44,6 @@ public class AudioPlayerMenu
                 $"By {queue.Track!.Author}"));
 
         var menu = new DiscordSelectComponent("remove", "Select track to remove", options);
-
-        var builder = new DiscordMessageBuilder()
-            .WithContent(" ")
-            .AddComponents(menu);
-
-        return builder;
+        return menu;
     }
 }

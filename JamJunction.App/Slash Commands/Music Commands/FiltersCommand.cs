@@ -67,6 +67,7 @@ public class FiltersCommand : ApplicationCommandModule
             return;
         }
 
-        await context.FollowUpAsync(new DiscordFollowupMessageBuilder(audioPlayerMenu.Filters()));
+        await context.FollowUpAsync(new DiscordFollowupMessageBuilder(new DiscordMessageBuilder().WithContent(" ")
+            .AddComponents(audioPlayerMenu.Filters())));
     }
 }

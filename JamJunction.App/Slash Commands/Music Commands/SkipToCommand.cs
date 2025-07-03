@@ -75,6 +75,7 @@ public class SkipToCommand : ApplicationCommandModule
             return;
         }
 
-        await context.FollowUpAsync(new DiscordFollowupMessageBuilder(audioPlayerMenu.Queue(player)));
+        await context.FollowUpAsync(new DiscordFollowupMessageBuilder(new DiscordMessageBuilder().WithContent(" ")
+            .AddComponents(audioPlayerMenu.SkipTo(player))));
     }
 }
