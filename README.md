@@ -1,3 +1,7 @@
+![image](/Images/Discord%20Logo.png)
+
+---
+
 Jam Junction isn't just any Discord bot; it's your ultimate companion for orchestrating the perfect musical experience within your server. With Jam Junction, you can effortlessly queue up tracks, pause for those important moments, resume the groove, or even stop the playback altogether. Feel like shaking things up? Just hit shuffle and let the rhythm surprise you. Need to fine-tune the volume? Jam Junction's got you covered. From managing the queue to providing intricate details about the current song, this bot does it all. So why wait? Invite Jam Junction today and elevate your Discord server's atmosphere to a whole new level!
 
 Powered by [DSharpPlus 5.0.0](https://github.com/DSharpPlus/DSharpPlus), [Lavalink4NET 4.0.26](https://github.com/angelobreuer/Lavalink4NET), .NET 8, and [Docker](https://www.docker.com/).
