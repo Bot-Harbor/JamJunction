@@ -10,19 +10,25 @@ Powered by [DSharpPlus 5.0.0](https://github.com/DSharpPlus/DSharpPlus), [Lavali
 
 Want to invite Jam Junction to your server?
 
-[Add Jam Junction](https://discord.com/oauth2/authorize?client_id=1181700334561796227)
+🤖[Add Jam Junction](https://discord.com/oauth2/authorize?client_id=1181700334561796227)
 
 ---
 
 Check out Jam Junction on Top.gg!
 
-[Top.gg](https://top.gg/bot/1181700334561796227)
+🎩[Top.gg](https://top.gg/bot/1181700334561796227)
 
 ---
 
 Great and affordable resource for hosting images!
 
-[Digital Ocean](https://www.digitalocean.com)
+🌊[Digital Ocean](https://www.digitalocean.com)
+
+---
+
+Looking to donate?
+
+☕[Ko-fi](https://ko-fi.com/jamjunction)
 
 ---
 
