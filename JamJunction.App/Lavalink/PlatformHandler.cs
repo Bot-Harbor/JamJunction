@@ -14,6 +14,7 @@ using Lavalink4NET.Tracks;
 using SpotifyAPI.Web;
 using YoutubeExplode;
 using YoutubeExplode.Common;
+using YoutubeExplode.Playlists;
 using YoutubeExplode.Search;
 using YoutubeExplode.Videos;
 
@@ -35,6 +36,11 @@ public class PlatformHandler
     public async Task PlayFromSpotify(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
     {
+        var config = SpotifyClientConfig.CreateDefault().WithAuthenticator(
+            new ClientCredentialsAuthenticator(SpotifySecrets.ClientId, SpotifySecrets.ClientSecret));
+
+        var spotify = new SpotifyClient(config);
+
         if (query.Contains("spotify.com"))
         {
             if (query.Contains("/album"))
@@ -43,11 +49,6 @@ public class PlatformHandler
 
                 try
                 {
-                    var config = SpotifyClientConfig.CreateDefault().WithAuthenticator(
-                        new ClientCredentialsAuthenticator(SpotifySecrets.ClientId, SpotifySecrets.ClientSecret));
-
-                    var spotify = new SpotifyClient(config);
-
                     var albumId = Regex.Match(query, @"(?<=album/)[^?]+").Value;
                     fullAlbum = await spotify.Albums.Get(albumId);
                 }
@@ -135,11 +136,6 @@ public class PlatformHandler
 
                 try
                 {
-                    var config = SpotifyClientConfig.CreateDefault().WithAuthenticator(
-                        new ClientCredentialsAuthenticator(SpotifySecrets.ClientId, SpotifySecrets.ClientSecret));
-
-                    var spotify = new SpotifyClient(config);
-
                     var trackId = Regex.Match(query, @"(?<=track/)[^?]+").Value;
                     fullTrack = await spotify.Tracks.Get(trackId);
                 }
@@ -267,78 +263,165 @@ public class PlatformHandler
 
         if (query.Contains("youtube.com"))
         {
-            Video video;
+            if (query.Contains("/playlist"))
+            {
+                IReadOnlyList<PlaylistVideo> playlist;
+                Playlist playlistData;
 
-            try
-            {
-                video = await youtube.Videos.GetAsync(query);
-            }
-            catch (Exception e)
-            {
-                video = null;
-                Console.WriteLine(e);
-            }
+                try
+                {
+                    playlist = await youtube.Playlists.GetVideosAsync(query);
+                    playlistData = await youtube.Playlists.GetAsync(query);
+                }
+                catch (Exception)
+                {
+                    playlist = null;
+                    playlistData = null;
+                }
 
-            if (video == null)
-            {
+                if (playlist == null || playlistData == null)
+                {
+                    await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                            .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                    return;
+                }
+
+                foreach (var video in playlist.Take(25))
+                {
+                    var seekable = true;
+                    var liveStream = false;
+
+                    if (video.Duration == TimeSpan.Zero)
+                    {
+                        seekable = false;
+                        liveStream = true;
+                    }
+
+                    var artworkUri = video.Thumbnails.FirstOrDefault()?.Url!;
+
+                    var youtubeVideo = new LavalinkTrack
+                    {
+                        SourceName = "youtube",
+                        Identifier = video.Id,
+                        IsSeekable = seekable,
+                        IsLiveStream = liveStream,
+                        Title = video.Title,
+                        Author = video.Author.ToString(),
+                        StartPosition = TimeSpan.Zero,
+                        Duration = (TimeSpan)video.Duration!,
+                        Uri = new Uri(video.Url),
+                        ArtworkUri = new Uri(artworkUri!)
+                    };
+
+                    if (youtubeVideo.IsLiveStream)
+                    {
+                        await context
+                            .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                                .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                        return;
+                    }
+
+                    if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
+
+                    GuildData = Bot.GuildData[guildId];
+                    GuildData.TextChannelId = context.Channel.Id;
+
+                    await player.Queue.AddAsync(new TrackQueueItem(youtubeVideo));
+                }
+
+                if (GuildData.FirstSongInQueue)
+                {
+                    var firstTrack = player.Queue.FirstOrDefault()!.Track;
+                    await player.PlayAsync(firstTrack!, false);
+                    await player.Queue.RemoveAtAsync(0);
+
+                    await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                            new DiscordInteractionResponseBuilder(
+                                AudioPlayerEmbed.TrackInformation(firstTrack, player))));
+                    return;
+                }
+
                 await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.AudioTrackError(context)));
-                return;
+                        .AddEmbed(AudioPlayerEmbed
+                            .PlaylistAddedToQueue(playlistData)));
             }
-
-            var seekable = true;
-            var liveStream = false;
-
-            if (video.Duration == TimeSpan.Zero)
+            else
             {
-                seekable = false;
-                liveStream = true;
-            }
+                Video video;
 
-            var artworkUri = video.Thumbnails.FirstOrDefault()?.Url!;
+                try
+                {
+                    video = await youtube.Videos.GetAsync(query);
+                }
+                catch (Exception)
+                {
+                    video = null;
+                }
 
-            var youtubeTrack = new LavalinkTrack
-            {
-                SourceName = "youtube",
-                Identifier = video.Id,
-                IsSeekable = seekable,
-                IsLiveStream = liveStream,
-                Title = video.Title,
-                Author = video.Author.ToString(),
-                StartPosition = TimeSpan.Zero,
-                Duration = (TimeSpan)video.Duration!,
-                Uri = new Uri(video.Url),
-                ArtworkUri = new Uri(artworkUri!)
-            };
+                if (video == null)
+                {
+                    await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                            .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                    return;
+                }
 
-            if (youtubeTrack.IsLiveStream)
-            {
+                var seekable = true;
+                var liveStream = false;
+
+                if (video.Duration == TimeSpan.Zero)
+                {
+                    seekable = false;
+                    liveStream = true;
+                }
+
+                var artworkUri = video.Thumbnails.FirstOrDefault()?.Url!;
+
+                var youtubeVideo = new LavalinkTrack
+                {
+                    SourceName = "youtube",
+                    Identifier = video.Id,
+                    IsSeekable = seekable,
+                    IsLiveStream = liveStream,
+                    Title = video.Title,
+                    Author = video.Author.ToString(),
+                    StartPosition = TimeSpan.Zero,
+                    Duration = (TimeSpan)video.Duration!,
+                    Uri = new Uri(video.Url),
+                    ArtworkUri = new Uri(artworkUri!)
+                };
+
+                if (youtubeVideo.IsLiveStream)
+                {
+                    await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                            .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                    return;
+                }
+
+                if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
+
+                GuildData = Bot.GuildData[guildId];
+                GuildData.TextChannelId = context.Channel.Id;
+
+                await player.PlayAsync(youtubeVideo);
+
+                if (player.Queue.IsEmpty)
+                {
+                    await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                            new DiscordInteractionResponseBuilder(
+                                AudioPlayerEmbed.TrackInformation(youtubeVideo, player))));
+                    return;
+                }
+
                 await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.LiveSteamError(context)));
-                return;
+                        .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo)));
             }
-
-            if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
-
-            GuildData = Bot.GuildData[guildId];
-            GuildData.TextChannelId = context.Channel.Id;
-
-            await player.PlayAsync(youtubeTrack);
-
-            if (player.Queue.IsEmpty)
-            {
-                await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(
-                            AudioPlayerEmbed.TrackInformation(youtubeTrack, player))));
-                return;
-            }
-
-            await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeTrack)));
         }
         else
         {
@@ -374,7 +457,7 @@ public class PlatformHandler
 
             var artworkUri = video.Thumbnails.FirstOrDefault()?.Url!;
 
-            var youtubeTrack = new LavalinkTrack
+            var youtubeVideo = new LavalinkTrack
             {
                 SourceName = "youtube",
                 Identifier = video.Id,
@@ -388,7 +471,7 @@ public class PlatformHandler
                 ArtworkUri = new Uri(artworkUri!)
             };
 
-            if (youtubeTrack.IsLiveStream)
+            if (youtubeVideo.IsLiveStream)
             {
                 await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -401,20 +484,20 @@ public class PlatformHandler
             GuildData = Bot.GuildData[guildId];
             GuildData.TextChannelId = context.Channel.Id;
 
-            await player.PlayAsync(youtubeTrack);
+            await player.PlayAsync(youtubeVideo);
 
             if (player.Queue.IsEmpty)
             {
                 await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
-                            AudioPlayerEmbed.TrackInformation(youtubeTrack, player))));
+                            AudioPlayerEmbed.TrackInformation(youtubeVideo, player))));
                 return;
             }
 
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeTrack)));
+                    .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo)));
         }
     }
 

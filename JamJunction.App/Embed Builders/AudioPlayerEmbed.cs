@@ -6,6 +6,7 @@ using JamJunction.App.Menu_Builders;
 using Lavalink4NET.Integrations.Lavasrc;
 using Lavalink4NET.Players.Queued;
 using SpotifyAPI.Web;
+using YoutubeExplode.Playlists;
 using LavalinkTrack = Lavalink4NET.Tracks.LavalinkTrack;
 
 namespace JamJunction.App.Embed_Builders;
@@ -119,7 +120,7 @@ public class AudioPlayerEmbed
         (
             ButtonStyle.Secondary, "shuffle", "🔀"
         );
-        
+
         var repeatButton = new DiscordButtonComponent
         (
             ButtonStyle.Secondary, "repeat", "🔁"
@@ -268,7 +269,7 @@ public class AudioPlayerEmbed
         (
             ButtonStyle.Secondary, "shuffle", "🔀"
         );
-        
+
         var repeatButton = new DiscordButtonComponent
         (
             ButtonStyle.Secondary, "repeat", "🔁"
@@ -318,6 +319,17 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    public DiscordEmbedBuilder TrackAddedToQueue(ExtendedLavalinkTrack track)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Title = "Added To The Queue 🎵",
+            Description = $"ılı   •  [{track!.Title}]({track.Uri}) - By **{track.Author}**",
+            Color = DiscordColor.Cyan
+        };
+        return embed;
+    }
+
     public DiscordEmbedBuilder AlbumAddedToQueue(FullAlbum fullAlbum, string albumUrl)
     {
         var artistName = fullAlbum.Artists.FirstOrDefault()!.Name;
@@ -331,12 +343,14 @@ public class AudioPlayerEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder TrackAddedToQueue(ExtendedLavalinkTrack track)
+    public DiscordEmbedBuilder PlaylistAddedToQueue(Playlist playlist)
     {
+        var channelTitle = playlist.Author!.ChannelTitle;
+
         var embed = new DiscordEmbedBuilder
         {
             Title = "Added To The Queue 🎵",
-            Description = $"ılı   •  [{track!.Title}]({track.Uri}) - By **{track.Author}**",
+            Description = $"ılı   •  [{playlist.Title}]({playlist.Url}) - By **{channelTitle}**",
             Color = DiscordColor.Cyan
         };
         return embed;
@@ -690,7 +704,7 @@ public class AudioPlayerEmbed
 
         return embed;
     }
-    
+
     public DiscordEmbedBuilder Filter()
     {
         var embed = new DiscordEmbedBuilder
