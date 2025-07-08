@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using JamJunction.App.Embed_Builders;
 using JamJunction.App.Lavalink;
 using Lavalink4NET;
@@ -40,6 +41,11 @@ public class TrackStartedEvent
         
         var message = guildData.Message;
         await channel.DeleteMessageAsync(message);
+        
+        List<DiscordMessage> messages = null;
+        messages.Add(message);
+        
+        await channel.DeleteMessagesAsync(messages);
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         message = await channel.SendMessageAsync(audioPlayerEmbed.TrackInformation(track, player));
