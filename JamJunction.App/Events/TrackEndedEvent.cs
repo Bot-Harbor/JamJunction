@@ -32,8 +32,10 @@ public class TrackEndedEvent
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
         var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, true);
 
+        var message = guildData.Message;
         if (eventargs.Reason == TrackEndReason.Stopped)
         {
+            await channel.DeleteMessageAsync(message);
             Bot.GuildData.Remove(guildId);
             return;
         }
@@ -41,6 +43,7 @@ public class TrackEndedEvent
         if (player.State == PlayerState.NotPlaying)
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
+            await channel.DeleteMessageAsync(message);
             await channel.SendMessageAsync(audioPlayerEmbed.QueueSomething());
             Bot.GuildData.Remove(guildId);
         }

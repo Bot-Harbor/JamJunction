@@ -37,8 +37,12 @@ public class TrackStartedEvent
             guildData.FirstSongInQueue = false;
             return;
         }
+        
+        var message = guildData.Message;
+        await channel.DeleteMessageAsync(message);
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
-        await channel.SendMessageAsync(audioPlayerEmbed.TrackInformation(track, player));
+        message = await channel.SendMessageAsync(audioPlayerEmbed.TrackInformation(track, player));
+        guildData.Message = message;
     }
 }

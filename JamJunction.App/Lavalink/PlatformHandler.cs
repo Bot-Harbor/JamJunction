@@ -17,6 +17,7 @@ using YoutubeExplode.Common;
 using YoutubeExplode.Playlists;
 using YoutubeExplode.Search;
 using YoutubeExplode.Videos;
+using Playlist = YoutubeExplode.Playlists.Playlist;
 
 namespace JamJunction.App.Lavalink;
 
@@ -117,10 +118,11 @@ public class PlatformHandler
                     await player.PlayAsync(firstTrack!, false);
                     await player.Queue.RemoveAtAsync(0);
 
-                    await context
+                    var message = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(firstTrack, player))));
+                    GuildData.Message = message;
                     return;
                 }
 
@@ -197,10 +199,11 @@ public class PlatformHandler
 
                 if (player.Queue.IsEmpty)
                 {
-                    await context
+                    var message = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(spotifyTrack, player))));
+                    GuildData.Message = message;
                     return;
                 }
 
@@ -243,10 +246,11 @@ public class PlatformHandler
 
             if (player.Queue.IsEmpty)
             {
-                await context
+                var message = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
                             AudioPlayerEmbed.TrackInformation(spotifyTrack, player))));
+                GuildData.Message = message;
                 return;
             }
 
@@ -265,7 +269,7 @@ public class PlatformHandler
         {
             if (query.Contains("/playlist"))
             {
-                IReadOnlyList<PlaylistVideo> playlist;
+                IEnumerable<PlaylistVideo> playlist;
                 Playlist playlistData;
 
                 try
@@ -279,7 +283,7 @@ public class PlatformHandler
                     playlistData = null;
                 }
 
-                if (playlist == null || playlistData == null)
+                if (playlist == null)
                 {
                     await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -336,10 +340,11 @@ public class PlatformHandler
                     await player.PlayAsync(firstTrack!, false);
                     await player.Queue.RemoveAtAsync(0);
 
-                    await context
+                    var message = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(firstTrack, player))));
+                    GuildData.Message = message;
                     return;
                 }
 
@@ -411,10 +416,11 @@ public class PlatformHandler
 
                 if (player.Queue.IsEmpty)
                 {
-                    await context
+                    var message = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(youtubeVideo, player))));
+                    GuildData.Message = message;
                     return;
                 }
 
@@ -425,7 +431,7 @@ public class PlatformHandler
         }
         else
         {
-            IReadOnlyList<VideoSearchResult> videos;
+            IEnumerable<VideoSearchResult> videos;
 
             try
             {
@@ -488,10 +494,11 @@ public class PlatformHandler
 
             if (player.Queue.IsEmpty)
             {
-                await context
+                var message = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
                             AudioPlayerEmbed.TrackInformation(youtubeVideo, player))));
+                GuildData.Message = message;
                 return;
             }
 
@@ -504,41 +511,54 @@ public class PlatformHandler
     public async Task PlayFromSoundCloud(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
     {
-        var soundcloudTrack = await _audioService.Tracks.LoadTrackAsync(query!, TrackSearchMode.SoundCloud);
-
-        if (soundcloudTrack == null)
+        if (query.Contains("soundcloud.com")) // Change to /playlists or something
         {
+            //REMOVE NUGET PACKAGE BEFORE COMMITING!!!
+
+            //var result = await _apiClient.SearchAsync(query);
+
+            //Console.WriteLine($"Loaded playlist: {result.Tracks} tracks");
+        }
+        else
+        {
+            var soundcloudTrack = await _audioService.Tracks.LoadTrackAsync(query!, TrackSearchMode.SoundCloud);
+
+            if (soundcloudTrack == null)
+            {
+                await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                        .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                return;
+            }
+
+            if (soundcloudTrack.IsLiveStream)
+            {
+                await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                        .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                return;
+            }
+
+            if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
+
+            GuildData = Bot.GuildData[guildId];
+            GuildData.TextChannelId = context.Channel.Id;
+
+            await player.PlayAsync(soundcloudTrack!);
+
+            if (player.Queue.IsEmpty)
+            {
+                var message = await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                        new DiscordInteractionResponseBuilder(
+                            AudioPlayerEmbed.TrackInformation(soundcloudTrack, player))));
+                GuildData.Message = message;
+                return;
+            }
+
             await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(ErrorEmbed.AudioTrackError(context)));
-            return;
+                    .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(soundcloudTrack)));
         }
-
-        if (soundcloudTrack.IsLiveStream)
-        {
-            await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(ErrorEmbed.LiveSteamError(context)));
-            return;
-        }
-
-        if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
-
-        GuildData = Bot.GuildData[guildId];
-        GuildData.TextChannelId = context.Channel.Id;
-
-        await player.PlayAsync(soundcloudTrack!);
-
-        if (player.Queue.IsEmpty)
-        {
-            await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                    new DiscordInteractionResponseBuilder(AudioPlayerEmbed.TrackInformation(soundcloudTrack, player))));
-            return;
-        }
-
-        await context
-            .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(soundcloudTrack)));
     }
 }
