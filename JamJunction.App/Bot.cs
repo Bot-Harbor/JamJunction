@@ -32,24 +32,7 @@ internal sealed class Bot : BackgroundService
         SlashCommands();
         ButtonEvents();
         MenuEvents();
-
-        var trackStartedEvent = new TrackStartedEvent(_discordClient, _audioService);
-        _audioService.TrackStarted += trackStartedEvent.TrackStarted;
-
-        var trackEndedEvent = new TrackEndedEvent(_discordClient, _audioService);
-        _audioService.TrackEnded += trackEndedEvent.TrackEnded;
-
-        var trackStuckEvent = new TrackStuckEvent(_discordClient, _audioService);
-        _audioService.TrackStuck += trackStuckEvent.TrackStuck;
-
-        var connectionClosedEvent = new ConnectionClosedEvent();
-        _audioService.ConnectionClosed += connectionClosedEvent.ConnectionClosed;
-
-        var playerDestroyedEvent = new PlayerDestroyedEvent();
-        _audioService.Players.PlayerDestroyed += playerDestroyedEvent.PlayerDestroyed;
-
-        var voiceStateUpdatedEvent = new VoiceStateUpdatedEvent(_audioService);
-        _discordClient.VoiceStateUpdated += voiceStateUpdatedEvent.VoiceStateUpdated;
+        AudioPlayerEvents();
     }
 
     private void SlashCommands()
@@ -108,5 +91,26 @@ internal sealed class Bot : BackgroundService
             await menuHandler.Execute(new SkipToMenu(_audioService, _discordClient), sender, args);
             await menuHandler.Execute(new RemoveMenu(_audioService, _discordClient), sender, args);
         };
+    }
+    
+    private void AudioPlayerEvents()
+    {
+        var trackStartedEvent = new TrackStartedEvent(_discordClient, _audioService);
+        _audioService.TrackStarted += trackStartedEvent.TrackStarted;
+
+        var trackEndedEvent = new TrackEndedEvent(_discordClient, _audioService);
+        _audioService.TrackEnded += trackEndedEvent.TrackEnded;
+
+        var trackStuckEvent = new TrackStuckEvent(_discordClient, _audioService);
+        _audioService.TrackStuck += trackStuckEvent.TrackStuck;
+
+        var connectionClosedEvent = new ConnectionClosedEvent();
+        _audioService.ConnectionClosed += connectionClosedEvent.ConnectionClosed;
+
+        var playerDestroyedEvent = new PlayerDestroyedEvent(_discordClient);
+        _audioService.Players.PlayerDestroyed += playerDestroyedEvent.PlayerDestroyed;
+
+        var voiceStateUpdatedEvent = new VoiceStateUpdatedEvent(_audioService);
+        _discordClient.VoiceStateUpdated += voiceStateUpdatedEvent.VoiceStateUpdated;
     }
 }
