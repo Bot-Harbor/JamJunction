@@ -125,17 +125,17 @@ public class AudioPlayerEmbed
 
         var restartButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "restart", "🔄"
+            ButtonStyle.Secondary, "restart", "↻"
         );
 
         var shuffleButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "shuffle", "🔀"
+            ButtonStyle.Secondary, "shuffle", "⇌"
         );
 
         var repeatButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "repeat", "🔁"
+            ButtonStyle.Secondary, "repeat", "⇄"
         );
 
         var buttons = new List<DiscordComponent>
@@ -275,17 +275,17 @@ public class AudioPlayerEmbed
 
         var restartButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "restart", "🔄"
+            ButtonStyle.Secondary, "restart", "↻"
         );
 
         var shuffleButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "shuffle", "🔀"
+            ButtonStyle.Secondary, "shuffle", "⇌"
         );
 
         var repeatButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "repeat", "🔁"
+            ButtonStyle.Secondary, "repeat", "⇄"
         );
 
         var buttons = new List<DiscordComponent>
@@ -473,7 +473,7 @@ public class AudioPlayerEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"⬜   • ``{context.Member.Username}`` stopped the player.",
+            Description = $"⏹   • ``{context.Member.Username}`` stopped the player.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -483,7 +483,7 @@ public class AudioPlayerEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"⬜   • ``{btnInteractionArgs.User.Username}`` stopped the player.",
+            Description = $"⏹   • ``{btnInteractionArgs.User.Username}`` stopped the player.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -541,7 +541,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🔄   • ``{context.Member.Username}`` restarted the track.",
+                $"↻   • ``{context.Member.Username}`` restarted the track.",
             Color = DiscordColor.Orange
         };
         return embed;
@@ -552,7 +552,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🔄   • ``{btnInteractionArgs.User.Username}`` restarted the track.",
+                $"↻   • ``{btnInteractionArgs.User.Username}`` restarted the track.",
             Color = DiscordColor.Orange
         };
         return embed;
@@ -573,7 +573,7 @@ public class AudioPlayerEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Title = " 🎵  Queue List:",
+            Title = "☰  Queue List:",
             Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
@@ -611,7 +611,7 @@ public class AudioPlayerEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Title = " 🎵  Queue List:",
+            Title = "☰  Queue List:",
             Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
@@ -649,7 +649,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🔀  • ``{context.Member.Username}`` shuffled the queue.",
+                $"⇌  • ``{context.Member.Username}`` shuffled the queue.",
             Color = DiscordColor.Cyan
         };
         return embed;
@@ -660,7 +660,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🔀  • ``{btnInteractionArgs.User.Username}`` shuffled the queue.",
+                $"⇌  • ``{btnInteractionArgs.User.Username}`` shuffled the queue.",
             Color = DiscordColor.Cyan
         };
         return embed;
@@ -671,7 +671,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"⏭️  • ``{context.Member.Username}`` skipped to the next track.",
+                $"⏭  • ``{context.Member.Username}`` skipped to the next track.",
             Color = DiscordColor.Cyan
         };
         return embed;
@@ -682,7 +682,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"⏭️  • ``{btnInteractionArgs.User.Username}`` skipped to the next track.",
+                $"⏭  • ``{btnInteractionArgs.User.Username}`` skipped to the next track.",
             Color = DiscordColor.Cyan
         };
         return embed;
@@ -696,7 +696,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"⏭️  • ``{menuInteractionArgs.User.Username}`` skipped to ``{track!.Track!.Title}``.",
+                $"⏭  • ``{menuInteractionArgs.User.Username}`` skipped to ``{track!.Track!.Title}``.",
             Color = DiscordColor.Cyan
         };
         return embed;
@@ -738,21 +738,21 @@ public class AudioPlayerEmbed
             embed = new DiscordEmbedBuilder
             {
                 Description =
-                    $" 🔁  • ``{context.Member.Username}`` enabled repeat track mode.",
+                    $" ⇄  • ``{context.Member.Username}`` enabled repeat track mode.",
                 Color = DiscordColor.Cyan
             };
         else if (queuedLavalinkPlayer.RepeatMode == TrackRepeatMode.Queue)
             embed = new DiscordEmbedBuilder
             {
                 Description =
-                    $" 🔁  • ``{context.Member.Username}`` enabled repeat queue mode.",
+                    $" ⇄  • ``{context.Member.Username}`` enabled repeat queue mode.",
                 Color = DiscordColor.Cyan
             };
         else
             embed = new DiscordEmbedBuilder
             {
                 Description =
-                    $" 🔁  • ``{context.Member.Username}`` disabled repeat mode.",
+                    $" ⇄  • ``{context.Member.Username}`` disabled repeat mode.",
                 Color = DiscordColor.Cyan
             };
 
@@ -764,7 +764,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $" 🔁  • ``{btnInteractionArgs.User.Username}`` enabled repeat track mode.",
+                $" ⇄  • ``{btnInteractionArgs.User.Username}`` enabled repeat track mode.",
             Color = DiscordColor.Cyan
         };
 
@@ -776,7 +776,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $" 🔁  • ``{btnInteractionArgs.User.Username}`` disabled repeat mode.",
+                $" ⇄  • ``{btnInteractionArgs.User.Username}`` disabled repeat mode.",
             Color = DiscordColor.Cyan
         };
 
@@ -786,8 +786,6 @@ public class AudioPlayerEmbed
     public DiscordEmbedBuilder Remove(ComponentInteractionCreateEventArgs menuInteractionArgs,
         QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
-        var track = queuedLavalinkPlayer.CurrentItem;
-
         var embed = new DiscordEmbedBuilder
         {
             Description =

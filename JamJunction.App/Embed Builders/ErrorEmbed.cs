@@ -71,7 +71,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊 • There is no player in the voice channel.",
+            Description = $"📻 • There is no player in the voice channel.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -81,7 +81,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊 • There is no player in the voice channel.",
+            Description = $"📻 • There is no player in the voice channel.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -91,7 +91,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"\ud83c\udfb5 • There are no tracks currently playing.",
+            Description = $"🎵 • There are no tracks currently playing.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -102,7 +102,7 @@ public class ErrorEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"\ud83c\udfb5 • There are no tracks currently playing.",
+                $"🎵 • There are no tracks currently playing.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -112,7 +112,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"\ud83c\udfb5 • Failed to find music data.",
+            Description = $"🔴 • Failed to find music data.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -122,7 +122,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"\ud83d\udd34 • You can not play a livestream.",
+            Description = $"🔴 • You can not play a livestream.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -162,7 +162,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  The volume is already at its minimum.",
+            Description = $"🔉  •  The volume is already at its minimum.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -192,7 +192,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  The number for the time must be a whole number.",
+            Description = $"🕒  •  The number for the time must be a whole number.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -203,7 +203,7 @@ public class ErrorEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🔊  •  The time you are seeking for is larger than the duration of the track.",
+                $"🕒  •  The time you are seeking for is larger than the duration of the track.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -213,7 +213,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • There are no tracks to skip to.",
+            Description = $"⏭ • There are no tracks to skip to.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -223,7 +223,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • There are no tracks to skip to.",
+            Description = $"⏭ • There are no tracks to skip to.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -233,7 +233,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔀 • There are no tracks in the queue to shuffle.",
+            Description = $"⇌ • There are no tracks in the queue to shuffle.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -243,7 +243,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔀 • There are no tracks in the queue to shuffle.",
+            Description = $"⇌ • There are no tracks in the queue to shuffle.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -253,7 +253,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • The queue is full. The max capacity is 25 tracks.",
+            Description = $"☰ • The queue is full. The max capacity is 25 tracks.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -263,7 +263,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🎵 • There are no tracks in the queue to remove.",
+            Description = $"🗑️ • There are no tracks in the queue to remove.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -273,7 +273,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = "\u274c • Track failed to load. Reattempting to connect in 5 seconds.",
+            Description = "❌ • Track failed to load. Reattempting to connect in 5 seconds.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -283,7 +283,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = "\u274c • Attempt to load track again failed. The audio player has been reset.",
+            Description = "❌ • Attempt to load track again failed. The audio player has been reset.",
             Color = DiscordColor.Red
         };
         return embed;
