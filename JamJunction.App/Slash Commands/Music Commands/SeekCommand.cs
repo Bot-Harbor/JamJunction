@@ -110,6 +110,15 @@ public class SeekCommand : ApplicationCommandModule
         }
 
         await player.SeekAsync(TimeSpan.FromSeconds(time));
+        
+        var guildData = Bot.GuildData[guildId];
+        _ = context.Channel.DeleteMessageAsync(guildData.Message);
+
+        var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+            new DiscordInteractionResponseBuilder(
+                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
+            
+        guildData.Message = guildMessage;
 
         var message = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
