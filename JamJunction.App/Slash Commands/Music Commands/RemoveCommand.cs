@@ -19,9 +19,8 @@ public class RemoveCommand : ApplicationCommandModule
     [SlashCommand("remove", "Removes a track from the queue.")]
     public async Task RemoveCommandAsync(InteractionContext context)
     {
-        await context.DeferAsync();
+        await context.DeferAsync(true);
 
-        var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
         var audioPlayerMenu = new AudioPlayerMenu();
 
@@ -30,9 +29,11 @@ public class RemoveCommand : ApplicationCommandModule
 
         if (userVoiceChannel == null)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -41,17 +42,21 @@ public class RemoveCommand : ApplicationCommandModule
 
         if (botVoiceChannel == false)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
         if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -61,17 +66,21 @@ public class RemoveCommand : ApplicationCommandModule
 
         if (player == null)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
         if (player.Queue.IsEmpty)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.RemoveError(context)));
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 

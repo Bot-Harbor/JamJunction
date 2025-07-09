@@ -44,17 +44,21 @@ public class RepeatButton : IButton
 
                 if (UserVoiceChannel == null)
                 {
-                    await channel.CreateFollowupMessageAsync(
+                    var errorMessage = await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
                             errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
+                    await Task.Delay(10000);
+                    await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
                 }
             }
             catch (Exception)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -64,9 +68,11 @@ public class RepeatButton : IButton
 
             if (botVoiceChannel == false)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoPlayerError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -74,9 +80,11 @@ public class RepeatButton : IButton
 
             if (UserVoiceChannel!.Id != botVoiceState.Channel!.Id)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -86,17 +94,21 @@ public class RepeatButton : IButton
 
             if (player == null)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoConnectionError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
             if (player!.CurrentTrack == null)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoAudioTrackError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -109,17 +121,22 @@ public class RepeatButton : IButton
             {
                 player!.RepeatMode = TrackRepeatMode.None;
 
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         audioPlayerEmbed.DisableRepeat(btnInteractionArgs)));
+                await Task.Delay(10000);
+                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
             player!.RepeatMode = TrackRepeatMode.Track;
 
-            await channel.CreateFollowupMessageAsync(
+            var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.EnableRepeat(btnInteractionArgs)));
+            
+            await Task.Delay(10000);
+            await channel.DeleteFollowupMessageAsync(message.Id);
         }
     }
 }

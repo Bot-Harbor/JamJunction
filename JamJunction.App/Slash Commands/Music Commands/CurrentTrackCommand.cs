@@ -26,11 +26,15 @@ public class CurrentTrackCommand : ApplicationCommandModule
         var guildId = context.Guild.Id;
         var userVoiceChannel = context.Member?.VoiceState?.Channel;
 
+        var channel = context.Channel;
+
         if (userVoiceChannel == null)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -39,17 +43,21 @@ public class CurrentTrackCommand : ApplicationCommandModule
 
         if (botVoiceChannel == false)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
+            await Task.Delay(10000);
+            await channel.DeleteMessageAsync(errorMessage);
             return;
         }
 
         if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
+            await Task.Delay(10000);
+            await channel.DeleteMessageAsync(errorMessage);
             return;
         }
 
@@ -59,24 +67,34 @@ public class CurrentTrackCommand : ApplicationCommandModule
 
         if (player == null)
         {
-            await context.FollowUpAsync(
+           var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
+            await Task.Delay(10000);
+            await channel.DeleteMessageAsync(errorMessage);
             return;
         }
 
         if (player!.CurrentTrack == null)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoAudioTrackError(context)));
+            await Task.Delay(10000);
+            await channel.DeleteMessageAsync(errorMessage);
             return;
         }
 
         var track = player.CurrentTrack;
 
-        await context
+        var guildData = Bot.GuildData[guildId];
+        
+        channel = context.Channel;
+        await channel.DeleteMessageAsync(guildData.Message);
+        
+        var message = await context
             .FollowUpAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(audioPlayerEmbed.TrackInformation(track, player))));
+        guildData.Message = message;
     }
 }

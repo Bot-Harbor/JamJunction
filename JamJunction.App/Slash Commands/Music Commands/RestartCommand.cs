@@ -25,12 +25,14 @@ public class RestartCommand : ApplicationCommandModule
 
         var guildId = context.Guild.Id;
         var userVoiceChannel = context.Member?.VoiceState?.Channel;
-
+        
         if (userVoiceChannel == null)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -39,17 +41,21 @@ public class RestartCommand : ApplicationCommandModule
 
         if (botVoiceChannel == false)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
         if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -59,24 +65,31 @@ public class RestartCommand : ApplicationCommandModule
 
         if (player == null)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
         if (player!.CurrentTrack == null)
         {
-            await context.FollowUpAsync(
+            var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoAudioTrackError(context)));
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
         await player!.SeekAsync(TimeSpan.FromSeconds(0));
 
-        await context.FollowUpAsync(
+        var message = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Restart(context)));
+
+        await Task.Delay(10000);
+        await context.DeleteFollowupAsync(message.Id);
     }
 }

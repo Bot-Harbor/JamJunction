@@ -43,17 +43,21 @@ public class ResumeButton : IButton
 
                 if (UserVoiceChannel == null)
                 {
-                    await channel.CreateFollowupMessageAsync(
+                    var errorMessage = await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
                             errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
+                    await Task.Delay(10000);
+                    await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
                 }
             }
             catch (Exception)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -63,9 +67,11 @@ public class ResumeButton : IButton
 
             if (botVoiceChannel == false)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoPlayerError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -73,9 +79,11 @@ public class ResumeButton : IButton
 
             if (UserVoiceChannel!.Id != botVoiceState.Channel!.Id)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -85,25 +93,32 @@ public class ResumeButton : IButton
 
             if (player == null)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoConnectionError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
             if (player!.CurrentTrack == null)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoAudioTrackError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
             await player!.ResumeAsync();
 
-            await channel.CreateFollowupMessageAsync(
+            var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.Resume(btnInteractionArgs)));
+            
+            await Task.Delay(10000);
+            await channel.DeleteFollowupMessageAsync(message.Id);
         }
     }
 }

@@ -33,6 +33,7 @@ public class PlatformHandler
     private GuildData GuildData { get; set; }
     private AudioPlayerEmbed AudioPlayerEmbed { get; } = new();
     private ErrorEmbed ErrorEmbed { get; } = new();
+    private DiscordMessage DiscordMessage { get; set; }
 
     public async Task PlayFromSpotify(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
@@ -41,7 +42,9 @@ public class PlatformHandler
             new ClientCredentialsAuthenticator(SpotifySecrets.ClientId, SpotifySecrets.ClientSecret));
 
         var spotify = new SpotifyClient(config);
-
+        
+        var channel = context.Channel;
+        
         if (query.Contains("spotify.com"))
         {
             if (query.Contains("/album"))
@@ -60,12 +63,14 @@ public class PlatformHandler
 
                 if (fullAlbum == null)
                 {
-                    await context
+                    var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                    await Task.Delay(10000);
+                    await channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
-
+                
                 foreach (var track in fullAlbum.Tracks.Items!.Take(25))
                 {
                     var seekable = true;
@@ -98,9 +103,11 @@ public class PlatformHandler
 
                     if (spotifyTrack.IsLiveStream)
                     {
-                        await context
+                        var errorMessage = await context
                             .FollowUpAsync(new DiscordFollowupMessageBuilder()
                                 .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                        await Task.Delay(10000);
+                        await channel.DeleteMessageAsync(errorMessage);
                         return;
                     }
 
@@ -111,26 +118,29 @@ public class PlatformHandler
 
                     await player.Queue.AddAsync(new TrackQueueItem(spotifyTrack));
                 }
-
+                
                 if (GuildData.FirstSongInQueue)
                 {
                     var firstTrack = player.Queue.FirstOrDefault()!.Track;
                     await player.PlayAsync(firstTrack!, false);
                     await player.Queue.RemoveAtAsync(0);
 
-                    var message = await context
+                    DiscordMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                    GuildData.Message = message;
+                    GuildData.Message = DiscordMessage;
                     return;
                 }
 
                 var albumUrl = $"https://open.spotify.com/album/{fullAlbum.Id}";
-                await context
+                DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(AudioPlayerEmbed
                             .AlbumAddedToQueue(fullAlbum, albumUrl)));
+                
+                await Task.Delay(10000);
+                await context.DeleteFollowupAsync(DiscordMessage.Id);
             }
             else
             {
@@ -148,9 +158,11 @@ public class PlatformHandler
 
                 if (fullTrack == null)
                 {
-                    await context
+                    var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                    await Task.Delay(10000);
+                    await channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
 
@@ -184,9 +196,11 @@ public class PlatformHandler
 
                 if (spotifyTrack.IsLiveStream)
                 {
-                    await context
+                    var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                    await Task.Delay(10000);
+                    await channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
 
@@ -196,20 +210,23 @@ public class PlatformHandler
                 GuildData.TextChannelId = context.Channel.Id;
 
                 await player.PlayAsync(spotifyTrack);
-
+                
                 if (player.Queue.IsEmpty)
                 {
-                    var message = await context
+                    DiscordMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(spotifyTrack, player))));
-                    GuildData.Message = message;
+                    GuildData.Message = DiscordMessage;
                     return;
                 }
 
-                await context
+                DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(spotifyTrack)));
+                
+                await Task.Delay(10000);
+                await context.DeleteFollowupAsync(DiscordMessage.Id);
             }
         }
         else
@@ -221,9 +238,11 @@ public class PlatformHandler
 
             if (searchResult == null)
             {
-                await context
+                var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                await Task.Delay(10000);
+                await channel.DeleteMessageAsync(errorMessage);
                 return;
             }
 
@@ -231,9 +250,11 @@ public class PlatformHandler
 
             if (spotifyTrack.IsLiveStream)
             {
-                await context
+                var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                await Task.Delay(10000);
+                await channel.DeleteMessageAsync(errorMessage);
                 return;
             }
 
@@ -243,20 +264,23 @@ public class PlatformHandler
             GuildData.TextChannelId = context.Channel.Id;
 
             await player!.PlayAsync(spotifyTrack.Track);
-
+            
             if (player.Queue.IsEmpty)
             {
-                var message = await context
+                DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
                             AudioPlayerEmbed.TrackInformation(spotifyTrack, player))));
-                GuildData.Message = message;
+                GuildData.Message = DiscordMessage;
                 return;
             }
 
-            await context
+            DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
                     .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(spotifyTrack)));
+            
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(DiscordMessage.Id);
         }
     }
 
@@ -264,6 +288,8 @@ public class PlatformHandler
         InteractionContext context, ulong guildId)
     {
         var youtube = new YoutubeClient();
+        
+        var channel = context.Channel;
 
         if (query.Contains("youtube.com"))
         {
@@ -285,9 +311,11 @@ public class PlatformHandler
 
                 if (playlist == null)
                 {
-                    await context
+                    var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                    await Task.Delay(10000);
+                    await channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
 
@@ -320,9 +348,11 @@ public class PlatformHandler
 
                     if (youtubeVideo.IsLiveStream)
                     {
-                        await context
+                        var errorMessage = await context
                             .FollowUpAsync(new DiscordFollowupMessageBuilder()
                                 .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                        await Task.Delay(10000);
+                        await channel.DeleteMessageAsync(errorMessage);
                         return;
                     }
 
@@ -333,25 +363,28 @@ public class PlatformHandler
 
                     await player.Queue.AddAsync(new TrackQueueItem(youtubeVideo));
                 }
-
+                
                 if (GuildData.FirstSongInQueue)
                 {
                     var firstTrack = player.Queue.FirstOrDefault()!.Track;
                     await player.PlayAsync(firstTrack!, false);
                     await player.Queue.RemoveAtAsync(0);
 
-                    var message = await context
+                    DiscordMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                    GuildData.Message = message;
+                    GuildData.Message = DiscordMessage;
                     return;
                 }
 
-                await context
+                DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(AudioPlayerEmbed
                             .PlaylistAddedToQueue(playlistData)));
+                
+                await Task.Delay(10000);
+                await context.DeleteFollowupAsync(DiscordMessage.Id);
             }
             else
             {
@@ -368,9 +401,11 @@ public class PlatformHandler
 
                 if (video == null)
                 {
-                    await context
+                    var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                    await Task.Delay(10000);
+                    await channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
 
@@ -401,9 +436,11 @@ public class PlatformHandler
 
                 if (youtubeVideo.IsLiveStream)
                 {
-                    await context
+                    var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                    await Task.Delay(10000);
+                    await channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
 
@@ -413,20 +450,23 @@ public class PlatformHandler
                 GuildData.TextChannelId = context.Channel.Id;
 
                 await player.PlayAsync(youtubeVideo);
-
+                
                 if (player.Queue.IsEmpty)
                 {
-                    var message = await context
+                    DiscordMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(youtubeVideo, player))));
-                    GuildData.Message = message;
+                    GuildData.Message = DiscordMessage;
                     return;
                 }
 
-                await context
+                DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo)));
+                
+                await Task.Delay(10000);
+                await context.DeleteFollowupAsync(DiscordMessage.Id);
             }
         }
         else
@@ -444,9 +484,11 @@ public class PlatformHandler
 
             if (videos == null)
             {
-                await context
+                var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                await Task.Delay(10000);
+                await channel.DeleteMessageAsync(errorMessage);;
                 return;
             }
 
@@ -479,9 +521,11 @@ public class PlatformHandler
 
             if (youtubeVideo.IsLiveStream)
             {
-                await context
+                var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                await Task.Delay(10000);
+                await channel.DeleteMessageAsync(errorMessage);
                 return;
             }
 
@@ -491,33 +535,38 @@ public class PlatformHandler
             GuildData.TextChannelId = context.Channel.Id;
 
             await player.PlayAsync(youtubeVideo);
-
+            
             if (player.Queue.IsEmpty)
             {
-                var message = await context
+                DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
                             AudioPlayerEmbed.TrackInformation(youtubeVideo, player))));
-                GuildData.Message = message;
+                GuildData.Message = DiscordMessage;
                 return;
             }
 
-            await context
+            DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
                     .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo)));
+            
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(DiscordMessage.Id);
         }
     }
 
     public async Task PlayFromSoundCloud(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
     {
+        var channel = context.Channel;
+        
         if (query.Contains("soundcloud.com")) // Change to /playlists or something
         {
-            //REMOVE NUGET PACKAGE BEFORE COMMITING!!!
-
             //var result = await _apiClient.SearchAsync(query);
 
             //Console.WriteLine($"Loaded playlist: {result.Tracks} tracks");
+            
+            // SHOULDN'T NEED TO ISSTARTEDFROMEVENT SINCE SOUNDCLOUD TRACK INFO IS NOT IN TRACK STARTED EVENT
         }
         else
         {
@@ -525,17 +574,21 @@ public class PlatformHandler
 
             if (soundcloudTrack == null)
             {
-                await context
+                var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                await Task.Delay(10000);
+                await channel.DeleteMessageAsync(errorMessage);
                 return;
             }
 
             if (soundcloudTrack.IsLiveStream)
             {
-                await context
+                var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                await Task.Delay(10000);
+                await channel.DeleteMessageAsync(errorMessage);
                 return;
             }
 
@@ -545,20 +598,23 @@ public class PlatformHandler
             GuildData.TextChannelId = context.Channel.Id;
 
             await player.PlayAsync(soundcloudTrack!);
-
+            
             if (player.Queue.IsEmpty)
             {
-                var message = await context
+                DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
                             AudioPlayerEmbed.TrackInformation(soundcloudTrack, player))));
-                GuildData.Message = message;
+                GuildData.Message = DiscordMessage;
                 return;
             }
 
-            await context
+            DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
                     .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(soundcloudTrack)));
+            
+            await Task.Delay(10000);
+            await context.DeleteFollowupAsync(DiscordMessage.Id);
         }
     }
 }
