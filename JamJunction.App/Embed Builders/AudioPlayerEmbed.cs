@@ -1,4 +1,5 @@
-﻿using DSharpPlus;
+﻿using System.Text;
+using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
@@ -13,15 +14,26 @@ namespace JamJunction.App.Embed_Builders;
 
 public class AudioPlayerEmbed
 {
-    public DiscordMessageBuilder TrackInformation(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordMessageBuilder TrackInformation(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer, bool isStartedFromEvent = false)
     {
         var uri = track.Uri!.AbsoluteUri;
 
+        string slider;
+        
+        if (isStartedFromEvent)
+        {
+            slider = GenerateSlider(TimeSpan.Zero, track.Duration);
+        }
+        else
+        {
+            slider = GenerateSlider(queuedLavalinkPlayer.Position!.Value.Position, track.Duration);
+        }
+        
         var embed = new DiscordEmbedBuilder
         {
             Description = $"💿  •  **Title**: [{track.Title}]({uri})\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"🕒  •  **Duration**: {RoundSeconds(track.Duration)}\n",
+                          $"{slider}", 
             Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
@@ -159,21 +171,22 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-
-    public DiscordMessageBuilder TrackInformation(ExtendedLavalinkTrack track,
-        QueuedLavalinkPlayer queuedLavalinkPlayer)
+    
+    public DiscordMessageBuilder TrackInformation(ExtendedLavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var uri = track.Uri!.AbsoluteUri;
 
+        var slider = GenerateSlider(queuedLavalinkPlayer.Position!.Value.Position, track.Duration);
+        
         var embed = new DiscordEmbedBuilder
         {
             Description = $"💿  •  **Title**: [{track.Title}]({uri})\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"🕒  •  **Duration**: {RoundSeconds(track.Duration)}\n",
+                          $"{slider}", 
             Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
-                Url = track.ArtworkUri!.AbsoluteUri
+                Url = track.ArtworkUri!.AbsoluteUri,
             }
         };
 
@@ -306,6 +319,66 @@ public class AudioPlayerEmbed
         foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
         return messageBuilder;
+    }
+    
+    private string AppliedFilter(QueuedLavalinkPlayer queuedLavalinkPlayer)
+    {
+        if (queuedLavalinkPlayer.Filters.Timescale != null)
+        {
+            switch (queuedLavalinkPlayer.Filters.Timescale.Speed)
+            {
+                case 1.25f when
+                    queuedLavalinkPlayer.Filters.Timescale.Pitch == 1.2f &&
+                    queuedLavalinkPlayer.Filters.Timescale.Rate == 1.0f:
+                    return "Nightcore";
+                case 0.8f when
+                    queuedLavalinkPlayer.Filters.Timescale.Pitch == 0.85f &&
+                    queuedLavalinkPlayer.Filters.Timescale.Rate == 1.0f:
+                    return "Vaporwave";
+                case 0.5f:
+                    return "Slow Motion";
+            }
+        }
+
+        if (queuedLavalinkPlayer.Filters.Karaoke != null)
+        {
+            return "Karaoke";
+        }
+
+        if (queuedLavalinkPlayer.Filters.Rotation != null)
+        {
+            return "8D";
+        }
+
+        return "None";
+    }
+    
+    private string GenerateSlider(TimeSpan position, TimeSpan duration, int barLength = 20)
+    {
+        if (duration.TotalSeconds == 0)
+            return "`00:00` 🔘 `00:00`";
+
+        var progress = position.TotalSeconds / duration.TotalSeconds;
+        var progressIndex = (int)(progress * barLength);
+
+        if (progressIndex >= barLength)
+            progressIndex = barLength - 1;
+
+        var bar = new StringBuilder();
+
+        for (var i = 0; i < barLength; i++)
+        {
+            bar.Append(i == progressIndex ? "🔘" : "─");
+        }
+
+        return $"`{FormatTime(position)}` {bar} `{FormatTime(duration)}`";
+    }
+
+    private string FormatTime(TimeSpan time)
+    {
+        return time.Hours > 0
+            ? time.ToString(@"hh\:mm\:ss")
+            : time.ToString(@"mm\:ss");
     }
 
     public DiscordEmbedBuilder TrackAddedToQueue(LavalinkTrack track)
@@ -651,6 +724,11 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
+    
+    private TimeSpan RoundSeconds(TimeSpan timespan)
+    {
+        return TimeSpan.FromSeconds(Math.Round(timespan.TotalSeconds));
+    }
 
     public DiscordEmbedBuilder Repeat(InteractionContext context, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
@@ -704,17 +782,7 @@ public class AudioPlayerEmbed
 
         return embed;
     }
-
-    public DiscordEmbedBuilder Filter()
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description = "\ud83c\udfb5  • Filter applied. (It may take a few seconds to apply).",
-            Color = DiscordColor.Cyan
-        };
-        return embed;
-    }
-
+    
     public DiscordEmbedBuilder Remove(ComponentInteractionCreateEventArgs menuInteractionArgs,
         QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
@@ -727,42 +795,5 @@ public class AudioPlayerEmbed
             Color = DiscordColor.Cyan
         };
         return embed;
-    }
-
-    private TimeSpan RoundSeconds(TimeSpan timespan)
-    {
-        return TimeSpan.FromSeconds(Math.Round(timespan.TotalSeconds));
-    }
-
-    private string AppliedFilter(QueuedLavalinkPlayer queuedLavalinkPlayer)
-    {
-        if (queuedLavalinkPlayer.Filters.Timescale != null)
-        {
-            switch (queuedLavalinkPlayer.Filters.Timescale.Speed)
-            {
-                case 1.25f when
-                    queuedLavalinkPlayer.Filters.Timescale.Pitch == 1.2f &&
-                    queuedLavalinkPlayer.Filters.Timescale.Rate == 1.0f:
-                    return "Nightcore";
-                case 0.8f when
-                    queuedLavalinkPlayer.Filters.Timescale.Pitch == 0.85f &&
-                    queuedLavalinkPlayer.Filters.Timescale.Rate == 1.0f:
-                    return "Vaporwave";
-                case 0.5f:
-                    return "Slow Motion";
-            }
-        }
-
-        if (queuedLavalinkPlayer.Filters.Karaoke != null)
-        {
-            return "Karaoke";
-        }
-
-        if (queuedLavalinkPlayer.Filters.Rotation != null)
-        {
-            return "8D";
-        }
-
-        return "None";
     }
 }
