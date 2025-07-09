@@ -73,6 +73,11 @@ public class PlatformHandler
                 
                 foreach (var track in fullAlbum.Tracks.Items!.Take(25))
                 {
+                    if (player.Queue.Count >= 25)
+                    {
+                        break;
+                    }
+                    
                     var seekable = true;
                     var liveStream = false;
 
@@ -321,6 +326,11 @@ public class PlatformHandler
 
                 foreach (var video in playlist.Take(25))
                 {
+                    if (player.Queue.Count >= 25)
+                    {
+                        break;
+                    }
+                    
                     var seekable = true;
                     var liveStream = false;
 
