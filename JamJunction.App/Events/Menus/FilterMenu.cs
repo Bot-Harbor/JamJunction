@@ -44,17 +44,21 @@ public class FilterMenu : IMenu
 
                 if (UserVoiceChannel == null)
                 {
-                    await channel.CreateFollowupMessageAsync(
+                    var errorMessage = await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
                             errorEmbed.ValidVoiceChannelError(menuInteractionArgs)));
+                    await Task.Delay(10000);
+                    _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
                 }
             }
             catch (Exception)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.ValidVoiceChannelError(menuInteractionArgs)));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -64,9 +68,11 @@ public class FilterMenu : IMenu
 
             if (botVoiceChannel == false)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoPlayerError(menuInteractionArgs)));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -74,9 +80,11 @@ public class FilterMenu : IMenu
 
             if (UserVoiceChannel!.Id != botVoiceState.Channel!.Id)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.SameVoiceChannelError(menuInteractionArgs)));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -86,17 +94,21 @@ public class FilterMenu : IMenu
 
             if (player == null)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoConnectionError(menuInteractionArgs)));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
             if (player!.CurrentTrack == null)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoAudioTrackError(menuInteractionArgs)));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -106,7 +118,6 @@ public class FilterMenu : IMenu
                     case "reset":
                         player.Filters.Clear();
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteOriginalResponseAsync();
                         break;
                     case "nightcore":
                     {
@@ -120,7 +131,6 @@ public class FilterMenu : IMenu
 
                         player.Filters.Timescale = nightcore;
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteOriginalResponseAsync();
                         break;
                     }
                     case "8d":
@@ -133,7 +143,6 @@ public class FilterMenu : IMenu
 
                         player.Filters.Rotation = eightDFilter;
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteOriginalResponseAsync();
                         break;
                     }
                     case "vapor-wave":
@@ -148,7 +157,6 @@ public class FilterMenu : IMenu
 
                         player.Filters.Timescale = vaporwaveFilter;
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteOriginalResponseAsync();
                         break;
                     }
                     case "karaoke":
@@ -164,7 +172,6 @@ public class FilterMenu : IMenu
 
                         player.Filters.Karaoke = karaokeFilter;
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteOriginalResponseAsync();
                         break;
                     }
                     case "slow-motion":
@@ -177,13 +184,11 @@ public class FilterMenu : IMenu
 
                         player.Filters.Timescale = slowMotionFilter;
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteOriginalResponseAsync();
                         break;
                     }
                     default:
                         player.Filters.Clear();
                         await player!.Filters.CommitAsync();
-                        await channel.DeleteOriginalResponseAsync();
                         break;
                 }
         }

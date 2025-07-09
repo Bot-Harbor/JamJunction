@@ -34,7 +34,7 @@ public class VolumeCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -47,7 +47,7 @@ public class VolumeCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -57,7 +57,7 @@ public class VolumeCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -71,7 +71,7 @@ public class VolumeCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -81,7 +81,7 @@ public class VolumeCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoAudioTrackError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -93,7 +93,7 @@ public class VolumeCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.VolumeNotAnIntegerError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -103,7 +103,7 @@ public class VolumeCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoVolumeOver100Error(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -115,6 +115,6 @@ public class VolumeCommand : ApplicationCommandModule
                 audioPlayerEmbed.Volume(Math.Round(volume * 100), context)));
 
         await Task.Delay(10000);
-        await context.DeleteFollowupAsync(message.Id);
+        _ = context.DeleteFollowupAsync(message.Id);
     }
 }

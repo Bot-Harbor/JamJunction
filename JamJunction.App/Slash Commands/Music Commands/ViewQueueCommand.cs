@@ -32,7 +32,7 @@ public class ViewQueueCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -45,7 +45,7 @@ public class ViewQueueCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -55,7 +55,7 @@ public class ViewQueueCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -69,7 +69,7 @@ public class ViewQueueCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 

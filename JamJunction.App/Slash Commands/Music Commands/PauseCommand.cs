@@ -25,14 +25,14 @@ public class PauseCommand : ApplicationCommandModule
 
         var guildId = context.Guild.Id;
         var userVoiceChannel = context.Member?.VoiceState?.Channel;
-        
+
         if (userVoiceChannel == null)
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -45,7 +45,7 @@ public class PauseCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -55,7 +55,7 @@ public class PauseCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -69,7 +69,7 @@ public class PauseCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -79,7 +79,7 @@ public class PauseCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoAudioTrackError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -89,7 +89,7 @@ public class PauseCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.AlreadyPausedError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -98,8 +98,8 @@ public class PauseCommand : ApplicationCommandModule
         var message = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Pause(context)));
-        
+
         await Task.Delay(10000);
-        await context.DeleteFollowupAsync(message.Id);
+        _ = context.DeleteFollowupAsync(message.Id);
     }
 }

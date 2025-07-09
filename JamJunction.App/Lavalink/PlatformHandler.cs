@@ -67,7 +67,7 @@ public class PlatformHandler
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.AudioTrackError(context)));
                     await Task.Delay(10000);
-                    await channel.DeleteMessageAsync(errorMessage);
+                    _ = channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
                 
@@ -112,7 +112,7 @@ public class PlatformHandler
                             .FollowUpAsync(new DiscordFollowupMessageBuilder()
                                 .AddEmbed(ErrorEmbed.LiveSteamError(context)));
                         await Task.Delay(10000);
-                        await channel.DeleteMessageAsync(errorMessage);
+                        _ = channel.DeleteMessageAsync(errorMessage);
                         return;
                     }
 
@@ -145,7 +145,7 @@ public class PlatformHandler
                             .AlbumAddedToQueue(fullAlbum, albumUrl)));
                 
                 await Task.Delay(10000);
-                await context.DeleteFollowupAsync(DiscordMessage.Id);
+                _ = context.DeleteFollowupAsync(DiscordMessage.Id);
             }
             else
             {
@@ -167,7 +167,7 @@ public class PlatformHandler
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.AudioTrackError(context)));
                     await Task.Delay(10000);
-                    await channel.DeleteMessageAsync(errorMessage);
+                    _ = channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
 
@@ -205,7 +205,7 @@ public class PlatformHandler
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.LiveSteamError(context)));
                     await Task.Delay(10000);
-                    await channel.DeleteMessageAsync(errorMessage);
+                    _ = channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
 
@@ -231,7 +231,7 @@ public class PlatformHandler
                         .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(spotifyTrack)));
                 
                 await Task.Delay(10000);
-                await context.DeleteFollowupAsync(DiscordMessage.Id);
+                _ = context.DeleteFollowupAsync(DiscordMessage.Id);
             }
         }
         else
@@ -247,7 +247,7 @@ public class PlatformHandler
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.AudioTrackError(context)));
                 await Task.Delay(10000);
-                await channel.DeleteMessageAsync(errorMessage);
+                _ = channel.DeleteMessageAsync(errorMessage);
                 return;
             }
 
@@ -259,7 +259,7 @@ public class PlatformHandler
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.LiveSteamError(context)));
                 await Task.Delay(10000);
-                await channel.DeleteMessageAsync(errorMessage);
+                _ = channel.DeleteMessageAsync(errorMessage);
                 return;
             }
 
@@ -285,7 +285,7 @@ public class PlatformHandler
                     .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(spotifyTrack)));
             
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(DiscordMessage.Id);
+            _ = context.DeleteFollowupAsync(DiscordMessage.Id);
         }
     }
 
@@ -320,7 +320,7 @@ public class PlatformHandler
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.AudioTrackError(context)));
                     await Task.Delay(10000);
-                    await channel.DeleteMessageAsync(errorMessage);
+                    _ = channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
 
@@ -362,7 +362,7 @@ public class PlatformHandler
                             .FollowUpAsync(new DiscordFollowupMessageBuilder()
                                 .AddEmbed(ErrorEmbed.LiveSteamError(context)));
                         await Task.Delay(10000);
-                        await channel.DeleteMessageAsync(errorMessage);
+                        _ = channel.DeleteMessageAsync(errorMessage);
                         return;
                     }
 
@@ -394,7 +394,7 @@ public class PlatformHandler
                             .PlaylistAddedToQueue(playlistData)));
                 
                 await Task.Delay(10000);
-                await context.DeleteFollowupAsync(DiscordMessage.Id);
+                _ = context.DeleteFollowupAsync(DiscordMessage.Id);
             }
             else
             {
@@ -415,7 +415,7 @@ public class PlatformHandler
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.AudioTrackError(context)));
                     await Task.Delay(10000);
-                    await channel.DeleteMessageAsync(errorMessage);
+                    _ = channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
 
@@ -450,7 +450,7 @@ public class PlatformHandler
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
                             .AddEmbed(ErrorEmbed.LiveSteamError(context)));
                     await Task.Delay(10000);
-                    await channel.DeleteMessageAsync(errorMessage);
+                    _ = channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
 
@@ -476,7 +476,7 @@ public class PlatformHandler
                         .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo)));
                 
                 await Task.Delay(10000);
-                await context.DeleteFollowupAsync(DiscordMessage.Id);
+                _ = context.DeleteFollowupAsync(DiscordMessage.Id);
             }
         }
         else
@@ -498,7 +498,7 @@ public class PlatformHandler
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.AudioTrackError(context)));
                 await Task.Delay(10000);
-                await channel.DeleteMessageAsync(errorMessage);;
+                _ = channel.DeleteMessageAsync(errorMessage);;
                 return;
             }
 
@@ -535,7 +535,7 @@ public class PlatformHandler
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.LiveSteamError(context)));
                 await Task.Delay(10000);
-                await channel.DeleteMessageAsync(errorMessage);
+                _ = channel.DeleteMessageAsync(errorMessage);
                 return;
             }
 
@@ -561,7 +561,7 @@ public class PlatformHandler
                     .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo)));
             
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(DiscordMessage.Id);
+            _ = context.DeleteFollowupAsync(DiscordMessage.Id);
         }
     }
 
@@ -588,7 +588,7 @@ public class PlatformHandler
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.AudioTrackError(context)));
                 await Task.Delay(10000);
-                await channel.DeleteMessageAsync(errorMessage);
+                _ = channel.DeleteMessageAsync(errorMessage);
                 return;
             }
 
@@ -598,7 +598,7 @@ public class PlatformHandler
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.LiveSteamError(context)));
                 await Task.Delay(10000);
-                await channel.DeleteMessageAsync(errorMessage);
+                _ = channel.DeleteMessageAsync(errorMessage);
                 return;
             }
 
@@ -624,7 +624,7 @@ public class PlatformHandler
                     .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(soundcloudTrack)));
             
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(DiscordMessage.Id);
+            _ = context.DeleteFollowupAsync(DiscordMessage.Id);
         }
     }
 }

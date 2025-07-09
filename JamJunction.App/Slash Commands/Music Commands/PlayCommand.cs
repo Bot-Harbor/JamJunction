@@ -32,14 +32,14 @@ public class PlayCommand : ApplicationCommandModule
 
         var guildId = context.Guild.Id;
         var userVoiceChannel = context.Member?.VoiceState?.Channel;
-        
+
         if (userVoiceChannel == null)
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     ErrorEmbed.ValidVoiceChannelError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -52,7 +52,7 @@ public class PlayCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     ErrorEmbed.NoConnectionError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -65,7 +65,7 @@ public class PlayCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     ErrorEmbed.SameVoiceChannelError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -75,7 +75,7 @@ public class PlayCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     ErrorEmbed.QueueIsFullError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 

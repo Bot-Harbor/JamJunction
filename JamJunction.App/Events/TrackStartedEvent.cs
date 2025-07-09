@@ -39,7 +39,7 @@ public class TrackStartedEvent
         }
         
         var message = guildData.Message;
-        await channel.DeleteMessageAsync(message);
+        _ = channel.DeleteMessageAsync(message);
         
         var audioPlayerEmbed = new AudioPlayerEmbed();
         message = await channel.SendMessageAsync(audioPlayerEmbed.TrackInformation(track, player, true));

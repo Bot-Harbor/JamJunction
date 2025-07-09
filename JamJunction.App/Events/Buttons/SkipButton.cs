@@ -47,7 +47,7 @@ public class SkipButton : IButton
                         new DiscordFollowupMessageBuilder().AddEmbed(
                             errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
                     await Task.Delay(10000);
-                    await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                    _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
                 }
             }
@@ -57,7 +57,7 @@ public class SkipButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -71,7 +71,7 @@ public class SkipButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoPlayerError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -83,7 +83,7 @@ public class SkipButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -97,7 +97,7 @@ public class SkipButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoConnectionError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -107,7 +107,7 @@ public class SkipButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoTracksToSkipToError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -116,9 +116,9 @@ public class SkipButton : IButton
             var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.Skip(btnInteractionArgs)));
-            
+
             await Task.Delay(10000);
-            await channel.DeleteFollowupMessageAsync(message.Id);
+            _ = channel.DeleteFollowupMessageAsync(message.Id);
         }
     }
 }

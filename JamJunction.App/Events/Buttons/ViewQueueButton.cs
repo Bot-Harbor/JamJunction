@@ -47,7 +47,7 @@ public class ViewQueueButton : IButton
                         new DiscordFollowupMessageBuilder().AddEmbed(
                             errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
                     await Task.Delay(10000);
-                    await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                    _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
                 }
             }
@@ -57,7 +57,7 @@ public class ViewQueueButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -71,7 +71,7 @@ public class ViewQueueButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoPlayerError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -83,7 +83,7 @@ public class ViewQueueButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -97,7 +97,7 @@ public class ViewQueueButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoConnectionError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 

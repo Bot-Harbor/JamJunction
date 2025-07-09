@@ -48,7 +48,7 @@ public class RepeatButton : IButton
                         new DiscordFollowupMessageBuilder().AddEmbed(
                             errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
                     await Task.Delay(10000);
-                    await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                    _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
                 }
             }
@@ -58,7 +58,7 @@ public class RepeatButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -72,7 +72,7 @@ public class RepeatButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoPlayerError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -84,7 +84,7 @@ public class RepeatButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -98,7 +98,7 @@ public class RepeatButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoConnectionError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -108,7 +108,7 @@ public class RepeatButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoAudioTrackError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -116,7 +116,7 @@ public class RepeatButton : IButton
             var repeatMode = guildData.RepeatMode;
 
             guildData.RepeatMode = !guildData.RepeatMode;
-            
+
             if (repeatMode == false)
             {
                 player!.RepeatMode = TrackRepeatMode.None;
@@ -125,7 +125,7 @@ public class RepeatButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         audioPlayerEmbed.DisableRepeat(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -134,9 +134,9 @@ public class RepeatButton : IButton
             var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.EnableRepeat(btnInteractionArgs)));
-            
+
             await Task.Delay(10000);
-            await channel.DeleteFollowupMessageAsync(message.Id);
+            _ = channel.DeleteFollowupMessageAsync(message.Id);
         }
     }
 }

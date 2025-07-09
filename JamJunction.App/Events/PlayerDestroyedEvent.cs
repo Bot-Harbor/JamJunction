@@ -20,9 +20,8 @@ public class PlayerDestroyedEvent
         var guildData = Bot.GuildData[guildId];
         var textChannelId = guildData.TextChannelId;
         var channel = guild.GetChannel(textChannelId);
-        
-        var message = guildData.Message;
-        await channel.DeleteMessageAsync(message);
+
+        _  = channel.DeleteMessageAsync(guildData.Message);
         Bot.GuildData.Remove(guildId);
     }
 }

@@ -27,14 +27,14 @@ public class SeekCommand : ApplicationCommandModule
 
         var guildId = context.Guild.Id;
         var userVoiceChannel = context.Member?.VoiceState?.Channel;
-        
+
         if (userVoiceChannel == null)
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.ValidVoiceChannelError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -47,7 +47,7 @@ public class SeekCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoPlayerError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -57,7 +57,7 @@ public class SeekCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SameVoiceChannelError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -71,7 +71,7 @@ public class SeekCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoConnectionError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -81,11 +81,11 @@ public class SeekCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.NoAudioTrackError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
-        var isInt = time == (int) time;
+        var isInt = time == (int)time;
 
         if (!isInt)
         {
@@ -93,7 +93,7 @@ public class SeekCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SeekNotAnIntegerError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -105,7 +105,7 @@ public class SeekCommand : ApplicationCommandModule
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     errorEmbed.SeekLargerThanDurationError(context)));
             await Task.Delay(10000);
-            await context.DeleteFollowupAsync(errorMessage.Id);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -114,8 +114,8 @@ public class SeekCommand : ApplicationCommandModule
         var message = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Seek(context, time)));
-        
+
         await Task.Delay(10000);
-        await context.DeleteFollowupAsync(message.Id);
+        _ = context.DeleteFollowupAsync(message.Id);
     }
 }

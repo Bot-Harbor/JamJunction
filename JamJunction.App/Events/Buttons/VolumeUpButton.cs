@@ -47,7 +47,7 @@ public class VolumeUpButton : IButton
                         new DiscordFollowupMessageBuilder().AddEmbed(
                             errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
                     await Task.Delay(10000);
-                    await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                    _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
                 }
             }
@@ -57,7 +57,7 @@ public class VolumeUpButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -71,7 +71,7 @@ public class VolumeUpButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoPlayerError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -83,7 +83,7 @@ public class VolumeUpButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -97,7 +97,7 @@ public class VolumeUpButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoConnectionError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -107,7 +107,7 @@ public class VolumeUpButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoAudioTrackError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -119,19 +119,19 @@ public class VolumeUpButton : IButton
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.MaxVolumeError(btnInteractionArgs)));
                 await Task.Delay(10000);
-                await channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
             var increasedVolume = Math.Min(Math.Round(currentVolume + 0.10, 2), 1);
-            await player!.SetVolumeAsync((float) increasedVolume);
+            await player!.SetVolumeAsync((float)increasedVolume);
 
             var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.VolumeIncreased(btnInteractionArgs)));
-            
+
             await Task.Delay(10000);
-            await channel.DeleteFollowupMessageAsync(message.Id);
+            _ = channel.DeleteFollowupMessageAsync(message.Id);
         }
     }
 }

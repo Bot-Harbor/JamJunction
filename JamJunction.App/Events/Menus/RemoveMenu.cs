@@ -43,17 +43,21 @@ public class RemoveMenu : IMenu
 
                 if (UserVoiceChannel == null)
                 {
-                    await channel.CreateFollowupMessageAsync(
+                    var errorMessage = await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
                             errorEmbed.ValidVoiceChannelError(menuInteractionArgs)));
+                    await Task.Delay(10000);
+                    _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
                 }
             }
             catch (Exception)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.ValidVoiceChannelError(menuInteractionArgs)));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -63,9 +67,11 @@ public class RemoveMenu : IMenu
 
             if (botVoiceChannel == false)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoPlayerError(menuInteractionArgs)));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -73,9 +79,11 @@ public class RemoveMenu : IMenu
 
             if (UserVoiceChannel!.Id != botVoiceState.Channel!.Id)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.SameVoiceChannelError(menuInteractionArgs)));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -85,9 +93,11 @@ public class RemoveMenu : IMenu
 
             if (player == null)
             {
-                await channel.CreateFollowupMessageAsync(
+                var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         errorEmbed.NoConnectionError(menuInteractionArgs)));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
@@ -95,8 +105,12 @@ public class RemoveMenu : IMenu
             {
                 await player.Queue.RemoveAtAsync(Convert.ToInt32(value));
                 await channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-                await channel.CreateFollowupMessageAsync(
+                
+                var message = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Remove(menuInteractionArgs, player)));
+                
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(message.Id);
                 break;
             }
         }
