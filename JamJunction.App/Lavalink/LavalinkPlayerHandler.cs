@@ -30,7 +30,7 @@ public class LavalinkPlayerHandler
             var retrieveOptions = new PlayerRetrieveOptions(
                 connectToVoiceChannel ? PlayerChannelBehavior.Join : PlayerChannelBehavior.None);
 
-            var playerOptions = new QueuedLavalinkPlayerOptions {HistoryCapacity = 10000};
+            var playerOptions = new QueuedLavalinkPlayerOptions { HistoryCapacity = 10000 };
 
             var result = await _audioService.Players
                 .RetrieveAsync(guildId, voiceChannel.Id,
@@ -61,7 +61,7 @@ public class LavalinkPlayerHandler
             var retrieveOptions = new PlayerRetrieveOptions(
                 connectToVoiceChannel ? PlayerChannelBehavior.Join : PlayerChannelBehavior.None);
 
-            var playerOptions = new QueuedLavalinkPlayerOptions {HistoryCapacity = 10000};
+            var playerOptions = new QueuedLavalinkPlayerOptions { HistoryCapacity = 10000 };
 
             var result = await _audioService.Players
                 .RetrieveAsync(guildId, voiceChannelId,

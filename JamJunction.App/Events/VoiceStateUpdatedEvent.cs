@@ -30,7 +30,7 @@ public class VoiceStateUpdatedEvent
             var voiceChannelId = voiceChannel.Id;
 
             var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
-            var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannelId, true);
+            var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannelId);
 
             await player.DisconnectAsync();
         }

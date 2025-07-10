@@ -38,7 +38,7 @@ internal sealed class Bot : BackgroundService
     private void SlashCommands()
     {
         var slashCommands =
-            _discordClient.UseSlashCommands(new SlashCommandsConfiguration {Services = _serviceProvider});
+            _discordClient.UseSlashCommands(new SlashCommandsConfiguration { Services = _serviceProvider });
 
         slashCommands.RegisterCommands<PingCommand>();
         slashCommands.RegisterCommands<CaptionCommand>();
@@ -92,7 +92,7 @@ internal sealed class Bot : BackgroundService
             await menuHandler.Execute(new RemoveMenu(_audioService, _discordClient), sender, args);
         };
     }
-    
+
     private void AudioPlayerEvents()
     {
         var trackStartedEvent = new TrackStartedEvent(_discordClient, _audioService);

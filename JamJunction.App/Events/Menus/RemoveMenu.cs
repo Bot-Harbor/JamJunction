@@ -105,19 +105,19 @@ public class RemoveMenu : IMenu
             {
                 await player.Queue.RemoveAtAsync(Convert.ToInt32(value));
                 _ = channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-                
+
                 var guildData = Bot.GuildData[guildId];
                 _ = channel.Channel.DeleteMessageAsync(guildData.Message);
 
                 var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
                 guildData.Message = guildMessage;
-                
+
                 var message = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Remove(menuInteractionArgs, player)));
-                
+
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(message.Id);
                 break;

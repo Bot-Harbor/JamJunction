@@ -118,7 +118,7 @@ public class RepeatButton : IButton
             guildData.RepeatMode = !guildData.RepeatMode;
 
             DiscordMessage guildMessage;
-            
+
             if (repeatMode == false)
             {
                 player!.RepeatMode = TrackRepeatMode.None;
@@ -128,29 +128,29 @@ public class RepeatButton : IButton
                 guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
                 guildData.Message = guildMessage;
-                
+
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         audioPlayerEmbed.DisableRepeat(btnInteractionArgs)));
-                
+
                 await Task.Delay(10000);
-                
+
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
             player!.RepeatMode = TrackRepeatMode.Track;
-            
+
             _ = channel.Channel.DeleteMessageAsync(guildData.Message);
 
             guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
             guildData.Message = guildMessage;
-            
+
             var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.EnableRepeat(btnInteractionArgs)));

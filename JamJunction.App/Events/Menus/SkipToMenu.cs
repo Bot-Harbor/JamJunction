@@ -105,10 +105,10 @@ public class SkipToMenu : IMenu
             {
                 await player.SkipAsync(Convert.ToInt32(value));
                 _ = channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-                
+
                 var message = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.SkipTo(menuInteractionArgs, player)));
-                
+
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(message.Id);
                 break;

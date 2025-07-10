@@ -129,7 +129,7 @@ public class PauseButton : IButton
             var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
             guildData.Message = guildMessage;
 
             var message = await channel.CreateFollowupMessageAsync(

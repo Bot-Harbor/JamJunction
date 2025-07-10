@@ -15,30 +15,27 @@ namespace JamJunction.App.Embed_Builders;
 
 public class AudioPlayerEmbed
 {
-    public DiscordMessageBuilder TrackInformation(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer, bool isStartedFromEvent = false)
+    public DiscordMessageBuilder TrackInformation(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer,
+        bool isStartedFromEvent = false)
     {
         var uri = track.Uri!.AbsoluteUri;
 
         string slider;
-        
+
         if (isStartedFromEvent)
-        {
             slider = GenerateSlider(TimeSpan.Zero, track.Duration);
-        }
         else
-        {
             slider = GenerateSlider(queuedLavalinkPlayer.Position!.Value.Position, track.Duration);
-        }
-        
+
         var embed = new DiscordEmbedBuilder
         {
             Description = $"💿  •  **Title**: [{track.Title}]({uri})\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"{slider}", 
+                          $"{slider}",
             Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
-                Url = track.ArtworkUri!.AbsoluteUri,
+                Url = track.ArtworkUri!.AbsoluteUri
             }
         };
 
@@ -172,22 +169,23 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-    
-    public DiscordMessageBuilder TrackInformation(ExtendedLavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer)
+
+    public DiscordMessageBuilder TrackInformation(ExtendedLavalinkTrack track,
+        QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var uri = track.Uri!.AbsoluteUri;
 
         var slider = GenerateSlider(queuedLavalinkPlayer.Position!.Value.Position, track.Duration);
-        
+
         var embed = new DiscordEmbedBuilder
         {
             Description = $"💿  •  **Title**: [{track.Title}]({uri})\n" +
                           $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"{slider}", 
+                          $"{slider}",
             Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
-                Url = track.ArtworkUri!.AbsoluteUri,
+                Url = track.ArtworkUri!.AbsoluteUri
             }
         };
 
@@ -321,11 +319,10 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-    
+
     private string AppliedFilter(QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         if (queuedLavalinkPlayer.Filters.Timescale != null)
-        {
             switch (queuedLavalinkPlayer.Filters.Timescale.Speed)
             {
                 case 1.25f when
@@ -339,21 +336,14 @@ public class AudioPlayerEmbed
                 case 0.5f:
                     return "Slow Motion";
             }
-        }
 
-        if (queuedLavalinkPlayer.Filters.Karaoke != null)
-        {
-            return "Karaoke";
-        }
+        if (queuedLavalinkPlayer.Filters.Karaoke != null) return "Karaoke";
 
-        if (queuedLavalinkPlayer.Filters.Rotation != null)
-        {
-            return "8D";
-        }
+        if (queuedLavalinkPlayer.Filters.Rotation != null) return "8D";
 
         return "None";
     }
-    
+
     private string GenerateSlider(TimeSpan position, TimeSpan duration, int barLength = 20)
     {
         if (duration.TotalSeconds == 0)
@@ -367,10 +357,7 @@ public class AudioPlayerEmbed
 
         var bar = new StringBuilder();
 
-        for (var i = 0; i < barLength; i++)
-        {
-            bar.Append(i == progressIndex ? "🔘" : "─");
-        }
+        for (var i = 0; i < barLength; i++) bar.Append(i == progressIndex ? "🔘" : "─");
 
         return $"`{FormatTime(position)}` {bar} `{FormatTime(duration)}`";
     }
@@ -416,7 +403,7 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder PlaylistAddedToQueue(FullPlaylist fullPlaylist, string playlistUrl)
     {
         var embed = new DiscordEmbedBuilder
@@ -440,7 +427,7 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder PlaylistAddedToQueue(TrackLoadResult playlist, string playlistUrl)
     {
         var embed = new DiscordEmbedBuilder
@@ -747,7 +734,7 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-    
+
     private TimeSpan RoundSeconds(TimeSpan timespan)
     {
         return TimeSpan.FromSeconds(Math.Round(timespan.TotalSeconds));
@@ -805,7 +792,7 @@ public class AudioPlayerEmbed
 
         return embed;
     }
-    
+
     public DiscordEmbedBuilder Remove(ComponentInteractionCreateEventArgs menuInteractionArgs,
         QueuedLavalinkPlayer queuedLavalinkPlayer)
     {

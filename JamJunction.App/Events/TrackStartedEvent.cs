@@ -30,17 +30,17 @@ public class TrackStartedEvent
         var track = eventargs.Track;
 
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
-        var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, true);
+        var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel);
 
         if (guildData.FirstSongInQueue)
         {
             guildData.FirstSongInQueue = false;
             return;
         }
-        
+
         var message = guildData.Message;
         _ = channel.DeleteMessageAsync(message);
-        
+
         var audioPlayerEmbed = new AudioPlayerEmbed();
         message = await channel.SendMessageAsync(audioPlayerEmbed.TrackInformation(track, player, true));
         guildData.Message = message;

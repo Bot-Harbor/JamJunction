@@ -112,14 +112,14 @@ public class RestartButton : IButton
             }
 
             await player!.SeekAsync(TimeSpan.FromSeconds(0));
-            
+
             var guildData = Bot.GuildData[guildId];
             _ = channel.Channel.DeleteMessageAsync(guildData.Message);
 
             var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, true))));
-            
+
             guildData.Message = guildMessage;
 
             var message = await channel.CreateFollowupMessageAsync(

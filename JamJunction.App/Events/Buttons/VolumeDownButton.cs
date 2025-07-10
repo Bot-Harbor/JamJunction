@@ -126,14 +126,14 @@ public class VolumeDownButton : IButton
 
             var decreasedVolume = Math.Max(Math.Round(currentVolume - 0.10, 2), 0);
             await player!.SetVolumeAsync((float)decreasedVolume);
-            
+
             var guildData = Bot.GuildData[guildId];
             _ = channel.Channel.DeleteMessageAsync(guildData.Message);
 
             var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
             guildData.Message = guildMessage;
 
             var message = await channel.CreateFollowupMessageAsync(

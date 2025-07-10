@@ -34,7 +34,7 @@ public class TrackStuckEvent
         await Task.Delay(TimeSpan.FromSeconds(5));
 
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
-        var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel, true);
+        var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel);
 
         var track = eventargs.Track;
         await player.PlayAsync(track);

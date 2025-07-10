@@ -1,6 +1,5 @@
 ﻿using System.Collections.Immutable;
 using System.Text.RegularExpressions;
-using AngleSharp.Common;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
@@ -74,10 +73,7 @@ public class PlatformHandler
 
                 foreach (var track in fullAlbum.Tracks.Items!.Take(25))
                 {
-                    if (player.Queue.Count >= 25)
-                    {
-                        break;
-                    }
+                    if (player.Queue.Count >= 25) break;
 
                     var seekable = true;
                     var liveStream = false;
@@ -93,7 +89,7 @@ public class PlatformHandler
                     var uri = $"https://open.spotify.com/track/{track.Id}";
                     var artworkUri = fullAlbum.Images.FirstOrDefault()!.Url;
 
-                    var spotifyTrack = new LavalinkTrack()
+                    var spotifyTrack = new LavalinkTrack
                     {
                         SourceName = "spotify",
                         Identifier = track.Id,
@@ -159,7 +155,7 @@ public class PlatformHandler
             else if (query.Contains("/playlist"))
             {
                 FullPlaylist fullPlaylist;
-                
+
                 try
                 {
                     var playlistId = Regex.Match(query, @"(?<=playlist/)[^?]+").Value;
@@ -169,7 +165,7 @@ public class PlatformHandler
                 {
                     fullPlaylist = null;
                 }
-                
+
                 if (fullPlaylist == null)
                 {
                     var errorMessage = await context
@@ -183,11 +179,8 @@ public class PlatformHandler
                 foreach (var item in fullPlaylist.Tracks!.Items!.Take(25))
                 {
                     var track = item.Track as FullTrack;
-                    
-                    if (player.Queue.Count >= 25)
-                    {
-                        break;
-                    }
+
+                    if (player.Queue.Count >= 25) break;
 
                     var seekable = true;
                     var liveStream = false;
@@ -203,7 +196,7 @@ public class PlatformHandler
                     var uri = $"https://open.spotify.com/track/{track.Id}";
                     var artworkUri = track.Album.Images.FirstOrDefault()!.Url;
 
-                    var spotifyTrack = new LavalinkTrack()
+                    var spotifyTrack = new LavalinkTrack
                     {
                         SourceName = "spotify",
                         Identifier = track.Id,
@@ -461,10 +454,7 @@ public class PlatformHandler
 
                 foreach (var video in playlist.Take(25))
                 {
-                    if (player.Queue.Count >= 25)
-                    {
-                        break;
-                    }
+                    if (player.Queue.Count >= 25) break;
 
                     var seekable = true;
                     var liveStream = false;
@@ -746,10 +736,7 @@ public class PlatformHandler
 
             foreach (var track in trackLoadResult.Tracks.Take(25))
             {
-                if (player.Queue.Count >= 25)
-                {
-                    break;
-                }
+                if (player.Queue.Count >= 25) break;
 
                 var seekable = true;
                 var liveStream = false;
@@ -760,7 +747,7 @@ public class PlatformHandler
                     liveStream = true;
                 }
 
-                var soundCloudTrack = new LavalinkTrack()
+                var soundCloudTrack = new LavalinkTrack
                 {
                     SourceName = "soundcloud",
                     Identifier = track.Identifier,
@@ -771,7 +758,7 @@ public class PlatformHandler
                     StartPosition = TimeSpan.Zero,
                     Duration = track.Duration,
                     Uri = new Uri(track.Uri!.ToString()),
-                    ArtworkUri = new Uri(track.ArtworkUri!.ToString()),
+                    ArtworkUri = new Uri(track.ArtworkUri!.ToString())
                 };
 
                 if (soundCloudTrack.IsLiveStream)
