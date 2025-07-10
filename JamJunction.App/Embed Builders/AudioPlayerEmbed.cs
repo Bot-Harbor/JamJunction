@@ -416,6 +416,17 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
+    
+    public DiscordEmbedBuilder PlaylistAddedToQueue(FullPlaylist fullPlaylist, string playlistUrl)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Title = "Added To The Queue 🎵",
+            Description = $"ılı   •  [{fullPlaylist.Name}]({playlistUrl}) - By **{fullPlaylist.Owner!.DisplayName}**",
+            Color = DiscordColor.Cyan
+        };
+        return embed;
+    }
 
     public DiscordEmbedBuilder PlaylistAddedToQueue(Playlist playlist)
     {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using System.Text.RegularExpressions;
+using AngleSharp.Common;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embed_Builders;
@@ -155,6 +156,116 @@ public class PlatformHandler
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
             }
+            else if (query.Contains("/playlist"))
+            {
+                FullPlaylist fullPlaylist;
+                
+                try
+                {
+                    var playlistId = Regex.Match(query, @"(?<=playlist/)[^?]+").Value;
+                    fullPlaylist = await spotify.Playlists.Get(playlistId);
+                }
+                catch (Exception)
+                {
+                    fullPlaylist = null;
+                }
+                
+                if (fullPlaylist == null)
+                {
+                    var errorMessage = await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                            .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                    await Task.Delay(10000);
+                    _ = channel.DeleteMessageAsync(errorMessage);
+                    return;
+                }
+
+                foreach (var item in fullPlaylist.Tracks!.Items!.Take(25))
+                {
+                    var track = item.Track as FullTrack;
+                    
+                    if (player.Queue.Count >= 25)
+                    {
+                        break;
+                    }
+
+                    var seekable = true;
+                    var liveStream = false;
+
+                    if (track!.DurationMs == 0)
+                    {
+                        seekable = false;
+                        liveStream = true;
+                    }
+
+                    var author = track.Artists.FirstOrDefault()!.Name;
+                    var duration = TimeSpan.FromMilliseconds(track.DurationMs);
+                    var uri = $"https://open.spotify.com/track/{track.Id}";
+                    var artworkUri = track.Album.Images.FirstOrDefault()!.Url;
+
+                    var spotifyTrack = new LavalinkTrack()
+                    {
+                        SourceName = "spotify",
+                        Identifier = track.Id,
+                        IsSeekable = seekable,
+                        IsLiveStream = liveStream,
+                        Title = track.Name,
+                        Author = author,
+                        StartPosition = TimeSpan.Zero,
+                        Duration = duration,
+                        Uri = new Uri(uri),
+                        ArtworkUri = new Uri(artworkUri)
+                    };
+
+                    if (spotifyTrack.IsLiveStream)
+                    {
+                        var errorMessage = await context
+                            .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                                .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                        await Task.Delay(10000);
+                        _ = channel.DeleteMessageAsync(errorMessage);
+                        return;
+                    }
+
+                    if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
+
+                    GuildData = Bot.GuildData[guildId];
+                    GuildData.TextChannelId = context.Channel.Id;
+
+                    await player.Queue.AddAsync(new TrackQueueItem(spotifyTrack));
+                }
+
+                if (GuildData.FirstSongInQueue)
+                {
+                    var firstTrack = player.Queue.FirstOrDefault()!.Track;
+                    await player.PlayAsync(firstTrack!, false);
+                    await player.Queue.RemoveAtAsync(0);
+
+                    DiscordMessage = await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                            new DiscordInteractionResponseBuilder(
+                                AudioPlayerEmbed.TrackInformation(firstTrack, player))));
+                    GuildData.Message = DiscordMessage;
+                    return;
+                }
+
+                _ = context.Channel.DeleteMessageAsync(GuildData.Message);
+
+                var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+                    new DiscordInteractionResponseBuilder(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
+
+                GuildData.Message = guildMessage;
+
+                var playlistUrl = $"https://open.spotify.com/playlist/{fullPlaylist.Id}";
+                DiscordMessage = await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                        .AddEmbed(AudioPlayerEmbed
+                            .PlaylistAddedToQueue(fullPlaylist, playlistUrl)));
+
+                await Task.Delay(10000);
+                _ = context.DeleteFollowupAsync(DiscordMessage.Id);
+            }
             else
             {
                 FullTrack fullTrack;
@@ -248,11 +359,6 @@ public class PlatformHandler
 
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
-            }
-
-            if (query.Contains("/playlist"))
-            {
-                // Playlist function here
             }
         }
         else
@@ -627,7 +733,7 @@ public class PlatformHandler
         if (query.Contains("soundcloud.com") && query.Contains("/sets")) // Change to /playlists or something
         {
             var trackLoadResult = await _audioService.Tracks.LoadTracksAsync(query!, TrackSearchMode.SoundCloud);
-            
+
             if (trackLoadResult.Playlist == null)
             {
                 var errorMessage = await context
@@ -701,7 +807,7 @@ public class PlatformHandler
             }
 
             _ = context.Channel.DeleteMessageAsync(GuildData.Message);
-            
+
             var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));

@@ -86,16 +86,16 @@ public class PlayCommand : ApplicationCommandModule
         switch (streamingPlatform)
         {
             case Platform.Spotify:
-                await platformHandler.PlayFromSpotify(player, query.ToLower(), context, guildId);
+                await platformHandler.PlayFromSpotify(player, query, context, guildId);
                 return;
             case Platform.YouTube:
-                await platformHandler.PlayFromYoutube(player, query.ToLower(), context, guildId);
+                await platformHandler.PlayFromYoutube(player, query, context, guildId);
                 return;
             case Platform.SoundCloud:
-                await platformHandler.PlayFromSoundCloud(player, query.ToLower(), context, guildId);
+                await platformHandler.PlayFromSoundCloud(player, query, context, guildId);
                 return;
             default:
-                await platformHandler.PlayFromSpotify(player, query.ToLower(), context, guildId);
+                await platformHandler.PlayFromSpotify(player, query, context, guildId);
                 return;
         }
     }
