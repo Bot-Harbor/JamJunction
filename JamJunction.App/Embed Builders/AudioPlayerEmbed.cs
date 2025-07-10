@@ -6,6 +6,7 @@ using DSharpPlus.SlashCommands;
 using JamJunction.App.Menu_Builders;
 using Lavalink4NET.Integrations.Lavasrc;
 using Lavalink4NET.Players.Queued;
+using Lavalink4NET.Rest.Entities.Tracks;
 using SpotifyAPI.Web;
 using YoutubeExplode.Playlists;
 using LavalinkTrack = Lavalink4NET.Tracks.LavalinkTrack;
@@ -424,6 +425,17 @@ public class AudioPlayerEmbed
         {
             Title = "Added To The Queue 🎵",
             Description = $"ılı   •  [{playlist.Title}]({playlist.Url}) - By **{channelTitle}**",
+            Color = DiscordColor.Cyan
+        };
+        return embed;
+    }
+    
+    public DiscordEmbedBuilder PlaylistAddedToQueue(TrackLoadResult playlist, string playlistUrl)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Title = "Added To The Queue 🎵",
+            Description = $"ılı   •  [{playlist.Playlist!.Name}]({playlistUrl})",
             Color = DiscordColor.Cyan
         };
         return embed;

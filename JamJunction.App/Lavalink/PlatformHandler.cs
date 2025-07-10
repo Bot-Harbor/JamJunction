@@ -42,9 +42,9 @@ public class PlatformHandler
             new ClientCredentialsAuthenticator(SpotifySecrets.ClientId, SpotifySecrets.ClientSecret));
 
         var spotify = new SpotifyClient(config);
-        
+
         var channel = context.Channel;
-        
+
         if (query.Contains("spotify.com"))
         {
             if (query.Contains("/album"))
@@ -70,14 +70,14 @@ public class PlatformHandler
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
                 }
-                
+
                 foreach (var track in fullAlbum.Tracks.Items!.Take(25))
                 {
                     if (player.Queue.Count >= 25)
                     {
                         break;
                     }
-                    
+
                     var seekable = true;
                     var liveStream = false;
 
@@ -123,7 +123,7 @@ public class PlatformHandler
 
                     await player.Queue.AddAsync(new TrackQueueItem(spotifyTrack));
                 }
-                
+
                 if (GuildData.FirstSongInQueue)
                 {
                     var firstTrack = player.Queue.FirstOrDefault()!.Track;
@@ -137,21 +137,21 @@ public class PlatformHandler
                     GuildData.Message = DiscordMessage;
                     return;
                 }
-                
+
                 _ = context.Channel.DeleteMessageAsync(GuildData.Message);
 
                 var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
                 GuildData.Message = guildMessage;
-                
+
                 var albumUrl = $"https://open.spotify.com/album/{fullAlbum.Id}";
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(AudioPlayerEmbed
                             .AlbumAddedToQueue(fullAlbum, albumUrl)));
-                
+
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
             }
@@ -223,7 +223,7 @@ public class PlatformHandler
                 GuildData.TextChannelId = context.Channel.Id;
 
                 await player.PlayAsync(spotifyTrack);
-                
+
                 if (player.Queue.IsEmpty)
                 {
                     DiscordMessage = await context
@@ -239,15 +239,20 @@ public class PlatformHandler
                 var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
                 GuildData.Message = guildMessage;
-                
+
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(spotifyTrack)));
-                
+
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
+            }
+
+            if (query.Contains("/playlist"))
+            {
+                // Playlist function here
             }
         }
         else
@@ -285,7 +290,7 @@ public class PlatformHandler
             GuildData.TextChannelId = context.Channel.Id;
 
             await player!.PlayAsync(spotifyTrack.Track);
-            
+
             if (player.Queue.IsEmpty)
             {
                 DiscordMessage = await context
@@ -295,19 +300,19 @@ public class PlatformHandler
                 GuildData.Message = DiscordMessage;
                 return;
             }
-            
+
             _ = context.Channel.DeleteMessageAsync(GuildData.Message);
 
             var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
             GuildData.Message = guildMessage;
 
             DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
                     .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(spotifyTrack)));
-            
+
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(DiscordMessage.Id);
         }
@@ -317,7 +322,7 @@ public class PlatformHandler
         InteractionContext context, ulong guildId)
     {
         var youtube = new YoutubeClient();
-        
+
         var channel = context.Channel;
 
         if (query.Contains("youtube.com"))
@@ -354,7 +359,7 @@ public class PlatformHandler
                     {
                         break;
                     }
-                    
+
                     var seekable = true;
                     var liveStream = false;
 
@@ -397,7 +402,7 @@ public class PlatformHandler
 
                     await player.Queue.AddAsync(new TrackQueueItem(youtubeVideo));
                 }
-                
+
                 if (GuildData.FirstSongInQueue)
                 {
                     var firstTrack = player.Queue.FirstOrDefault()!.Track;
@@ -417,14 +422,14 @@ public class PlatformHandler
                 var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
                 GuildData.Message = guildMessage;
-                
+
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(AudioPlayerEmbed
                             .PlaylistAddedToQueue(playlistData)));
-                
+
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
             }
@@ -492,7 +497,7 @@ public class PlatformHandler
                 GuildData.TextChannelId = context.Channel.Id;
 
                 await player.PlayAsync(youtubeVideo);
-                
+
                 if (player.Queue.IsEmpty)
                 {
                     DiscordMessage = await context
@@ -502,19 +507,19 @@ public class PlatformHandler
                     GuildData.Message = DiscordMessage;
                     return;
                 }
-                
+
                 _ = context.Channel.DeleteMessageAsync(GuildData.Message);
 
                 var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
                 GuildData.Message = guildMessage;
 
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo)));
-                
+
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
             }
@@ -538,7 +543,8 @@ public class PlatformHandler
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
                         .AddEmbed(ErrorEmbed.AudioTrackError(context)));
                 await Task.Delay(10000);
-                _ = channel.DeleteMessageAsync(errorMessage);;
+                _ = channel.DeleteMessageAsync(errorMessage);
+                ;
                 return;
             }
 
@@ -585,7 +591,7 @@ public class PlatformHandler
             GuildData.TextChannelId = context.Channel.Id;
 
             await player.PlayAsync(youtubeVideo);
-            
+
             if (player.Queue.IsEmpty)
             {
                 DiscordMessage = await context
@@ -601,13 +607,13 @@ public class PlatformHandler
             var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
             GuildData.Message = guildMessage;
-            
+
             DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
                     .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo)));
-            
+
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(DiscordMessage.Id);
         }
@@ -617,14 +623,100 @@ public class PlatformHandler
         InteractionContext context, ulong guildId)
     {
         var channel = context.Channel;
-        
-        if (query.Contains("soundcloud.com")) // Change to /playlists or something
-        {
-            //var result = await _apiClient.SearchAsync(query);
 
-            //Console.WriteLine($"Loaded playlist: {result.Tracks} tracks");
+        if (query.Contains("soundcloud.com") && query.Contains("/sets")) // Change to /playlists or something
+        {
+            var trackLoadResult = await _audioService.Tracks.LoadTracksAsync(query!, TrackSearchMode.SoundCloud);
             
-            // SHOULDN'T NEED TO ISSTARTEDFROMEVENT SINCE SOUNDCLOUD TRACK INFO IS NOT IN TRACK STARTED EVENT
+            if (trackLoadResult.Playlist == null)
+            {
+                var errorMessage = await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                        .AddEmbed(ErrorEmbed.AudioTrackError(context)));
+                await Task.Delay(10000);
+                _ = channel.DeleteMessageAsync(errorMessage);
+                return;
+            }
+
+            foreach (var track in trackLoadResult.Tracks.Take(25))
+            {
+                if (player.Queue.Count >= 25)
+                {
+                    break;
+                }
+
+                var seekable = true;
+                var liveStream = false;
+
+                if (track.Duration.Hours == 0 && track.Duration is { Minutes: 0, Seconds: 0 })
+                {
+                    seekable = false;
+                    liveStream = true;
+                }
+
+                var soundCloudTrack = new LavalinkTrack()
+                {
+                    SourceName = "soundcloud",
+                    Identifier = track.Identifier,
+                    IsSeekable = seekable,
+                    IsLiveStream = liveStream,
+                    Title = track.Title,
+                    Author = track.Author,
+                    StartPosition = TimeSpan.Zero,
+                    Duration = track.Duration,
+                    Uri = new Uri(track.Uri!.ToString()),
+                    ArtworkUri = new Uri(track.ArtworkUri!.ToString()),
+                };
+
+                if (soundCloudTrack.IsLiveStream)
+                {
+                    var errorMessage = await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                            .AddEmbed(ErrorEmbed.LiveSteamError(context)));
+                    await Task.Delay(10000);
+                    _ = channel.DeleteMessageAsync(errorMessage);
+                    return;
+                }
+
+                if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
+
+                GuildData = Bot.GuildData[guildId];
+                GuildData.TextChannelId = context.Channel.Id;
+
+                await player.Queue.AddAsync(new TrackQueueItem(soundCloudTrack));
+            }
+
+            if (GuildData.FirstSongInQueue)
+            {
+                var firstTrack = player.Queue.FirstOrDefault()!.Track;
+                await player.PlayAsync(firstTrack!, false);
+                await player.Queue.RemoveAtAsync(0);
+
+                DiscordMessage = await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                        new DiscordInteractionResponseBuilder(
+                            AudioPlayerEmbed.TrackInformation(firstTrack, player))));
+                GuildData.Message = DiscordMessage;
+                return;
+            }
+
+            _ = context.Channel.DeleteMessageAsync(GuildData.Message);
+            
+            var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+                new DiscordInteractionResponseBuilder(
+                    AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
+
+            GuildData.Message = guildMessage;
+
+            var playlistUrl = query;
+
+            DiscordMessage = await context
+                .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                    .AddEmbed(AudioPlayerEmbed
+                        .PlaylistAddedToQueue(trackLoadResult, playlistUrl)));
+
+            await Task.Delay(10000);
+            _ = context.DeleteFollowupAsync(DiscordMessage.Id);
         }
         else
         {
@@ -656,7 +748,7 @@ public class PlatformHandler
             GuildData.TextChannelId = context.Channel.Id;
 
             await player.PlayAsync(soundcloudTrack!);
-            
+
             if (player.Queue.IsEmpty)
             {
                 DiscordMessage = await context
@@ -666,19 +758,19 @@ public class PlatformHandler
                 GuildData.Message = DiscordMessage;
                 return;
             }
-            
+
             _ = context.Channel.DeleteMessageAsync(GuildData.Message);
 
             var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-            
+
             GuildData.Message = guildMessage;
 
             DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
                     .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(soundcloudTrack)));
-            
+
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(DiscordMessage.Id);
         }
