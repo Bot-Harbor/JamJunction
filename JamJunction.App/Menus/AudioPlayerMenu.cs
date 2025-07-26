@@ -1,7 +1,7 @@
 ﻿using DSharpPlus.Entities;
 using Lavalink4NET.Players.Queued;
 
-namespace JamJunction.App.Menu_Builders;
+namespace JamJunction.App.Menus;
 
 public class AudioPlayerMenu
 {
@@ -26,7 +26,7 @@ public class AudioPlayerMenu
         var options = new List<DiscordSelectComponentOption>();
 
         var id = 1;
-        foreach (var queue in queuedLavalinkPlayer.Queue)
+        foreach (var queue in queuedLavalinkPlayer.Queue.Take(15))
             options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
                 $"By {queue.Track!.Author}"));
 
@@ -39,7 +39,7 @@ public class AudioPlayerMenu
         var options = new List<DiscordSelectComponentOption>();
 
         var id = 0;
-        foreach (var queue in queuedLavalinkPlayer.Queue)
+        foreach (var queue in queuedLavalinkPlayer.Queue.Take(15))
             options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
                 $"By {queue.Track!.Author}"));
 

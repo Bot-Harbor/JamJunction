@@ -3,7 +3,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Menu_Builders;
+using JamJunction.App.Menus;
 using Lavalink4NET.Integrations.Lavasrc;
 using Lavalink4NET.Players.Queued;
 using Lavalink4NET.Rest.Entities.Tracks;
