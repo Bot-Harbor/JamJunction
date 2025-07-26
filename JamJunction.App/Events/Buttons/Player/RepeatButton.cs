@@ -2,18 +2,19 @@
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Embed_Builders;
+using JamJunction.App.Events.Buttons.Interfaces;
 using JamJunction.App.Lavalink;
 using Lavalink4NET;
-using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
+using Lavalink4NET.Players.Queued;
 
-namespace JamJunction.App.Events.Buttons;
+namespace JamJunction.App.Events.Buttons.Player;
 
-public class SkipButton : IButton
+public class RepeatButton : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public SkipButton(IAudioService audioService, DiscordClient discordClient)
+    public RepeatButton(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
@@ -23,7 +24,7 @@ public class SkipButton : IButton
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        if (btnInteractionArgs.Interaction.Data.CustomId == "skip")
+        if (btnInteractionArgs.Interaction.Data.CustomId == "repeat")
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
             var errorEmbed = new ErrorEmbed();
@@ -101,21 +102,58 @@ public class SkipButton : IButton
                 return;
             }
 
-            if (player.Queue.IsEmpty)
+            if (player!.CurrentTrack == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoTracksToSkipToError(btnInteractionArgs)));
+                        errorEmbed.NoAudioTrackError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
-            await player!.SkipAsync();
+            var guildData = Bot.GuildData[guildId];
+            var repeatMode = guildData.RepeatMode;
+
+            guildData.RepeatMode = !guildData.RepeatMode;
+
+            DiscordMessage guildMessage;
+
+            if (repeatMode == false)
+            {
+                player!.RepeatMode = TrackRepeatMode.None;
+
+                await channel.Channel.DeleteMessageAsync(guildData.Message);
+
+                guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+                    new DiscordInteractionResponseBuilder(
+                        audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
+
+                guildData.Message = guildMessage;
+
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(
+                        audioPlayerEmbed.DisableRepeat(btnInteractionArgs)));
+
+                await Task.Delay(10000);
+
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
+
+            player!.RepeatMode = TrackRepeatMode.Track;
+
+            _ = channel.Channel.DeleteMessageAsync(guildData.Message);
+
+            guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+                new DiscordInteractionResponseBuilder(
+                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
+
+            guildData.Message = guildMessage;
 
             var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.Skip(btnInteractionArgs)));
+                    audioPlayerEmbed.EnableRepeat(btnInteractionArgs)));
 
             await Task.Delay(10000);
             _ = channel.DeleteFollowupMessageAsync(message.Id);

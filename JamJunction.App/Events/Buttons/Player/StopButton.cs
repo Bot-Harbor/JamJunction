@@ -6,14 +6,14 @@ using JamJunction.App.Lavalink;
 using Lavalink4NET;
 using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
-namespace JamJunction.App.Events.Buttons;
+namespace JamJunction.App.Events.Buttons.Player;
 
-public class VolumeUpButton : IButton
+public class StopButton : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public VolumeUpButton(IAudioService audioService, DiscordClient discordClient)
+    public StopButton(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
@@ -23,7 +23,7 @@ public class VolumeUpButton : IButton
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        if (btnInteractionArgs.Interaction.Data.CustomId == "volume-up")
+        if (btnInteractionArgs.Interaction.Data.CustomId == "stop")
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
             var errorEmbed = new ErrorEmbed();
@@ -111,33 +111,11 @@ public class VolumeUpButton : IButton
                 return;
             }
 
-            var currentVolume = player.Volume;
-
-            if (currentVolume == 1)
-            {
-                var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.MaxVolumeError(btnInteractionArgs)));
-                await Task.Delay(10000);
-                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
-                return;
-            }
-
-            var increasedVolume = Math.Min(Math.Round(currentVolume + 0.10, 2), 1);
-            await player!.SetVolumeAsync((float)increasedVolume);
-
-            var guildData = Bot.GuildData[guildId];
-            _ = channel.Channel.DeleteMessageAsync(guildData.Message);
-
-            var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                new DiscordInteractionResponseBuilder(
-                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-
-            guildData.Message = guildMessage;
+            await player!.StopAsync();
 
             var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.VolumeIncreased(btnInteractionArgs)));
+                    audioPlayerEmbed.Stop(btnInteractionArgs)));
 
             await Task.Delay(10000);
             _ = channel.DeleteFollowupMessageAsync(message.Id);

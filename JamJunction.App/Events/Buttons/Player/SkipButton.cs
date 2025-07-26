@@ -6,14 +6,14 @@ using JamJunction.App.Lavalink;
 using Lavalink4NET;
 using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
-namespace JamJunction.App.Events.Buttons;
+namespace JamJunction.App.Events.Buttons.Player;
 
-public class ViewQueueButton : IButton
+public class SkipButton : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public ViewQueueButton(IAudioService audioService, DiscordClient discordClient)
+    public SkipButton(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
@@ -23,7 +23,7 @@ public class ViewQueueButton : IButton
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        if (btnInteractionArgs.Interaction.Data.CustomId == "view-queue")
+        if (btnInteractionArgs.Interaction.Data.CustomId == "skip")
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
             var errorEmbed = new ErrorEmbed();
@@ -35,7 +35,7 @@ public class ViewQueueButton : IButton
 
             var channel = btnInteractionArgs.Interaction;
 
-            await channel.DeferAsync(true);
+            await channel.DeferAsync();
 
             try
             {
@@ -101,9 +101,24 @@ public class ViewQueueButton : IButton
                 return;
             }
 
-            await channel.CreateFollowupMessageAsync(
+            if (player.Queue.IsEmpty)
+            {
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(
+                        errorEmbed.NoTracksToSkipToError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
+
+            await player!.SkipAsync();
+
+            var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
+                    audioPlayerEmbed.Skip(btnInteractionArgs)));
+
+            await Task.Delay(10000);
+            _ = channel.DeleteFollowupMessageAsync(message.Id);
         }
     }
 }

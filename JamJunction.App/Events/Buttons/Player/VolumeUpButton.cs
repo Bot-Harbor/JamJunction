@@ -2,19 +2,18 @@
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Embed_Builders;
-using JamJunction.App.Events.Buttons.Interfaces;
 using JamJunction.App.Lavalink;
 using Lavalink4NET;
-using Lavalink4NET.Players.Queued;
+using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
-namespace JamJunction.App.Events.Buttons;
+namespace JamJunction.App.Events.Buttons.Player;
 
-public class RepeatButton : IButton
+public class VolumeUpButton : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public RepeatButton(IAudioService audioService, DiscordClient discordClient)
+    public VolumeUpButton(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
@@ -24,7 +23,7 @@ public class RepeatButton : IButton
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        if (btnInteractionArgs.Interaction.Data.CustomId == "repeat")
+        if (btnInteractionArgs.Interaction.Data.CustomId == "volume-up")
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
             var errorEmbed = new ErrorEmbed();
@@ -112,40 +111,25 @@ public class RepeatButton : IButton
                 return;
             }
 
-            var guildData = Bot.GuildData[guildId];
-            var repeatMode = guildData.RepeatMode;
+            var currentVolume = player.Volume;
 
-            guildData.RepeatMode = !guildData.RepeatMode;
-
-            DiscordMessage guildMessage;
-
-            if (repeatMode == false)
+            if (currentVolume == 1)
             {
-                player!.RepeatMode = TrackRepeatMode.None;
-
-                await channel.Channel.DeleteMessageAsync(guildData.Message);
-
-                guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                    new DiscordInteractionResponseBuilder(
-                        audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-
-                guildData.Message = guildMessage;
-
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        audioPlayerEmbed.DisableRepeat(btnInteractionArgs)));
-
+                        errorEmbed.MaxVolumeError(btnInteractionArgs)));
                 await Task.Delay(10000);
-
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
-            player!.RepeatMode = TrackRepeatMode.Track;
+            var increasedVolume = Math.Min(Math.Round(currentVolume + 0.10, 2), 1);
+            await player!.SetVolumeAsync((float)increasedVolume);
 
+            var guildData = Bot.GuildData[guildId];
             _ = channel.Channel.DeleteMessageAsync(guildData.Message);
 
-            guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+            var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
@@ -153,7 +137,7 @@ public class RepeatButton : IButton
 
             var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.EnableRepeat(btnInteractionArgs)));
+                    audioPlayerEmbed.VolumeIncreased(btnInteractionArgs)));
 
             await Task.Delay(10000);
             _ = channel.DeleteFollowupMessageAsync(message.Id);
