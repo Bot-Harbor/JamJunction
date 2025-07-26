@@ -1,7 +1,7 @@
 ﻿using DSharpPlus.Entities;
 using Color = JamJunction.App.Enums.Color;
 
-namespace JamJunction.App.Embed_Builders;
+namespace JamJunction.App.Embeds;
 
 public class CaptionEmbed
 {

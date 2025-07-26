@@ -2,7 +2,7 @@
 using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
 
-namespace JamJunction.App.Embed_Builders;
+namespace JamJunction.App.Embeds;
 
 public class ErrorEmbed
 {

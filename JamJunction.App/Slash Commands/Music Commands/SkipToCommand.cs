@@ -1,6 +1,5 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Embed_Builders;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Menu_Builders;
 using Lavalink4NET;

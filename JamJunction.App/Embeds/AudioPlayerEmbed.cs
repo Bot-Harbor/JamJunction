@@ -11,7 +11,7 @@ using SpotifyAPI.Web;
 using YoutubeExplode.Playlists;
 using LavalinkTrack = Lavalink4NET.Tracks.LavalinkTrack;
 
-namespace JamJunction.App.Embed_Builders;
+namespace JamJunction.App.Embeds;
 
 public class AudioPlayerEmbed
 {
@@ -65,7 +65,7 @@ public class AudioPlayerEmbed
         var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
         var queue = queuedLavalinkPlayer.Queue;
 
-        var queueFull = queue.Count >= 25;
+        var queueFull = queue.Count >= 100;
 
         embed.AddField(
             "Player Status",
@@ -215,7 +215,7 @@ public class AudioPlayerEmbed
         var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
         var queue = queuedLavalinkPlayer.Queue;
 
-        var queueFull = queue.Count >= 25;
+        var queueFull = queue.Count >= 100;
 
         embed.AddField(
             "Player Status",
@@ -579,8 +579,10 @@ public class AudioPlayerEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder ViewQueue(InteractionContext context, QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordMessageBuilder ViewQueue(InteractionContext context, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
+        var messageBuilder = new DiscordMessageBuilder();
+
         var embed = new DiscordEmbedBuilder
         {
             Title = "☰  Queue List:",
@@ -594,6 +596,7 @@ public class AudioPlayerEmbed
         if (queuedLavalinkPlayer.Queue.IsEmpty)
         {
             embed.Description = "There are no tracks currently in the queue.";
+            messageBuilder.AddEmbed(embed);
         }
         else
         {
@@ -611,11 +614,69 @@ public class AudioPlayerEmbed
                         ? $"`{i++}.` [{queue.Track!.Title.Substring(0, 20)}...]({url}) - By **{author}**"
                         : $"`{i++}.` [{queue.Track!.Title}]({url}) - By **{author}**", true);
             }
+
+            messageBuilder.AddEmbed(embed);
+            
+            if (queuedLavalinkPlayer.Queue.Count > 15)
+            {
+                var beginningButton = new DiscordButtonComponent
+                (
+                    ButtonStyle.Secondary, "beginning", "<<"
+                );
+                
+                var backButton = new DiscordButtonComponent
+                (
+                    ButtonStyle.Secondary, "back", "<"
+                );
+                
+                var pageNumberButton = new DiscordButtonComponent
+                (
+                    ButtonStyle.Secondary, "page-number", "1" // Add parameter here
+                );
+
+                var nextButton = new DiscordButtonComponent
+                (
+                    ButtonStyle.Secondary, "next", ">"
+                );
+                
+                var endButton = new DiscordButtonComponent
+                (
+                    ButtonStyle.Secondary, "end", ">>"
+                );
+
+                var buttons = new List<DiscordComponent>
+                {
+                    beginningButton, backButton, pageNumberButton, nextButton, endButton
+                };
+
+                var componentsRows = new List<List<DiscordComponent>>();
+                var currentRow = new List<DiscordComponent>();
+
+                foreach (var button in buttons)
+                {
+                    if (currentRow.Count == 5)
+                    {
+                        componentsRows.Add(currentRow);
+                        currentRow = new List<DiscordComponent>();
+                    }
+
+                    currentRow.Add(button);
+                }
+
+                if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                var audioPlayerMenu = new AudioPlayerMenu();
+                
+                messageBuilder.AddComponents(audioPlayerMenu.SkipTo(queuedLavalinkPlayer));
+
+                foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+            }
         }
 
-        return embed;
+        return messageBuilder;
     }
 
+    // Copy & Paste
     public DiscordEmbedBuilder ViewQueue(ComponentInteractionCreateEventArgs btnInteractionArgs,
         QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
@@ -637,7 +698,7 @@ public class AudioPlayerEmbed
         {
             var i = 1;
 
-            foreach (var queue in queuedLavalinkPlayer.Queue.Take(25))
+            foreach (var queue in queuedLavalinkPlayer.Queue.Take(15))
             {
                 var title = queue.Track!.Title;
                 var url = queue.Track.Uri;

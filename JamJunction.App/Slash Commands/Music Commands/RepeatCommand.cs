@@ -1,6 +1,6 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Embed_Builders;
+using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Slash_Commands.Music_Commands.Enums;
 using Lavalink4NET;

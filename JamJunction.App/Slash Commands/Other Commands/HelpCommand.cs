@@ -1,6 +1,6 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Embed_Builders;
+using JamJunction.App.Embeds;
 
 namespace JamJunction.App.Slash_Commands.Other_Commands;
 
