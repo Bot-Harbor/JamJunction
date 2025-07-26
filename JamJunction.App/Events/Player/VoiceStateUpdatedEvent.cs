@@ -3,7 +3,7 @@ using DSharpPlus.EventArgs;
 using JamJunction.App.Lavalink;
 using Lavalink4NET;
 
-namespace JamJunction.App.Events;
+namespace JamJunction.App.Events.Player;
 
 public class VoiceStateUpdatedEvent
 {

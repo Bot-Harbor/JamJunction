@@ -4,7 +4,7 @@ using JamJunction.App.Lavalink;
 using Lavalink4NET;
 using Lavalink4NET.Events.Players;
 
-namespace JamJunction.App.Events;
+namespace JamJunction.App.Events.Player;
 
 public class TrackStartedEvent
 {

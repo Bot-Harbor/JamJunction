@@ -5,7 +5,7 @@ using Lavalink4NET;
 using Lavalink4NET.Events.Players;
 using Lavalink4NET.Players;
 
-namespace JamJunction.App.Events;
+namespace JamJunction.App.Events.Player;
 
 public class TrackStuckEvent
 {

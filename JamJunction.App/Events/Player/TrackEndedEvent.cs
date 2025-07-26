@@ -6,7 +6,7 @@ using Lavalink4NET.Events.Players;
 using Lavalink4NET.Players;
 using Lavalink4NET.Protocol.Payloads.Events;
 
-namespace JamJunction.App.Events;
+namespace JamJunction.App.Events.Player;
 
 public class TrackEndedEvent
 {
