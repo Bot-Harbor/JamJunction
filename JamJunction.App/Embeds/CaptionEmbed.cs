@@ -1,5 +1,5 @@
 ﻿using DSharpPlus.Entities;
-using Color = JamJunction.App.Enums.Color;
+using Color = JamJunction.App.Embeds.Enums.Color;
 
 namespace JamJunction.App.Embeds;
 
