@@ -1,6 +1,6 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Embed_Builders;
+using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Lavalink.Enums;
 using Lavalink4NET;
@@ -37,7 +37,7 @@ public class PlayCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.ValidVoiceChannelError(context)));
+                    ErrorEmbed.BuildValidVoiceChannelError(context)));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -50,7 +50,7 @@ public class PlayCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.NoConnectionError(context)));
+                    ErrorEmbed.BuildNoConnectionError(context)));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -63,17 +63,17 @@ public class PlayCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.SameVoiceChannelError(context)));
+                    ErrorEmbed.BuildSameVoiceChannelError(context)));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
-        if (player.Queue.Count >= 25)
+        if (player.Queue.Count >= 100)
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.QueueIsFullError(context)));
+                    ErrorEmbed.BuildQueueIsFullError(context)));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;

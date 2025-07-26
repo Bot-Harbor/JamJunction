@@ -1,6 +1,6 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Embed_Builders;
+using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
 using Lavalink4NET;
 
@@ -30,7 +30,7 @@ public class ViewQueueCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelError(context)));
+                    errorEmbed.BuildValidVoiceChannelError(context)));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -43,7 +43,7 @@ public class ViewQueueCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerError(context)));
+                    errorEmbed.BuildNoPlayerError(context)));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -53,7 +53,7 @@ public class ViewQueueCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelError(context)));
+                    errorEmbed.BuildSameVoiceChannelError(context)));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -67,14 +67,13 @@ public class ViewQueueCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionError(context)));
+                    errorEmbed.BuildNoConnectionError(context)));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
         await context.FollowUpAsync(
-            new DiscordFollowupMessageBuilder().AddEmbed(
-                audioPlayerEmbed.ViewQueue(context, player)));
+            new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(context, player)));
     }
 }
