@@ -85,6 +85,6 @@ public class RemoveCommand : ApplicationCommandModule
         }
 
         await context.FollowUpAsync(new DiscordFollowupMessageBuilder(new DiscordMessageBuilder().WithContent(" ")
-            .AddComponents(audioPlayerMenu.Remove(player))));
+            .AddComponents(audioPlayerMenu.BuildRemove(player))));
     }
 }

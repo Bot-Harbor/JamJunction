@@ -5,7 +5,7 @@ namespace JamJunction.App.Menus;
 
 public class AudioPlayerMenu
 {
-    public DiscordSelectComponent Filters()
+    public DiscordSelectComponent BuildFilters()
     {
         var options = new List<DiscordSelectComponentOption>
         {
@@ -21,7 +21,7 @@ public class AudioPlayerMenu
         return menu;
     }
 
-    public DiscordSelectComponent SkipTo(QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordSelectComponent BuildSkipTo(QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var options = new List<DiscordSelectComponentOption>();
 
@@ -34,7 +34,7 @@ public class AudioPlayerMenu
         return menu;
     }
 
-    public DiscordSelectComponent Remove(QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordSelectComponent BuildRemove(QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var options = new List<DiscordSelectComponentOption>();
 

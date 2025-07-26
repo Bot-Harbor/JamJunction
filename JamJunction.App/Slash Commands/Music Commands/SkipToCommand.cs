@@ -86,6 +86,6 @@ public class SkipToCommand : ApplicationCommandModule
 
         await context.FollowUpAsync(new DiscordFollowupMessageBuilder(new DiscordMessageBuilder()
             .WithContent(" ")
-            .AddComponents(audioPlayerMenu.SkipTo(player))));
+            .AddComponents(audioPlayerMenu.BuildSkipTo(player))));
     }
 }
