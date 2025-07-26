@@ -8,12 +8,12 @@ using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
 namespace JamJunction.App.Events.Buttons.Player;
 
-public class ShuffleButton : IButton
+public class RestartButtonEvent : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public ShuffleButton(IAudioService audioService, DiscordClient discordClient)
+    public RestartButtonEvent(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
@@ -23,7 +23,7 @@ public class ShuffleButton : IButton
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        if (btnInteractionArgs.Interaction.Data.CustomId == "shuffle")
+        if (btnInteractionArgs.Interaction.Data.CustomId == "restart")
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
             var errorEmbed = new ErrorEmbed();
@@ -101,21 +101,30 @@ public class ShuffleButton : IButton
                 return;
             }
 
-            if (player.Queue.IsEmpty)
+            if (player!.CurrentTrack == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildNoTracksToShuffleError(btnInteractionArgs)));
+                        errorEmbed.BuildNoAudioTrackError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
-            await player!.Queue.ShuffleAsync();
+            await player!.SeekAsync(TimeSpan.FromSeconds(0));
+
+            var guildData = Bot.GuildData[guildId];
+            _ = channel.Channel.DeleteMessageAsync(guildData.Message);
+
+            var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+                new DiscordInteractionResponseBuilder(
+                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, true))));
+
+            guildData.Message = guildMessage;
 
             var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.ShuffleQueue(btnInteractionArgs)));
+                    audioPlayerEmbed.Restart(btnInteractionArgs)));
 
             await Task.Delay(10000);
             _ = channel.DeleteFollowupMessageAsync(message.Id);

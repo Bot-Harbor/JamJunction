@@ -8,12 +8,12 @@ using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
 namespace JamJunction.App.Events.Buttons.Player;
 
-public class PauseButton : IButton
+public class PauseButtonEvent : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public PauseButton(IAudioService audioService, DiscordClient discordClient)
+    public PauseButtonEvent(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;

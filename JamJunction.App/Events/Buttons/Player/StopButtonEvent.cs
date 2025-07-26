@@ -8,12 +8,12 @@ using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
 namespace JamJunction.App.Events.Buttons.Player;
 
-public class SkipButton : IButton
+public class StopButtonEvent : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public SkipButton(IAudioService audioService, DiscordClient discordClient)
+    public StopButtonEvent(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
@@ -23,7 +23,7 @@ public class SkipButton : IButton
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        if (btnInteractionArgs.Interaction.Data.CustomId == "skip")
+        if (btnInteractionArgs.Interaction.Data.CustomId == "stop")
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
             var errorEmbed = new ErrorEmbed();
@@ -101,21 +101,21 @@ public class SkipButton : IButton
                 return;
             }
 
-            if (player.Queue.IsEmpty)
+            if (player!.CurrentTrack == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildNoTracksToSkipToError(btnInteractionArgs)));
+                        errorEmbed.BuildNoAudioTrackError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
-            await player!.SkipAsync();
+            await player!.StopAsync();
 
             var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.Skip(btnInteractionArgs)));
+                    audioPlayerEmbed.Stop(btnInteractionArgs)));
 
             await Task.Delay(10000);
             _ = channel.DeleteFollowupMessageAsync(message.Id);

@@ -2,18 +2,19 @@
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Embeds;
-using JamJunction.App.Events.Menus.Interfaces;
+using JamJunction.App.Events.Buttons.Interfaces;
 using JamJunction.App.Lavalink;
 using Lavalink4NET;
+using Lavalink4NET.Players.Queued;
 
-namespace JamJunction.App.Events.Menus;
+namespace JamJunction.App.Events.Buttons.Player;
 
-public class RemoveMenu : IMenu
+public class RepeatButtonEvent : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public RemoveMenu(IAudioService audioService, DiscordClient discordClient)
+    public RepeatButtonEvent(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
@@ -21,19 +22,19 @@ public class RemoveMenu : IMenu
 
     private DiscordChannel UserVoiceChannel { get; set; }
 
-    public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs menuInteractionArgs)
+    public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        if (menuInteractionArgs.Interaction.Data.CustomId == "remove")
+        if (btnInteractionArgs.Interaction.Data.CustomId == "repeat")
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
             var errorEmbed = new ErrorEmbed();
 
-            var guildId = menuInteractionArgs.Guild.Id;
+            var guildId = btnInteractionArgs.Guild.Id;
 
-            var memberId = menuInteractionArgs.User.Id;
-            var member = await menuInteractionArgs.Guild.GetMemberAsync(memberId);
+            var memberId = btnInteractionArgs.User.Id;
+            var member = await btnInteractionArgs.Guild.GetMemberAsync(memberId);
 
-            var channel = menuInteractionArgs.Interaction;
+            var channel = btnInteractionArgs.Interaction;
 
             await channel.DeferAsync();
 
@@ -45,7 +46,7 @@ public class RemoveMenu : IMenu
                 {
                     var errorMessage = await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.BuildValidVoiceChannelError(menuInteractionArgs)));
+                            errorEmbed.BuildValidVoiceChannelError(btnInteractionArgs)));
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
@@ -55,21 +56,21 @@ public class RemoveMenu : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildValidVoiceChannelError(menuInteractionArgs)));
+                        errorEmbed.BuildValidVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
             var botId = _discordClient.CurrentUser.Id;
-            var bot = await menuInteractionArgs.Guild.GetMemberAsync(botId);
+            var bot = await btnInteractionArgs.Guild.GetMemberAsync(botId);
             var botVoiceChannel = bot.Guild.VoiceStates.TryGetValue(botId, out var botVoiceState);
 
             if (botVoiceChannel == false)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildNoPlayerError(menuInteractionArgs)));
+                        errorEmbed.BuildNoPlayerError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -81,7 +82,7 @@ public class RemoveMenu : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildSameVoiceChannelError(menuInteractionArgs)));
+                        errorEmbed.BuildSameVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -95,33 +96,67 @@ public class RemoveMenu : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildNoConnectionError(menuInteractionArgs)));
+                        errorEmbed.BuildNoConnectionError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
-            foreach (var value in menuInteractionArgs.Values)
+            if (player!.CurrentTrack == null)
             {
-                await player.Queue.RemoveAtAsync(Convert.ToInt32(value));
-                _ = channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(
+                        errorEmbed.BuildNoAudioTrackError(btnInteractionArgs)));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
 
-                var guildData = Bot.GuildData[guildId];
-                _ = channel.Channel.DeleteMessageAsync(guildData.Message);
+            var guildData = Bot.GuildData[guildId];
+            var repeatMode = guildData.RepeatMode;
 
-                var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+            guildData.RepeatMode = !guildData.RepeatMode;
+
+            DiscordMessage guildMessage;
+
+            if (repeatMode == false)
+            {
+                player!.RepeatMode = TrackRepeatMode.None;
+
+                await channel.Channel.DeleteMessageAsync(guildData.Message);
+
+                guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
                 guildData.Message = guildMessage;
 
-                var message = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Remove(menuInteractionArgs, player)));
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(
+                        audioPlayerEmbed.DisableRepeat(btnInteractionArgs)));
 
                 await Task.Delay(10000);
-                _ = channel.DeleteFollowupMessageAsync(message.Id);
-                break;
+
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
             }
+
+            player!.RepeatMode = TrackRepeatMode.Track;
+
+            _ = channel.Channel.DeleteMessageAsync(guildData.Message);
+
+            guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+                new DiscordInteractionResponseBuilder(
+                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
+
+            guildData.Message = guildMessage;
+
+            var message = await channel.CreateFollowupMessageAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    audioPlayerEmbed.EnableRepeat(btnInteractionArgs)));
+
+            await Task.Delay(10000);
+            _ = channel.DeleteFollowupMessageAsync(message.Id);
         }
     }
 }

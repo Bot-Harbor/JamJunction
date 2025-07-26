@@ -2,30 +2,30 @@
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Embeds;
-using JamJunction.App.Events.Buttons.Interfaces;
 using JamJunction.App.Lavalink;
-using JamJunction.App.Modals;
 using Lavalink4NET;
+using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
-namespace JamJunction.App.Events.Buttons;
+namespace JamJunction.App.Events.Buttons.Player;
 
-public class PageNumberButton : IButton
+public class ResumeButtonEvent : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public PageNumberButton(IAudioService audioService, DiscordClient discordClient)
+    public ResumeButtonEvent(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
     }
-    
+
     private DiscordChannel UserVoiceChannel { get; set; }
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        if (btnInteractionArgs.Interaction.Data.CustomId == "page-number")
+        if (btnInteractionArgs.Interaction.Data.CustomId == "resume")
         {
+            var audioPlayerEmbed = new AudioPlayerEmbed();
             var errorEmbed = new ErrorEmbed();
 
             var guildId = btnInteractionArgs.Guild.Id;
@@ -34,6 +34,8 @@ public class PageNumberButton : IButton
             var member = await btnInteractionArgs.Guild.GetMemberAsync(memberId);
 
             var channel = btnInteractionArgs.Interaction;
+
+            await channel.DeferAsync();
 
             try
             {
@@ -108,11 +110,24 @@ public class PageNumberButton : IButton
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
-            
-            // Add condition if page number does not match with any current ones in the modal interaction
 
-            var pageNumberModal = new PageNumberModal();
-            await channel.CreateResponseAsync(InteractionResponseType.Modal, pageNumberModal.Build());
+            await player!.ResumeAsync();
+
+            var guildData = Bot.GuildData[guildId];
+            _ = channel.Channel.DeleteMessageAsync(guildData.Message);
+
+            var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+                new DiscordInteractionResponseBuilder(
+                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
+
+            guildData.Message = guildMessage;
+
+            var message = await channel.CreateFollowupMessageAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    audioPlayerEmbed.Resume(btnInteractionArgs)));
+
+            await Task.Delay(10000);
+            _ = channel.DeleteFollowupMessageAsync(message.Id);
         }
     }
 }

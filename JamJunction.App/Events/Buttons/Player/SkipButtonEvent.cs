@@ -8,12 +8,12 @@ using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
 namespace JamJunction.App.Events.Buttons.Player;
 
-public class VolumeDownButton : IButton
+public class SkipButtonEvent : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public VolumeDownButton(IAudioService audioService, DiscordClient discordClient)
+    public SkipButtonEvent(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
@@ -23,7 +23,7 @@ public class VolumeDownButton : IButton
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        if (btnInteractionArgs.Interaction.Data.CustomId == "volume-down")
+        if (btnInteractionArgs.Interaction.Data.CustomId == "skip")
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
             var errorEmbed = new ErrorEmbed();
@@ -101,44 +101,21 @@ public class VolumeDownButton : IButton
                 return;
             }
 
-            if (player!.CurrentTrack == null)
+            if (player.Queue.IsEmpty)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildNoAudioTrackError(btnInteractionArgs)));
+                        errorEmbed.BuildNoTracksToSkipToError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
-            var currentVolume = player.Volume;
-            Console.WriteLine($"Current Volume: {currentVolume}");
-
-            if (currentVolume == 0)
-            {
-                var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildMinVolumeError(btnInteractionArgs)));
-                await Task.Delay(10000);
-                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
-                return;
-            }
-
-            var decreasedVolume = Math.Max(Math.Round(currentVolume - 0.10, 2), 0);
-            await player!.SetVolumeAsync((float)decreasedVolume);
-
-            var guildData = Bot.GuildData[guildId];
-            _ = channel.Channel.DeleteMessageAsync(guildData.Message);
-
-            var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                new DiscordInteractionResponseBuilder(
-                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-
-            guildData.Message = guildMessage;
+            await player!.SkipAsync();
 
             var message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.VolumeDecreased(btnInteractionArgs)));
+                    audioPlayerEmbed.Skip(btnInteractionArgs)));
 
             await Task.Delay(10000);
             _ = channel.DeleteFollowupMessageAsync(message.Id);

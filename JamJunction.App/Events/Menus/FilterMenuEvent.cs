@@ -9,12 +9,12 @@ using Lavalink4NET.Filters;
 
 namespace JamJunction.App.Events.Menus;
 
-public class FilterMenu : IMenu
+public class FilterMenuEvent : IMenu
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public FilterMenu(IAudioService audioService, DiscordClient discordClient)
+    public FilterMenuEvent(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;

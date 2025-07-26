@@ -8,12 +8,12 @@ using Lavalink4NET;
 
 namespace JamJunction.App.Events.Menus;
 
-public class SkipToMenu : IMenu
+public class SkipToMenuEvent : IMenu
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public SkipToMenu(IAudioService audioService, DiscordClient discordClient)
+    public SkipToMenuEvent(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
