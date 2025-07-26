@@ -46,7 +46,7 @@ public class RepeatButton : IButton
                 {
                     var errorMessage = await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
+                            errorEmbed.BuildValidVoiceChannelError(btnInteractionArgs)));
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
@@ -56,7 +56,7 @@ public class RepeatButton : IButton
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.ValidVoiceChannelError(btnInteractionArgs)));
+                        errorEmbed.BuildValidVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -70,7 +70,7 @@ public class RepeatButton : IButton
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoPlayerError(btnInteractionArgs)));
+                        errorEmbed.BuildNoPlayerError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -82,7 +82,7 @@ public class RepeatButton : IButton
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.SameVoiceChannelError(btnInteractionArgs)));
+                        errorEmbed.BuildSameVoiceChannelError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -96,7 +96,7 @@ public class RepeatButton : IButton
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoConnectionError(btnInteractionArgs)));
+                        errorEmbed.BuildNoConnectionError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -106,7 +106,7 @@ public class RepeatButton : IButton
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoAudioTrackError(btnInteractionArgs)));
+                        errorEmbed.BuildNoAudioTrackError(btnInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;

@@ -20,6 +20,6 @@ public class CaptionCommand : ApplicationCommandModule
     )
     {
         var captionEmbed = new CaptionEmbed();
-        await context.CreateResponseAsync(captionEmbed.Caption(caption, image, color));
+        await context.CreateResponseAsync(captionEmbed.Build(caption, image, color));
     }
 }

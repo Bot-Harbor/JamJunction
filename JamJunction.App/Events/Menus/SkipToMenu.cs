@@ -45,7 +45,7 @@ public class SkipToMenu : IMenu
                 {
                     var errorMessage = await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.ValidVoiceChannelError(menuInteractionArgs)));
+                            errorEmbed.BuildValidVoiceChannelError(menuInteractionArgs)));
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
@@ -55,7 +55,7 @@ public class SkipToMenu : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.ValidVoiceChannelError(menuInteractionArgs)));
+                        errorEmbed.BuildValidVoiceChannelError(menuInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -69,7 +69,7 @@ public class SkipToMenu : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoPlayerError(menuInteractionArgs)));
+                        errorEmbed.BuildNoPlayerError(menuInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -81,7 +81,7 @@ public class SkipToMenu : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.SameVoiceChannelError(menuInteractionArgs)));
+                        errorEmbed.BuildSameVoiceChannelError(menuInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -95,7 +95,7 @@ public class SkipToMenu : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoConnectionError(menuInteractionArgs)));
+                        errorEmbed.BuildNoConnectionError(menuInteractionArgs)));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;

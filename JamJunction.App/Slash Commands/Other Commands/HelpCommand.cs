@@ -11,7 +11,7 @@ public class HelpCommand : ApplicationCommandModule
     {
         var helpEmbed = new HelpEmbed();
         await context.CreateResponseAsync(
-            new DiscordInteractionResponseBuilder(helpEmbed.Help(context)).AsEphemeral()
+            new DiscordInteractionResponseBuilder(helpEmbed.Build(context)).AsEphemeral()
         );
     }
 }

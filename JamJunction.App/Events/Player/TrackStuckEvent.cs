@@ -29,7 +29,7 @@ public class TrackStuckEvent
         var channel = guild.GetChannel(textChannelId);
 
         var errorEmbed = new ErrorEmbed();
-        await channel.SendMessageAsync(errorEmbed.TrackFailedToLoadError());
+        await channel.SendMessageAsync(errorEmbed.BuildTrackFailedToLoadError());
 
         await Task.Delay(TimeSpan.FromSeconds(5));
 
@@ -43,7 +43,7 @@ public class TrackStuckEvent
 
         if (player.State == PlayerState.NotPlaying)
         {
-            await channel.SendMessageAsync(errorEmbed.CouldNotLoadTrackOnAttemptError());
+            await channel.SendMessageAsync(errorEmbed.BuildCouldNotLoadTrackOnAttemptError());
             Bot.GuildData.Remove(guildId);
         }
     }

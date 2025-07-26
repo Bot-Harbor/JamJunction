@@ -2,30 +2,30 @@
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Embeds;
+using JamJunction.App.Events.Buttons.Interfaces;
 using JamJunction.App.Lavalink;
+using JamJunction.App.Modals;
 using Lavalink4NET;
-using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
-namespace JamJunction.App.Events.Buttons.Player;
+namespace JamJunction.App.Events.Buttons;
 
-public class VolumeUpButton : IButton
+public class PageNumberButton : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public VolumeUpButton(IAudioService audioService, DiscordClient discordClient)
+    public PageNumberButton(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
     }
-
+    
     private DiscordChannel UserVoiceChannel { get; set; }
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        if (btnInteractionArgs.Interaction.Data.CustomId == "volume-up")
+        if (btnInteractionArgs.Interaction.Data.CustomId == "page-number")
         {
-            var audioPlayerEmbed = new AudioPlayerEmbed();
             var errorEmbed = new ErrorEmbed();
 
             var guildId = btnInteractionArgs.Guild.Id;
@@ -34,8 +34,6 @@ public class VolumeUpButton : IButton
             var member = await btnInteractionArgs.Guild.GetMemberAsync(memberId);
 
             var channel = btnInteractionArgs.Interaction;
-
-            await channel.DeferAsync();
 
             try
             {
@@ -110,37 +108,11 @@ public class VolumeUpButton : IButton
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
+            
+            // Add condition if page number does not match with any current ones in the modal interaction
 
-            var currentVolume = player.Volume;
-
-            if (currentVolume == 1)
-            {
-                var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildMaxVolumeError(btnInteractionArgs)));
-                await Task.Delay(10000);
-                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
-                return;
-            }
-
-            var increasedVolume = Math.Min(Math.Round(currentVolume + 0.10, 2), 1);
-            await player!.SetVolumeAsync((float)increasedVolume);
-
-            var guildData = Bot.GuildData[guildId];
-            _ = channel.Channel.DeleteMessageAsync(guildData.Message);
-
-            var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                new DiscordInteractionResponseBuilder(
-                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-
-            guildData.Message = guildMessage;
-
-            var message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.VolumeIncreased(btnInteractionArgs)));
-
-            await Task.Delay(10000);
-            _ = channel.DeleteFollowupMessageAsync(message.Id);
+            var pageNumberModal = new PageNumberModal();
+            await channel.CreateResponseAsync(InteractionResponseType.Modal, pageNumberModal.Build());
         }
     }
 }

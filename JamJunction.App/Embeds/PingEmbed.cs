@@ -5,7 +5,7 @@ namespace JamJunction.App.Embeds;
 
 public class PingEmbed
 {
-    public DiscordEmbedBuilder Ping(InteractionContext context)
+    public DiscordEmbedBuilder Build(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {

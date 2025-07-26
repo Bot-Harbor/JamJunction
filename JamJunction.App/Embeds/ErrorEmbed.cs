@@ -6,7 +6,7 @@ namespace JamJunction.App.Embeds;
 
 public class ErrorEmbed
 {
-    public DiscordEmbedBuilder ValidVoiceChannelError(InteractionContext context)
+    public DiscordEmbedBuilder BuildValidVoiceChannelError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -16,7 +16,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder ValidVoiceChannelError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder BuildValidVoiceChannelError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -26,7 +26,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder SameVoiceChannelError(InteractionContext context)
+    public DiscordEmbedBuilder BuildSameVoiceChannelError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -36,7 +36,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder SameVoiceChannelError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder BuildSameVoiceChannelError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -47,7 +47,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoConnectionError(InteractionContext context)
+    public DiscordEmbedBuilder BuildNoConnectionError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -57,7 +57,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoConnectionError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder BuildNoConnectionError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -67,7 +67,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoPlayerError(InteractionContext context)
+    public DiscordEmbedBuilder BuildNoPlayerError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -77,7 +77,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoPlayerError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder BuildNoPlayerError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -87,7 +87,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoAudioTrackError(InteractionContext context)
+    public DiscordEmbedBuilder BuildNoAudioTrackError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -97,7 +97,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoAudioTrackError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder BuildNoAudioTrackError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -108,7 +108,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder AudioTrackError(InteractionContext context)
+    public DiscordEmbedBuilder BuildAudioTrackError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -118,7 +118,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder LiveSteamError(InteractionContext context)
+    public DiscordEmbedBuilder BuildLiveSteamError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -128,7 +128,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder VolumeNotAnIntegerError(InteractionContext context)
+    public DiscordEmbedBuilder BuildVolumeNotAnIntegerError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -138,7 +138,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoVolumeOver100Error(InteractionContext context)
+    public DiscordEmbedBuilder BuildNoVolumeOver100Error(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -148,7 +148,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder MaxVolumeError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder BuildMaxVolumeError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -158,7 +158,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder MinVolumeError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder BuildMinVolumeError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -168,7 +168,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbed AlreadyPausedError(InteractionContext context)
+    public DiscordEmbed BuildAlreadyPausedError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -178,7 +178,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbed AlreadyPausedError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbed BuildAlreadyPausedError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -188,7 +188,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder SeekNotAnIntegerError(InteractionContext context)
+    public DiscordEmbedBuilder BuildSeekNotAnIntegerError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -198,7 +198,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder SeekLargerThanDurationError(InteractionContext context)
+    public DiscordEmbedBuilder BuildSeekLargerThanDurationError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -209,7 +209,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoTracksToSkipToError(InteractionContext context)
+    public DiscordEmbedBuilder BuildNoTracksToSkipToError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -219,7 +219,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoTracksToSkipToError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder BuildNoTracksToSkipToError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -229,7 +229,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoTracksToShuffleError(InteractionContext context)
+    public DiscordEmbedBuilder BuildNoTracksToShuffleError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -239,7 +239,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoTracksToShuffleError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder BuildNoTracksToShuffleError(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -249,7 +249,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder QueueIsFullError(InteractionContext context)
+    public DiscordEmbedBuilder BuildQueueIsFullError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -259,7 +259,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder RemoveError(InteractionContext context)
+    public DiscordEmbedBuilder BuildRemoveError(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -269,7 +269,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder TrackFailedToLoadError()
+    public DiscordEmbedBuilder BuildTrackFailedToLoadError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -279,7 +279,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder CouldNotLoadTrackOnAttemptError()
+    public DiscordEmbedBuilder BuildCouldNotLoadTrackOnAttemptError()
     {
         var embed = new DiscordEmbedBuilder
         {

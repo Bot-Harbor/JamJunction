@@ -6,7 +6,7 @@ namespace JamJunction.App.Embeds;
 
 public class HelpEmbed
 {
-    public DiscordMessageBuilder Help(InteractionContext context)
+    public DiscordMessageBuilder Build(InteractionContext context)
     {
         var userIcon = context.User.GetAvatarUrl(ImageFormat.Png);
         var userName = context.Client.CurrentUser.Username;

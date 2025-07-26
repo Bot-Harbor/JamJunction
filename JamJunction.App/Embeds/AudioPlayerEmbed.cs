@@ -163,7 +163,7 @@ public class AudioPlayerEmbed
         messageBuilder.AddEmbed(embed);
 
         var audioPlayerMenu = new AudioPlayerMenu();
-        messageBuilder.AddComponents(audioPlayerMenu.Filters());
+        messageBuilder.AddComponents(audioPlayerMenu.BuildFilters());
 
         foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
@@ -313,7 +313,7 @@ public class AudioPlayerEmbed
         messageBuilder.AddEmbed(embed);
 
         var audioPlayerMenu = new AudioPlayerMenu();
-        messageBuilder.AddComponents(audioPlayerMenu.Filters());
+        messageBuilder.AddComponents(audioPlayerMenu.BuildFilters());
 
         foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
@@ -667,7 +667,7 @@ public class AudioPlayerEmbed
 
                 var audioPlayerMenu = new AudioPlayerMenu();
                 
-                messageBuilder.AddComponents(audioPlayerMenu.SkipTo(queuedLavalinkPlayer));
+                messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
 
                 foreach (var row in componentsRows) messageBuilder.AddComponents(row);
             }

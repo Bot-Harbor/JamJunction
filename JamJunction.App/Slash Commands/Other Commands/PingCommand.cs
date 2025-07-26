@@ -9,6 +9,6 @@ public class PingCommand : ApplicationCommandModule
     public async Task PingAsync(InteractionContext context)
     {
         var pingEmbed = new PingEmbed();
-        await context.CreateResponseAsync(pingEmbed.Ping(context), true);
+        await context.CreateResponseAsync(pingEmbed.Build(context), true);
     }
 }
