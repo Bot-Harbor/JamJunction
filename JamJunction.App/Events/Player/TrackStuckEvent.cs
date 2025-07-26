@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
 using Lavalink4NET;
 using Lavalink4NET.Events.Players;
