@@ -6,7 +6,7 @@ namespace JamJunction.App.Embeds;
 
 public class ErrorEmbed
 {
-    public DiscordEmbedBuilder BuildValidVoiceChannelError(InteractionContext context)
+    public DiscordEmbedBuilder BuildValidVoiceChannelError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -15,18 +15,8 @@ public class ErrorEmbed
         };
         return embed;
     }
-
-    public DiscordEmbedBuilder BuildValidVoiceChannelError(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description = "\ud83d\udd0a • You must be in a valid voice channel.",
-            Color = DiscordColor.Red
-        };
-        return embed;
-    }
-
-    public DiscordEmbedBuilder BuildSameVoiceChannelError(InteractionContext context)
+    
+    public DiscordEmbedBuilder BuildSameVoiceChannelError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -35,19 +25,8 @@ public class ErrorEmbed
         };
         return embed;
     }
-
-    public DiscordEmbedBuilder BuildSameVoiceChannelError(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description =
-                "\ud83d\udd0a • You must be in the same voice channel as the bot.",
-            Color = DiscordColor.Red
-        };
-        return embed;
-    }
-
-    public DiscordEmbedBuilder BuildNoConnectionError(InteractionContext context)
+    
+    public DiscordEmbedBuilder BuildNoConnectionError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -56,18 +35,8 @@ public class ErrorEmbed
         };
         return embed;
     }
-
-    public DiscordEmbedBuilder BuildNoConnectionError(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description = "\ud83c\udf0b • Lavalink connection is not established.",
-            Color = DiscordColor.Red
-        };
-        return embed;
-    }
-
-    public DiscordEmbedBuilder BuildNoPlayerError(InteractionContext context)
+    
+    public DiscordEmbedBuilder BuildNoPlayerError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -77,17 +46,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildNoPlayerError(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description = "\ud83d\udcfb • There is no player in the voice channel.",
-            Color = DiscordColor.Red
-        };
-        return embed;
-    }
-
-    public DiscordEmbedBuilder BuildNoAudioTrackError(InteractionContext context)
+    public DiscordEmbedBuilder BuildNoAudioTrackError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -96,19 +55,8 @@ public class ErrorEmbed
         };
         return embed;
     }
-
-    public DiscordEmbedBuilder BuildNoAudioTrackError(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description =
-                "\ud83c\udfb5 • There are no tracks currently playing.",
-            Color = DiscordColor.Red
-        };
-        return embed;
-    }
-
-    public DiscordEmbedBuilder BuildAudioTrackError(InteractionContext context)
+    
+    public DiscordEmbedBuilder BuildAudioTrackError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -118,7 +66,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildLiveSteamError(InteractionContext context)
+    public DiscordEmbedBuilder BuildLiveSteamError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -128,7 +76,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildVolumeNotAnIntegerError(InteractionContext context)
+    public DiscordEmbedBuilder BuildVolumeNotAnIntegerError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -138,7 +86,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildNoVolumeOver100Error(InteractionContext context)
+    public DiscordEmbedBuilder BuildNoVolumeOver100Error()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -148,7 +96,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildMaxVolumeError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder BuildMaxVolumeError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -158,7 +106,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildMinVolumeError(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder BuildMinVolumeError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -168,7 +116,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbed BuildAlreadyPausedError(InteractionContext context)
+    public DiscordEmbed BuildAlreadyPausedError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -178,17 +126,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbed BuildAlreadyPausedError(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description = "\u23f8  •  The player is already paused.",
-            Color = DiscordColor.Red
-        };
-        return embed;
-    }
-
-    public DiscordEmbedBuilder BuildSeekNotAnIntegerError(InteractionContext context)
+    public DiscordEmbedBuilder BuildSeekNotAnIntegerError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -198,7 +136,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildSeekLargerThanDurationError(InteractionContext context)
+    public DiscordEmbedBuilder BuildSeekLargerThanDurationError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -209,7 +147,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildNoTracksToSkipToError(InteractionContext context)
+    public DiscordEmbedBuilder BuildNoTracksToSkipToError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -218,18 +156,8 @@ public class ErrorEmbed
         };
         return embed;
     }
-
-    public DiscordEmbedBuilder BuildNoTracksToSkipToError(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description = "\u23ed • There are no tracks to skip to.",
-            Color = DiscordColor.Red
-        };
-        return embed;
-    }
-
-    public DiscordEmbedBuilder BuildNoTracksToShuffleError(InteractionContext context)
+    
+    public DiscordEmbedBuilder BuildNoTracksToShuffleError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -238,18 +166,8 @@ public class ErrorEmbed
         };
         return embed;
     }
-
-    public DiscordEmbedBuilder BuildNoTracksToShuffleError(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description = "\u21cc • There are no tracks in the queue to shuffle.",
-            Color = DiscordColor.Red
-        };
-        return embed;
-    }
-
-    public DiscordEmbedBuilder BuildQueueIsFullError(InteractionContext context)
+    
+    public DiscordEmbedBuilder BuildQueueIsFullError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -259,7 +177,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildRemoveError(InteractionContext context)
+    public DiscordEmbedBuilder BuildRemoveError()
     {
         var embed = new DiscordEmbedBuilder
         {

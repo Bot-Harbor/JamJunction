@@ -34,7 +34,7 @@ public class RepeatCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.BuildValidVoiceChannelError(context)));
+                    errorEmbed.BuildValidVoiceChannelError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -47,7 +47,7 @@ public class RepeatCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.BuildNoPlayerError(context)));
+                    errorEmbed.BuildNoPlayerError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -57,7 +57,7 @@ public class RepeatCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.BuildSameVoiceChannelError(context)));
+                    errorEmbed.BuildSameVoiceChannelError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -71,7 +71,7 @@ public class RepeatCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.BuildNoConnectionError(context)));
+                    errorEmbed.BuildNoConnectionError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -81,7 +81,7 @@ public class RepeatCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.BuildNoAudioTrackError(context)));
+                    errorEmbed.BuildNoAudioTrackError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;

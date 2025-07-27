@@ -46,7 +46,7 @@ public class FilterMenuEvent : IMenu
                 {
                     var errorMessage = await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.BuildValidVoiceChannelError(menuInteractionArgs)));
+                            errorEmbed.BuildValidVoiceChannelError()));
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
@@ -56,7 +56,7 @@ public class FilterMenuEvent : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildValidVoiceChannelError(menuInteractionArgs)));
+                        errorEmbed.BuildValidVoiceChannelError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -70,7 +70,7 @@ public class FilterMenuEvent : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildNoPlayerError(menuInteractionArgs)));
+                        errorEmbed.BuildNoPlayerError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -82,7 +82,7 @@ public class FilterMenuEvent : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildSameVoiceChannelError(menuInteractionArgs)));
+                        errorEmbed.BuildSameVoiceChannelError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -96,7 +96,7 @@ public class FilterMenuEvent : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildNoConnectionError(menuInteractionArgs)));
+                        errorEmbed.BuildNoConnectionError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -106,7 +106,7 @@ public class FilterMenuEvent : IMenu
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildNoAudioTrackError(menuInteractionArgs)));
+                        errorEmbed.BuildNoAudioTrackError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
