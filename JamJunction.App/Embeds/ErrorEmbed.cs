@@ -206,4 +206,14 @@ public class ErrorEmbed
         };
         return embed;
     }
+
+    public DiscordEmbedBuilder PageNumberDoesNotExistError()
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = "\ud83d\udcc4 • Page number does not exist.",
+            Color = DiscordColor.Red
+        };
+        return embed;
+    }
 }

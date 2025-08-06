@@ -102,8 +102,7 @@ public class ViewQueueButtonEvent : IButton
             }
 
             await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
+                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
         }
     }
 }
