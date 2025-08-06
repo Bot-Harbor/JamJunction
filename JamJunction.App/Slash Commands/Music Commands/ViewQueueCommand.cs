@@ -73,7 +73,9 @@ public class ViewQueueCommand : ApplicationCommandModule
             return;
         }
 
-        await context.FollowUpAsync(
+        var guildData = Bot.GuildData[guildId];
+
+        guildData.ViewQueueMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(context, player)));
     }
 }
