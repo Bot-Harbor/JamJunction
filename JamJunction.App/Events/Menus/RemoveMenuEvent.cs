@@ -103,6 +103,8 @@ public class RemoveMenuEvent : IMenu
 
             foreach (var value in menuInteractionArgs.Values)
             {
+                var removedTrack = player.Queue[Convert.ToInt32(value)].Track;
+                
                 await player.Queue.RemoveAtAsync(Convert.ToInt32(value));
                 _ = channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
 
@@ -116,7 +118,7 @@ public class RemoveMenuEvent : IMenu
                 guildData.Message = guildMessage;
 
                 var message = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Remove(menuInteractionArgs, player)));
+                    new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Remove(menuInteractionArgs, removedTrack)));
 
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(message.Id);
