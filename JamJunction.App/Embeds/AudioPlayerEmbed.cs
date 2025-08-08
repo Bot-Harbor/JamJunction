@@ -665,13 +665,12 @@ public class AudioPlayerEmbed
                 }
 
                 if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                var audioPlayerMenu = new AudioPlayerMenu();
-
-                messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
-
+                
                 foreach (var row in componentsRows) messageBuilder.AddComponents(row);
             }
+            
+            var audioPlayerMenu = new AudioPlayerMenu();
+            messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
         }
 
         return messageBuilder;
@@ -701,10 +700,15 @@ public class AudioPlayerEmbed
         {
             var i = 1;
 
+            var userId = btnInteractionArgs.Interaction.User.Id;
+            var userData = Bot.UserData[userId];
+            
             switch (pageNumber)
             {
                 case "1":
                 {
+                    userData.CurrentPageNumber = "1"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -720,6 +724,8 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
                     if (queuedLavalinkPlayer.Queue.Count > 15)
                     {
                         var beginningButton = new DiscordButtonComponent
@@ -768,19 +774,18 @@ public class AudioPlayerEmbed
 
                         if (currentRow.Count > 0) componentsRows.Add(currentRow);
 
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
-
                         foreach (var row in componentsRows) messageBuilder.AddComponents(row);
                     }
 
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
                     break;
                 }
                 case "2":
                 {
                     i = 16;
 
+                    userData.CurrentPageNumber = "2"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(15).Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -874,6 +879,8 @@ public class AudioPlayerEmbed
                 {
                     i = 31;
 
+                    userData.CurrentPageNumber = "3"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(30).Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -967,6 +974,8 @@ public class AudioPlayerEmbed
                 {
                     i = 46;
 
+                    userData.CurrentPageNumber = "4"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(45).Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -1060,6 +1069,8 @@ public class AudioPlayerEmbed
                 {
                     i = 61;
 
+                    userData.CurrentPageNumber = "5"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(60).Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -1153,6 +1164,8 @@ public class AudioPlayerEmbed
                 {
                     i = 76;
 
+                    userData.CurrentPageNumber = "6"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(75).Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -1245,6 +1258,8 @@ public class AudioPlayerEmbed
                 case "7":
                 {
                     i = 91;
+                    
+                    userData.CurrentPageNumber = "7"; 
 
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(90).Take(15))
                     {
@@ -1323,8 +1338,7 @@ public class AudioPlayerEmbed
     }
 
     public DiscordMessageBuilder ViewQueue(ModalSubmitEventArgs modalEventArgs,
-        QueuedLavalinkPlayer queuedLavalinkPlayer,
-        bool backBtnIsDisabled = true, bool nextBtnIsDisabled = false, string pageNumber = "1")
+        QueuedLavalinkPlayer queuedLavalinkPlayer, string pageNumber = "1")
     {
         var messageBuilder = new DiscordMessageBuilder();
 
@@ -1345,12 +1359,17 @@ public class AudioPlayerEmbed
         }
         else
         {
-            var i = 1;
+             var i = 1;
 
+            var userId = modalEventArgs.Interaction.User.Id;
+            var userData = Bot.UserData[userId];
+            
             switch (pageNumber)
             {
                 case "1":
                 {
+                    userData.CurrentPageNumber = "1"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -1365,7 +1384,9 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
-
+                    
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
                     if (queuedLavalinkPlayer.Queue.Count > 15)
                     {
                         var beginningButton = new DiscordButtonComponent
@@ -1414,19 +1435,18 @@ public class AudioPlayerEmbed
 
                         if (currentRow.Count > 0) componentsRows.Add(currentRow);
 
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
-
                         foreach (var row in componentsRows) messageBuilder.AddComponents(row);
                     }
 
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
                     break;
                 }
                 case "2":
                 {
                     i = 16;
 
+                    userData.CurrentPageNumber = "2"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(15).Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -1520,6 +1540,8 @@ public class AudioPlayerEmbed
                 {
                     i = 31;
 
+                    userData.CurrentPageNumber = "3"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(30).Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -1613,6 +1635,8 @@ public class AudioPlayerEmbed
                 {
                     i = 46;
 
+                    userData.CurrentPageNumber = "4"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(45).Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -1706,6 +1730,8 @@ public class AudioPlayerEmbed
                 {
                     i = 61;
 
+                    userData.CurrentPageNumber = "5"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(60).Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -1799,6 +1825,8 @@ public class AudioPlayerEmbed
                 {
                     i = 76;
 
+                    userData.CurrentPageNumber = "6"; 
+                    
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(75).Take(15))
                     {
                         var title = queue.Track!.Title;
@@ -1891,6 +1919,8 @@ public class AudioPlayerEmbed
                 case "7":
                 {
                     i = 91;
+                    
+                    userData.CurrentPageNumber = "7"; 
 
                     foreach (var queue in queuedLavalinkPlayer.Queue.Skip(90).Take(15))
                     {
