@@ -2,6 +2,7 @@
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events.Buttons;
 using JamJunction.App.Events.Buttons.Player;
+using JamJunction.App.Events.Buttons.Queue_Controls;
 using JamJunction.App.Events.Menus;
 using JamJunction.App.Events.Modals;
 using JamJunction.App.Events.Player;
@@ -17,6 +18,7 @@ namespace JamJunction.App;
 internal sealed class Bot : BackgroundService
 {
     public static readonly Dictionary<ulong, GuildData> GuildData = new();
+    public static readonly Dictionary<ulong, UserData> UserData = new();
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
     private readonly IServiceProvider _serviceProvider;
@@ -83,6 +85,7 @@ internal sealed class Bot : BackgroundService
             await buttonHandler.Execute(new RestartButtonEvent(_audioService, _discordClient), sender, args);
             await buttonHandler.Execute(new RepeatButtonEvent(_audioService, _discordClient), sender, args);
             await buttonHandler.Execute(new PageNumberButtonEvent(_audioService, _discordClient), sender, args);
+            await buttonHandler.Execute(new BackButton(_audioService, _discordClient), sender, args);
         };
     }
 

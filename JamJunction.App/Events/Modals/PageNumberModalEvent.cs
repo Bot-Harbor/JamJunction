@@ -99,11 +99,16 @@ public class PageNumberModalEvent : IModal
             return;
         }
 
+        var userId = modalEventArgs.Interaction.User.Id;
+        
         var values = modalEventArgs.Values;
         var pageNumber = values["page-number"];
-
+        
+        var userData = Bot.UserData[userId];
+        
         var guildData = Bot.GuildData[guildId];
-        _ = channel.Channel.DeleteMessageAsync(guildData.ViewQueueMessage);
+        var previousViewQueueMessage = guildData.ViewQueueMessage;
+        _ = channel.Channel.DeleteMessageAsync(previousViewQueueMessage);
 
         DiscordMessage message = null;
 
@@ -111,44 +116,45 @@ public class PageNumberModalEvent : IModal
         
         if (pageNumber == "1")
         {
+            userData.CurrentPageNumber = pageNumber;
             message = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player)));
         }
         else if (pageNumber == "2" && totalTracks > 15)
         {
+            userData.CurrentPageNumber = pageNumber;
             message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player,
-                    backBtnIsDisabled: false, pageNumber: "2")));
+                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "2")));
         }
         else if (pageNumber == "3" && totalTracks > 30)
         {
+            userData.CurrentPageNumber = pageNumber;
             message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player,
-                    backBtnIsDisabled: false, pageNumber: "3")));
+                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "3")));
         }
         else if (pageNumber == "4" && totalTracks > 45)
         {
+            userData.CurrentPageNumber = pageNumber;
             message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player,
-                    backBtnIsDisabled: false, pageNumber: "4")));
+                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "4")));
         }
         else if (pageNumber == "5" && totalTracks > 60)
         {
+            userData.CurrentPageNumber = pageNumber;
             message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player,
-                    backBtnIsDisabled: false, pageNumber: "5")));
+                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "5")));
         }
         else if (pageNumber == "6" && totalTracks > 75)
         {
+            userData.CurrentPageNumber = pageNumber;
             message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player,
-                    backBtnIsDisabled: false, pageNumber: "6")));
+                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "6")));
         }
         else if (pageNumber == "7" && totalTracks > 90)
         {
+            userData.CurrentPageNumber = pageNumber;
             message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player,
-                    backBtnIsDisabled: false, pageNumber: "7")));
+                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "7")));
         }
         else
         {

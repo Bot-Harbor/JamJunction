@@ -7,7 +7,7 @@ using JamJunction.App.Lavalink;
 using JamJunction.App.Modals;
 using Lavalink4NET;
 
-namespace JamJunction.App.Events.Buttons;
+namespace JamJunction.App.Events.Buttons.Queue_Controls;
 
 public class PageNumberButtonEvent : IButton
 {

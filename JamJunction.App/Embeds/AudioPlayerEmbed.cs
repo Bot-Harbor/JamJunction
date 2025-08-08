@@ -69,7 +69,7 @@ public class AudioPlayerEmbed
         var queueFull = queue.Count >= 100;
 
         embed.AddField(
-            "Player Status",
+            "Player Controls Status",
             $"Volume: `{Math.Round(queuedLavalinkPlayer.Volume * 100)}` \n" +
             $"Paused: `{playerState}` \n" +
             $"Repeating Mode: `{queuedLavalinkPlayer.RepeatMode}` \n" +
@@ -219,7 +219,7 @@ public class AudioPlayerEmbed
         var queueFull = queue.Count >= 100;
 
         embed.AddField(
-            "Player Status",
+            "Player Controls Status",
             $"Volume: `{Math.Round(queuedLavalinkPlayer.Volume * 100)}` \n" +
             $"Paused: `{playerState}` \n" +
             $"Repeating Mode: `{queuedLavalinkPlayer.RepeatMode}` \n" +
@@ -579,7 +579,7 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-    
+
     public DiscordMessageBuilder ViewQueue(InteractionContext context, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var messageBuilder = new DiscordMessageBuilder();
@@ -678,8 +678,7 @@ public class AudioPlayerEmbed
     }
 
     public DiscordMessageBuilder ViewQueue(ComponentInteractionCreateEventArgs btnInteractionArgs,
-        QueuedLavalinkPlayer queuedLavalinkPlayer, bool backBtnIsDisabled = true, bool nextBtnIsDisabled = false,
-        string pageNumber = "1")
+        QueuedLavalinkPlayer queuedLavalinkPlayer, string pageNumber = "1")
     {
         var messageBuilder = new DiscordMessageBuilder();
 
@@ -725,12 +724,12 @@ public class AudioPlayerEmbed
                     {
                         var beginningButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "beginning", "<<", true
                         );
 
                         var backButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "back", "<", true
                         );
 
                         var pageNumberButton = new DiscordButtonComponent
@@ -740,12 +739,12 @@ public class AudioPlayerEmbed
 
                         var nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
                         var endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>"
                         );
 
                         var buttons = new List<DiscordComponent>
@@ -797,61 +796,77 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+
+                    DiscordButtonComponent nextButton;
+                    DiscordButtonComponent endButton;
+
+                    if (queuedLavalinkPlayer.Queue.Count < 31)
                     {
-                        var beginningButton = new DiscordButtonComponent
+                        nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">", true
                         );
 
-                        var backButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>", true
+                        );
+                    }
+                    else
+                    {
+                        nextButton = new DiscordButtonComponent
+                        (
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
-                        var pageNumberButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                            ButtonStyle.Secondary, "end", ">>"
                         );
+                    }
 
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
+                    var buttons = new List<DiscordComponent>
+                    {
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "2"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "2"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
@@ -874,61 +889,77 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+
+                    DiscordButtonComponent nextButton;
+                    DiscordButtonComponent endButton;
+
+                    if (queuedLavalinkPlayer.Queue.Count < 46)
                     {
-                        var beginningButton = new DiscordButtonComponent
+                        nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">", true
                         );
 
-                        var backButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>", true
+                        );
+                    }
+                    else
+                    {
+                        nextButton = new DiscordButtonComponent
+                        (
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
-                        var pageNumberButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                            ButtonStyle.Secondary, "end", ">>"
                         );
+                    }
 
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
+                    var buttons = new List<DiscordComponent>
+                    {
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "3"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "3"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
@@ -951,61 +982,77 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+
+                    DiscordButtonComponent nextButton;
+                    DiscordButtonComponent endButton;
+
+                    if (queuedLavalinkPlayer.Queue.Count < 61)
                     {
-                        var beginningButton = new DiscordButtonComponent
+                        nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">", true
                         );
 
-                        var backButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>", true
+                        );
+                    }
+                    else
+                    {
+                        nextButton = new DiscordButtonComponent
+                        (
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
-                        var pageNumberButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                            ButtonStyle.Secondary, "end", ">>"
                         );
+                    }
 
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
+                    var buttons = new List<DiscordComponent>
+                    {
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "4"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "4"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
@@ -1028,61 +1075,77 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+
+                    DiscordButtonComponent nextButton;
+                    DiscordButtonComponent endButton;
+
+                    if (queuedLavalinkPlayer.Queue.Count < 76)
                     {
-                        var beginningButton = new DiscordButtonComponent
+                        nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">", true
                         );
 
-                        var backButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>", true
+                        );
+                    }
+                    else
+                    {
+                        nextButton = new DiscordButtonComponent
+                        (
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
-                        var pageNumberButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                            ButtonStyle.Secondary, "end", ">>"
                         );
+                    }
 
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
+                    var buttons = new List<DiscordComponent>
+                    {
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "5"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "5"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
@@ -1105,61 +1168,77 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+
+                    DiscordButtonComponent nextButton;
+                    DiscordButtonComponent endButton;
+
+                    if (queuedLavalinkPlayer.Queue.Count < 91)
                     {
-                        var beginningButton = new DiscordButtonComponent
+                        nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">", true
                         );
 
-                        var backButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>", true
+                        );
+                    }
+                    else
+                    {
+                        nextButton = new DiscordButtonComponent
+                        (
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
-                        var pageNumberButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                            ButtonStyle.Secondary, "end", ">>"
                         );
+                    }
 
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
+                    var buttons = new List<DiscordComponent>
+                    {
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "6"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "6"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
@@ -1182,61 +1261,58 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+                    var nextButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "next", ">", true
+                    );
+
+                    var endButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "end", ">>", true
+                    );
+
+                    var buttons = new List<DiscordComponent>
                     {
-                        var beginningButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
-                        );
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var backButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var pageNumberButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
-                        );
-
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
-
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
-
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "7"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "7"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
@@ -1245,7 +1321,7 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-    
+
     public DiscordMessageBuilder ViewQueue(ModalSubmitEventArgs modalEventArgs,
         QueuedLavalinkPlayer queuedLavalinkPlayer,
         bool backBtnIsDisabled = true, bool nextBtnIsDisabled = false, string pageNumber = "1")
@@ -1294,12 +1370,12 @@ public class AudioPlayerEmbed
                     {
                         var beginningButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "beginning", "<<", true
                         );
 
                         var backButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "back", "<", true
                         );
 
                         var pageNumberButton = new DiscordButtonComponent
@@ -1309,12 +1385,12 @@ public class AudioPlayerEmbed
 
                         var nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
                         var endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>"
                         );
 
                         var buttons = new List<DiscordComponent>
@@ -1366,61 +1442,77 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+
+                    DiscordButtonComponent nextButton;
+                    DiscordButtonComponent endButton;
+
+                    if (queuedLavalinkPlayer.Queue.Count < 31)
                     {
-                        var beginningButton = new DiscordButtonComponent
+                        nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">", true
                         );
 
-                        var backButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>", true
+                        );
+                    }
+                    else
+                    {
+                        nextButton = new DiscordButtonComponent
+                        (
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
-                        var pageNumberButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                            ButtonStyle.Secondary, "end", ">>"
                         );
+                    }
 
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
+                    var buttons = new List<DiscordComponent>
+                    {
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "2"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "2"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
@@ -1443,61 +1535,77 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+
+                    DiscordButtonComponent nextButton;
+                    DiscordButtonComponent endButton;
+
+                    if (queuedLavalinkPlayer.Queue.Count < 46)
                     {
-                        var beginningButton = new DiscordButtonComponent
+                        nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">", true
                         );
 
-                        var backButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>", true
+                        );
+                    }
+                    else
+                    {
+                        nextButton = new DiscordButtonComponent
+                        (
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
-                        var pageNumberButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                            ButtonStyle.Secondary, "end", ">>"
                         );
+                    }
 
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
+                    var buttons = new List<DiscordComponent>
+                    {
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "3"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "3"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
@@ -1520,61 +1628,77 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+
+                    DiscordButtonComponent nextButton;
+                    DiscordButtonComponent endButton;
+
+                    if (queuedLavalinkPlayer.Queue.Count < 61)
                     {
-                        var beginningButton = new DiscordButtonComponent
+                        nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">", true
                         );
 
-                        var backButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>", true
+                        );
+                    }
+                    else
+                    {
+                        nextButton = new DiscordButtonComponent
+                        (
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
-                        var pageNumberButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                            ButtonStyle.Secondary, "end", ">>"
                         );
+                    }
 
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
+                    var buttons = new List<DiscordComponent>
+                    {
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "4"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "4"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
@@ -1597,61 +1721,77 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+
+                    DiscordButtonComponent nextButton;
+                    DiscordButtonComponent endButton;
+
+                    if (queuedLavalinkPlayer.Queue.Count < 76)
                     {
-                        var beginningButton = new DiscordButtonComponent
+                        nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">", true
                         );
 
-                        var backButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>", true
+                        );
+                    }
+                    else
+                    {
+                        nextButton = new DiscordButtonComponent
+                        (
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
-                        var pageNumberButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                            ButtonStyle.Secondary, "end", ">>"
                         );
+                    }
 
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
+                    var buttons = new List<DiscordComponent>
+                    {
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "5"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "5"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
@@ -1674,61 +1814,77 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+
+                    DiscordButtonComponent nextButton;
+                    DiscordButtonComponent endButton;
+
+                    if (queuedLavalinkPlayer.Queue.Count < 91)
                     {
-                        var beginningButton = new DiscordButtonComponent
+                        nextButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "next", ">", true
                         );
 
-                        var backButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
+                            ButtonStyle.Secondary, "end", ">>", true
+                        );
+                    }
+                    else
+                    {
+                        nextButton = new DiscordButtonComponent
+                        (
+                            ButtonStyle.Secondary, "next", ">"
                         );
 
-                        var pageNumberButton = new DiscordButtonComponent
+                        endButton = new DiscordButtonComponent
                         (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                            ButtonStyle.Secondary, "end", ">>"
                         );
+                    }
 
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
+                    var buttons = new List<DiscordComponent>
+                    {
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "6"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "6"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
@@ -1751,61 +1907,58 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
-                    if (queuedLavalinkPlayer.Queue.Count > 15)
+                    var beginningButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "beginning", "<<"
+                    );
+
+                    var backButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "back", "<"
+                    );
+
+                    var pageNumberButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "page-number", $"{pageNumber}"
+                    );
+
+                    var nextButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "next", ">", true
+                    );
+
+                    var endButton = new DiscordButtonComponent
+                    (
+                        ButtonStyle.Secondary, "end", ">>", true
+                    );
+
+                    var buttons = new List<DiscordComponent>
                     {
-                        var beginningButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "beginning", "<<", backBtnIsDisabled
-                        );
+                        beginningButton, backButton, pageNumberButton, nextButton, endButton
+                    };
 
-                        var backButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "back", "<", backBtnIsDisabled
-                        );
+                    var componentsRows = new List<List<DiscordComponent>>();
+                    var currentRow = new List<DiscordComponent>();
 
-                        var pageNumberButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "page-number", $"{pageNumber}"
-                        );
-
-                        var nextButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "next", ">", nextBtnIsDisabled
-                        );
-
-                        var endButton = new DiscordButtonComponent
-                        (
-                            ButtonStyle.Secondary, "end", ">>", nextBtnIsDisabled
-                        );
-
-                        var buttons = new List<DiscordComponent>
+                    foreach (var button in buttons)
+                    {
+                        if (currentRow.Count == 5)
                         {
-                            beginningButton, backButton, pageNumberButton, nextButton, endButton
-                        };
-
-                        var componentsRows = new List<List<DiscordComponent>>();
-                        var currentRow = new List<DiscordComponent>();
-
-                        foreach (var button in buttons)
-                        {
-                            if (currentRow.Count == 5)
-                            {
-                                componentsRows.Add(currentRow);
-                                currentRow = new List<DiscordComponent>();
-                            }
-
-                            currentRow.Add(button);
+                            componentsRows.Add(currentRow);
+                            currentRow = new List<DiscordComponent>();
                         }
 
-                        if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                        var audioPlayerMenu = new AudioPlayerMenu();
-
-                        messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                            pageNumber: "7"));
-
-                        foreach (var row in componentsRows) messageBuilder.AddComponents(row);
+                        currentRow.Add(button);
                     }
+
+                    if (currentRow.Count > 0) componentsRows.Add(currentRow);
+
+                    var audioPlayerMenu = new AudioPlayerMenu();
+
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "7"));
+
+                    foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
                 }
