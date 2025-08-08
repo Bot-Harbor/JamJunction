@@ -73,8 +73,17 @@ public class ViewQueueCommand : ApplicationCommandModule
             return;
         }
 
+        var userId = context.Interaction.User.Id;
+        if (!Bot.UserData.ContainsKey(userId)) Bot.UserData.Add(userId, new UserData());
+        
         var guildData = Bot.GuildData[guildId];
-
+        
+        if (guildData.ViewQueueMessage != null)
+        {
+            var previousViewQueueMessage = guildData.ViewQueueMessage.Id;
+            _ = context.DeleteFollowupAsync(previousViewQueueMessage);
+        }
+        
         guildData.ViewQueueMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(context, player)));
     }

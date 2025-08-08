@@ -101,7 +101,18 @@ public class ViewQueueButtonEvent : IButton
                 return;
             }
 
-            await channel.CreateFollowupMessageAsync(
+            var userId = btnInteractionArgs.Interaction.User.Id;
+            if (!Bot.UserData.ContainsKey(userId)) Bot.UserData.Add(userId, new UserData());
+
+            var guildData = Bot.GuildData[guildId];
+            
+            if (guildData.ViewQueueMessage != null)
+            {
+                var previousViewQueueMessage = guildData.ViewQueueMessage.Id;
+                _ = channel.DeleteFollowupMessageAsync(previousViewQueueMessage);
+            }
+            
+            guildData.ViewQueueMessage = guildData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
         }
     }
