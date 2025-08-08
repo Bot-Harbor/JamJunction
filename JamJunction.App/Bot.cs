@@ -88,6 +88,7 @@ internal sealed class Bot : BackgroundService
             await buttonHandler.Execute(new BackButton(_audioService, _discordClient), sender, args);
             await buttonHandler.Execute(new BeginningButton(_audioService, _discordClient), sender, args);
             await buttonHandler.Execute(new NextButton(_audioService, _discordClient), sender, args);
+            await buttonHandler.Execute(new EndButton(_audioService, _discordClient), sender, args);
         };
     }
 
