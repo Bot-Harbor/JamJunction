@@ -101,31 +101,43 @@ public class AudioPlayerMenu
                 break;
             }
             case "2":
+                id = 15;
+                
                 foreach (var queue in queuedLavalinkPlayer.Queue.Skip(15).Take(15))
                     options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
                         $"By {queue.Track!.Author}"));
                 break;
             case "3":
+                id = 30;
+                
                 foreach (var queue in queuedLavalinkPlayer.Queue.Skip(30).Take(15))
                     options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
                         $"By {queue.Track!.Author}"));
                 break;
             case "4":
+                id = 45;
+                
                 foreach (var queue in queuedLavalinkPlayer.Queue.Skip(45).Take(15))
                     options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
                         $"By {queue.Track!.Author}"));
                 break;
             case "5":
+                id = 60;
+                
                 foreach (var queue in queuedLavalinkPlayer.Queue.Skip(60).Take(15))
                     options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
                         $"By {queue.Track!.Author}"));
                 break;
             case "6":
+                id = 75;
+                
                 foreach (var queue in queuedLavalinkPlayer.Queue.Skip(75).Take(15))
                     options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
                         $"By {queue.Track!.Author}"));
                 break;
             case "7":
+                id = 90;
+                
                 foreach (var queue in queuedLavalinkPlayer.Queue.Skip(90).Take(15))
                     options.Add(new DiscordSelectComponentOption(queue.Track!.Title, id++.ToString(),
                         $"By {queue.Track!.Author}"));

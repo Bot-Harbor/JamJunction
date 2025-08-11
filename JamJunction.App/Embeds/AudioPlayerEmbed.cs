@@ -617,6 +617,10 @@ public class AudioPlayerEmbed
             }
 
             messageBuilder.AddEmbed(embed);
+            
+            var audioPlayerMenu = new AudioPlayerMenu();
+            messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
+            messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer));
 
             if (queuedLavalinkPlayer.Queue.Count > 15)
             {
@@ -668,9 +672,6 @@ public class AudioPlayerEmbed
                 
                 foreach (var row in componentsRows) messageBuilder.AddComponents(row);
             }
-            
-            var audioPlayerMenu = new AudioPlayerMenu();
-            messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
         }
 
         return messageBuilder;
@@ -723,8 +724,11 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
-
+                    
                     var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer));
                     
                     if (queuedLavalinkPlayer.Queue.Count > 15)
                     {
@@ -776,8 +780,6 @@ public class AudioPlayerEmbed
 
                         foreach (var row in componentsRows) messageBuilder.AddComponents(row);
                     }
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
                     break;
                 }
                 case "2":
@@ -800,6 +802,12 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
+                    
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "2"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "2"));
 
                     var beginningButton = new DiscordButtonComponent
                     (
@@ -865,14 +873,9 @@ public class AudioPlayerEmbed
                     }
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "2"));
-
+                    
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
-
+                    
                     break;
                 }
                 case "3":
@@ -896,6 +899,12 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "3"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "3"));
+                    
                     var beginningButton = new DiscordButtonComponent
                     (
                         ButtonStyle.Secondary, "beginning", "<<"
@@ -960,12 +969,7 @@ public class AudioPlayerEmbed
                     }
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "3"));
-
+                    
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
@@ -990,6 +994,12 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
+                    
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "4"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "4"));
 
                     var beginningButton = new DiscordButtonComponent
                     (
@@ -1055,12 +1065,7 @@ public class AudioPlayerEmbed
                     }
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "4"));
-
+                    
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
@@ -1085,6 +1090,12 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
+                    
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "5"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "5"));
 
                     var beginningButton = new DiscordButtonComponent
                     (
@@ -1151,11 +1162,6 @@ public class AudioPlayerEmbed
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
 
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "5"));
-
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
@@ -1180,6 +1186,12 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
+                    
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "6"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "6"));
 
                     var beginningButton = new DiscordButtonComponent
                     (
@@ -1246,11 +1258,6 @@ public class AudioPlayerEmbed
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
 
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "6"));
-
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
@@ -1275,6 +1282,12 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
+                    
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "7"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "7"));
 
                     var beginningButton = new DiscordButtonComponent
                     (
@@ -1321,11 +1334,6 @@ public class AudioPlayerEmbed
                     }
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "7"));
 
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
@@ -1359,7 +1367,7 @@ public class AudioPlayerEmbed
         }
         else
         {
-             var i = 1;
+            var i = 1;
 
             var userId = modalEventArgs.Interaction.User.Id;
             var userData = Bot.UserData[userId];
@@ -1386,6 +1394,9 @@ public class AudioPlayerEmbed
                     messageBuilder.AddEmbed(embed);
                     
                     var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer));
                     
                     if (queuedLavalinkPlayer.Queue.Count > 15)
                     {
@@ -1437,8 +1448,6 @@ public class AudioPlayerEmbed
 
                         foreach (var row in componentsRows) messageBuilder.AddComponents(row);
                     }
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer));
                     break;
                 }
                 case "2":
@@ -1461,6 +1470,12 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
+                    
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "2"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "2"));
 
                     var beginningButton = new DiscordButtonComponent
                     (
@@ -1526,14 +1541,9 @@ public class AudioPlayerEmbed
                     }
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "2"));
-
+                    
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
-
+                    
                     break;
                 }
                 case "3":
@@ -1557,6 +1567,12 @@ public class AudioPlayerEmbed
 
                     messageBuilder.AddEmbed(embed);
 
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "3"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "3"));
+                    
                     var beginningButton = new DiscordButtonComponent
                     (
                         ButtonStyle.Secondary, "beginning", "<<"
@@ -1621,12 +1637,7 @@ public class AudioPlayerEmbed
                     }
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "3"));
-
+                    
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
@@ -1651,6 +1662,12 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
+                    
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "4"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "4"));
 
                     var beginningButton = new DiscordButtonComponent
                     (
@@ -1716,12 +1733,7 @@ public class AudioPlayerEmbed
                     }
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "4"));
-
+                    
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
@@ -1746,6 +1758,12 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
+                    
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "5"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "5"));
 
                     var beginningButton = new DiscordButtonComponent
                     (
@@ -1812,11 +1830,6 @@ public class AudioPlayerEmbed
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
 
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "5"));
-
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
@@ -1841,6 +1854,12 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
+                    
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "6"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "6"));
 
                     var beginningButton = new DiscordButtonComponent
                     (
@@ -1907,11 +1926,6 @@ public class AudioPlayerEmbed
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
 
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "6"));
-
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
                     break;
@@ -1936,6 +1950,12 @@ public class AudioPlayerEmbed
                     }
 
                     messageBuilder.AddEmbed(embed);
+                    
+                    var audioPlayerMenu = new AudioPlayerMenu();
+                    
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
+                        pageNumber: "7"));
+                    messageBuilder.AddComponents(audioPlayerMenu.BuildRemove(queuedLavalinkPlayer, pageNumber: "7"));
 
                     var beginningButton = new DiscordButtonComponent
                     (
@@ -1982,11 +2002,6 @@ public class AudioPlayerEmbed
                     }
 
                     if (currentRow.Count > 0) componentsRows.Add(currentRow);
-
-                    var audioPlayerMenu = new AudioPlayerMenu();
-
-                    messageBuilder.AddComponents(audioPlayerMenu.BuildSkipTo(queuedLavalinkPlayer,
-                        pageNumber: "7"));
 
                     foreach (var row in componentsRows) messageBuilder.AddComponents(row);
 
