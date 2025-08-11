@@ -64,8 +64,6 @@ public class HelpEmbed
             "\ud83d\udd01  </repeating-mode:1319060173561659555>\n" +
             "\ud83d\udd52  </seek:1186000603273510952>\n" +
             "\u23ed\ufe0f  </skip:1204215826773835778>\n" +
-            "\u23ed\ufe0f  </skip-to:1326355880069042187>\n" +
-            "\ud83d\uddd1  </remove:1326355880069042188>\n" +
             "\ud83d\udd0c  </leave:1192206662468108438>\n",
             true
         );
