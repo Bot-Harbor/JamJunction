@@ -132,17 +132,17 @@ public class PlatformHandler
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                    GuildData.Message = DiscordMessage;
+                    GuildData.PlayerMessage = DiscordMessage;
                     return;
                 }
 
-                _ = context.Channel.DeleteMessageAsync(GuildData.Message);
+                _ = context.Channel.DeleteMessageAsync(GuildData.PlayerMessage);
 
-                var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+                var playerMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-                GuildData.Message = guildMessage;
+                GuildData.PlayerMessage = playerMessage;
 
                 var albumUrl = $"https://open.spotify.com/album/{fullAlbum.Id}";
                 DiscordMessage = await context
@@ -239,17 +239,17 @@ public class PlatformHandler
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                    GuildData.Message = DiscordMessage;
+                    GuildData.PlayerMessage = DiscordMessage;
                     return;
                 }
 
-                _ = context.Channel.DeleteMessageAsync(GuildData.Message);
+                _ = context.Channel.DeleteMessageAsync(GuildData.PlayerMessage);
 
-                var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+                var playerMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-                GuildData.Message = guildMessage;
+                GuildData.PlayerMessage = playerMessage;
 
                 var playlistUrl = $"https://open.spotify.com/playlist/{fullPlaylist.Id}";
                 DiscordMessage = await context
@@ -335,17 +335,17 @@ public class PlatformHandler
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(spotifyTrack, player))));
-                    GuildData.Message = DiscordMessage;
+                    GuildData.PlayerMessage = DiscordMessage;
                     return;
                 }
 
-                _ = context.Channel.DeleteMessageAsync(GuildData.Message);
+                _ = context.Channel.DeleteMessageAsync(GuildData.PlayerMessage);
 
-                var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+                var playerMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-                GuildData.Message = guildMessage;
+                GuildData.PlayerMessage = playerMessage;
 
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -397,17 +397,17 @@ public class PlatformHandler
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
                             AudioPlayerEmbed.TrackInformation(spotifyTrack, player))));
-                GuildData.Message = DiscordMessage;
+                GuildData.PlayerMessage = DiscordMessage;
                 return;
             }
 
-            _ = context.Channel.DeleteMessageAsync(GuildData.Message);
+            _ = context.Channel.DeleteMessageAsync(GuildData.PlayerMessage);
 
-            var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+            var playerMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-            GuildData.Message = guildMessage;
+            GuildData.PlayerMessage = playerMessage;
 
             DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -510,17 +510,17 @@ public class PlatformHandler
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                    GuildData.Message = DiscordMessage;
+                    GuildData.PlayerMessage = DiscordMessage;
                     return;
                 }
 
-                _ = context.Channel.DeleteMessageAsync(GuildData.Message);
+                _ = context.Channel.DeleteMessageAsync(GuildData.PlayerMessage);
 
-                var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+                var playerMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-                GuildData.Message = guildMessage;
+                GuildData.PlayerMessage = playerMessage;
 
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -601,17 +601,17 @@ public class PlatformHandler
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
                                 AudioPlayerEmbed.TrackInformation(youtubeVideo, player))));
-                    GuildData.Message = DiscordMessage;
+                    GuildData.PlayerMessage = DiscordMessage;
                     return;
                 }
 
-                _ = context.Channel.DeleteMessageAsync(GuildData.Message);
+                _ = context.Channel.DeleteMessageAsync(GuildData.PlayerMessage);
 
-                var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+                var playerMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-                GuildData.Message = guildMessage;
+                GuildData.PlayerMessage = playerMessage;
 
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -695,17 +695,17 @@ public class PlatformHandler
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
                             AudioPlayerEmbed.TrackInformation(youtubeVideo, player))));
-                GuildData.Message = DiscordMessage;
+                GuildData.PlayerMessage = DiscordMessage;
                 return;
             }
 
-            _ = context.Channel.DeleteMessageAsync(GuildData.Message);
+            _ = context.Channel.DeleteMessageAsync(GuildData.PlayerMessage);
 
-            var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+            var playerMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-            GuildData.Message = guildMessage;
+            GuildData.PlayerMessage = playerMessage;
 
             DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -790,17 +790,17 @@ public class PlatformHandler
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
                             AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                GuildData.Message = DiscordMessage;
+                GuildData.PlayerMessage = DiscordMessage;
                 return;
             }
 
-            _ = context.Channel.DeleteMessageAsync(GuildData.Message);
+            _ = context.Channel.DeleteMessageAsync(GuildData.PlayerMessage);
 
-            var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+            var playerMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-            GuildData.Message = guildMessage;
+            GuildData.PlayerMessage = playerMessage;
 
             var playlistUrl = query;
 
@@ -849,17 +849,17 @@ public class PlatformHandler
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
                             AudioPlayerEmbed.TrackInformation(soundcloudTrack, player))));
-                GuildData.Message = DiscordMessage;
+                GuildData.PlayerMessage = DiscordMessage;
                 return;
             }
 
-            _ = context.Channel.DeleteMessageAsync(GuildData.Message);
+            _ = context.Channel.DeleteMessageAsync(GuildData.PlayerMessage);
 
-            var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
+            var playerMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-            GuildData.Message = guildMessage;
+            GuildData.PlayerMessage = playerMessage;
 
             DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()

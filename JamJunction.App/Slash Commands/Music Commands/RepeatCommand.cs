@@ -96,19 +96,19 @@ public class RepeatCommand : ApplicationCommandModule
         };
 
         var guildData = Bot.GuildData[guildId];
-        _ = context.Channel.DeleteMessageAsync(guildData.Message);
+        _ = context.Channel.DeleteMessageAsync(guildData.PlayerMessage);
 
         var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
             new DiscordInteractionResponseBuilder(
                 audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-        guildData.Message = guildMessage;
+        guildData.PlayerMessage = guildMessage;
 
-        var message = await context.FollowUpAsync(
+        var repeatMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Repeat(context, player)));
 
         await Task.Delay(10000);
-        _ = context.DeleteFollowupAsync(message.Id);
+        _ = context.DeleteFollowupAsync(repeatMessage.Id);
     }
 }

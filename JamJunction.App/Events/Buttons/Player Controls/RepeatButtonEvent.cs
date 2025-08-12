@@ -117,19 +117,19 @@ public class RepeatButtonEvent : IButton
 
             guildData.RepeatMode = !guildData.RepeatMode;
 
-            DiscordMessage guildMessage;
+            DiscordMessage playerMessage;
 
             if (repeatMode == false)
             {
                 player!.RepeatMode = TrackRepeatMode.None;
 
-                await channel.Channel.DeleteMessageAsync(guildData.Message);
+                await channel.Channel.DeleteMessageAsync(guildData.PlayerMessage);
 
-                guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+                playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                     new DiscordInteractionResponseBuilder(
                         audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-                guildData.Message = guildMessage;
+                guildData.PlayerMessage = playerMessage;
 
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
@@ -143,20 +143,20 @@ public class RepeatButtonEvent : IButton
 
             player!.RepeatMode = TrackRepeatMode.Track;
 
-            _ = channel.Channel.DeleteMessageAsync(guildData.Message);
+            _ = channel.Channel.DeleteMessageAsync(guildData.PlayerMessage);
 
-            guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+            playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-            guildData.Message = guildMessage;
+            guildData.PlayerMessage = playerMessage;
 
-            var message = await channel.CreateFollowupMessageAsync(
+            var enableRepeatMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.EnableRepeat(btnInteractionArgs)));
 
             await Task.Delay(10000);
-            _ = channel.DeleteFollowupMessageAsync(message.Id);
+            _ = channel.DeleteFollowupMessageAsync(enableRepeatMessage.Id);
         }
     }
 }

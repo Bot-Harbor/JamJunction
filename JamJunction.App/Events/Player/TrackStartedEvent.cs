@@ -38,11 +38,11 @@ public class TrackStartedEvent
             return;
         }
 
-        var message = guildData.Message;
-        _ = channel.DeleteMessageAsync(message);
+        var playerMessage = guildData.PlayerMessage;
+        _ = channel.DeleteMessageAsync(playerMessage);
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
-        message = await channel.SendMessageAsync(audioPlayerEmbed.TrackInformation(track, player, true));
-        guildData.Message = message;
+        playerMessage = await channel.SendMessageAsync(audioPlayerEmbed.TrackInformation(track, player, true));
+        guildData.PlayerMessage = playerMessage;
     }
 }

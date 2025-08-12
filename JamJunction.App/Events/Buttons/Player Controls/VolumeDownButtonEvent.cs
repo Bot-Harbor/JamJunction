@@ -128,20 +128,20 @@ public class VolumeDownButtonEvent : IButton
             await player!.SetVolumeAsync((float)decreasedVolume);
 
             var guildData = Bot.GuildData[guildId];
-            _ = channel.Channel.DeleteMessageAsync(guildData.Message);
+            _ = channel.Channel.DeleteMessageAsync(guildData.PlayerMessage);
 
-            var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+            var playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-            guildData.Message = guildMessage;
+            guildData.PlayerMessage = playerMessage;
 
-            var message = await channel.CreateFollowupMessageAsync(
+            var volumeDecreasedMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.VolumeDecreased(btnInteractionArgs)));
 
             await Task.Delay(10000);
-            _ = channel.DeleteFollowupMessageAsync(message.Id);
+            _ = channel.DeleteFollowupMessageAsync(volumeDecreasedMessage.Id);
         }
     }
 }

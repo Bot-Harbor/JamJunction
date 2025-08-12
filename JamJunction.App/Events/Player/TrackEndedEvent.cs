@@ -34,7 +34,7 @@ public class TrackEndedEvent
 
         if (eventArgs.Reason == TrackEndReason.Stopped)
         {
-            _ = channel.DeleteMessageAsync(guildData.Message);
+            _ = channel.DeleteMessageAsync(guildData.PlayerMessage);
             
             foreach (var userData in Bot.UserData.Values)
             {
@@ -53,13 +53,13 @@ public class TrackEndedEvent
         if (player.State == PlayerState.NotPlaying)
         {
             var audioPlayerEmbed = new AudioPlayerEmbed();
-            await channel.DeleteMessageAsync(guildData.Message);
+            await channel.DeleteMessageAsync(guildData.PlayerMessage);
 
-            var message = await channel.SendMessageAsync(audioPlayerEmbed.QueueSomething());
+            var queueSomethingMessage = await channel.SendMessageAsync(audioPlayerEmbed.QueueSomething());
 
             await Task.Delay(10000);
 
-            _ = channel.DeleteMessageAsync(message);
+            _ = channel.DeleteMessageAsync(queueSomethingMessage);
             
             foreach (var userData in Bot.UserData.Values)
             {

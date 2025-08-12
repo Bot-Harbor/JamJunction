@@ -127,20 +127,20 @@ public class VolumeUpButtonEvent : IButton
             await player!.SetVolumeAsync((float)increasedVolume);
 
             var guildData = Bot.GuildData[guildId];
-            _ = channel.Channel.DeleteMessageAsync(guildData.Message);
+            _ = channel.Channel.DeleteMessageAsync(guildData.PlayerMessage);
 
-            var guildMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+            var playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(
                     audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-            guildData.Message = guildMessage;
+            guildData.PlayerMessage = playerMessage;
 
-            var message = await channel.CreateFollowupMessageAsync(
+            var volumeIncreasedMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.VolumeIncreased(btnInteractionArgs)));
 
             await Task.Delay(10000);
-            _ = channel.DeleteFollowupMessageAsync(message.Id);
+            _ = channel.DeleteFollowupMessageAsync(volumeIncreasedMessage.Id);
         }
     }
 }

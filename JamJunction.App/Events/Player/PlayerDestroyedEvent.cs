@@ -22,7 +22,7 @@ public class PlayerDestroyedEvent
         var textChannelId = guildData.TextChannelId;
         var channel = guild.GetChannel(textChannelId);
 
-        _ = channel.DeleteMessageAsync(guildData.Message);
+        _ = channel.DeleteMessageAsync(guildData.PlayerMessage);
         
         foreach (var userData in Bot.UserData.Values)
         {

@@ -87,11 +87,11 @@ public class CurrentTrackCommand : ApplicationCommandModule
         }
 
         channel = context.Channel;
-        _ = channel.DeleteMessageAsync(guildData.Message);
+        _ = channel.DeleteMessageAsync(guildData.PlayerMessage);
 
-        var message = await context
+        var playerMessage = await context
             .FollowUpAsync(new DiscordFollowupMessageBuilder(
                 new DiscordInteractionResponseBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-        guildData.Message = message;
+        guildData.PlayerMessage = playerMessage;
     }
 }

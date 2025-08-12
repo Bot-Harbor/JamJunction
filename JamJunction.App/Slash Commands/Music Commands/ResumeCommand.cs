@@ -86,19 +86,19 @@ public class ResumeCommand : ApplicationCommandModule
         await player!.ResumeAsync();
 
         var guildData = Bot.GuildData[guildId];
-        _ = context.Channel.DeleteMessageAsync(guildData.Message);
+        _ = context.Channel.DeleteMessageAsync(guildData.PlayerMessage);
 
         var guildMessage = await context.FollowUpAsync(new DiscordFollowupMessageBuilder(
             new DiscordInteractionResponseBuilder(
                 audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
 
-        guildData.Message = guildMessage;
+        guildData.PlayerMessage = guildMessage;
 
-        var message = await context.FollowUpAsync(
+        var resumeMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Resume(context)));
 
         await Task.Delay(10000);
-        _ = context.DeleteFollowupAsync(message.Id);
+        _ = context.DeleteFollowupAsync(resumeMessage.Id);
     }
 }
