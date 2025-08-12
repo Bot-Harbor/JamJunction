@@ -18,10 +18,10 @@ public class TrackStuckEvent
         _audioService = audioService;
     }
 
-    public async Task TrackStuck(object sender, TrackStuckEventArgs eventargs)
+    public async Task TrackStuck(object sender, TrackStuckEventArgs eventArgs)
     {
-        var guildId = eventargs.Player.GuildId;
-        var voiceChannel = eventargs.Player.VoiceChannelId;
+        var guildId = eventArgs.Player.GuildId;
+        var voiceChannel = eventArgs.Player.VoiceChannelId;
         var guild = await _discordClient.GetGuildAsync(guildId);
 
         var guildData = Bot.GuildData[guildId];
@@ -36,7 +36,7 @@ public class TrackStuckEvent
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
         var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel);
 
-        var track = eventargs.Track;
+        var track = eventArgs.Track;
         await player.PlayAsync(track);
 
         await Task.Delay(TimeSpan.FromSeconds(3));

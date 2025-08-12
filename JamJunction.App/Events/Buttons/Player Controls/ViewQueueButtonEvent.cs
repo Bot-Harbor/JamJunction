@@ -103,6 +103,9 @@ public class ViewQueueButtonEvent : IButton
 
             var userId = btnInteractionArgs.Interaction.User.Id;
             if (!Bot.UserData.ContainsKey(userId)) Bot.UserData.Add(userId, new UserData());
+            
+            var userData = Bot.UserData[userId];
+            userData.GuildId = guildId;
 
             var guildData = Bot.GuildData[guildId];
             

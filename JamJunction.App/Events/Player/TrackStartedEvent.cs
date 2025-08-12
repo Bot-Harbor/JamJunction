@@ -17,17 +17,17 @@ public class TrackStartedEvent
         _audioService = audioService;
     }
 
-    public async Task TrackStarted(object sender, TrackStartedEventArgs eventargs)
+    public async Task TrackStarted(object sender, TrackStartedEventArgs eventArgs)
     {
-        var guildId = eventargs.Player.GuildId;
-        var voiceChannel = eventargs.Player.VoiceChannelId;
+        var guildId = eventArgs.Player.GuildId;
+        var voiceChannel = eventArgs.Player.VoiceChannelId;
         var guild = await _discordClient.GetGuildAsync(guildId);
 
         var guildData = Bot.GuildData[guildId];
         var textChannelId = guildData.TextChannelId;
         var channel = guild.GetChannel(textChannelId);
 
-        var track = eventargs.Track;
+        var track = eventArgs.Track;
 
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
         var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel);

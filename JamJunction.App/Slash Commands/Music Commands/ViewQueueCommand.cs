@@ -76,6 +76,9 @@ public class ViewQueueCommand : ApplicationCommandModule
         var userId = context.Interaction.User.Id;
         if (!Bot.UserData.ContainsKey(userId)) Bot.UserData.Add(userId, new UserData());
         
+        var userData = Bot.UserData[userId];
+        userData.GuildId = guildId;
+        
         var guildData = Bot.GuildData[guildId];
         
         if (guildData.ViewQueueMessage != null)

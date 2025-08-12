@@ -19,10 +19,10 @@ public class TrackEndedEvent
         _audioService = audioService;
     }
 
-    public async Task TrackEnded(object sender, TrackEndedEventArgs eventargs)
+    public async Task TrackEnded(object sender, TrackEndedEventArgs eventArgs)
     {
-        var guildId = eventargs.Player.GuildId;
-        var voiceChannel = eventargs.Player.VoiceChannelId;
+        var guildId = eventArgs.Player.GuildId;
+        var voiceChannel = eventArgs.Player.VoiceChannelId;
         var guild = await _discordClient.GetGuildAsync(guildId);
 
         var guildData = Bot.GuildData[guildId];
@@ -32,9 +32,20 @@ public class TrackEndedEvent
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
         var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel);
 
-        if (eventargs.Reason == TrackEndReason.Stopped)
+        if (eventArgs.Reason == TrackEndReason.Stopped)
         {
             _ = channel.DeleteMessageAsync(guildData.Message);
+            
+            foreach (var userData in Bot.UserData.Values)
+            {
+                if (userData.GuildId == guildId)
+                {
+                    var userToRemove = Bot.UserData.FirstOrDefault(x =>
+                        x.Value.GuildId == guildId).Key;
+                    Bot.UserData.Remove(userToRemove);
+                }
+            }
+            
             Bot.GuildData.Remove(guildId);
             return;
         }
@@ -49,6 +60,17 @@ public class TrackEndedEvent
             await Task.Delay(10000);
 
             _ = channel.DeleteMessageAsync(message);
+            
+            foreach (var userData in Bot.UserData.Values)
+            {
+                if (userData.GuildId == guildId)
+                {
+                    var userToRemove = Bot.UserData.FirstOrDefault(x =>
+                        x.Value.GuildId == guildId).Key;
+                    Bot.UserData.Remove(userToRemove);
+                }
+            }
+            
             Bot.GuildData.Remove(guildId);
         }
     }

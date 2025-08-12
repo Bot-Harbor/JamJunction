@@ -21,9 +21,14 @@ public class VoiceStateUpdatedEvent
 
         if (voiceChannel == null)
             return;
-
+        
+        var userUpdated = args.User.Id;
+        if (Bot.UserData.ContainsKey(userUpdated))
+        {
+            Bot.UserData.Remove(userUpdated);
+        }
+        
         var users = voiceChannel.Users;
-
         if (users.Count == 1 && users.First().Id == sender.CurrentUser.Id)
         {
             var guildId = guild.Id;
