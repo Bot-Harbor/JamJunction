@@ -7,6 +7,7 @@ using JamJunction.App.Events.Menus;
 using JamJunction.App.Events.Modals;
 using JamJunction.App.Events.Player;
 using JamJunction.App.Lavalink;
+using JamJunction.App.Models;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Lavalink4NET;

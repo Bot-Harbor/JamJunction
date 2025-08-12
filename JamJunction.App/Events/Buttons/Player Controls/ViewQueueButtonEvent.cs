@@ -3,6 +3,7 @@ using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
+using JamJunction.App.Models;
 using Lavalink4NET;
 using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
@@ -106,16 +107,14 @@ public class ViewQueueButtonEvent : IButton
             
             var userData = Bot.UserData[userId];
             userData.GuildId = guildId;
-
-            var guildData = Bot.GuildData[guildId];
             
-            if (guildData.ViewQueueMessage != null)
+            if (userData.ViewQueueMessage != null)
             {
-                var previousViewQueueMessage = guildData.ViewQueueMessage.Id;
+                var previousViewQueueMessage = userData.ViewQueueMessage.Id;
                 _ = channel.DeleteFollowupMessageAsync(previousViewQueueMessage);
             }
             
-            guildData.ViewQueueMessage = guildData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
+            userData.ViewQueueMessage = userData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
         }
     }

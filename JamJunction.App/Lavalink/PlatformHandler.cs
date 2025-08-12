@@ -4,6 +4,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embeds;
+using JamJunction.App.Models;
 using JamJunction.App.Secrets;
 using Lavalink4NET;
 using Lavalink4NET.Integrations.Lavasearch;

@@ -112,16 +112,14 @@ public class BeginningButton : IButton
                 return;
             }
 
-            var guildData = Bot.GuildData[guildId];
-            var previousViewQueueMessage = guildData.ViewQueueMessage;
-
-            _ = channel.Channel.DeleteMessageAsync(previousViewQueueMessage);
-
             var userId = btnInteractionArgs.Interaction.User.Id;
             var userData = Bot.UserData[userId];
             
+            var previousViewQueueMessage = userData.ViewQueueMessage;
+            _ = channel.Channel.DeleteMessageAsync(previousViewQueueMessage);
+            
             userData.CurrentPageNumber = "1";
-            guildData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
+            userData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
                     pageNumber: "1")));
         }

@@ -106,8 +106,7 @@ public class PageNumberModalEvent : IModal
         
         var userData = Bot.UserData[userId];
         
-        var guildData = Bot.GuildData[guildId];
-        var previousViewQueueMessage = guildData.ViewQueueMessage;
+        var previousViewQueueMessage = userData.ViewQueueMessage;
         _ = channel.Channel.DeleteMessageAsync(previousViewQueueMessage);
 
         DiscordMessage message = null;
@@ -164,6 +163,6 @@ public class PageNumberModalEvent : IModal
             _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
         }
         
-        guildData.ViewQueueMessage = message;
+        userData.ViewQueueMessage = message;
     }
 }

@@ -2,6 +2,7 @@
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
+using JamJunction.App.Models;
 using Lavalink4NET;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
@@ -79,15 +80,13 @@ public class ViewQueueCommand : ApplicationCommandModule
         var userData = Bot.UserData[userId];
         userData.GuildId = guildId;
         
-        var guildData = Bot.GuildData[guildId];
-        
-        if (guildData.ViewQueueMessage != null)
+        if (userData.ViewQueueMessage != null)
         {
-            var previousViewQueueMessage = guildData.ViewQueueMessage.Id;
+            var previousViewQueueMessage = userData.ViewQueueMessage.Id;
             _ = context.DeleteFollowupAsync(previousViewQueueMessage);
         }
         
-        guildData.ViewQueueMessage = await context.FollowUpAsync(
+        userData.ViewQueueMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(context, player)));
     }
 }

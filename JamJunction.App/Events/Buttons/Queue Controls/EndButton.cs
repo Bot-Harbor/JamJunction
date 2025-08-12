@@ -111,54 +111,52 @@ public class EndButton : IButton
                 return;
             }
 
-            var guildData = Bot.GuildData[guildId];
-            var previousViewQueueMessage = guildData.ViewQueueMessage;
-
-            _ = channel.Channel.DeleteMessageAsync(previousViewQueueMessage);
-
             var userId = btnInteractionArgs.Interaction.User.Id;
             var userData = Bot.UserData[userId];
+            
+            var previousViewQueueMessage = userData.ViewQueueMessage;
+            _ = channel.Channel.DeleteMessageAsync(previousViewQueueMessage);
 
             var totalTracks = player.Queue.Count;
             if (totalTracks < 31)
             {
                 userData.CurrentPageNumber = "2";
-                guildData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
+                userData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
                         pageNumber: "2")));
             }
             else if (totalTracks < 46)
             {
                 userData.CurrentPageNumber = "3";
-                guildData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
+                userData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
                         pageNumber: "3")));
             }
             else if (totalTracks < 61)
             {
                 userData.CurrentPageNumber = "4";
-                guildData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
+                userData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
                         pageNumber: "4")));
             }
             else if (totalTracks < 76)
             {
                 userData.CurrentPageNumber = "5";
-                guildData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
+                userData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
                         pageNumber: "5")));
             }
             else if (totalTracks < 91)
             {
                 userData.CurrentPageNumber = "6";
-                guildData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
+                userData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
                         pageNumber: "6")));
             }
             else if (totalTracks < 101)
             {
                 userData.CurrentPageNumber = "7";
-                guildData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
+                userData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
                         pageNumber: "7")));
             }
