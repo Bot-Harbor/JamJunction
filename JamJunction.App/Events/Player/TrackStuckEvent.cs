@@ -31,7 +31,7 @@ public class TrackStuckEvent
 
         var errorEmbed = new ErrorEmbed();
 
-        var errorMessage = await channel.SendMessageAsync(errorEmbed.BuildTrackFailedToLoadError());
+        var errorMessage = await channel.SendMessageAsync(errorEmbed.TrackFailedToLoadError());
         
         await Task.Delay(5000);
 
@@ -47,7 +47,7 @@ public class TrackStuckEvent
 
         if (player.State == PlayerState.NotPlaying)
         {
-            errorMessage = await channel.SendMessageAsync(errorEmbed.BuildCouldNotLoadTrackOnAttemptError());
+            errorMessage = await channel.SendMessageAsync(errorEmbed.CouldNotLoadTrackOnAttemptError());
             
             await Task.Delay(10000);
 

@@ -6,7 +6,7 @@ namespace JamJunction.App.Embeds;
 
 public class ErrorEmbed
 {
-    public DiscordEmbedBuilder BuildValidVoiceChannelError()
+    public DiscordEmbedBuilder ValidVoiceChannelError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -16,7 +16,7 @@ public class ErrorEmbed
         return embed;
     }
     
-    public DiscordEmbedBuilder BuildSameVoiceChannelError()
+    public DiscordEmbedBuilder SameVoiceChannelError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -26,7 +26,7 @@ public class ErrorEmbed
         return embed;
     }
     
-    public DiscordEmbedBuilder BuildNoConnectionError()
+    public DiscordEmbedBuilder NoConnectionError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -36,7 +36,7 @@ public class ErrorEmbed
         return embed;
     }
     
-    public DiscordEmbedBuilder BuildNoPlayerError()
+    public DiscordEmbedBuilder NoPlayerError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -46,7 +46,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildNoAudioTrackError()
+    public DiscordEmbedBuilder NoAudioTrackError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -56,7 +56,7 @@ public class ErrorEmbed
         return embed;
     }
     
-    public DiscordEmbedBuilder BuildAudioTrackError()
+    public DiscordEmbedBuilder AudioTrackError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -66,7 +66,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildLiveSteamError()
+    public DiscordEmbedBuilder LiveSteamError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -76,7 +76,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildVolumeNotAnIntegerError()
+    public DiscordEmbedBuilder VolumeNotAnIntegerError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -86,7 +86,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildNoVolumeOver100Error()
+    public DiscordEmbedBuilder NoVolumeOver100Error()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -96,7 +96,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildMaxVolumeError()
+    public DiscordEmbedBuilder MaxVolumeError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -106,7 +106,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildMinVolumeError()
+    public DiscordEmbedBuilder MinVolumeError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -116,7 +116,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbed BuildAlreadyPausedError()
+    public DiscordEmbed AlreadyPausedError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -126,7 +126,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildSeekNotAnIntegerError()
+    public DiscordEmbedBuilder SeekNotAnIntegerError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -136,7 +136,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildSeekLargerThanDurationError()
+    public DiscordEmbedBuilder SeekLargerThanDurationError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -147,7 +147,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildNoTracksToSkipToError()
+    public DiscordEmbedBuilder NoTracksToSkipToError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -157,7 +157,7 @@ public class ErrorEmbed
         return embed;
     }
     
-    public DiscordEmbedBuilder BuildNoTracksToShuffleError()
+    public DiscordEmbedBuilder NoTracksToShuffleError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -167,7 +167,7 @@ public class ErrorEmbed
         return embed;
     }
     
-    public DiscordEmbedBuilder BuildQueueIsFullError()
+    public DiscordEmbedBuilder QueueIsFullError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -177,7 +177,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildRemoveError()
+    public DiscordEmbedBuilder RemoveError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -187,7 +187,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildTrackFailedToLoadError()
+    public DiscordEmbedBuilder TrackFailedToLoadError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -197,7 +197,7 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder BuildCouldNotLoadTrackOnAttemptError()
+    public DiscordEmbedBuilder CouldNotLoadTrackOnAttemptError()
     {
         var embed = new DiscordEmbedBuilder
         {

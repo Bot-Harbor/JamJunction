@@ -37,7 +37,7 @@ public class PlayCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.BuildValidVoiceChannelError()));
+                    ErrorEmbed.ValidVoiceChannelError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -50,7 +50,7 @@ public class PlayCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.BuildNoConnectionError()));
+                    ErrorEmbed.NoConnectionError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -63,7 +63,7 @@ public class PlayCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.BuildSameVoiceChannelError()));
+                    ErrorEmbed.SameVoiceChannelError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -73,7 +73,7 @@ public class PlayCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.BuildQueueIsFullError()));
+                    ErrorEmbed.QueueIsFullError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;

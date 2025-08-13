@@ -66,7 +66,7 @@ public class PlatformHandler
                 {
                     var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.BuildAudioTrackError()));
+                            .AddEmbed(ErrorEmbed.AudioTrackError()));
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -107,7 +107,7 @@ public class PlatformHandler
                     {
                         var errorMessage = await context
                             .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                                .AddEmbed(ErrorEmbed.BuildLiveSteamError()));
+                                .AddEmbed(ErrorEmbed.LiveSteamError()));
                         await Task.Delay(10000);
                         _ = channel.DeleteMessageAsync(errorMessage);
                         return;
@@ -165,7 +165,7 @@ public class PlatformHandler
                 {
                     var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.BuildAudioTrackError()));
+                            .AddEmbed(ErrorEmbed.AudioTrackError()));
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -209,7 +209,7 @@ public class PlatformHandler
                     {
                         var errorMessage = await context
                             .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                                .AddEmbed(ErrorEmbed.BuildLiveSteamError()));
+                                .AddEmbed(ErrorEmbed.LiveSteamError()));
                         await Task.Delay(10000);
                         _ = channel.DeleteMessageAsync(errorMessage);
                         return;
@@ -267,7 +267,7 @@ public class PlatformHandler
                 {
                     var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.BuildAudioTrackError()));
+                            .AddEmbed(ErrorEmbed.AudioTrackError()));
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -305,7 +305,7 @@ public class PlatformHandler
                 {
                     var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.BuildLiveSteamError()));
+                            .AddEmbed(ErrorEmbed.LiveSteamError()));
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -350,7 +350,7 @@ public class PlatformHandler
             {
                 var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.BuildAudioTrackError()));
+                        .AddEmbed(ErrorEmbed.AudioTrackError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -362,7 +362,7 @@ public class PlatformHandler
             {
                 var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.BuildLiveSteamError()));
+                        .AddEmbed(ErrorEmbed.LiveSteamError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -427,7 +427,7 @@ public class PlatformHandler
                 {
                     var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.BuildAudioTrackError()));
+                            .AddEmbed(ErrorEmbed.AudioTrackError()));
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -466,7 +466,7 @@ public class PlatformHandler
                     {
                         var errorMessage = await context
                             .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                                .AddEmbed(ErrorEmbed.BuildLiveSteamError()));
+                                .AddEmbed(ErrorEmbed.LiveSteamError()));
                         await Task.Delay(10000);
                         _ = channel.DeleteMessageAsync(errorMessage);
                         return;
@@ -522,7 +522,7 @@ public class PlatformHandler
                 {
                     var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.BuildAudioTrackError()));
+                            .AddEmbed(ErrorEmbed.AudioTrackError()));
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -557,7 +557,7 @@ public class PlatformHandler
                 {
                     var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.BuildLiveSteamError()));
+                            .AddEmbed(ErrorEmbed.LiveSteamError()));
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -608,7 +608,7 @@ public class PlatformHandler
             {
                 var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.BuildAudioTrackError()));
+                        .AddEmbed(ErrorEmbed.AudioTrackError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 ;
@@ -646,7 +646,7 @@ public class PlatformHandler
             {
                 var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.BuildLiveSteamError()));
+                        .AddEmbed(ErrorEmbed.LiveSteamError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -694,7 +694,7 @@ public class PlatformHandler
             {
                 var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.BuildAudioTrackError()));
+                        .AddEmbed(ErrorEmbed.AudioTrackError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -731,7 +731,7 @@ public class PlatformHandler
                 {
                     var errorMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.BuildLiveSteamError()));
+                            .AddEmbed(ErrorEmbed.LiveSteamError()));
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -780,7 +780,7 @@ public class PlatformHandler
             {
                 var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.BuildAudioTrackError()));
+                        .AddEmbed(ErrorEmbed.AudioTrackError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -790,7 +790,7 @@ public class PlatformHandler
             {
                 var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.BuildLiveSteamError()));
+                        .AddEmbed(ErrorEmbed.LiveSteamError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;

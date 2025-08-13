@@ -43,7 +43,7 @@ public class PageNumberModalEvent : IModal
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.BuildValidVoiceChannelError()));
+                        errorEmbed.ValidVoiceChannelError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -53,7 +53,7 @@ public class PageNumberModalEvent : IModal
         {
             var errorMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.BuildValidVoiceChannelError()));
+                    errorEmbed.ValidVoiceChannelError()));
             await Task.Delay(10000);
             _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
             return;
@@ -67,7 +67,7 @@ public class PageNumberModalEvent : IModal
         {
             var errorMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.BuildNoPlayerError()));
+                    errorEmbed.NoPlayerError()));
             await Task.Delay(10000);
             _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
             return;
@@ -79,7 +79,7 @@ public class PageNumberModalEvent : IModal
         {
             var errorMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.BuildSameVoiceChannelError()));
+                    errorEmbed.SameVoiceChannelError()));
             await Task.Delay(10000);
             _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
             return;
@@ -93,7 +93,7 @@ public class PageNumberModalEvent : IModal
         {
             var errorMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.BuildNoConnectionError()));
+                    errorEmbed.NoConnectionError()));
             await Task.Delay(10000);
             _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
             return;
