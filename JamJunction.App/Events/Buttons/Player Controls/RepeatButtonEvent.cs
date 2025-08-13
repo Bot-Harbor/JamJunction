@@ -122,34 +122,24 @@ public class RepeatButtonEvent : IButton
             if (repeatMode == false)
             {
                 player!.RepeatMode = TrackRepeatMode.None;
+                
+                await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                    new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
 
-                await channel.Channel.DeleteMessageAsync(guildData.PlayerMessage);
-
-                playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                    new DiscordInteractionResponseBuilder(
-                        audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-
-                guildData.PlayerMessage = playerMessage;
-
-                var errorMessage = await channel.CreateFollowupMessageAsync(
+                var disableRepeatMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
                         audioPlayerEmbed.DisableRepeat(btnInteractionArgs)));
 
                 await Task.Delay(10000);
 
-                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(disableRepeatMessage.Id);
                 return;
             }
 
             player!.RepeatMode = TrackRepeatMode.Track;
-
-            _ = channel.Channel.DeleteMessageAsync(guildData.PlayerMessage);
-
-            playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                new DiscordInteractionResponseBuilder(
-                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-
-            guildData.PlayerMessage = playerMessage;
+            
+            await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
 
             var enableRepeatMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(

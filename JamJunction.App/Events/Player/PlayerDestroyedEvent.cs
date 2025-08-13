@@ -30,7 +30,6 @@ public class PlayerDestroyedEvent
             { 
                 var userToRemove = Bot.UserData.FirstOrDefault(x =>
                     x.Value.GuildId == guildId).Key;
-                Console.WriteLine(userToRemove);
                 Bot.UserData.Remove(userToRemove);
             }
         }

@@ -113,9 +113,8 @@ public class FilterMenuEvent : IMenu
             }
 
             var guildData = Bot.GuildData[guildId];
-            _ = channel.Channel.DeleteMessageAsync(guildData.PlayerMessage);
 
-            DiscordMessage playerMessage;
+            DiscordMessage filterMessage;
 
             foreach (var value in menuInteractionArgs.Values)
                 switch (value)
@@ -124,10 +123,15 @@ public class FilterMenuEvent : IMenu
                         player.Filters.Clear();
                         await player!.Filters.CommitAsync();
 
-                        playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, true))));
-                        guildData.PlayerMessage = playerMessage;
+                        await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                        
+                        filterMessage = await channel.CreateFollowupMessageAsync(
+                            new DiscordFollowupMessageBuilder().AddEmbed(
+                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🔄 Reset")));
+
+                        await Task.Delay(10000);
+                        _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
                         break;
                     case "nightcore":
                     {
@@ -142,10 +146,15 @@ public class FilterMenuEvent : IMenu
                         player.Filters.Timescale = nightcore;
                         await player!.Filters.CommitAsync();
 
-                        playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, true))));
-                        guildData.PlayerMessage = playerMessage;
+                        await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                        
+                        filterMessage = await channel.CreateFollowupMessageAsync(
+                            new DiscordFollowupMessageBuilder().AddEmbed(
+                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🌙 Nightcore")));
+
+                        await Task.Delay(10000);
+                        _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
                         break;
                     }
                     case "8d":
@@ -159,10 +168,15 @@ public class FilterMenuEvent : IMenu
                         player.Filters.Rotation = eightDFilter;
                         await player!.Filters.CommitAsync();
 
-                        playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, true))));
-                        guildData.PlayerMessage = playerMessage;
+                        await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                        
+                        filterMessage = await channel.CreateFollowupMessageAsync(
+                            new DiscordFollowupMessageBuilder().AddEmbed(
+                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "️8️ 8D")));
+
+                        await Task.Delay(10000);
+                        _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
                         break;
                     }
                     case "vapor-wave":
@@ -178,10 +192,15 @@ public class FilterMenuEvent : IMenu
                         player.Filters.Timescale = vaporwaveFilter;
                         await player!.Filters.CommitAsync();
 
-                        playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, true))));
-                        guildData.PlayerMessage = playerMessage;
+                        await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                        
+                        filterMessage = await channel.CreateFollowupMessageAsync(
+                            new DiscordFollowupMessageBuilder().AddEmbed(
+                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🌊 Vaporwave")));
+
+                        await Task.Delay(10000);
+                        _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
                         break;
                     }
                     case "karaoke":
@@ -198,10 +217,15 @@ public class FilterMenuEvent : IMenu
                         player.Filters.Karaoke = karaokeFilter;
                         await player!.Filters.CommitAsync();
 
-                        playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, true))));
-                        guildData.PlayerMessage = playerMessage;
+                        await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                        
+                        filterMessage = await channel.CreateFollowupMessageAsync(
+                            new DiscordFollowupMessageBuilder().AddEmbed(
+                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🎤 Karaoke")));
+
+                        await Task.Delay(10000);
+                        _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
                         break;
                     }
                     case "slow-motion":
@@ -215,20 +239,30 @@ public class FilterMenuEvent : IMenu
                         player.Filters.Timescale = slowMotionFilter;
                         await player!.Filters.CommitAsync();
 
-                        playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, true))));
-                        guildData.PlayerMessage = playerMessage;
+                        await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                        
+                        filterMessage = await channel.CreateFollowupMessageAsync(
+                            new DiscordFollowupMessageBuilder().AddEmbed(
+                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🕒 Slow Motion")));
+
+                        await Task.Delay(10000);
+                        _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
                         break;
                     }
                     default:
                         player.Filters.Clear();
                         await player!.Filters.CommitAsync();
 
-                        playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, true))));
-                        guildData.PlayerMessage = playerMessage;
+                        await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                        
+                        filterMessage = await channel.CreateFollowupMessageAsync(
+                            new DiscordFollowupMessageBuilder().AddEmbed(
+                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🔄 Reset")));
+
+                        await Task.Delay(10000);
+                        _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
                         break;
                 }
         }

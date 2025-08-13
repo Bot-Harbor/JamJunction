@@ -113,12 +113,12 @@ public class ShuffleButtonEvent : IButton
 
             await player!.Queue.ShuffleAsync();
 
-            var message = await channel.CreateFollowupMessageAsync(
+            var shuffleQueueMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.ShuffleQueue(btnInteractionArgs)));
 
             await Task.Delay(10000);
-            _ = channel.DeleteFollowupMessageAsync(message.Id);
+            _ = channel.DeleteFollowupMessageAsync(shuffleQueueMessage.Id);
         }
     }
 }

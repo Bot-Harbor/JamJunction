@@ -114,7 +114,7 @@ internal sealed class Bot : BackgroundService
         var trackStuckEvent = new TrackStuckEvent(_discordClient, _audioService);
         _audioService.TrackStuck += trackStuckEvent.TrackStuck;
 
-        var connectionClosedEvent = new ConnectionClosedEvent();
+        var connectionClosedEvent = new ConnectionClosedEvent(_discordClient);
         _audioService.ConnectionClosed += connectionClosedEvent.ConnectionClosed;
 
         var playerDestroyedEvent = new PlayerDestroyedEvent(_discordClient);

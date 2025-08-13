@@ -171,7 +171,7 @@ public class ErrorEmbed
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = "\u2630 • The queue is full. The max capacity is 25 tracks.",
+            Description = "\u2630 • The queue is full. The max capacity is 100 tracks.",
             Color = DiscordColor.Red
         };
         return embed;

@@ -17,13 +17,15 @@ namespace JamJunction.App.Embeds;
 public class AudioPlayerEmbed
 {
     public DiscordMessageBuilder TrackInformation(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer,
-        bool isStartedFromEvent = false)
+        bool isStartedFromEvent = false, bool trackIsRestarted = false)
     {
         var uri = track.Uri!.AbsoluteUri;
 
         string slider;
 
         if (isStartedFromEvent)
+            slider = GenerateSlider(TimeSpan.Zero, track.Duration);
+        else if (trackIsRestarted)
             slider = GenerateSlider(TimeSpan.Zero, track.Duration);
         else
             slider = GenerateSlider(queuedLavalinkPlayer.Position!.Value.Position, track.Duration);
@@ -2152,6 +2154,17 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    public DiscordEmbedBuilder BuildFilter(ComponentInteractionCreateEventArgs menuInteractionArgs, string filter)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description =
+                $"🗑️  • ``{menuInteractionArgs.User.Username}`` changed the filter to ``{filter}``.",
+            Color = DiscordColor.Cyan
+        };
+        return embed;
+    }
+    
     public DiscordEmbedBuilder Remove(ComponentInteractionCreateEventArgs menuInteractionArgs,
         LavalinkTrack removedTrack)
     {

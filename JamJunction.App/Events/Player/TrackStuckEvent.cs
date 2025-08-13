@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
 using Lavalink4NET;
@@ -29,21 +30,29 @@ public class TrackStuckEvent
         var channel = guild.GetChannel(textChannelId);
 
         var errorEmbed = new ErrorEmbed();
-        await channel.SendMessageAsync(errorEmbed.BuildTrackFailedToLoadError());
 
-        await Task.Delay(TimeSpan.FromSeconds(5));
+        var errorMessage = await channel.SendMessageAsync(errorEmbed.BuildTrackFailedToLoadError());
+        
+        await Task.Delay(5000);
 
+        _ = channel.DeleteMessageAsync(errorMessage);
+        
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
         var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel);
 
         var track = eventArgs.Track;
         await player.PlayAsync(track);
 
-        await Task.Delay(TimeSpan.FromSeconds(3));
+        await Task.Delay(3000);
 
         if (player.State == PlayerState.NotPlaying)
         {
-            await channel.SendMessageAsync(errorEmbed.BuildCouldNotLoadTrackOnAttemptError());
+            errorMessage = await channel.SendMessageAsync(errorEmbed.BuildCouldNotLoadTrackOnAttemptError());
+            
+            await Task.Delay(10000);
+
+            await channel.DeleteMessageAsync(errorMessage);
+            
             Bot.GuildData.Remove(guildId);
         }
     }

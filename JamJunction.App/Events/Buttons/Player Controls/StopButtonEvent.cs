@@ -113,12 +113,12 @@ public class StopButtonEvent : IButton
 
             await player!.StopAsync();
 
-            var message = await channel.CreateFollowupMessageAsync(
+            var stopMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.Stop(btnInteractionArgs)));
 
             await Task.Delay(10000);
-            _ = channel.DeleteFollowupMessageAsync(message.Id);
+            _ = channel.DeleteFollowupMessageAsync(stopMessage.Id);
         }
     }
 }

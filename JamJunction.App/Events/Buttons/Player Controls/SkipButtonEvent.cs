@@ -113,12 +113,12 @@ public class SkipButtonEvent : IButton
 
             await player!.SkipAsync();
 
-            var message = await channel.CreateFollowupMessageAsync(
+            var skipMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.Skip(btnInteractionArgs)));
 
             await Task.Delay(10000);
-            _ = channel.DeleteFollowupMessageAsync(message.Id);
+            _ = channel.DeleteFollowupMessageAsync(skipMessage.Id);
         }
     }
 }
