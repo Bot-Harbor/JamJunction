@@ -113,61 +113,74 @@ public class EndButton : IButton
 
             var userId = btnInteractionArgs.Interaction.User.Id;
             var userData = Bot.UserData[userId];
-            
+
             var loadingMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder(new DiscordMessageBuilder().WithContent("Loading...")));
-            
+
             await Task.Delay(500);
-            
+
             await channel.DeleteFollowupMessageAsync(loadingMessage.Id);
 
-            var totalTracks = player.Queue.Count;
-            switch (totalTracks)
+            try
             {
-                case < 31:
-                    userData.CurrentPageNumber = "2";
-                    await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
-                        new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                            pageNumber: "2")));
-                    break;
-                case < 46:
-                    userData.CurrentPageNumber = "3";
-                    await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
-                        new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                            pageNumber: "3")));
-                    break;
-                case < 61:
-                    userData.CurrentPageNumber = "4";
-                    await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
-                        new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                            pageNumber: "4")));
-                    break;
-                case < 76:
-                    userData.CurrentPageNumber = "5";
-                    await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
-                        new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                            pageNumber: "5")));
-                    break;
-                case < 91:
-                    userData.CurrentPageNumber = "6";
-                    await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
-                        new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                            pageNumber: "6")));
-                    break;
-                case < 101:
-                    userData.CurrentPageNumber = "7";
-                    await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
-                        new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                            pageNumber: "7")));
-                    break;
-                default:
+                var totalTracks = player.Queue.Count;
+                switch (totalTracks)
                 {
-                    var errorMessage = await channel.CreateFollowupMessageAsync(
-                        new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.PageNumberDoesNotExistError()));
-                    await Task.Delay(10000);
-                    _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
-                    break;
+                    case < 31:
+                        userData.CurrentPageNumber = "2";
+                        await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
+                                pageNumber: "2")));
+                        break;
+                    case < 46:
+                        userData.CurrentPageNumber = "3";
+                        await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
+                                pageNumber: "3")));
+                        break;
+                    case < 61:
+                        userData.CurrentPageNumber = "4";
+                        await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
+                                pageNumber: "4")));
+                        break;
+                    case < 76:
+                        userData.CurrentPageNumber = "5";
+                        await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
+                                pageNumber: "5")));
+                        break;
+                    case < 91:
+                        userData.CurrentPageNumber = "6";
+                        await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
+                                pageNumber: "6")));
+                        break;
+                    case < 101:
+                        userData.CurrentPageNumber = "7";
+                        await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
+                            new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
+                                pageNumber: "7")));
+                        break;
+                    default:
+                    {
+                        var errorMessage = await channel.CreateFollowupMessageAsync(
+                            new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.PageNumberDoesNotExistError()));
+                        await Task.Delay(10000);
+                        _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                        break;
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
+                    new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
+
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.PageNumberDoesNotExistError()));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
             }
         }
     }
