@@ -114,7 +114,7 @@ public class ViewQueueButtonEvent : IButton
                 _ = channel.DeleteFollowupMessageAsync(previousViewQueueMessage);
             }
             
-            userData.ViewQueueMessage = userData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
+            userData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
         }
     }

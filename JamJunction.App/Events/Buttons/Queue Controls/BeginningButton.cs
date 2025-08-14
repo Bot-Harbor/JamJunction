@@ -115,13 +115,16 @@ public class BeginningButton : IButton
             var userId = btnInteractionArgs.Interaction.User.Id;
             var userData = Bot.UserData[userId];
             
-            var previousViewQueueMessage = userData.ViewQueueMessage;
-            _ = channel.Channel.DeleteMessageAsync(previousViewQueueMessage);
+            var loadingMessage = await channel.CreateFollowupMessageAsync(
+                new DiscordFollowupMessageBuilder(new DiscordMessageBuilder().WithContent("Loading...")));
+            
+            await Task.Delay(500);
+            
+            await channel.DeleteFollowupMessageAsync(loadingMessage.Id);
             
             userData.CurrentPageNumber = "1";
-            userData.ViewQueueMessage = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                    pageNumber: "1")));
+            await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
+                new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
         }
     }
 }

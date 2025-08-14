@@ -100,69 +100,65 @@ public class PageNumberModalEvent : IModal
         }
 
         var userId = modalEventArgs.Interaction.User.Id;
-        
+
         var values = modalEventArgs.Values;
         var pageNumber = values["page-number"];
-        
-        var userData = Bot.UserData[userId];
-        
-        var previousViewQueueMessage = userData.ViewQueueMessage;
-        _ = channel.Channel.DeleteMessageAsync(previousViewQueueMessage);
 
-        DiscordMessage message = null;
+        var userData = Bot.UserData[userId];
+
+        var loadingMessage = await channel.CreateFollowupMessageAsync(
+            new DiscordFollowupMessageBuilder(new DiscordMessageBuilder().WithContent("Loading...")));
+
+        await Task.Delay(500);
+
+        await channel.DeleteFollowupMessageAsync(loadingMessage.Id);
 
         var totalTracks = player.Queue.Count;
-        
-        if (pageNumber == "1")
+        switch (pageNumber)
         {
-            userData.CurrentPageNumber = pageNumber;
-            message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player)));
+            case "1":
+                userData.CurrentPageNumber = pageNumber;
+                await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player)));
+                break;
+            case "2" when totalTracks > 15:
+                userData.CurrentPageNumber = pageNumber;
+                await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "2")));
+                break;
+            case "3" when totalTracks > 30:
+                userData.CurrentPageNumber = pageNumber;
+                await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "3")));
+                break;
+            case "4" when totalTracks > 45:
+                userData.CurrentPageNumber = pageNumber;
+                await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "4")));
+                break;
+            case "5" when totalTracks > 60:
+                userData.CurrentPageNumber = pageNumber;
+                await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "5")));
+                break;
+            case "6" when totalTracks > 75:
+                userData.CurrentPageNumber = pageNumber;
+                await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "6")));
+                break;
+            case "7" when totalTracks > 90:
+                userData.CurrentPageNumber = pageNumber;
+                await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "7")));
+                break;
+            default:
+            {
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.PageNumberDoesNotExistError()));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                break;
+            }
         }
-        else if (pageNumber == "2" && totalTracks > 15)
-        {
-            userData.CurrentPageNumber = pageNumber;
-            message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "2")));
-        }
-        else if (pageNumber == "3" && totalTracks > 30)
-        {
-            userData.CurrentPageNumber = pageNumber;
-            message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "3")));
-        }
-        else if (pageNumber == "4" && totalTracks > 45)
-        {
-            userData.CurrentPageNumber = pageNumber;
-            message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "4")));
-        }
-        else if (pageNumber == "5" && totalTracks > 60)
-        {
-            userData.CurrentPageNumber = pageNumber;
-            message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "5")));
-        }
-        else if (pageNumber == "6" && totalTracks > 75)
-        {
-            userData.CurrentPageNumber = pageNumber;
-            message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "6")));
-        }
-        else if (pageNumber == "7" && totalTracks > 90)
-        {
-            userData.CurrentPageNumber = pageNumber;
-            message = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "7")));
-        }
-        else
-        {
-            var errorMessage = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.PageNumberDoesNotExistError()));
-            await Task.Delay(10000);
-            _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
-        }
-        
-        userData.ViewQueueMessage = message;
     }
 }
