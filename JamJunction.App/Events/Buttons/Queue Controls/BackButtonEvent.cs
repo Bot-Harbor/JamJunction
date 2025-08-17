@@ -1,5 +1,4 @@
-﻿using AngleSharp.Text;
-using DSharpPlus;
+﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Embeds;
@@ -9,12 +8,12 @@ using Lavalink4NET;
 
 namespace JamJunction.App.Events.Buttons.Queue_Controls;
 
-public class BeginningButton : IButton
+public class BackButtonEvent : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public BeginningButton(IAudioService audioService, DiscordClient discordClient)
+    public BackButtonEvent(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
@@ -24,7 +23,7 @@ public class BeginningButton : IButton
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
-        if (btnInteractionArgs.Interaction.Data.CustomId == "beginning")
+        if (btnInteractionArgs.Interaction.Data.CustomId == "back")
         {
             var errorEmbed = new ErrorEmbed();
             var audioPlayerEmbed = new AudioPlayerEmbed();
@@ -35,7 +34,7 @@ public class BeginningButton : IButton
             var member = await btnInteractionArgs.Guild.GetMemberAsync(memberId);
 
             var channel = btnInteractionArgs.Interaction;
-
+            
             await channel.DeferAsync(true);
 
             try
@@ -121,13 +120,24 @@ public class BeginningButton : IButton
             await Task.Delay(500);
             
             _ = channel.DeleteFollowupMessageAsync(loadingMessage.Id);
-            
+
             try
             {
-                userData.CurrentPageNumber = "1";
+                var currentPageNumber = int.Parse(userData.CurrentPageNumber) - 1;
+            
+                if (currentPageNumber > 7)
+                {
+                    var errorMessage = await channel.CreateFollowupMessageAsync(
+                        new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.PageNumberDoesNotExistError()));
+                    await Task.Delay(10000);
+                    _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                    return;
+                }
+            
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
-                    new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));   
-            }
+                    new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
+                        currentPageNumber.ToString())));
+            }   
             catch (Exception)
             {
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,

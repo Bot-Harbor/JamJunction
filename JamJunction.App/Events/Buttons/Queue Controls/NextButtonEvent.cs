@@ -10,12 +10,12 @@ using Lavalink4NET;
 
 namespace JamJunction.App.Events.Buttons.Queue_Controls;
 
-public class NextButton : IButton
+public class NextButtonEvent : IButton
 {
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
 
-    public NextButton(IAudioService audioService, DiscordClient discordClient)
+    public NextButtonEvent(IAudioService audioService, DiscordClient discordClient)
     {
         _audioService = audioService;
         _discordClient = discordClient;
