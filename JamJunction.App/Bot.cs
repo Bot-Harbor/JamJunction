@@ -1,7 +1,7 @@
 ﻿using DSharpPlus;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Events.Buttons;
-using JamJunction.App.Events.Buttons.Player;
+using JamJunction.App.Events.Buttons.Player_Controls;
 using JamJunction.App.Events.Buttons.Queue_Controls;
 using JamJunction.App.Events.Menus;
 using JamJunction.App.Events.Modals;

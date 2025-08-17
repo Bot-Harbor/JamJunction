@@ -4,6 +4,7 @@ using DSharpPlus.EventArgs;
 using JamJunction.App.Embeds;
 using JamJunction.App.Events.Menus.Interfaces;
 using JamJunction.App.Lavalink;
+using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
 
 namespace JamJunction.App.Events.Menus;

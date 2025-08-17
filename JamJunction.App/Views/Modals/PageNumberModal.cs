@@ -1,6 +1,6 @@
 ﻿using DSharpPlus.Entities;
 
-namespace JamJunction.App.Modals;
+namespace JamJunction.App.Views.Modals;
 
 public class PageNumberModal
 {

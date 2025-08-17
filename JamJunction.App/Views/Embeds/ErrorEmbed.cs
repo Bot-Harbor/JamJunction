@@ -1,6 +1,6 @@
 ﻿using DSharpPlus.Entities;
 
-namespace JamJunction.App.Embeds;
+namespace JamJunction.App.Views.Embeds;
 
 public class ErrorEmbed
 {

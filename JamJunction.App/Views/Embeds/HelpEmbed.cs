@@ -2,7 +2,7 @@
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 
-namespace JamJunction.App.Embeds;
+namespace JamJunction.App.Views.Embeds;
 
 public class HelpEmbed
 {

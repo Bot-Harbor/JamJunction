@@ -3,10 +3,11 @@ using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
+using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
 using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
-namespace JamJunction.App.Events.Buttons.Player;
+namespace JamJunction.App.Events.Buttons.Player_Controls;
 
 public class SkipButtonEvent : IButton
 {

@@ -2,7 +2,8 @@
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
-using JamJunction.App.Menus;
+using JamJunction.App.Views.Embeds;
+using JamJunction.App.Views.Menus;
 using Lavalink4NET;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;

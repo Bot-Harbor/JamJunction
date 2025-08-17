@@ -4,10 +4,11 @@ using DSharpPlus.EventArgs;
 using JamJunction.App.Embeds;
 using JamJunction.App.Events.Buttons.Interfaces;
 using JamJunction.App.Lavalink;
+using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
 using Lavalink4NET.Players.Queued;
 
-namespace JamJunction.App.Events.Buttons.Player;
+namespace JamJunction.App.Events.Buttons.Player_Controls;
 
 public class RepeatButtonEvent : IButton
 {

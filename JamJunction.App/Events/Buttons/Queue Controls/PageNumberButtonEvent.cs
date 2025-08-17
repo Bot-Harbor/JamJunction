@@ -4,7 +4,8 @@ using DSharpPlus.EventArgs;
 using JamJunction.App.Embeds;
 using JamJunction.App.Events.Buttons.Interfaces;
 using JamJunction.App.Lavalink;
-using JamJunction.App.Modals;
+using JamJunction.App.Views.Embeds;
+using JamJunction.App.Views.Modals;
 using Lavalink4NET;
 
 namespace JamJunction.App.Events.Buttons.Queue_Controls;

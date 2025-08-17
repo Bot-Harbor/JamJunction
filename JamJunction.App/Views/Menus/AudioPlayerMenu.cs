@@ -1,7 +1,7 @@
 ﻿using DSharpPlus.Entities;
 using Lavalink4NET.Players.Queued;
 
-namespace JamJunction.App.Menus;
+namespace JamJunction.App.Views.Menus;
 
 public class AudioPlayerMenu
 {

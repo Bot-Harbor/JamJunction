@@ -3,7 +3,7 @@ using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Menus;
+using JamJunction.App.Views.Menus;
 using Lavalink4NET.Integrations.Lavasrc;
 using Lavalink4NET.Players.Queued;
 using Lavalink4NET.Rest.Entities.Tracks;
@@ -11,7 +11,7 @@ using SpotifyAPI.Web;
 using YoutubeExplode.Playlists;
 using LavalinkTrack = Lavalink4NET.Tracks.LavalinkTrack;
 
-namespace JamJunction.App.Embeds;
+namespace JamJunction.App.Views.Embeds;
 
 public class AudioPlayerEmbed
 {

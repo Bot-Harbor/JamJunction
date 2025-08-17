@@ -1,7 +1,7 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Embeds;
-using Color = JamJunction.App.Embeds.Enums.Color;
+using Color = JamJunction.App.Views.Embeds.Enums.Color;
 
 namespace JamJunction.App.Slash_Commands.Other_Commands;
 
