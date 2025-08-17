@@ -95,11 +95,16 @@ public class PauseCommand : ApplicationCommandModule
 
         await player!.PauseAsync();
 
-        var message = await context.FollowUpAsync(
+        var guildData = Bot.GuildData[guildId];
+        
+        var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
+        await updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+        
+        var pauseMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Pause(context)));
 
         await Task.Delay(10000);
-        _ = context.DeleteFollowupAsync(message.Id);
+        _ = context.DeleteFollowupAsync(pauseMessage.Id);
     }
 }

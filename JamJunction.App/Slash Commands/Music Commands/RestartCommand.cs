@@ -88,7 +88,7 @@ public class RestartCommand : ApplicationCommandModule
         var guildData = Bot.GuildData[guildId];
 
         var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
-        await updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+        await updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, trackIsRestarted: true));
 
         var restartMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
