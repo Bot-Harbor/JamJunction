@@ -140,7 +140,7 @@ public class VolumeUpButtonEvent : IButton
                         new DiscordFollowupMessageBuilder(
                             audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
             }
-            
+
             var volumeIncreasedMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.VolumeIncreased(btnInteractionArgs)));

@@ -84,9 +84,9 @@ public class PositionCommand : ApplicationCommandModule
         }
 
         var position = player.Position!.Value.Position;
-        
+
         var guildData = Bot.GuildData[guildId];
-        
+
         try
         {
             var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);

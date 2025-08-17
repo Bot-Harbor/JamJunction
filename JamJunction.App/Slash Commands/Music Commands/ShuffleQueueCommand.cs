@@ -72,7 +72,7 @@ public class ShuffleQueueCommand : ApplicationCommandModule
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
-        
+
         if (player!.CurrentTrack == null)
         {
             var errorMessage = await context.FollowUpAsync(
@@ -96,7 +96,7 @@ public class ShuffleQueueCommand : ApplicationCommandModule
         await player.Queue.ShuffleAsync();
 
         var guildData = Bot.GuildData[guildId];
-        
+
         try
         {
             var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
@@ -107,7 +107,7 @@ public class ShuffleQueueCommand : ApplicationCommandModule
             guildData.PlayerMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
         }
-        
+
         var shuffleMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.ShuffleQueue(context)));

@@ -11,7 +11,7 @@ public class PageNumberModal
             .WithCustomId("jump-to-page")
             .AddComponents(
                 new TextInputComponent("Page Number", "page-number"));
-        
+
         return model;
     }
 }

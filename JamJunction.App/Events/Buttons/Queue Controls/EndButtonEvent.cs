@@ -130,37 +130,37 @@ public class EndButtonEvent : IButton
                         userData.CurrentPageNumber = "2";
                         await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
                             new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                                pageNumber: "2")));
+                                "2")));
                         break;
                     case < 46:
                         userData.CurrentPageNumber = "3";
                         await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
                             new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                                pageNumber: "3")));
+                                "3")));
                         break;
                     case < 61:
                         userData.CurrentPageNumber = "4";
                         await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
                             new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                                pageNumber: "4")));
+                                "4")));
                         break;
                     case < 76:
                         userData.CurrentPageNumber = "5";
                         await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
                             new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                                pageNumber: "5")));
+                                "5")));
                         break;
                     case < 91:
                         userData.CurrentPageNumber = "6";
                         await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
                             new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                                pageNumber: "6")));
+                                "6")));
                         break;
                     case < 101:
                         userData.CurrentPageNumber = "7";
                         await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
                             new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
-                                pageNumber: "7")));
+                                "7")));
                         break;
                     default:
                     {

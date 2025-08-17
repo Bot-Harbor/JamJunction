@@ -107,7 +107,7 @@ public class RepeatCommand : ApplicationCommandModule
             guildData.PlayerMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
         }
-        
+
         var repeatMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Repeat(context, player)));

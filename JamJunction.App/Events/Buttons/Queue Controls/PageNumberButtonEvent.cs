@@ -19,7 +19,7 @@ public class PageNumberButtonEvent : IButton
         _audioService = audioService;
         _discordClient = discordClient;
     }
-    
+
     private DiscordChannel UserVoiceChannel { get; set; }
 
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
@@ -34,7 +34,7 @@ public class PageNumberButtonEvent : IButton
             var member = await btnInteractionArgs.Guild.GetMemberAsync(memberId);
 
             var channel = btnInteractionArgs.Interaction;
-            
+
             try
             {
                 UserVoiceChannel = member.VoiceState.Channel;
@@ -108,7 +108,7 @@ public class PageNumberButtonEvent : IButton
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
-            
+
             var pageNumberModal = new PageNumberModal();
             await channel.CreateResponseAsync(InteractionResponseType.Modal, pageNumberModal.Build());
         }

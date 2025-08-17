@@ -112,7 +112,7 @@ public class RemoveMenuEvent : IMenu
             }
 
             var guildData = Bot.GuildData[guildId];
-            
+
             try
             {
                 foreach (var value in menuInteractionArgs.Values)

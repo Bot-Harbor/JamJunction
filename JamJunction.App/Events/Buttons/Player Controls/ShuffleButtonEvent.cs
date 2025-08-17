@@ -100,7 +100,7 @@ public class ShuffleButtonEvent : IButton
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
-            
+
             if (player!.CurrentTrack == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
@@ -124,7 +124,7 @@ public class ShuffleButtonEvent : IButton
             await player!.Queue.ShuffleAsync();
 
             var guildData = Bot.GuildData[guildId];
-            
+
             try
             {
                 await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,

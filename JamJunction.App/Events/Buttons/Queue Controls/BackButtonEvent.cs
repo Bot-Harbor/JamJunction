@@ -34,7 +34,7 @@ public class BackButtonEvent : IButton
             var member = await btnInteractionArgs.Guild.GetMemberAsync(memberId);
 
             var channel = btnInteractionArgs.Interaction;
-            
+
             await channel.DeferAsync(true);
 
             try
@@ -113,18 +113,18 @@ public class BackButtonEvent : IButton
 
             var userId = btnInteractionArgs.Interaction.User.Id;
             var userData = Bot.UserData[userId];
-            
+
             var loadingMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder(new DiscordMessageBuilder().WithContent("Loading...")));
-            
+
             await Task.Delay(500);
-            
+
             _ = channel.DeleteFollowupMessageAsync(loadingMessage.Id);
 
             try
             {
                 var currentPageNumber = int.Parse(userData.CurrentPageNumber) - 1;
-            
+
                 if (currentPageNumber > 7)
                 {
                     var errorMessage = await channel.CreateFollowupMessageAsync(
@@ -133,11 +133,11 @@ public class BackButtonEvent : IButton
                     _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
                 }
-            
+
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
                     new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
                         currentPageNumber.ToString())));
-            }   
+            }
             catch (Exception)
             {
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,

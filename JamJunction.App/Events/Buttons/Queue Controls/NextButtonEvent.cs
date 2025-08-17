@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-using AngleSharp.Text;
-using DSharpPlus;
+﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Embeds;
@@ -38,7 +36,7 @@ public class NextButtonEvent : IButton
             var channel = btnInteractionArgs.Interaction;
 
             await channel.DeferAsync(true);
-            
+
             try
             {
                 UserVoiceChannel = member.VoiceState.Channel;
@@ -115,18 +113,18 @@ public class NextButtonEvent : IButton
 
             var userId = btnInteractionArgs.Interaction.User.Id;
             var userData = Bot.UserData[userId];
-            
+
             var loadingMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder(new DiscordMessageBuilder().WithContent("Loading...")));
-            
+
             await Task.Delay(500);
-            
+
             _ = channel.DeleteFollowupMessageAsync(loadingMessage.Id);
 
             try
             {
                 var currentPageNumber = int.Parse(userData.CurrentPageNumber) + 1;
-            
+
                 if (currentPageNumber > 7)
                 {
                     var errorMessage = await channel.CreateFollowupMessageAsync(
@@ -135,13 +133,13 @@ public class NextButtonEvent : IButton
                     _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
                 }
-            
+
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
                     new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player,
                         currentPageNumber.ToString())));
             }
             catch (Exception)
-            {   
+            {
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
                     new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
 

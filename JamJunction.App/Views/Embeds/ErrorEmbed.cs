@@ -1,6 +1,4 @@
 ﻿using DSharpPlus.Entities;
-using DSharpPlus.EventArgs;
-using DSharpPlus.SlashCommands;
 
 namespace JamJunction.App.Embeds;
 
@@ -15,7 +13,7 @@ public class ErrorEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder SameVoiceChannelError()
     {
         var embed = new DiscordEmbedBuilder
@@ -25,7 +23,7 @@ public class ErrorEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoConnectionError()
     {
         var embed = new DiscordEmbedBuilder
@@ -35,7 +33,7 @@ public class ErrorEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoPlayerError()
     {
         var embed = new DiscordEmbedBuilder
@@ -55,7 +53,7 @@ public class ErrorEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder AudioTrackError()
     {
         var embed = new DiscordEmbedBuilder
@@ -156,7 +154,7 @@ public class ErrorEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder NoTracksToShuffleError()
     {
         var embed = new DiscordEmbedBuilder
@@ -166,7 +164,7 @@ public class ErrorEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder QueueIsFullError()
     {
         var embed = new DiscordEmbedBuilder
@@ -216,7 +214,7 @@ public class ErrorEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder TrackDoesNotExistError()
     {
         var embed = new DiscordEmbedBuilder

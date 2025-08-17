@@ -127,7 +127,7 @@ public class ResumeButtonEvent : IButton
                         new DiscordFollowupMessageBuilder(
                             audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
             }
-            
+
             var resumeMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.Resume(btnInteractionArgs)));

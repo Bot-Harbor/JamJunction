@@ -6,13 +6,11 @@ using JamJunction.App.Events.Buttons.Queue_Controls;
 using JamJunction.App.Events.Menus;
 using JamJunction.App.Events.Modals;
 using JamJunction.App.Events.Player;
-using JamJunction.App.Lavalink;
 using JamJunction.App.Models;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Lavalink4NET;
 using Microsoft.Extensions.Hosting;
-using PageNumberModal = JamJunction.App.Modals.PageNumberModal;
 
 namespace JamJunction.App;
 
@@ -101,7 +99,7 @@ internal sealed class Bot : BackgroundService
             await menuHandler.Execute(new RemoveMenuEvent(_audioService, _discordClient), sender, args);
         };
     }
-    
+
     private void AudioPlayerEvents()
     {
         var trackStartedEvent = new TrackStartedEvent(_discordClient, _audioService);

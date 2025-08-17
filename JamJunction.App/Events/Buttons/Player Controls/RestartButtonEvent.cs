@@ -100,7 +100,7 @@ public class RestartButtonEvent : IButton
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
-            
+
             if (player!.CurrentTrack == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
@@ -120,7 +120,6 @@ public class RestartButtonEvent : IButton
                 await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
                     new DiscordWebhookBuilder(
                         audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, trackIsRestarted: true)));
-
             }
             catch (Exception)
             {
@@ -129,7 +128,7 @@ public class RestartButtonEvent : IButton
                         new DiscordFollowupMessageBuilder(
                             audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
             }
-            
+
             var restartMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.Restart(btnInteractionArgs)));

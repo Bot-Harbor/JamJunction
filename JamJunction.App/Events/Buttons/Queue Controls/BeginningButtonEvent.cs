@@ -1,5 +1,4 @@
-﻿using AngleSharp.Text;
-using DSharpPlus;
+﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Embeds;
@@ -114,19 +113,19 @@ public class BeginningButtonEvent : IButton
 
             var userId = btnInteractionArgs.Interaction.User.Id;
             var userData = Bot.UserData[userId];
-            
+
             var loadingMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder(new DiscordMessageBuilder().WithContent("Loading...")));
-            
+
             await Task.Delay(500);
-            
+
             _ = channel.DeleteFollowupMessageAsync(loadingMessage.Id);
-            
+
             try
             {
                 userData.CurrentPageNumber = "1";
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
-                    new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));   
+                    new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
             }
             catch (Exception)
             {

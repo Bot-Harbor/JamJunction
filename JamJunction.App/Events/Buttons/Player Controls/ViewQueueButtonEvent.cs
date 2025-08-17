@@ -111,13 +111,13 @@ public class ViewQueueButtonEvent : IButton
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
-            
+
             var userId = btnInteractionArgs.Interaction.User.Id;
             if (!Bot.UserData.ContainsKey(userId)) Bot.UserData.Add(userId, new UserData());
-            
+
             var userData = Bot.UserData[userId];
             userData.GuildId = guildId;
-            
+
             if (userData.ViewQueueMessage != null)
             {
                 var previousViewQueueMessage = userData.ViewQueueMessage.Id;

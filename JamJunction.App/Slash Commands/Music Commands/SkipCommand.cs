@@ -72,7 +72,7 @@ public class SkipCommand : ApplicationCommandModule
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
-        
+
         if (player!.CurrentTrack == null)
         {
             var errorMessage = await context.FollowUpAsync(

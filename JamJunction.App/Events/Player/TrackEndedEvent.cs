@@ -35,17 +35,15 @@ public class TrackEndedEvent
         if (eventArgs.Reason == TrackEndReason.Stopped)
         {
             _ = channel.DeleteMessageAsync(guildData.PlayerMessage);
-            
+
             foreach (var userData in Bot.UserData.Values)
-            {
                 if (userData.GuildId == guildId)
                 {
                     var userToRemove = Bot.UserData.FirstOrDefault(x =>
                         x.Value.GuildId == guildId).Key;
                     Bot.UserData.Remove(userToRemove);
                 }
-            }
-            
+
             Bot.GuildData.Remove(guildId);
             return;
         }
@@ -60,17 +58,15 @@ public class TrackEndedEvent
             await Task.Delay(10000);
 
             _ = channel.DeleteMessageAsync(queueSomethingMessage);
-            
+
             foreach (var userData in Bot.UserData.Values)
-            {
                 if (userData.GuildId == guildId)
                 {
                     var userToRemove = Bot.UserData.FirstOrDefault(x =>
                         x.Value.GuildId == guildId).Key;
                     Bot.UserData.Remove(userToRemove);
                 }
-            }
-            
+
             Bot.GuildData.Remove(guildId);
         }
     }

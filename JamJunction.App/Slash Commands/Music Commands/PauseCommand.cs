@@ -107,7 +107,7 @@ public class PauseCommand : ApplicationCommandModule
             guildData.PlayerMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
         }
-        
+
         var pauseMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Pause(context)));

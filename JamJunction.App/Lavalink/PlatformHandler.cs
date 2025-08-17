@@ -417,7 +417,7 @@ public class PlatformHandler
                 GuildData.PlayerMessage = DiscordMessage;
                 return;
             }
-            
+
             try
             {
                 var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);

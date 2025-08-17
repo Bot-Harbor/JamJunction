@@ -86,7 +86,7 @@ public class ResumeCommand : ApplicationCommandModule
         await player!.ResumeAsync();
 
         var guildData = Bot.GuildData[guildId];
-        
+
         try
         {
             var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);

@@ -73,7 +73,7 @@ public class ViewQueueCommand : ApplicationCommandModule
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
-        
+
         if (player!.CurrentTrack == null)
         {
             var errorMessage = await context.FollowUpAsync(
@@ -86,16 +86,16 @@ public class ViewQueueCommand : ApplicationCommandModule
 
         var userId = context.Interaction.User.Id;
         if (!Bot.UserData.ContainsKey(userId)) Bot.UserData.Add(userId, new UserData());
-        
+
         var userData = Bot.UserData[userId];
         userData.GuildId = guildId;
-        
+
         if (userData.ViewQueueMessage != null)
         {
             var previousViewQueueMessage = userData.ViewQueueMessage.Id;
             _ = context.DeleteFollowupAsync(previousViewQueueMessage);
         }
-        
+
         userData.ViewQueueMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder(audioPlayerEmbed.ViewQueue(context, player)));
     }

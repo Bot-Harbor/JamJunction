@@ -71,9 +71,9 @@ public class LeaveCommand : ApplicationCommandModule
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
-        
+
         _ = player!.DisconnectAsync();
-        
+
         var message = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Leave(context)));

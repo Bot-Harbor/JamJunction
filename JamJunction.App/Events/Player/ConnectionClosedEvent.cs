@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using DSharpPlus;
+﻿using DSharpPlus;
 using Lavalink4NET.Events;
 
 namespace JamJunction.App.Events.Player;

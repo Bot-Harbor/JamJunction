@@ -114,13 +114,13 @@ public class RepeatButtonEvent : IButton
 
             var guildData = Bot.GuildData[guildId];
             var repeatMode = guildData.RepeatMode;
-            
+
             guildData.RepeatMode = !guildData.RepeatMode;
 
             if (repeatMode == false)
             {
                 player!.RepeatMode = TrackRepeatMode.None;
-             
+
                 try
                 {
                     await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
@@ -158,7 +158,7 @@ public class RepeatButtonEvent : IButton
                         new DiscordFollowupMessageBuilder(
                             audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
             }
-            
+
             var enableRepeatMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.EnableRepeat(btnInteractionArgs)));

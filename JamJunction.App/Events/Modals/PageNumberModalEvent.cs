@@ -108,7 +108,7 @@ public class PageNumberModalEvent : IModal
             _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
             return;
         }
-        
+
         var userId = modalEventArgs.Interaction.User.Id;
 
         var values = modalEventArgs.Values;
@@ -134,32 +134,32 @@ public class PageNumberModalEvent : IModal
             case "2" when totalTracks > 15:
                 userData.CurrentPageNumber = pageNumber;
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
-                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "2")));
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, "2")));
                 break;
             case "3" when totalTracks > 30:
                 userData.CurrentPageNumber = pageNumber;
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
-                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "3")));
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, "3")));
                 break;
             case "4" when totalTracks > 45:
                 userData.CurrentPageNumber = pageNumber;
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
-                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "4")));
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, "4")));
                 break;
             case "5" when totalTracks > 60:
                 userData.CurrentPageNumber = pageNumber;
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
-                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "5")));
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, "5")));
                 break;
             case "6" when totalTracks > 75:
                 userData.CurrentPageNumber = pageNumber;
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
-                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "6")));
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, "6")));
                 break;
             case "7" when totalTracks > 90:
                 userData.CurrentPageNumber = pageNumber;
                 await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id, new DiscordWebhookBuilder(
-                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, pageNumber: "7")));
+                    audioPlayerEmbed.ViewQueue(modalEventArgs, player, "7")));
                 break;
             default:
             {

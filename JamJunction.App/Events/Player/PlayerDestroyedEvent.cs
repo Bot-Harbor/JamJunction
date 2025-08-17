@@ -1,6 +1,5 @@
 ﻿using DSharpPlus;
 using Lavalink4NET.Events.Players;
-using Newtonsoft.Json;
 
 namespace JamJunction.App.Events.Player;
 
@@ -23,17 +22,15 @@ public class PlayerDestroyedEvent
         var channel = guild.GetChannel(textChannelId);
 
         _ = channel.DeleteMessageAsync(guildData.PlayerMessage);
-        
+
         foreach (var userData in Bot.UserData.Values)
-        {
             if (userData.GuildId == guildId)
-            { 
+            {
                 var userToRemove = Bot.UserData.FirstOrDefault(x =>
                     x.Value.GuildId == guildId).Key;
                 Bot.UserData.Remove(userToRemove);
             }
-        }
-        
+
         Bot.GuildData.Remove(guildId);
     }
 }

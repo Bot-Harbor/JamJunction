@@ -110,7 +110,7 @@ public class SkipButtonEvent : IButton
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
-            
+
             if (player.Queue.IsEmpty)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
