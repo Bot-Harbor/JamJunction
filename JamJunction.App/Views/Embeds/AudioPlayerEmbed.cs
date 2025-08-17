@@ -589,7 +589,6 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Title = "☰  Queue List:",
-            Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
                 Url = context.Guild.IconUrl
@@ -598,11 +597,14 @@ public class AudioPlayerEmbed
 
         if (queuedLavalinkPlayer.Queue.IsEmpty)
         {
+            embed.Color = DiscordColor.Red;
             embed.Description = "There are no tracks currently in the queue.";
             messageBuilder.AddEmbed(embed);
         }
         else
         {
+            embed.Color = DiscordColor.Cyan;
+            
             var i = 1;
 
             foreach (var queue in queuedLavalinkPlayer.Queue.Take(15))
@@ -687,7 +689,6 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Title = "☰  Queue List:",
-            Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
                 Url = btnInteractionArgs.Interaction.Guild.IconUrl
@@ -696,11 +697,14 @@ public class AudioPlayerEmbed
 
         if (queuedLavalinkPlayer.Queue.IsEmpty)
         {
+            embed.Color = DiscordColor.Red;
             embed.Description = "There are no tracks currently in the queue.";
             messageBuilder.AddEmbed(embed);
         }
         else
         {
+            embed.Color = DiscordColor.Cyan;
+            
             var i = 1;
 
             var userId = btnInteractionArgs.Interaction.User.Id;
@@ -1355,7 +1359,6 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Title = "☰  Queue List:",
-            Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
                 Url = modalEventArgs.Interaction.Guild.IconUrl
@@ -1364,11 +1367,14 @@ public class AudioPlayerEmbed
 
         if (queuedLavalinkPlayer.Queue.IsEmpty)
         {
+            embed.Color = DiscordColor.Red;
             embed.Description = "There are no tracks currently in the queue.";
             messageBuilder.AddEmbed(embed);
         }
         else
         {
+            embed.Color = DiscordColor.Cyan;
+            
             var i = 1;
 
             var userId = modalEventArgs.Interaction.User.Id;

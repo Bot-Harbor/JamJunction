@@ -46,11 +46,11 @@ public class ErrorEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder NoAudioTrackError()
+    public DiscordEmbedBuilder PlayerInactiveError()
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = "\ud83c\udfb5 • There are no tracks currently playing.",
+            Description = "\ud83d\udcfb • The player is not active currently. Please queue something.",
             Color = DiscordColor.Red
         };
         return embed;
@@ -212,6 +212,16 @@ public class ErrorEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udcc4 • Page number does not exist.",
+            Color = DiscordColor.Red
+        };
+        return embed;
+    }
+    
+    public DiscordEmbedBuilder TrackDoesNotExistError()
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = "\ud83d\udcc4 • Track does not exist in the queue.",
             Color = DiscordColor.Red
         };
         return embed;
