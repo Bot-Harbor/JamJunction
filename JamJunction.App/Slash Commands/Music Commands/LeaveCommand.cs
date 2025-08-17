@@ -72,7 +72,11 @@ public class LeaveCommand : ApplicationCommandModule
             return;
         }
 
-        await player!.DisconnectAsync();
+       
+            await player!.DisconnectAsync();
+        
+     
+        
 
         var message = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(

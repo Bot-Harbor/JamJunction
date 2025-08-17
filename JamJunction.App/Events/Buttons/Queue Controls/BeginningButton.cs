@@ -106,7 +106,7 @@ public class BeginningButton : IButton
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoAudioTrackError()));
+                        errorEmbed.PlayerInactiveError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -122,9 +122,22 @@ public class BeginningButton : IButton
             
             await channel.DeleteFollowupMessageAsync(loadingMessage.Id);
             
-            userData.CurrentPageNumber = "1";
-            await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
-                new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
+            try
+            {
+                userData.CurrentPageNumber = "1";
+                await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
+                    new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));   
+            }
+            catch (Exception)
+            {
+                await channel.EditFollowupMessageAsync(userData.ViewQueueMessage.Id,
+                    new DiscordWebhookBuilder(audioPlayerEmbed.ViewQueue(btnInteractionArgs, player)));
+
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.PageNumberDoesNotExistError()));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+            }
         }
     }
 }

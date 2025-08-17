@@ -101,6 +101,16 @@ public class SkipButtonEvent : IButton
                 return;
             }
 
+            if (player!.CurrentTrack == null)
+            {
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(
+                        errorEmbed.PlayerInactiveError()));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
+            
             if (player.Queue.IsEmpty)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(

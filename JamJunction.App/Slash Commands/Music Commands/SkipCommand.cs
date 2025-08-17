@@ -72,6 +72,16 @@ public class SkipCommand : ApplicationCommandModule
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
+        
+        if (player!.CurrentTrack == null)
+        {
+            var errorMessage = await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.PlayerInactiveError()));
+            await Task.Delay(10000);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
+            return;
+        }
 
         if (player.Queue.IsEmpty)
         {

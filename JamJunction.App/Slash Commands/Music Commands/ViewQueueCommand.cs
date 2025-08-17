@@ -73,6 +73,16 @@ public class ViewQueueCommand : ApplicationCommandModule
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
+        
+        if (player!.CurrentTrack == null)
+        {
+            var errorMessage = await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.PlayerInactiveError()));
+            await Task.Delay(10000);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
+            return;
+        }
 
         var userId = context.Interaction.User.Id;
         if (!Bot.UserData.ContainsKey(userId)) Bot.UserData.Add(userId, new UserData());

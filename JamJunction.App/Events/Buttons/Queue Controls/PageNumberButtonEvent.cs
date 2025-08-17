@@ -103,7 +103,7 @@ public class PageNumberButtonEvent : IButton
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoAudioTrackError()));
+                        errorEmbed.PlayerInactiveError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;

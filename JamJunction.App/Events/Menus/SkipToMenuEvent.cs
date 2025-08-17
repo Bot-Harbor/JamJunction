@@ -101,17 +101,41 @@ public class SkipToMenuEvent : IMenu
                 return;
             }
 
-            foreach (var value in menuInteractionArgs.Values)
+            if (player!.CurrentTrack == null)
             {
-                await player.SkipAsync(Convert.ToInt32(value));
-                _ = channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-
-                var message = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.SkipTo(menuInteractionArgs, player)));
-
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(
+                        errorEmbed.PlayerInactiveError()));
                 await Task.Delay(10000);
-                _ = channel.DeleteFollowupMessageAsync(message.Id);
-                break;
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
+
+            try
+            {
+                foreach (var value in menuInteractionArgs.Values)
+                {
+                    await player.SkipAsync(Convert.ToInt32(value));
+                    _ = channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
+
+                    var message = await channel.CreateFollowupMessageAsync(
+                        new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.SkipTo(menuInteractionArgs, player)));
+
+                    await Task.Delay(10000);
+                    _ = channel.DeleteFollowupMessageAsync(message.Id);
+                    break;
+                }
+            }
+            catch (Exception)
+            {
+                var userData = Bot.UserData[menuInteractionArgs.User.Id];
+
+                await channel.DeleteFollowupMessageAsync(userData.ViewQueueMessage.Id);
+                
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.TrackDoesNotExistError()));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
             }
         }
     }

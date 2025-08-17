@@ -100,29 +100,53 @@ public class RemoveMenuEvent : IMenu
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
-
-            foreach (var value in menuInteractionArgs.Values)
+            
+            if (player!.CurrentTrack == null)
             {
-                var removedTrack = player.Queue[Convert.ToInt32(value)].Track;
-                
-                await player.Queue.RemoveAtAsync(Convert.ToInt32(value));
-                _ = channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-
-                var guildData = Bot.GuildData[guildId];
-                _ = channel.Channel.DeleteMessageAsync(guildData.PlayerMessage);
-
-                var playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                    new DiscordInteractionResponseBuilder(
-                        audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-
-                guildData.PlayerMessage = playerMessage;
-
-                var removeMenuMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Remove(menuInteractionArgs, removedTrack)));
-
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(
+                        errorEmbed.PlayerInactiveError()));
                 await Task.Delay(10000);
-                _ = channel.DeleteFollowupMessageAsync(removeMenuMessage.Id);
-                break;
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
+
+            try
+            {
+                foreach (var value in menuInteractionArgs.Values)
+                {
+                    var removedTrack = player.Queue[Convert.ToInt32(value)].Track;
+                
+                    await player.Queue.RemoveAtAsync(Convert.ToInt32(value));
+                    _ = channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
+
+                    var guildData = Bot.GuildData[guildId];
+                    _ = channel.Channel.DeleteMessageAsync(guildData.PlayerMessage);
+
+                    var playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
+                        new DiscordInteractionResponseBuilder(
+                            audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
+
+                    guildData.PlayerMessage = playerMessage;
+
+                    var removeMenuMessage = await channel.CreateFollowupMessageAsync(
+                        new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Remove(menuInteractionArgs, removedTrack)));
+
+                    await Task.Delay(10000);
+                    _ = channel.DeleteFollowupMessageAsync(removeMenuMessage.Id);
+                    break;
+                }
+            }
+            catch (Exception)
+            {
+                var userData = Bot.UserData[menuInteractionArgs.User.Id];
+
+                await channel.DeleteFollowupMessageAsync(userData.ViewQueueMessage.Id);
+                
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.TrackDoesNotExistError()));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
             }
         }
     }

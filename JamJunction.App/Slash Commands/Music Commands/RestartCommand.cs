@@ -77,7 +77,7 @@ public class RestartCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoAudioTrackError()));
+                    errorEmbed.PlayerInactiveError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;

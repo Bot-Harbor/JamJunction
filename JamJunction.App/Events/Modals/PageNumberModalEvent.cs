@@ -99,6 +99,16 @@ public class PageNumberModalEvent : IModal
             return;
         }
 
+        if (player!.CurrentTrack == null)
+        {
+            var errorMessage = await channel.CreateFollowupMessageAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.PlayerInactiveError()));
+            await Task.Delay(10000);
+            _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+            return;
+        }
+        
         var userId = modalEventArgs.Interaction.User.Id;
 
         var values = modalEventArgs.Values;

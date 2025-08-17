@@ -102,6 +102,16 @@ public class ViewQueueButtonEvent : IButton
                 return;
             }
 
+            if (player!.CurrentTrack == null)
+            {
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(
+                        errorEmbed.PlayerInactiveError()));
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
+            
             var userId = btnInteractionArgs.Interaction.User.Id;
             if (!Bot.UserData.ContainsKey(userId)) Bot.UserData.Add(userId, new UserData());
             

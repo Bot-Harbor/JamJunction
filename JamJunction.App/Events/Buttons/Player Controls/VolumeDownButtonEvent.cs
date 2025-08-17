@@ -105,14 +105,13 @@ public class VolumeDownButtonEvent : IButton
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoAudioTrackError()));
+                        errorEmbed.PlayerInactiveError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
 
             var currentVolume = player.Volume;
-            Console.WriteLine($"Current Volume: {currentVolume}");
 
             if (currentVolume == 0)
             {

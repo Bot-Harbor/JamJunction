@@ -81,7 +81,7 @@ public class RepeatCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoAudioTrackError()));
+                    errorEmbed.PlayerInactiveError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -97,9 +97,17 @@ public class RepeatCommand : ApplicationCommandModule
 
         var guildData = Bot.GuildData[guildId];
 
-        var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
-        await updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
-
+        try
+        {
+            var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
+            _ = updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+        }
+        catch (Exception)
+        {
+            guildData.PlayerMessage = await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+        }
+        
         var repeatMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Repeat(context, player)));
