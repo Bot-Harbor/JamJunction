@@ -135,8 +135,19 @@ public class PlatformHandler
                     return;
                 }
 
-                var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
-                await updatedPlayerMessage.ModifyAsync(AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+                try
+                {
+                    var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
+                    await updatedPlayerMessage.ModifyAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+                }
+                catch (Exception)
+                {
+                    GuildData.PlayerMessage =
+                        await context.FollowUpAsync(
+                            new DiscordFollowupMessageBuilder(
+                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                }
 
                 var albumUrl = $"https://open.spotify.com/album/{fullAlbum.Id}";
                 DiscordMessage = await context
@@ -237,8 +248,19 @@ public class PlatformHandler
                     return;
                 }
 
-                var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
-                await updatedPlayerMessage.ModifyAsync(AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+                try
+                {
+                    var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
+                    await updatedPlayerMessage.ModifyAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+                }
+                catch (Exception)
+                {
+                    GuildData.PlayerMessage =
+                        await context.FollowUpAsync(
+                            new DiscordFollowupMessageBuilder(
+                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                }
 
                 var playlistUrl = $"https://open.spotify.com/playlist/{fullPlaylist.Id}";
                 DiscordMessage = await context
@@ -328,8 +350,19 @@ public class PlatformHandler
                     return;
                 }
 
-                var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
-                await updatedPlayerMessage.ModifyAsync(AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+                try
+                {
+                    var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
+                    await updatedPlayerMessage.ModifyAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+                }
+                catch (Exception)
+                {
+                    GuildData.PlayerMessage =
+                        await context.FollowUpAsync(
+                            new DiscordFollowupMessageBuilder(
+                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                }
 
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -384,10 +417,20 @@ public class PlatformHandler
                 GuildData.PlayerMessage = DiscordMessage;
                 return;
             }
-
-            // Finish doing this and the command ands the menu events
-            var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
-            await updatedPlayerMessage.ModifyAsync(AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+            
+            try
+            {
+                var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
+                await updatedPlayerMessage.ModifyAsync(
+                    AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+            }
+            catch (Exception)
+            {
+                GuildData.PlayerMessage =
+                    await context.FollowUpAsync(
+                        new DiscordFollowupMessageBuilder(
+                            AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            }
 
             DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -493,9 +536,20 @@ public class PlatformHandler
                     GuildData.PlayerMessage = DiscordMessage;
                     return;
                 }
-                
-                var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
-                await updatedPlayerMessage.ModifyAsync(AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+
+                try
+                {
+                    var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
+                    await updatedPlayerMessage.ModifyAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+                }
+                catch (Exception)
+                {
+                    GuildData.PlayerMessage =
+                        await context.FollowUpAsync(
+                            new DiscordFollowupMessageBuilder(
+                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                }
 
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -579,9 +633,20 @@ public class PlatformHandler
                     GuildData.PlayerMessage = DiscordMessage;
                     return;
                 }
-                
-                var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
-                await updatedPlayerMessage.ModifyAsync(AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+
+                try
+                {
+                    var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
+                    await updatedPlayerMessage.ModifyAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+                }
+                catch (Exception)
+                {
+                    GuildData.PlayerMessage =
+                        await context.FollowUpAsync(
+                            new DiscordFollowupMessageBuilder(
+                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                }
 
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -669,8 +734,19 @@ public class PlatformHandler
                 return;
             }
 
-            var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
-            await updatedPlayerMessage.ModifyAsync(AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+            try
+            {
+                var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
+                await updatedPlayerMessage.ModifyAsync(
+                    AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+            }
+            catch (Exception)
+            {
+                GuildData.PlayerMessage =
+                    await context.FollowUpAsync(
+                        new DiscordFollowupMessageBuilder(
+                            AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            }
 
             DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -759,8 +835,19 @@ public class PlatformHandler
                 return;
             }
 
-            var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
-            await updatedPlayerMessage.ModifyAsync(AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+            try
+            {
+                var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
+                await updatedPlayerMessage.ModifyAsync(
+                    AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+            }
+            catch (Exception)
+            {
+                GuildData.PlayerMessage =
+                    await context.FollowUpAsync(
+                        new DiscordFollowupMessageBuilder(
+                            AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            }
 
             var playlistUrl = query;
 
@@ -812,9 +899,20 @@ public class PlatformHandler
                 GuildData.PlayerMessage = DiscordMessage;
                 return;
             }
-            
-            var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
-            await updatedPlayerMessage.ModifyAsync(AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+
+            try
+            {
+                var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
+                await updatedPlayerMessage.ModifyAsync(
+                    AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+            }
+            catch (Exception)
+            {
+                GuildData.PlayerMessage =
+                    await context.FollowUpAsync(
+                        new DiscordFollowupMessageBuilder(
+                            AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            }
 
             DiscordMessage = await context
                 .FollowUpAsync(new DiscordFollowupMessageBuilder()

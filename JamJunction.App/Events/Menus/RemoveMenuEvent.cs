@@ -100,7 +100,7 @@ public class RemoveMenuEvent : IMenu
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
-            
+
             if (player!.CurrentTrack == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
@@ -111,26 +111,33 @@ public class RemoveMenuEvent : IMenu
                 return;
             }
 
+            var guildData = Bot.GuildData[guildId];
+            
             try
             {
                 foreach (var value in menuInteractionArgs.Values)
                 {
                     var removedTrack = player.Queue[Convert.ToInt32(value)].Track;
-                
+
                     await player.Queue.RemoveAtAsync(Convert.ToInt32(value));
                     _ = channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-
-                    var guildData = Bot.GuildData[guildId];
-                    _ = channel.Channel.DeleteMessageAsync(guildData.PlayerMessage);
-
-                    var playerMessage = await channel.CreateFollowupMessageAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(
-                            audioPlayerEmbed.TrackInformation(player.CurrentTrack, player))));
-
-                    guildData.PlayerMessage = playerMessage;
-
+                    
+                    try
+                    {
+                        await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                            new DiscordWebhookBuilder(
+                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    }
+                    catch (Exception)
+                    {
+                        guildData.PlayerMessage = await channel.CreateFollowupMessageAsync(
+                            new DiscordFollowupMessageBuilder(
+                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    }
+                    
                     var removeMenuMessage = await channel.CreateFollowupMessageAsync(
-                        new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Remove(menuInteractionArgs, removedTrack)));
+                        new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Remove(menuInteractionArgs,
+                            removedTrack)));
 
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(removeMenuMessage.Id);
@@ -142,7 +149,7 @@ public class RemoveMenuEvent : IMenu
                 var userData = Bot.UserData[menuInteractionArgs.User.Id];
 
                 await channel.DeleteFollowupMessageAsync(userData.ViewQueueMessage.Id);
-                
+
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.TrackDoesNotExistError()));
                 await Task.Delay(10000);

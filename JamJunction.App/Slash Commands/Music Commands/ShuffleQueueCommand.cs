@@ -95,6 +95,19 @@ public class ShuffleQueueCommand : ApplicationCommandModule
 
         await player.Queue.ShuffleAsync();
 
+        var guildData = Bot.GuildData[guildId];
+        
+        try
+        {
+            var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
+            _ = updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+        }
+        catch (Exception)
+        {
+            guildData.PlayerMessage = await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+        }
+        
         var shuffleMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.ShuffleQueue(context)));

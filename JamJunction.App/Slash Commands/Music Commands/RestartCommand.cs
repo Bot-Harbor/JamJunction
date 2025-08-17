@@ -84,11 +84,21 @@ public class RestartCommand : ApplicationCommandModule
         }
 
         await player!.SeekAsync(TimeSpan.FromSeconds(0));
-        
+
         var guildData = Bot.GuildData[guildId];
 
-        var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
-        await updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, trackIsRestarted: true));
+        try
+        {
+            var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
+            _ = updatedPlayerMessage.ModifyAsync(
+                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, trackIsRestarted: true));
+        }
+        catch (Exception)
+        {
+            guildData.PlayerMessage = await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder(
+                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, trackIsRestarted: true)));
+        }
 
         var restartMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(

@@ -112,8 +112,16 @@ public class VolumeCommand : ApplicationCommandModule
 
         var guildData = Bot.GuildData[guildId];
         
-        var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
-        await updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+        try
+        {
+            var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
+            _ = updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+        }
+        catch (Exception)
+        {
+            guildData.PlayerMessage = await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+        }
         
         var volumeMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(

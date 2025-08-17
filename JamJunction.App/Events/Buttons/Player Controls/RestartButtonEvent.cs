@@ -115,10 +115,21 @@ public class RestartButtonEvent : IButton
 
             var guildData = Bot.GuildData[guildId];
 
-            await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
-                new DiscordWebhookBuilder(
-                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, trackIsRestarted: true)));
+            try
+            {
+                await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                    new DiscordWebhookBuilder(
+                        audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, trackIsRestarted: true)));
 
+            }
+            catch (Exception)
+            {
+                guildData.PlayerMessage =
+                    await channel.CreateFollowupMessageAsync(
+                        new DiscordFollowupMessageBuilder(
+                            audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            }
+            
             var restartMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.Restart(btnInteractionArgs)));

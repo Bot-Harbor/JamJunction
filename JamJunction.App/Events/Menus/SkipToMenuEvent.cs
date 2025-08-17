@@ -119,7 +119,8 @@ public class SkipToMenuEvent : IMenu
                     _ = channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
 
                     var message = await channel.CreateFollowupMessageAsync(
-                        new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.SkipTo(menuInteractionArgs, player)));
+                        new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.SkipTo(menuInteractionArgs,
+                            player)));
 
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(message.Id);
@@ -131,7 +132,7 @@ public class SkipToMenuEvent : IMenu
                 var userData = Bot.UserData[menuInteractionArgs.User.Id];
 
                 await channel.DeleteFollowupMessageAsync(userData.ViewQueueMessage.Id);
-                
+
                 var errorMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.TrackDoesNotExistError()));
                 await Task.Delay(10000);

@@ -84,6 +84,19 @@ public class PositionCommand : ApplicationCommandModule
         }
 
         var position = player.Position!.Value.Position;
+        
+        var guildData = Bot.GuildData[guildId];
+        
+        try
+        {
+            var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
+            _ = updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+        }
+        catch (Exception)
+        {
+            guildData.PlayerMessage = await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+        }
 
         var positionMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(

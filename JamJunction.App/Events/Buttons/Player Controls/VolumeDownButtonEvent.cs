@@ -128,8 +128,18 @@ public class VolumeDownButtonEvent : IButton
 
             var guildData = Bot.GuildData[guildId];
 
-            await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
-                new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            try
+            {
+                await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                    new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            }
+            catch (Exception)
+            {
+                guildData.PlayerMessage =
+                    await channel.CreateFollowupMessageAsync(
+                        new DiscordFollowupMessageBuilder(
+                            audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            }
 
             var volumeDecreasedMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(

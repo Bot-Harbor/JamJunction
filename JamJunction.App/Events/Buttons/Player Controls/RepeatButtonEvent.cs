@@ -114,15 +114,25 @@ public class RepeatButtonEvent : IButton
 
             var guildData = Bot.GuildData[guildId];
             var repeatMode = guildData.RepeatMode;
-
+            
             guildData.RepeatMode = !guildData.RepeatMode;
 
             if (repeatMode == false)
             {
                 player!.RepeatMode = TrackRepeatMode.None;
-                
-                await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
-                    new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+             
+                try
+                {
+                    await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                        new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                }
+                catch (Exception)
+                {
+                    guildData.PlayerMessage =
+                        await channel.CreateFollowupMessageAsync(
+                            new DiscordFollowupMessageBuilder(
+                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                }
 
                 var disableRepeatMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
@@ -135,10 +145,20 @@ public class RepeatButtonEvent : IButton
             }
 
             player!.RepeatMode = TrackRepeatMode.Track;
-            
-            await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
-                new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
 
+            try
+            {
+                await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                    new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            }
+            catch (Exception)
+            {
+                guildData.PlayerMessage =
+                    await channel.CreateFollowupMessageAsync(
+                        new DiscordFollowupMessageBuilder(
+                            audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            }
+            
             var enableRepeatMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.EnableRepeat(btnInteractionArgs)));

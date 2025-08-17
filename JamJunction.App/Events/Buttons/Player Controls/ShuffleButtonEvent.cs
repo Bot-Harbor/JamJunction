@@ -123,6 +123,21 @@ public class ShuffleButtonEvent : IButton
 
             await player!.Queue.ShuffleAsync();
 
+            var guildData = Bot.GuildData[guildId];
+            
+            try
+            {
+                await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                    new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            }
+            catch (Exception)
+            {
+                guildData.PlayerMessage =
+                    await channel.CreateFollowupMessageAsync(
+                        new DiscordFollowupMessageBuilder(
+                            audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            }
+
             var shuffleQueueMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
                     audioPlayerEmbed.ShuffleQueue(btnInteractionArgs)));
