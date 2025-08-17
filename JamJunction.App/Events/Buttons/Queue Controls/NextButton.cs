@@ -121,7 +121,7 @@ public class NextButton : IButton
             
             await Task.Delay(500);
             
-            await channel.DeleteFollowupMessageAsync(loadingMessage.Id);
+            _ = channel.DeleteFollowupMessageAsync(loadingMessage.Id);
 
             try
             {

@@ -121,7 +121,7 @@ public class PageNumberModalEvent : IModal
 
         await Task.Delay(500);
 
-        await channel.DeleteFollowupMessageAsync(loadingMessage.Id);
+        _ = channel.DeleteFollowupMessageAsync(loadingMessage.Id);
 
         var totalTracks = player.Queue.Count;
         switch (pageNumber)
