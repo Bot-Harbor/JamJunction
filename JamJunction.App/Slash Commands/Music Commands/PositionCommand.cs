@@ -85,11 +85,11 @@ public class PositionCommand : ApplicationCommandModule
 
         var position = player.Position!.Value.Position;
 
-        var message = await context.FollowUpAsync(
+        var positionMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.TrackPosition(position)));
 
         await Task.Delay(10000);
-        _ = context.DeleteFollowupAsync(message.Id);
+        _ = context.DeleteFollowupAsync(positionMessage.Id);
     }
 }

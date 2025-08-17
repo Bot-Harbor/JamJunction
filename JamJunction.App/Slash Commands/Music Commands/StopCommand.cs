@@ -85,11 +85,11 @@ public class StopCommand : ApplicationCommandModule
 
         await player!.StopAsync();
 
-        var message = await context.FollowUpAsync(
+        var stopMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Stop(context)));
 
         await Task.Delay(10000);
-        _ = context.DeleteFollowupAsync(message.Id);
+        _ = context.DeleteFollowupAsync(stopMessage.Id);
     }
 }

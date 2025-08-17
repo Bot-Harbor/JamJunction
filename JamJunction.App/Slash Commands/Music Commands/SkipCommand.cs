@@ -95,11 +95,11 @@ public class SkipCommand : ApplicationCommandModule
 
         await player.SkipAsync();
 
-        var message = await context.FollowUpAsync(
+        var skipMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.Skip(context)));
 
         await Task.Delay(10000);
-        _ = context.DeleteFollowupAsync(message.Id);
+        _ = context.DeleteFollowupAsync(skipMessage.Id);
     }
 }

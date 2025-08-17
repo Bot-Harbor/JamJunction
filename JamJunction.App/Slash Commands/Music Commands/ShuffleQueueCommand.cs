@@ -95,11 +95,11 @@ public class ShuffleQueueCommand : ApplicationCommandModule
 
         await player.Queue.ShuffleAsync();
 
-        var message = await context.FollowUpAsync(
+        var shuffleMessage = await context.FollowUpAsync(
             new DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.ShuffleQueue(context)));
 
         await Task.Delay(10000);
-        _ = context.DeleteFollowupAsync(message.Id);
+        _ = context.DeleteFollowupAsync(shuffleMessage.Id);
     }
 }
