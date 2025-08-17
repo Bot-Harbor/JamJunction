@@ -44,7 +44,6 @@ Looking to donate?
 | `🛑 /stop` | Stops the playback.  |
 | `🔀 /shuffle` | Shuffles the queue. |
 | `🔊 /volume` | Adjusts the volume 0-100. |
-| `🎵 /filters` | Change filter for the player. |
 | `🎶 /view-queue` | Displays what is currently in the queue. |
 | `📄 /current-track` | Shows details about the current track playing. |
 | `🕒 /position` | Gets the current track position. |
@@ -52,6 +51,4 @@ Looking to donate?
 | `🔁 /repeating-mode` | Change the repeating mode. |
 | `🕒 /seek` | Sets the position of the track. |
 | `⏭️ /skip` | Skips to the next track in the queue. |
-| `⏭️ /skip-to` | Skips to the desired track in the queue. |
-| `🗑️ /remove` | Removes a track from the queue. |
 | `🔌 /leave` | Disconnects the player. |
