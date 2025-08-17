@@ -121,12 +121,12 @@ public class RemoveMenuEvent : IMenu
 
                     await player.Queue.RemoveAtAsync(Convert.ToInt32(value));
                     _ = channel.DeleteFollowupMessageAsync(menuInteractionArgs.Message.Id);
-                    
+
                     try
                     {
-                        await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
-                            new DiscordWebhookBuilder(
-                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                        var updatedPlayerMessage = await channel.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
+                        _ = updatedPlayerMessage.ModifyAsync(
+                            audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                     }
                     catch (Exception)
                     {
@@ -134,7 +134,7 @@ public class RemoveMenuEvent : IMenu
                             new DiscordFollowupMessageBuilder(
                                 audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
                     }
-                    
+
                     var removeMenuMessage = await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Remove(menuInteractionArgs,
                             removedTrack)));
