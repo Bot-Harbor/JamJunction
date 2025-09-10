@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Embeds;
 using JamJunction.App.Models;
 using JamJunction.App.Secrets;
 using JamJunction.App.Views.Embeds;
@@ -127,6 +126,7 @@ public class PlatformHandler
                     var firstTrack = player.Queue.FirstOrDefault()!.Track;
                     await player.PlayAsync(firstTrack!, false);
                     await player.Queue.RemoveAtAsync(0);
+                    await player.SetVolumeAsync(.50f);
 
                     DiscordMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
@@ -240,6 +240,7 @@ public class PlatformHandler
                     var firstTrack = player.Queue.FirstOrDefault()!.Track;
                     await player.PlayAsync(firstTrack!, false);
                     await player.Queue.RemoveAtAsync(0);
+                    await player.SetVolumeAsync(.50f);
 
                     DiscordMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
@@ -343,6 +344,7 @@ public class PlatformHandler
 
                 if (player.Queue.IsEmpty)
                 {
+                    await player.SetVolumeAsync(.50f);
                     DiscordMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
@@ -411,6 +413,7 @@ public class PlatformHandler
 
             if (player.Queue.IsEmpty)
             {
+                await player.SetVolumeAsync(.50f);
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
@@ -529,6 +532,7 @@ public class PlatformHandler
                     var firstTrack = player.Queue.FirstOrDefault()!.Track;
                     await player.PlayAsync(firstTrack!, false);
                     await player.Queue.RemoveAtAsync(0);
+                    await player.SetVolumeAsync(.50f);
 
                     DiscordMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
@@ -627,6 +631,7 @@ public class PlatformHandler
 
                 if (player.Queue.IsEmpty)
                 {
+                    await player.SetVolumeAsync(.50f);
                     DiscordMessage = await context
                         .FollowUpAsync(new DiscordFollowupMessageBuilder(
                             new DiscordInteractionResponseBuilder(
@@ -727,6 +732,7 @@ public class PlatformHandler
 
             if (player.Queue.IsEmpty)
             {
+                await player.SetVolumeAsync(.50f);
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
@@ -762,7 +768,7 @@ public class PlatformHandler
         InteractionContext context, ulong guildId)
     {
         var channel = context.Channel;
-
+    
         if (query.Contains("soundcloud.com") && query.Contains("/sets"))
         {
             var trackLoadResult = await _audioService.Tracks.LoadTracksAsync(query!, TrackSearchMode.SoundCloud);
@@ -827,6 +833,7 @@ public class PlatformHandler
                 var firstTrack = player.Queue.FirstOrDefault()!.Track;
                 await player.PlayAsync(firstTrack!, false);
                 await player.Queue.RemoveAtAsync(0);
+                await player.SetVolumeAsync(.50f);
 
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
@@ -893,6 +900,7 @@ public class PlatformHandler
 
             if (player.Queue.IsEmpty)
             {
+                await player.SetVolumeAsync(.50f);
                 DiscordMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder(
                         new DiscordInteractionResponseBuilder(
