@@ -45,7 +45,7 @@ public class AudioPlayerEmbed
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
                 Name = "Platform: Soundcloud",
-                IconUrl = "https://static-00.iconduck.com/assets.00/soundcloud-icon-2048x2048-j8bxnm2n.png"
+                IconUrl = "https://cdn-icons-png.flaticon.com/512/145/145809.png"
             };
 
         if (track.Uri!.ToString().ToLower().Contains("youtube"))
@@ -195,7 +195,7 @@ public class AudioPlayerEmbed
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
                 Name = "Platform: Soundcloud",
-                IconUrl = "https://static-00.iconduck.com/assets.00/soundcloud-icon-2048x2048-j8bxnm2n.png"
+                IconUrl = "https://cdn-icons-png.flaticon.com/512/145/145809.png"
             };
 
         if (track.Uri!.ToString().ToLower().Contains("youtube"))
