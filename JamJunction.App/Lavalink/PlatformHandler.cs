@@ -682,7 +682,6 @@ public class PlatformHandler
                         .AddEmbed(ErrorEmbed.AudioTrackError()));
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
-                ;
                 return;
             }
 
@@ -768,9 +767,77 @@ public class PlatformHandler
         InteractionContext context, ulong guildId)
     {
         var channel = context.Channel;
-    
+
         if (query.Contains("soundcloud.com") && query.Contains("/sets"))
         {
+            if (query.Contains("in=user"))
+            {
+                var searchUrl = query.Split('?')[0];
+
+                var soundcloudTrack = await _audioService.Tracks.LoadTrackAsync(searchUrl!, TrackSearchMode.SoundCloud);
+
+                if (soundcloudTrack == null)
+                {
+                    var errorMessage = await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                            .AddEmbed(ErrorEmbed.AudioTrackError()));
+                    await Task.Delay(10000);
+                    _ = channel.DeleteMessageAsync(errorMessage);
+                    return;
+                }
+
+                if (soundcloudTrack.IsLiveStream)
+                {
+                    var errorMessage = await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                            .AddEmbed(ErrorEmbed.LiveSteamError()));
+                    await Task.Delay(10000);
+                    _ = channel.DeleteMessageAsync(errorMessage);
+                    return;
+                }
+
+                if (!Bot.GuildData.ContainsKey(guildId)) Bot.GuildData.Add(guildId, new GuildData());
+
+                GuildData = Bot.GuildData[guildId];
+                GuildData.TextChannelId = context.Channel.Id;
+
+                await player.PlayAsync(soundcloudTrack!);
+
+                if (player.Queue.IsEmpty)
+                {
+                    await player.SetVolumeAsync(.50f);
+                    DiscordMessage = await context
+                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                            new DiscordInteractionResponseBuilder(
+                                AudioPlayerEmbed.TrackInformation(soundcloudTrack, player))));
+                    GuildData.PlayerMessage = DiscordMessage;
+                    return;
+                }
+
+                try
+                {
+                    var updatedPlayerMessage = await channel.GetMessageAsync(GuildData.PlayerMessage.Id);
+                    await updatedPlayerMessage.ModifyAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+                }
+                catch (Exception)
+                {
+                    GuildData.PlayerMessage =
+                        await context.FollowUpAsync(
+                            new DiscordFollowupMessageBuilder(
+                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                }
+
+                DiscordMessage = await context
+                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
+                        .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(soundcloudTrack)));
+
+                await Task.Delay(10000);
+                _ = context.DeleteFollowupAsync(DiscordMessage.Id);
+                
+                return;
+            }
+
             var trackLoadResult = await _audioService.Tracks.LoadTracksAsync(query!, TrackSearchMode.SoundCloud);
 
             if (trackLoadResult.Playlist == null)
