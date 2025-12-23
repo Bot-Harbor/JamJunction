@@ -119,14 +119,15 @@ public class ResumeButtonEvent : IButton
             try
             {
                 await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
-                    new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    new DiscordWebhookBuilder(
+                        audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, resumeDisabled: true)));
             }
             catch (Exception)
             {
                 guildData.PlayerMessage =
                     await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder(
-                            audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                            audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, resumeDisabled: true)));
             }
 
             var resumeMessage = await channel.CreateFollowupMessageAsync(

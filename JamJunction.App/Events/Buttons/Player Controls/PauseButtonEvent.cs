@@ -111,7 +111,7 @@ public class PauseButtonEvent : IButton
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
             }
-            
+
             await player!.PauseAsync();
 
             var guildData = Bot.GuildData[guildId];
@@ -120,14 +120,16 @@ public class PauseButtonEvent : IButton
             {
                 await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
                     new DiscordWebhookBuilder(
-                        audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, trackIsPaused: true)));
+                        audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, pauseDisabled: true,
+                            resumeDisabled: false)));
             }
             catch (Exception)
             {
                 guildData.PlayerMessage =
                     await channel.CreateFollowupMessageAsync(
                         new DiscordFollowupMessageBuilder(
-                            audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, trackIsPaused: true)));
+                            audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, pauseDisabled: true,
+                                resumeDisabled: false)));
             }
 
             var pauseMessage = await channel.CreateFollowupMessageAsync(

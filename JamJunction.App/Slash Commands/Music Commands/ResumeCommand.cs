@@ -84,6 +84,16 @@ public class ResumeCommand : ApplicationCommandModule
             return;
         }
 
+        if (!player.IsPaused)
+        {
+            var errorMessage = await context.FollowUpAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(
+                    errorEmbed.AlreadyPlayingError()));
+            await Task.Delay(10000);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
+            return;
+        }
+
         await player!.ResumeAsync();
 
         var guildData = Bot.GuildData[guildId];
@@ -91,12 +101,14 @@ public class ResumeCommand : ApplicationCommandModule
         try
         {
             var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
-            _ = updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+            _ = updatedPlayerMessage.ModifyAsync(
+                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, resumeDisabled: true));
         }
         catch (Exception)
         {
             guildData.PlayerMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                new DiscordFollowupMessageBuilder(
+                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, resumeDisabled: true)));
         }
 
         var resumeMessage = await context.FollowUpAsync(

@@ -16,7 +16,8 @@ namespace JamJunction.App.Views.Embeds;
 public class AudioPlayerEmbed
 {
     public DiscordMessageBuilder TrackInformation(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer,
-        bool isStartedFromEvent = false, bool trackIsRestarted = false, bool trackIsPaused = false)
+        bool isStartedFromEvent = false, bool trackIsRestarted = false, bool pauseDisabled = false,
+        bool resumeDisabled = true)
     {
         var uri = track.Uri!.AbsoluteUri;
 
@@ -90,12 +91,12 @@ public class AudioPlayerEmbed
 
         var pauseButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "pause", "⏸", trackIsPaused
+            ButtonStyle.Secondary, "pause", "⏸", pauseDisabled
         );
 
         var resumeButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "resume", "▶"
+            ButtonStyle.Secondary, "resume", "▶", resumeDisabled
         );
 
         var skipButton = new DiscordButtonComponent
@@ -246,7 +247,7 @@ public class AudioPlayerEmbed
 
         var resumeButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "resume", "▶"
+            ButtonStyle.Secondary, "resume", "▶", true
         );
 
         var skipButton = new DiscordButtonComponent

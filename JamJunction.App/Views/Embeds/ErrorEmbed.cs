@@ -123,6 +123,16 @@ public class ErrorEmbed
         };
         return embed;
     }
+    
+    public DiscordEmbed AlreadyPlayingError()
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = "▶  •  The player is already playing.",
+            Color = DiscordColor.Red
+        };
+        return embed;
+    }
 
     public DiscordEmbedBuilder SeekNotAnIntegerError()
     {
