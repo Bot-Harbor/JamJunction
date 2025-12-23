@@ -6,10 +6,12 @@ using JamJunction.App.Events.Buttons.Queue_Controls;
 using JamJunction.App.Events.Menus;
 using JamJunction.App.Events.Modals;
 using JamJunction.App.Events.Player;
+using JamJunction.App.Lavalink;
 using JamJunction.App.Models;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Lavalink4NET;
+using Lavalink4NET.Rest;
 using Microsoft.Extensions.Hosting;
 
 namespace JamJunction.App;
@@ -32,7 +34,11 @@ internal sealed class Bot : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await _discordClient.ConnectAsync();
-
+        
+        // Only runs once
+        var youtubeCipher = new YoutubeCipher();
+        await youtubeCipher.WarmUpAsync(_audioService);
+        
         SlashCommands();
         ButtonEvents();
         MenuEvents();

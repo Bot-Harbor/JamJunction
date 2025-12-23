@@ -1,5 +1,6 @@
 ﻿using DSharpPlus;
 using JamJunction.App;
+using JamJunction.App.Lavalink;
 using JamJunction.App.Secrets;
 using Lavalink4NET;
 using Lavalink4NET.Extensions;
@@ -14,7 +15,7 @@ builder.Services.AddSingleton<DiscordClient>();
 builder.Services.AddSingleton(new DiscordConfiguration
 {
     TokenType = TokenType.Bot,
-    Token = DiscordSecrets.BotToken,
+    Token = DiscordSecrets.BotTokenForTesting, // Change back to BotToken when building image
     Intents = DiscordIntents.All,
     MinimumLogLevel = LogLevel.Information,
     AutoReconnect = true
