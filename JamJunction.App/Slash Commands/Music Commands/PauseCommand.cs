@@ -101,12 +101,14 @@ public class PauseCommand : ApplicationCommandModule
         try
         {
             var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
-            _ = updatedPlayerMessage.ModifyAsync(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
+            _ = updatedPlayerMessage.ModifyAsync(
+                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, trackIsPaused: true));
         }
         catch (Exception)
         {
             guildData.PlayerMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                new DiscordFollowupMessageBuilder(
+                    audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, trackIsPaused: true)));
         }
 
         var pauseMessage = await context.FollowUpAsync(
