@@ -6,12 +6,10 @@ using JamJunction.App.Events.Buttons.Queue_Controls;
 using JamJunction.App.Events.Menus;
 using JamJunction.App.Events.Modals;
 using JamJunction.App.Events.Player;
-using JamJunction.App.Lavalink;
 using JamJunction.App.Models;
 using JamJunction.App.Slash_Commands.Music_Commands;
 using JamJunction.App.Slash_Commands.Other_Commands;
 using Lavalink4NET;
-using Lavalink4NET.Rest;
 using Microsoft.Extensions.Hosting;
 
 namespace JamJunction.App;
@@ -23,7 +21,7 @@ internal sealed class Bot : BackgroundService
     private readonly IAudioService _audioService;
     private readonly DiscordClient _discordClient;
     private readonly IServiceProvider _serviceProvider;
-
+    
     public Bot(IServiceProvider serviceProvider, DiscordClient discordClient, IAudioService audioService)
     {
         _serviceProvider = serviceProvider;
@@ -35,17 +33,13 @@ internal sealed class Bot : BackgroundService
     {
         await _discordClient.ConnectAsync();
         
-        // Only runs once
-        var youtubeCipher = new YoutubeCipher();
-        await youtubeCipher.WarmUpAsync(_audioService);
-        
         SlashCommands();
         ButtonEvents();
         MenuEvents();
         AudioPlayerEvents();
         ModalEvents();
     }
-
+    
     private void SlashCommands()
     {
         var slashCommands =

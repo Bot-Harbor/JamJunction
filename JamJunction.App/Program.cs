@@ -1,12 +1,14 @@
 ﻿using DSharpPlus;
 using JamJunction.App;
 using JamJunction.App.Lavalink;
+using JamJunction.App.Quartz_Scheduler;
 using JamJunction.App.Secrets;
 using Lavalink4NET;
 using Lavalink4NET.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Quartz;
 
 var builder = new HostApplicationBuilder();
 builder.Services.AddHostedService<Bot>();
@@ -30,6 +32,21 @@ builder.Services.ConfigureLavalink(config =>
 });
 
 builder.Services.AddLavalink();
+
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionJobFactory();
+    
+    var jobKey = new JobKey("YoutubeCipherJob");
+    q.AddJob<YoutubeCipherJob>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("YoutubeCipherJob")
+        .WithCronSchedule("00 30 6 ? * *")); // Set to 6:30 AM
+});
+
+builder.Services.AddQuartzHostedService();
 
 builder.Services.AddLogging(s => s.AddConsole().SetMinimumLevel(LogLevel.Information));
 
