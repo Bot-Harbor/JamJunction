@@ -17,7 +17,7 @@ builder.Services.AddSingleton<DiscordClient>();
 builder.Services.AddSingleton(new DiscordConfiguration
 {
     TokenType = TokenType.Bot,
-    Token = DiscordSecrets.BotTokenForTesting, // Change back to BotToken when building image
+    Token = DiscordSecrets.BotToken,
     Intents = DiscordIntents.All,
     MinimumLogLevel = LogLevel.Information,
     AutoReconnect = true
