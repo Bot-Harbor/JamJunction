@@ -40,7 +40,7 @@ public class HelpEmbed
             Footer = new DiscordEmbedBuilder.EmbedFooter
             {
                 Text = "Bot Info  •  " +
-                       "Version: 2.5.2  •  " +
+                       "Version: 2.5.3  •  " +
                        $"Total Servers: {serverCount}  •  " +
                        $"Shard: {shardCount}  •  " +
                        $"Ping: {ping}"
