@@ -85,6 +85,7 @@ public class RestartCommand : ApplicationCommandModule
         }
 
         await player!.SeekAsync(TimeSpan.FromSeconds(0));
+        await player.ResumeAsync();
 
         var guildData = Bot.GuildData[guildId];
 

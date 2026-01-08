@@ -113,6 +113,7 @@ public class RestartButtonEvent : IButton
             }
 
             await player!.SeekAsync(TimeSpan.FromSeconds(0));
+            await player.ResumeAsync();
 
             var guildData = Bot.GuildData[guildId];
 

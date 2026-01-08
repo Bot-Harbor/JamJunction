@@ -43,7 +43,7 @@ builder.Services.AddQuartz(q =>
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
         .WithIdentity("YoutubeCipherJob")
-        .WithCronSchedule("00 30 6 ? * *")); // Set to 6:30 AM
+        .WithCronSchedule("00 30 06 ? * *"));
 });
 
 builder.Services.AddQuartzHostedService();

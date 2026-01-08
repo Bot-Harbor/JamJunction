@@ -20,7 +20,7 @@ public class YoutubeCipherJob : IJob
             var result = await _audioService.Tracks.LoadTracksAsync(
                 "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
                 new TrackLoadOptions(TrackSearchMode.None));
-            Console.WriteLine($"Warm Up Is Successful: {result.IsSuccess}");
+            Console.WriteLine($"[{DateTime.UtcNow}] Warm Up Is Successful: {result.IsSuccess}");
         }
         catch (Exception e)
         {
