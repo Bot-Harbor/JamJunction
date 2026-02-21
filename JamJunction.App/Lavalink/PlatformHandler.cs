@@ -58,9 +58,10 @@ public class PlatformHandler
                     var albumId = Regex.Match(query, @"(?<=album/)[^?]+").Value;
                     fullAlbum = await spotify.Albums.Get(albumId);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     fullAlbum = null;
+                    Console.WriteLine(e);
                 }
 
                 if (fullAlbum == null)
@@ -143,12 +144,13 @@ public class PlatformHandler
                     await updatedPlayerMessage.ModifyAsync(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     GuildData.PlayerMessage =
                         await context.FollowUpAsync(
                             new DiscordFollowupMessageBuilder(
                                 AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    Console.WriteLine(e);
                 }
 
                 var albumUrl = $"https://open.spotify.com/album/{fullAlbum.Id}";
@@ -169,9 +171,10 @@ public class PlatformHandler
                     var playlistId = Regex.Match(query, @"(?<=playlist/)[^?]+").Value;
                     fullPlaylist = await spotify.Playlists.Get(playlistId);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     fullPlaylist = null;
+                    Console.WriteLine(e);
                 }
 
                 if (fullPlaylist == null)
@@ -257,12 +260,13 @@ public class PlatformHandler
                     await updatedPlayerMessage.ModifyAsync(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     GuildData.PlayerMessage =
                         await context.FollowUpAsync(
                             new DiscordFollowupMessageBuilder(
                                 AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    Console.WriteLine(e);
                 }
 
                 var playlistUrl = $"https://open.spotify.com/playlist/{fullPlaylist.Id}";
@@ -283,9 +287,10 @@ public class PlatformHandler
                     var trackId = Regex.Match(query, @"(?<=track/)[^?]+").Value;
                     fullTrack = await spotify.Tracks.Get(trackId);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     fullTrack = null;
+                    Console.WriteLine(e);
                 }
 
                 if (fullTrack == null)
@@ -360,12 +365,13 @@ public class PlatformHandler
                     await updatedPlayerMessage.ModifyAsync(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     GuildData.PlayerMessage =
                         await context.FollowUpAsync(
                             new DiscordFollowupMessageBuilder(
                                 AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    Console.WriteLine(e);
                 }
 
                 DiscordMessage = await context
@@ -429,12 +435,13 @@ public class PlatformHandler
                 await updatedPlayerMessage.ModifyAsync(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 GuildData.PlayerMessage =
                     await context.FollowUpAsync(
                         new DiscordFollowupMessageBuilder(
                             AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                Console.WriteLine(e);
             }
 
             DiscordMessage = await context
@@ -481,10 +488,11 @@ public class PlatformHandler
                     playlist = await youtube.Playlists.GetVideosAsync(query);
                     playlistData = await youtube.Playlists.GetAsync(query);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     playlist = null;
                     playlistData = null;
+                    Console.WriteLine(e);
                 }
 
                 if (playlist == null)
@@ -565,12 +573,13 @@ public class PlatformHandler
                     await updatedPlayerMessage.ModifyAsync(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     GuildData.PlayerMessage =
                         await context.FollowUpAsync(
                             new DiscordFollowupMessageBuilder(
                                 AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    Console.WriteLine(e);
                 }
 
                 DiscordMessage = await context
@@ -591,8 +600,8 @@ public class PlatformHandler
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
                     video = null;
+                    Console.WriteLine(e);
                 }
 
                 if (video == null)
@@ -664,12 +673,13 @@ public class PlatformHandler
                     await updatedPlayerMessage.ModifyAsync(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     GuildData.PlayerMessage =
                         await context.FollowUpAsync(
                             new DiscordFollowupMessageBuilder(
                                 AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    Console.WriteLine(e);
                 }
 
                 DiscordMessage = await context
@@ -688,9 +698,10 @@ public class PlatformHandler
             {
                 videos = await youtube.Search.GetVideosAsync(query);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 videos = null;
+                Console.WriteLine(e);
             }
 
             if (videos == null)
@@ -764,12 +775,13 @@ public class PlatformHandler
                 await updatedPlayerMessage.ModifyAsync(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 GuildData.PlayerMessage =
                     await context.FollowUpAsync(
                         new DiscordFollowupMessageBuilder(
                             AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                Console.WriteLine(e);
             }
 
             DiscordMessage = await context
@@ -838,12 +850,13 @@ public class PlatformHandler
                     await updatedPlayerMessage.ModifyAsync(
                         AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
                     GuildData.PlayerMessage =
                         await context.FollowUpAsync(
                             new DiscordFollowupMessageBuilder(
                                 AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    Console.WriteLine(e);
                 }
 
                 DiscordMessage = await context
@@ -934,12 +947,13 @@ public class PlatformHandler
                 await updatedPlayerMessage.ModifyAsync(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 GuildData.PlayerMessage =
                     await context.FollowUpAsync(
                         new DiscordFollowupMessageBuilder(
                             AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                Console.WriteLine(e);
             }
 
             var playlistUrl = query;
@@ -1000,12 +1014,13 @@ public class PlatformHandler
                 await updatedPlayerMessage.ModifyAsync(
                     AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 GuildData.PlayerMessage =
                     await context.FollowUpAsync(
                         new DiscordFollowupMessageBuilder(
                             AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                Console.WriteLine(e);
             }
 
             DiscordMessage = await context
