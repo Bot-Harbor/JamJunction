@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Net;
 using System.Text.RegularExpressions;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
@@ -448,8 +449,24 @@ public class PlatformHandler
     public async Task PlayFromYoutube(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
     {
-        var youtube = new YoutubeClient();
+        var address = ProxySecrets.Address;
+        var username = ProxySecrets.Username;
+        var password = ProxySecrets.Password;
+        
+        var proxy = new WebProxy(address)
+        {
+            Credentials = new NetworkCredential(username, password)
+        };
 
+        var handler = new HttpClientHandler
+        {
+            Proxy = proxy,
+            UseProxy = true
+        };
+
+        var httpClient = new HttpClient(handler);
+        var youtube = new YoutubeClient(httpClient);
+        
         var channel = context.Channel;
 
         if (query.Contains("youtube.com"))
@@ -572,8 +589,9 @@ public class PlatformHandler
                 {
                     video = await youtube.Videos.GetAsync(query);
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
+                    Console.WriteLine(e);
                     video = null;
                 }
 
