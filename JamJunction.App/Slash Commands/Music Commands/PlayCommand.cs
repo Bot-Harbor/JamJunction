@@ -1,6 +1,5 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Lavalink.Enums;
 using JamJunction.App.Views.Embeds;
@@ -92,6 +91,9 @@ public class PlayCommand : ApplicationCommandModule
             case Platform.YouTube:
                 await platformHandler.PlayFromYoutube(player, query, context, guildId);
                 return;
+            case Platform.Deezer:
+                await platformHandler.PlayFromDeezer(player, query, context, guildId);
+                return;
             case Platform.SoundCloud:
                 await platformHandler.PlayFromSoundCloud(player, query, context, guildId);
                 return;
@@ -105,9 +107,10 @@ public class PlayCommand : ApplicationCommandModule
     {
         return query switch
         {
-            var a when a.Contains("youtube.com") => Platform.YouTube,
-            var b when b.Contains("spotify.com") => Platform.Spotify,
-            var c when c.Contains("soundcloud.com") => Platform.SoundCloud,
+            var a when a.Contains("spotify.com") => Platform.Spotify,
+            var b when b.Contains("youtube.com") => Platform.YouTube,
+            var c when c.Contains("deezer.com") => Platform.Deezer,
+            var d when d.Contains("soundcloud.com") => Platform.SoundCloud,
             _ => default
         };
     }

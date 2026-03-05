@@ -6,5 +6,6 @@ public enum Platform
 {
     [ChoiceName("Spotify")] Spotify,
     [ChoiceName("YouTube")] YouTube,
+    [ChoiceName("Deezer")] Deezer,
     [ChoiceName("SoundCloud")] SoundCloud
 }

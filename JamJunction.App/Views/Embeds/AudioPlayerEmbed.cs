@@ -41,14 +41,15 @@ public class AudioPlayerEmbed
                 Url = track.ArtworkUri!.AbsoluteUri
             }
         };
-
-        if (track.Uri!.ToString().ToLower().Contains("soundcloud"))
+        
+        if (track.Uri!.ToString().ToLower().Contains("spotify"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
-                Name = "Platform: Soundcloud",
-                IconUrl = "https://cdn-icons-png.flaticon.com/512/145/145809.png"
+                Name = "Platform: Spotify",
+                IconUrl =
+                    "https://cdn.freebiesupply.com/logos/large/2x/spotify-2-logo-png-transparent.png"
             };
-
+        
         if (track.Uri!.ToString().ToLower().Contains("youtube"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
@@ -56,13 +57,21 @@ public class AudioPlayerEmbed
                 IconUrl =
                     "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-youtube-circle-512.png"
             };
-
-        if (track.Uri!.ToString().ToLower().Contains("spotify"))
+        
+        
+        if (track.Uri!.ToString().ToLower().Contains("deezer"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
-                Name = "Platform: Spotify",
+                Name = "Platform: Deezer",
                 IconUrl =
-                    "https://p7.hiclipart.com/preview/158/639/798/spotify-streaming-media-logo-playlist-spotify-app-icon.jpg"
+                    "https://companieslogo.com/img/orig/DEEZR.PA-dbdcf2cf.png?t=1721547851"
+            };
+        
+        if (track.Uri!.ToString().ToLower().Contains("soundcloud"))
+            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+            {
+                Name = "Platform: Soundcloud",
+                IconUrl = "https://cdn-icons-png.flaticon.com/512/145/145809.png"
             };
 
         var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
@@ -177,7 +186,7 @@ public class AudioPlayerEmbed
         QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var uri = track.Uri!.AbsoluteUri;
-
+        
         var slider = GenerateSlider(queuedLavalinkPlayer.Position!.Value.Position, track.Duration);
 
         var embed = new DiscordEmbedBuilder
@@ -192,13 +201,14 @@ public class AudioPlayerEmbed
             }
         };
 
-        if (track.Uri!.ToString().ToLower().Contains("soundcloud"))
+        if (track.Uri!.ToString().ToLower().Contains("spotify"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
-                Name = "Platform: Soundcloud",
-                IconUrl = "https://cdn-icons-png.flaticon.com/512/145/145809.png"
+                Name = "Platform: Spotify",
+                IconUrl =
+                    "https://cdn.freebiesupply.com/logos/large/2x/spotify-2-logo-png-transparent.png"
             };
-
+        
         if (track.Uri!.ToString().ToLower().Contains("youtube"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
@@ -206,13 +216,21 @@ public class AudioPlayerEmbed
                 IconUrl =
                     "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-youtube-circle-512.png"
             };
-
-        if (track.Uri!.ToString().ToLower().Contains("spotify"))
+        
+        
+        if (track.Uri!.ToString().ToLower().Contains("deezer"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
-                Name = "Platform: Spotify",
+                Name = "Platform: Deezer",
                 IconUrl =
-                    "https://p7.hiclipart.com/preview/158/639/798/spotify-streaming-media-logo-playlist-spotify-app-icon.jpg"
+                    "https://companieslogo.com/img/orig/DEEZR.PA-dbdcf2cf.png?t=1721547851"
+            };
+        
+        if (track.Uri!.ToString().ToLower().Contains("soundcloud"))
+            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+            {
+                Name = "Platform: Soundcloud",
+                IconUrl = "https://cdn-icons-png.flaticon.com/512/145/145809.png"
             };
 
         var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
@@ -406,6 +424,20 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
+    
+    public DiscordEmbedBuilder AlbumAddedToQueue(TrackLoadResult trackLoadResult, string albumUrl)
+    {
+        var albumName = trackLoadResult.Playlist!.Name;
+        var authorName = trackLoadResult.Track!.Author;
+
+        var embed = new DiscordEmbedBuilder
+        {
+            Title = "Added To The Queue 🎵",
+            Description = $"ılı   •  [{albumName}]({albumUrl}) - By **{authorName}**",
+            Color = DiscordColor.Cyan
+        };
+        return embed;
+    }
 
     public DiscordEmbedBuilder PlaylistAddedToQueue(FullPlaylist fullPlaylist, string playlistUrl)
     {
@@ -430,7 +462,7 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-
+    
     public DiscordEmbedBuilder PlaylistAddedToQueue(TrackLoadResult playlist, string playlistUrl)
     {
         var embed = new DiscordEmbedBuilder
