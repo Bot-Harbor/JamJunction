@@ -27,10 +27,11 @@ public class HelpEmbed
             Title = "\ud83d\udcdd Getting Started",
             Color = DiscordColor.Cyan,
             Description =
-                "Your go-to music bot for you and your friends! Type one of the commands below to get started. " +
+                "Type </play:1181715791658360852> to get started! " +
+                "Jam Junction supports **Spotify**, **YouTube**, **Deezer**, and **SoundCloud**. " +
                 $"Jam Junction is powered by [DSharpPlus {dSharpPlusVersion}]" +
                 "(https://github.com/DSharpPlus/DSharpPlus), " +
-                "[Lavalink4NET 4.0.26](https://github.com/angelobreuer/Lavalink4NET), " +
+                "[Lavalink4NET 4.2.0](https://github.com/angelobreuer/Lavalink4NET), " +
                 "and [Docker](https://www.docker.com/).",
 
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
@@ -40,7 +41,7 @@ public class HelpEmbed
             Footer = new DiscordEmbedBuilder.EmbedFooter
             {
                 Text = "Bot Info  •  " +
-                       "Version: 2.5.4  •  " +
+                       "Version: 2.6.4  •  " +
                        $"Total Servers: {serverCount}  •  " +
                        $"Shard: {shardCount}  •  " +
                        $"Ping: {ping}"
