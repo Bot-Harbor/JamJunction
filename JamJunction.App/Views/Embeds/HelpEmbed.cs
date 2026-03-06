@@ -44,7 +44,8 @@ public class HelpEmbed
                        "Version: 2.6.4  •  " +
                        $"Total Servers: {serverCount}  •  " +
                        $"Shard: {shardCount}  •  " +
-                       $"Ping: {ping}"
+                       $"Ping: {ping}" + 
+                       "\n\nMade With ❤️",
             }
         };
 

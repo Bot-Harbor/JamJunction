@@ -41,7 +41,7 @@ public class AudioPlayerEmbed
                 Url = track.ArtworkUri!.AbsoluteUri
             }
         };
-        
+
         if (track.Uri!.ToString().ToLower().Contains("spotify"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
@@ -49,7 +49,7 @@ public class AudioPlayerEmbed
                 IconUrl =
                     "https://cdn.freebiesupply.com/logos/large/2x/spotify-2-logo-png-transparent.png"
             };
-        
+
         if (track.Uri!.ToString().ToLower().Contains("youtube"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
@@ -57,8 +57,8 @@ public class AudioPlayerEmbed
                 IconUrl =
                     "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-youtube-circle-512.png"
             };
-        
-        
+
+
         if (track.Uri!.ToString().ToLower().Contains("deezer"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
@@ -66,7 +66,7 @@ public class AudioPlayerEmbed
                 IconUrl =
                     "https://companieslogo.com/img/orig/DEEZR.PA-dbdcf2cf.png?t=1721547851"
             };
-        
+
         if (track.Uri!.ToString().ToLower().Contains("soundcloud"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
@@ -95,8 +95,15 @@ public class AudioPlayerEmbed
             foreach (var nextTrack in queue.Take(1))
                 embed.Footer = new DiscordEmbedBuilder.EmbedFooter
                 {
-                    Text = $"Next Track: {nextTrack.Track!.Title}"
+                    Text = $"Next Track: {nextTrack.Track!.Title}\n\nMade With ❤️"
                 };
+        else
+        {
+            embed.Footer = new DiscordEmbedBuilder.EmbedFooter
+            {
+                Text = "Made With ❤️",
+            };
+        }
 
         var pauseButton = new DiscordButtonComponent
         (
@@ -186,7 +193,7 @@ public class AudioPlayerEmbed
         QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var uri = track.Uri!.AbsoluteUri;
-        
+
         var slider = GenerateSlider(queuedLavalinkPlayer.Position!.Value.Position, track.Duration);
 
         var embed = new DiscordEmbedBuilder
@@ -208,7 +215,7 @@ public class AudioPlayerEmbed
                 IconUrl =
                     "https://cdn.freebiesupply.com/logos/large/2x/spotify-2-logo-png-transparent.png"
             };
-        
+
         if (track.Uri!.ToString().ToLower().Contains("youtube"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
@@ -216,8 +223,8 @@ public class AudioPlayerEmbed
                 IconUrl =
                     "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-youtube-circle-512.png"
             };
-        
-        
+
+
         if (track.Uri!.ToString().ToLower().Contains("deezer"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
@@ -225,7 +232,7 @@ public class AudioPlayerEmbed
                 IconUrl =
                     "https://companieslogo.com/img/orig/DEEZR.PA-dbdcf2cf.png?t=1721547851"
             };
-        
+
         if (track.Uri!.ToString().ToLower().Contains("soundcloud"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
@@ -255,8 +262,15 @@ public class AudioPlayerEmbed
             foreach (var nextTrack in queue.Take(1))
                 embed.Footer = new DiscordEmbedBuilder.EmbedFooter
                 {
-                    Text = $"Next Track: {nextTrack.Track!.Title}"
+                    Text = $"Next Track: {nextTrack.Track!.Title}\n\nMade With ❤️"
                 };
+        else
+        {
+            embed.Footer = new DiscordEmbedBuilder.EmbedFooter
+            {
+                Text = "Made With ❤️",
+            };
+        }
 
         var pauseButton = new DiscordButtonComponent
         (
@@ -424,7 +438,7 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder AlbumAddedToQueue(TrackLoadResult trackLoadResult, string albumUrl)
     {
         var albumName = trackLoadResult.Playlist!.Name;
@@ -462,7 +476,7 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-    
+
     public DiscordEmbedBuilder PlaylistAddedToQueue(TrackLoadResult playlist, string playlistUrl)
     {
         var embed = new DiscordEmbedBuilder
