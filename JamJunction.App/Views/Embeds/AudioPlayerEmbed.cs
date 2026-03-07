@@ -2213,7 +2213,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🗑️  • ``{menuInteractionArgs.User.Username}`` changed the filter to ``{filter}``.",
+                $"၊||၊  • ``{menuInteractionArgs.User.Username}`` changed the filter to ``{filter}``.",
             Color = DiscordColor.Cyan
         };
         return embed;
