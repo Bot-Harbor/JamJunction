@@ -89,13 +89,16 @@ public class PlayCommand : ApplicationCommandModule
                 await platformHandler.PlayFromSpotify(player, query, context, guildId);
                 return;
             case Platform.YouTube:
-                await platformHandler.PlayFromYoutube(player, query, context, guildId);
+                await platformHandler.PlayFromYoutubeOrYoutubeMusic(player, query, context, guildId);
                 return;
             case Platform.Deezer:
                 await platformHandler.PlayFromDeezer(player, query, context, guildId);
                 return;
             case Platform.SoundCloud:
                 await platformHandler.PlayFromSoundCloud(player, query, context, guildId);
+                return;
+            case Platform.YouTubeMusic:
+                await platformHandler.PlayFromYoutubeOrYoutubeMusic(player, query, context, guildId);
                 return;
             default:
                 await platformHandler.PlayFromSpotify(player, query, context, guildId);
@@ -108,7 +111,7 @@ public class PlayCommand : ApplicationCommandModule
         return query switch
         {
             var a when a.Contains("spotify.com") => Platform.Spotify,
-            var b when b.Contains("youtube.com") => Platform.YouTube,
+            var b when b.Contains("youtube.com") || b.Contains("music.youtube") => Platform.YouTube,
             var c when c.Contains("deezer.com") => Platform.Deezer,
             var d when d.Contains("soundcloud.com") => Platform.SoundCloud,
             _ => default

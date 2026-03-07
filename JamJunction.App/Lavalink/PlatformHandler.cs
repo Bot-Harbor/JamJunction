@@ -452,8 +452,8 @@ public class PlatformHandler
             _ = context.DeleteFollowupAsync(DiscordMessage.Id);
         }
     }
-
-    public async Task PlayFromYoutube(QueuedLavalinkPlayer player, string query,
+    
+    public async Task PlayFromYoutubeOrYoutubeMusic(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
     {
         var address = ProxySecrets.Address;
@@ -696,7 +696,7 @@ public class PlatformHandler
 
             try
             {
-                videos = await youtube.Search.GetVideosAsync(query);
+                videos = await youtube.Search.GetVideosAsync(query).CollectAsync(1);
             }
             catch (Exception e)
             {
