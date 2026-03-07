@@ -81,18 +81,24 @@ public class HelpEmbed
         var addBotBtn = new DiscordLinkButtonComponent
         (
             "https://discord.com/oauth2/authorize?client_id=1181700334561796227\n",
-            "Add To A Server"
+            "🤖 Add To A Server"
         );
 
-        var viewRepoBtn = new DiscordLinkButtonComponent
+        var viewTopggBtn = new DiscordLinkButtonComponent
         (
             "https://top.gg/bot/1181700334561796227",
-            "View On Top.gg"
+            "🎩 View On Top.gg"
+        );
+        
+        var leaveReviewBtn = new DiscordLinkButtonComponent
+        (
+            "https://top.gg/bot/1181700334561796227#reviews",
+            "⭐ Leave A Review"
         );
 
         var messageBuilder =
             new DiscordMessageBuilder(new DiscordMessageBuilder().AddEmbed(helpEmbed)
-                .AddComponents(addBotBtn, viewRepoBtn));
+                .AddComponents(addBotBtn, viewTopggBtn, leaveReviewBtn));
 
         return messageBuilder;
     }
