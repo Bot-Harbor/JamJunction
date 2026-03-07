@@ -16,7 +16,7 @@ Check out Jam Junction on Top.gg!
 
 ---
 
-Great and affordable resource for hosting images!
+Great and affordable resource for hosting Discord bots!
 
 🌊[Digital Ocean](https://www.digitalocean.com)
 
