@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JamJunction.App", "JamJunct
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{7D384347-E13D-4D83-B925-BDA830B3F0AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JamJunction.App.Old", "JamJunction.App.Old\JamJunction.App.Old.csproj", "{ABD3ED59-379F-4A90-B38D-C0FCEA35B7CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JamJunction.App.Legacy", "JamJunction.App.Legacy\JamJunction.App.Legacy.csproj", "{ABD3ED59-379F-4A90-B38D-C0FCEA35B7CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
