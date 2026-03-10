@@ -8,6 +8,9 @@ using Lavalink4NET;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
+/// <summary>
+/// No longer using. Keeping for archive purposes.
+/// </summary>
 public class RemoveCommand : ApplicationCommandModule
 {
     private readonly IAudioService _audioService;
