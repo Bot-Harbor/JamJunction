@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Net;
+﻿using System.Net;
 using System.Text.RegularExpressions;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
@@ -7,9 +6,6 @@ using JamJunction.App.Models;
 using JamJunction.App.Secrets;
 using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
-using Lavalink4NET.Integrations.Lavasearch;
-using Lavalink4NET.Integrations.Lavasearch.Extensions;
-using Lavalink4NET.Integrations.Lavasrc;
 using Lavalink4NET.Players.Queued;
 using Lavalink4NET.Rest.Entities.Tracks;
 using Lavalink4NET.Tracks;
@@ -36,7 +32,7 @@ public class PlatformHandler
     private AudioPlayerEmbed AudioPlayerEmbed { get; } = new();
     private ErrorEmbed ErrorEmbed { get; } = new();
     private DiscordMessage DiscordMessage { get; set; }
-
+    
     public async Task PlayFromSpotify(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
     {
@@ -384,12 +380,9 @@ public class PlatformHandler
         }
         else
         {
-            var searchResult = await _audioService.Tracks.SearchAsync(
-                query,
-                loadOptions: new TrackLoadOptions(TrackSearchMode.Spotify),
-                categories: ImmutableArray.Create(SearchCategory.Track));
-
-            if (searchResult == null)
+            var spotifyTrack = await _audioService.Tracks.LoadTrackAsync(query!, TrackSearchMode.Spotify);
+            
+            if (spotifyTrack == null)
             {
                 var errorMessage = await context
                     .FollowUpAsync(new DiscordFollowupMessageBuilder()
@@ -398,8 +391,6 @@ public class PlatformHandler
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
             }
-
-            var spotifyTrack = new ExtendedLavalinkTrack(searchResult!.Tracks[0]);
 
             if (spotifyTrack.IsLiveStream)
             {
@@ -416,7 +407,7 @@ public class PlatformHandler
             GuildData = Bot.GuildData[guildId];
             GuildData.TextChannelId = context.Channel.Id;
 
-            await player!.PlayAsync(spotifyTrack.Track);
+            await player.PlayAsync(spotifyTrack!);
 
             if (player.Queue.IsEmpty)
             {
@@ -452,7 +443,7 @@ public class PlatformHandler
             _ = context.DeleteFollowupAsync(DiscordMessage.Id);
         }
     }
-    
+
     public async Task PlayFromYoutubeOrYoutubeMusic(QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
     {
@@ -919,7 +910,7 @@ public class PlatformHandler
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
             }
-            
+
             foreach (var track in trackLoadResult.Tracks.Take(100))
             {
                 if (player.Queue.Count >= 100) break;
@@ -1007,7 +998,6 @@ public class PlatformHandler
 
             return;
         }
-
 
         deezerTrack = await _audioService.Tracks.LoadTrackAsync(query!, TrackSearchMode.Deezer);
 
