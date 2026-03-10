@@ -1,6 +1,5 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
@@ -23,9 +22,7 @@ public class CurrentTrackCommand : ApplicationCommandModule
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
-
         var guildId = context.Guild.Id;
-        var guildData = Bot.GuildData[guildId];
         var userVoiceChannel = context.Member?.VoiceState?.Channel;
 
         var channel = context.Channel;
@@ -87,6 +84,8 @@ public class CurrentTrackCommand : ApplicationCommandModule
             return;
         }
 
+        var guildData = Bot.GuildData[guildId];
+        
         channel = context.Channel;
         _ = channel.DeleteMessageAsync(guildData.PlayerMessage);
 
