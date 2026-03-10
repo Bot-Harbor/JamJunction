@@ -115,10 +115,22 @@ public class AudioPlayerEmbed
             ButtonStyle.Secondary, "resume", "▶", resumeDisabled
         );
 
-        var skipButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Secondary, "skip", "⏭"
-        );
+        DiscordButtonComponent skipButton;
+        
+        if (queuedLavalinkPlayer.Queue.IsEmpty)
+        {
+            skipButton = new DiscordButtonComponent
+            (
+                ButtonStyle.Secondary, "skip", "⏭", disabled: true
+            );
+        }
+        else
+        {
+            skipButton = new DiscordButtonComponent
+            (
+                ButtonStyle.Secondary, "skip", "⏭"
+            );
+        }
 
         var stopButton = new DiscordButtonComponent
         (
@@ -281,12 +293,23 @@ public class AudioPlayerEmbed
         (
             ButtonStyle.Secondary, "resume", "▶", true
         );
-
-        var skipButton = new DiscordButtonComponent
-        (
-            ButtonStyle.Secondary, "skip", "⏭"
-        );
-
+        DiscordButtonComponent skipButton;
+        
+        if (queuedLavalinkPlayer.Queue.IsEmpty)
+        {
+            skipButton = new DiscordButtonComponent
+            (
+                ButtonStyle.Secondary, "skip", "⏭", disabled: true
+            );
+        }
+        else
+        {
+            skipButton = new DiscordButtonComponent
+            (
+                ButtonStyle.Secondary, "skip", "⏭"
+            );
+        }
+        
         var stopButton = new DiscordButtonComponent
         (
             ButtonStyle.Secondary, "stop", "⏹"
