@@ -2,10 +2,12 @@
 using System.Text.RegularExpressions;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
+using JamJunction.App.Lavalink.Interfaces;
 using JamJunction.App.Models;
 using JamJunction.App.Secrets;
 using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
+using Lavalink4NET.Players;
 using Lavalink4NET.Players.Queued;
 using Lavalink4NET.Rest.Entities.Tracks;
 using Lavalink4NET.Tracks;
@@ -32,9 +34,15 @@ public class PlatformHandler
     private AudioPlayerEmbed AudioPlayerEmbed { get; } = new();
     private ErrorEmbed ErrorEmbed { get; } = new();
     private DiscordMessage DiscordMessage { get; set; }
-    
-    public async Task PlayFromSpotify(QueuedLavalinkPlayer player, string query,
+
+    private void Excute(IPlatform platform, QueuedLavalinkPlayer player, string query,
         InteractionContext context, ulong guildId)
+    {
+        platform.PlayTrack(player, query, context, guildId);
+    }
+
+    public async Task PlayFromSpotify(QueuedLavalinkPlayer player, string query,
+        InteractionContext context, ulong guildId, bool queueNext = false)
     {
         var config = SpotifyClientConfig.CreateDefault().WithAuthenticator(
             new ClientCredentialsAuthenticator(SpotifySecrets.ClientId, SpotifySecrets.ClientSecret));
@@ -42,6 +50,8 @@ public class PlatformHandler
         var spotify = new SpotifyClient(config);
 
         var channel = context.Channel;
+
+        var trackQueueItems = new List<ITrackQueueItem>();
 
         if (query.Contains("spotify.com"))
         {
@@ -72,7 +82,6 @@ public class PlatformHandler
 
                 foreach (var track in fullAlbum.Tracks.Items!.Take(100))
                 {
-                    if (player.Queue.Count >= 100) break;
                     var seekable = true;
                     var liveStream = false;
 
@@ -116,7 +125,21 @@ public class PlatformHandler
                     GuildData = Bot.GuildData[guildId];
                     GuildData.TextChannelId = context.Channel.Id;
 
-                    await player.Queue.AddAsync(new TrackQueueItem(spotifyTrack));
+                    trackQueueItems.Add(new TrackQueueItem(spotifyTrack));
+                }
+
+                for (var i = 0; i < trackQueueItems.Count; i++)
+                {
+                    if (player.Queue.Count >= 100) break;
+
+                    if (queueNext)
+                    {
+                        await player.Queue.InsertAsync(i, trackQueueItems[i]);
+                    }
+                    else
+                    {
+                        await player.Queue.AddAsync(trackQueueItems[i]);
+                    }
                 }
 
                 if (GuildData.FirstSongInQueue)
@@ -232,7 +255,21 @@ public class PlatformHandler
                     GuildData = Bot.GuildData[guildId];
                     GuildData.TextChannelId = context.Channel.Id;
 
-                    await player.Queue.AddAsync(new TrackQueueItem(spotifyTrack));
+                    trackQueueItems.Add(new TrackQueueItem(spotifyTrack));
+                }
+
+                for (var i = 0; i < trackQueueItems.Count; i++)
+                {
+                    if (player.Queue.Count >= 100) break;
+
+                    if (queueNext)
+                    {
+                        await player.Queue.InsertAsync(i, trackQueueItems[i]);
+                    }
+                    else
+                    {
+                        await player.Queue.AddAsync(trackQueueItems[i]);
+                    }
                 }
 
                 if (GuildData.FirstSongInQueue)
@@ -342,7 +379,14 @@ public class PlatformHandler
                 GuildData = Bot.GuildData[guildId];
                 GuildData.TextChannelId = context.Channel.Id;
 
-                await player.PlayAsync(spotifyTrack);
+                if (queueNext)
+                {
+                    await player.Queue.InsertAsync(0, new TrackQueueItem(spotifyTrack));
+                }
+                else
+                {
+                    await player.PlayAsync(spotifyTrack);
+                }
 
                 if (player.Queue.IsEmpty)
                 {
@@ -381,7 +425,7 @@ public class PlatformHandler
         else
         {
             var spotifyTrack = await _audioService.Tracks.LoadTrackAsync(query!, TrackSearchMode.Spotify);
-            
+
             if (spotifyTrack == null)
             {
                 var errorMessage = await context
@@ -407,7 +451,14 @@ public class PlatformHandler
             GuildData = Bot.GuildData[guildId];
             GuildData.TextChannelId = context.Channel.Id;
 
-            await player.PlayAsync(spotifyTrack!);
+            if (queueNext)
+            {
+                await player.Queue.InsertAsync(0, new TrackQueueItem(spotifyTrack));
+            }
+            else
+            {
+                await player.PlayAsync(spotifyTrack);
+            }
 
             if (player.Queue.IsEmpty)
             {
@@ -445,7 +496,7 @@ public class PlatformHandler
     }
 
     public async Task PlayFromYoutubeOrYoutubeMusic(QueuedLavalinkPlayer player, string query,
-        InteractionContext context, ulong guildId)
+        InteractionContext context, ulong guildId, bool queueNext = false)
     {
         var address = ProxySecrets.Address;
         var username = ProxySecrets.Username;
@@ -466,6 +517,8 @@ public class PlatformHandler
         var youtube = new YoutubeClient(httpClient);
 
         var channel = context.Channel;
+
+        var trackQueueItems = new List<ITrackQueueItem>();
 
         if (query.Contains("youtube.com"))
         {
@@ -540,7 +593,21 @@ public class PlatformHandler
                     GuildData = Bot.GuildData[guildId];
                     GuildData.TextChannelId = context.Channel.Id;
 
-                    await player.Queue.AddAsync(new TrackQueueItem(youtubeVideo));
+                    trackQueueItems.Add(new TrackQueueItem(youtubeVideo));
+                }
+
+                for (var i = 0; i < trackQueueItems.Count; i++)
+                {
+                    if (player.Queue.Count >= 100) break;
+
+                    if (queueNext)
+                    {
+                        await player.Queue.InsertAsync(i, trackQueueItems[i]);
+                    }
+                    else
+                    {
+                        await player.Queue.AddAsync(trackQueueItems[i]);
+                    }
                 }
 
                 if (GuildData.FirstSongInQueue)
@@ -550,11 +617,20 @@ public class PlatformHandler
                     await player.Queue.RemoveAtAsync(0);
                     await player.SetVolumeAsync(.50f);
 
-                    DiscordMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                    GuildData.PlayerMessage = DiscordMessage;
+                    try
+                    {
+                        DiscordMessage = await context
+                            .FollowUpAsync(new DiscordFollowupMessageBuilder(
+                                new DiscordInteractionResponseBuilder(
+                                    AudioPlayerEmbed.TrackInformation(firstTrack, player))));
+                        GuildData.PlayerMessage = DiscordMessage;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
+
                     return;
                 }
 
@@ -645,7 +721,14 @@ public class PlatformHandler
                 GuildData = Bot.GuildData[guildId];
                 GuildData.TextChannelId = context.Channel.Id;
 
-                await player.PlayAsync(youtubeVideo);
+                if (queueNext)
+                {
+                    await player.Queue.InsertAsync(0, new TrackQueueItem(youtubeVideo));
+                }
+                else
+                {
+                    await player.PlayAsync(youtubeVideo);
+                }
 
                 if (player.Queue.IsEmpty)
                 {
@@ -747,7 +830,14 @@ public class PlatformHandler
             GuildData = Bot.GuildData[guildId];
             GuildData.TextChannelId = context.Channel.Id;
 
-            await player.PlayAsync(youtubeVideo);
+            if (queueNext)
+            {
+                await player.Queue.InsertAsync(0, new TrackQueueItem(youtubeVideo));
+            }
+            else
+            {
+                await player.PlayAsync(youtubeVideo);
+            }
 
             if (player.Queue.IsEmpty)
             {
@@ -785,11 +875,13 @@ public class PlatformHandler
     }
 
     public async Task PlayFromDeezer(QueuedLavalinkPlayer player, string query,
-        InteractionContext context, ulong guildId)
+        InteractionContext context, ulong guildId, bool queueNext = false)
     {
         var channel = context.Channel;
 
         LavalinkTrack deezerTrack;
+
+        var trackQueueItems = new List<ITrackQueueItem>();
 
         if (query.Contains("deezer.com") && query.Contains("album"))
         {
@@ -851,7 +943,21 @@ public class PlatformHandler
                 GuildData = Bot.GuildData[guildId];
                 GuildData.TextChannelId = context.Channel.Id;
 
-                await player.Queue.AddAsync(new TrackQueueItem(deezerTrack));
+                trackQueueItems.Add(new TrackQueueItem(deezerTrack));
+            }
+
+            for (var i = 0; i < trackQueueItems.Count; i++)
+            {
+                if (player.Queue.Count >= 100) break;
+
+                if (queueNext)
+                {
+                    await player.Queue.InsertAsync(i, trackQueueItems[i]);
+                }
+                else
+                {
+                    await player.Queue.AddAsync(trackQueueItems[i]);
+                }
             }
 
             if (GuildData.FirstSongInQueue)
@@ -953,7 +1059,21 @@ public class PlatformHandler
                 GuildData = Bot.GuildData[guildId];
                 GuildData.TextChannelId = context.Channel.Id;
 
-                await player.Queue.AddAsync(new TrackQueueItem(deezerTrack));
+                trackQueueItems.Add(new TrackQueueItem(deezerTrack));
+            }
+
+            for (var i = 0; i < trackQueueItems.Count; i++)
+            {
+                if (player.Queue.Count >= 100) break;
+
+                if (queueNext)
+                {
+                    await player.Queue.InsertAsync(i, trackQueueItems[i]);
+                }
+                else
+                {
+                    await player.Queue.AddAsync(trackQueueItems[i]);
+                }
             }
 
             if (GuildData.FirstSongInQueue)
@@ -1026,7 +1146,14 @@ public class PlatformHandler
         GuildData = Bot.GuildData[guildId];
         GuildData.TextChannelId = context.Channel.Id;
 
-        await player.PlayAsync(deezerTrack!);
+        if (queueNext)
+        {
+            await player.Queue.InsertAsync(0, new TrackQueueItem(deezerTrack));
+        }
+        else
+        {
+            await player.PlayAsync(deezerTrack);
+        }
 
         if (player.Queue.IsEmpty)
         {
@@ -1064,9 +1191,11 @@ public class PlatformHandler
 
 
     public async Task PlayFromSoundCloud(QueuedLavalinkPlayer player, string query,
-        InteractionContext context, ulong guildId)
+        InteractionContext context, ulong guildId, bool queueNext = false)
     {
         var channel = context.Channel;
+
+        var trackQueueItems = new List<ITrackQueueItem>();
 
         if (query.Contains("soundcloud.com") && query.Contains("/sets"))
         {
@@ -1101,7 +1230,14 @@ public class PlatformHandler
                 GuildData = Bot.GuildData[guildId];
                 GuildData.TextChannelId = context.Channel.Id;
 
-                await player.PlayAsync(soundcloudTrack!);
+                if (queueNext)
+                {
+                    await player.Queue.InsertAsync(0, new TrackQueueItem(soundcloudTrack));
+                }
+                else
+                {
+                    await player.PlayAsync(soundcloudTrack);
+                }
 
                 if (player.Queue.IsEmpty)
                 {
@@ -1193,7 +1329,21 @@ public class PlatformHandler
                 GuildData = Bot.GuildData[guildId];
                 GuildData.TextChannelId = context.Channel.Id;
 
-                await player.Queue.AddAsync(new TrackQueueItem(soundCloudTrack));
+                trackQueueItems.Add(new TrackQueueItem(soundCloudTrack));
+            }
+
+            for (var i = 0; i < trackQueueItems.Count; i++)
+            {
+                if (player.Queue.Count >= 100) break;
+
+                if (queueNext)
+                {
+                    await player.Queue.InsertAsync(i, trackQueueItems[i]);
+                }
+                else
+                {
+                    await player.Queue.AddAsync(trackQueueItems[i]);
+                }
             }
 
             if (GuildData.FirstSongInQueue)
@@ -1265,7 +1415,14 @@ public class PlatformHandler
             GuildData = Bot.GuildData[guildId];
             GuildData.TextChannelId = context.Channel.Id;
 
-            await player.PlayAsync(soundcloudTrack!);
+            if (queueNext)
+            {
+                await player.Queue.InsertAsync(0, new TrackQueueItem(soundcloudTrack));
+            }
+            else
+            {
+                await player.PlayAsync(soundcloudTrack);
+            }
 
             if (player.Queue.IsEmpty)
             {

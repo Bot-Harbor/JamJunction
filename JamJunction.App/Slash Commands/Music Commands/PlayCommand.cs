@@ -25,7 +25,9 @@ public class PlayCommand : ApplicationCommandModule
         [Option("Input", "Enter a keyword or url to search.")]
         string query,
         [Option("Platform", "Pick a streaming platform. Default platform for keywords is Spotify.")]
-        Platform streamingPlatform = default
+        Platform streamingPlatform = default,
+        [Option("Queue-Next", "Queues the track next")]
+        bool queueNext = default
     )
     {
         await context.DeferAsync();
@@ -86,26 +88,26 @@ public class PlayCommand : ApplicationCommandModule
         switch (streamingPlatform)
         {
             case Platform.Spotify:
-                await platformHandler.PlayFromSpotify(player, query, context, guildId);
+                await platformHandler.PlayFromSpotify(player, query, context, guildId, queueNext);
                 return;
             case Platform.YouTube:
-                await platformHandler.PlayFromYoutubeOrYoutubeMusic(player, query, context, guildId);
+                await platformHandler.PlayFromYoutubeOrYoutubeMusic(player, query, context, guildId, queueNext);
                 return;
             case Platform.Deezer:
-                await platformHandler.PlayFromDeezer(player, query, context, guildId);
+                await platformHandler.PlayFromDeezer(player, query, context, guildId, queueNext);
                 return;
             case Platform.SoundCloud:
-                await platformHandler.PlayFromSoundCloud(player, query, context, guildId);
+                await platformHandler.PlayFromSoundCloud(player, query, context, guildId, queueNext);
                 return;
             case Platform.YouTubeMusic:
-                await platformHandler.PlayFromYoutubeOrYoutubeMusic(player, query, context, guildId);
+                await platformHandler.PlayFromYoutubeOrYoutubeMusic(player, query, context, guildId, queueNext);
                 return;
             default:
-                await platformHandler.PlayFromSpotify(player, query, context, guildId);
+                await platformHandler.PlayFromSpotify(player, query, context, guildId, queueNext);
                 return;
         }
     }
-
+    
     private Platform CheckForUrl(string query)
     {
         return query switch
