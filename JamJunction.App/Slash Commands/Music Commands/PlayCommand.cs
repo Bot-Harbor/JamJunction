@@ -16,8 +16,6 @@ public class PlayCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
-    private ErrorEmbed ErrorEmbed { get; } = new();
-
     [SlashCommand("play", "Queue a track.")]
     public async Task PlayAsync
     (
@@ -35,11 +33,13 @@ public class PlayCommand : ApplicationCommandModule
         var guildId = context.Guild.Id;
         var userVoiceChannel = context.Member?.VoiceState?.Channel;
 
+        var errorEmbed = new ErrorEmbed();
+
         if (userVoiceChannel == null)
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.ValidVoiceChannelError()));
+                    errorEmbed.ValidVoiceChannelError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -52,7 +52,7 @@ public class PlayCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.NoConnectionError()));
+                    errorEmbed.NoConnectionError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -65,7 +65,7 @@ public class PlayCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.SameVoiceChannelError()));
+                    errorEmbed.SameVoiceChannelError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -75,7 +75,7 @@ public class PlayCommand : ApplicationCommandModule
         {
             var errorMessage = await context.FollowUpAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    ErrorEmbed.QueueIsFullError()));
+                    errorEmbed.QueueIsFullError()));
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -83,31 +83,31 @@ public class PlayCommand : ApplicationCommandModule
 
         if (streamingPlatform == default) streamingPlatform = CheckForUrl(query);
 
-        var platformHandler = new PlatformHandler(_audioService);
+        var platformHandler = new PlatformHandler();
 
         switch (streamingPlatform)
         {
             case Platform.Spotify:
-                await platformHandler.PlayFromSpotify(player, query, context, guildId, queueNext);
+                platformHandler.Excute(new SpotifyPlatform(_audioService), player, context, query, queueNext);
                 return;
             case Platform.YouTube:
-                await platformHandler.PlayFromYoutubeOrYoutubeMusic(player, query, context, guildId, queueNext);
+                platformHandler.Excute(new YoutubePlatform(), player, context, query, queueNext);
                 return;
             case Platform.Deezer:
-                await platformHandler.PlayFromDeezer(player, query, context, guildId, queueNext);
+                platformHandler.Excute(new DeezerPlatform(_audioService), player, context, query, queueNext);
                 return;
             case Platform.SoundCloud:
-                await platformHandler.PlayFromSoundCloud(player, query, context, guildId, queueNext);
+                platformHandler.Excute(new SoundCloudPlatform(_audioService), player, context, query, queueNext);
                 return;
             case Platform.YouTubeMusic:
-                await platformHandler.PlayFromYoutubeOrYoutubeMusic(player, query, context, guildId, queueNext);
+                platformHandler.Excute(new YouTubeMusicPlatform(), player, context, query, queueNext);
                 return;
             default:
-                await platformHandler.PlayFromSpotify(player, query, context, guildId, queueNext);
+                platformHandler.Excute(new SpotifyPlatform(_audioService), player, context, query, queueNext);
                 return;
         }
     }
-    
+
     private Platform CheckForUrl(string query)
     {
         return query switch
