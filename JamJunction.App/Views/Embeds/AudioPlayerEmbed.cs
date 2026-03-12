@@ -4,7 +4,6 @@ using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Views.Menus;
-using Lavalink4NET.Integrations.Lavasrc;
 using Lavalink4NET.Players.Queued;
 using Lavalink4NET.Rest.Entities.Tracks;
 using SpotifyAPI.Web;
@@ -32,15 +31,25 @@ public class AudioPlayerEmbed
 
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"💿  •  **Title**: [{track.Title}]({uri})\n" +
-                          $"🎙️  •  **Artist**: {track.Author}\n" +
-                          $"{slider}",
             Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
                 Url = track.ArtworkUri!.AbsoluteUri
             }
         };
+
+        if (track.Title.Length > 35)
+        {
+            embed.Description = $"💿  •  **Title**: [{track.Title.Substring(0, 35)}...]({uri})\n" +
+                                $"🎙️  •  **Artist**: {track.Author}\n" +
+                                $"{slider}";
+        }
+        else
+        {
+            embed.Description = $"💿  •  **Title**: [{track.Title}]({uri})\n" +
+                                $"🎙️  •  **Artist**: {track.Author}\n" +
+                                $"{slider}";
+        }
 
         if (track.Uri!.ToString().ToLower().Contains("spotify"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
@@ -93,10 +102,20 @@ public class AudioPlayerEmbed
 
         if (queue.Count != 0)
             foreach (var nextTrack in queue.Take(1))
-                embed.Footer = new DiscordEmbedBuilder.EmbedFooter
+                if (nextTrack.Track!.Title.Length > 50)
                 {
-                    Text = $"Next Track: {nextTrack.Track!.Title}\n\nMade With ❤️"
-                };
+                    embed.Footer = new DiscordEmbedBuilder.EmbedFooter
+                    {
+                        Text = $"Next Track: {nextTrack.Track!.Title.Substring(0, 50)}...\n\nMade With ❤️"
+                    };
+                }
+                else
+                {
+                    embed.Footer = new DiscordEmbedBuilder.EmbedFooter
+                    {
+                        Text = $"Next Track: {nextTrack.Track!.Title}\n\nMade With ❤️"
+                    };
+                }
         else
         {
             embed.Footer = new DiscordEmbedBuilder.EmbedFooter
@@ -116,7 +135,7 @@ public class AudioPlayerEmbed
         );
 
         DiscordButtonComponent skipButton;
-        
+
         if (queuedLavalinkPlayer.Queue.IsEmpty)
         {
             skipButton = new DiscordButtonComponent
@@ -200,7 +219,7 @@ public class AudioPlayerEmbed
 
         return messageBuilder;
     }
-    
+
     private string AppliedFilter(QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         if (queuedLavalinkPlayer.Filters.Timescale != null)
@@ -261,17 +280,6 @@ public class AudioPlayerEmbed
         return embed;
     }
 
-    public DiscordEmbedBuilder TrackAddedToQueue(ExtendedLavalinkTrack track)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Title = "Added To The Queue 🎵",
-            Description = $"ılı   •  [{track!.Title}]({track.Uri}) - By **{track.Author}**",
-            Color = DiscordColor.Cyan
-        };
-        return embed;
-    }
-
     public DiscordEmbedBuilder AlbumAddedToQueue(FullAlbum fullAlbum, string albumUrl)
     {
         var artistName = fullAlbum.Artists.FirstOrDefault()!.Name;
@@ -312,12 +320,10 @@ public class AudioPlayerEmbed
 
     public DiscordEmbedBuilder PlaylistAddedToQueue(Playlist playlist)
     {
-        var channelTitle = playlist.Author!.ChannelTitle;
-
         var embed = new DiscordEmbedBuilder
         {
             Title = "Added To The Queue 🎵",
-            Description = $"ılı   •  [{playlist.Title}]({playlist.Url}) - By **{channelTitle}**",
+            Description = $"ılı   •  [{playlist.Title}]({playlist.Url})",
             Color = DiscordColor.Cyan
         };
         return embed;
