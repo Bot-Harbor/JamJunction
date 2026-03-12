@@ -1,7 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
-using JamJunction.App.Embeds;
 using JamJunction.App.Events.Buttons.Interfaces;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;

@@ -4,8 +4,31 @@ using DSharpPlus.SlashCommands;
 
 namespace JamJunction.App.Views.Embeds;
 
+/// <summary>
+/// Represents the help menu embed used to display available commands,
+/// bot information, and useful links for Jam Junction.
+/// </summary>
+/// <remarks>
+/// This embed provides users with an overview of music commands,
+/// additional bot commands, and links for adding the bot,
+/// viewing it on Top.gg, or leaving a review.
+/// </remarks>
 public class HelpEmbed
 {
+    /// <summary>
+    /// Builds the help message containing bot information, available commands,
+    /// and useful links such as adding the bot to a server or viewing it on Top.gg.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> that triggered the help command.
+    /// This provides access to the requesting user, guild information,
+    /// and the bot client state.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordMessageBuilder"/> containing the help embed
+    /// and interactive link buttons for adding the bot, viewing it on Top.gg,
+    /// and leaving a review.
+    /// </returns>
     public DiscordMessageBuilder Build(InteractionContext context)
     {
         var userIcon = context.User.GetAvatarUrl(ImageFormat.Png);

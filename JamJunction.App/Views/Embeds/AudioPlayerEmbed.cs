@@ -12,8 +12,47 @@ using LavalinkTrack = Lavalink4NET.Tracks.LavalinkTrack;
 
 namespace JamJunction.App.Views.Embeds;
 
+/// <summary>
+/// Provides embed builders used for displaying audio player information,
+/// playback actions, queue updates, and player status messages.
+/// </summary>
+/// <remarks>
+/// These embeds are used throughout the Jam Junction audio player system
+/// to present track details, queue information, playback controls,
+/// and user interaction responses.
+/// </remarks>
 public class AudioPlayerEmbed
 {
+    /// <summary>
+    /// Builds the main audio player message displaying the currently playing track,
+    /// playback progress slider, player status information, queue details, and
+    /// interactive control buttons.
+    /// </summary>
+    /// <param name="track">
+    /// The current <see cref="LavalinkTrack"/> that is being played.
+    /// </param>
+    /// <param name="queuedLavalinkPlayer">
+    /// The <see cref="QueuedLavalinkPlayer"/> instance that manages playback,
+    /// queue state, filters, and player controls.
+    /// </param>
+    /// <param name="isStartedFromEvent">
+    /// Indicates whether the track playback was triggered from a track started event.
+    /// When true, the progress slider begins at the start of the track.
+    /// </param>
+    /// <param name="trackIsRestarted">
+    /// Indicates whether the current track has been restarted. If true,
+    /// the progress slider resets to the beginning.
+    /// </param>
+    /// <param name="pauseDisabled">
+    /// Determines whether the pause button should be disabled in the player controls.
+    /// </param>
+    /// <param name="resumeDisabled">
+    /// Determines whether the resume button should be disabled in the player controls.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordMessageBuilder"/> containing the track information embed
+    /// and all interactive player components.
+    /// </returns>
     public DiscordMessageBuilder TrackInformation(LavalinkTrack track, QueuedLavalinkPlayer queuedLavalinkPlayer,
         bool isStartedFromEvent = false, bool trackIsRestarted = false, bool pauseDisabled = false,
         bool resumeDisabled = true)
@@ -220,6 +259,17 @@ public class AudioPlayerEmbed
         return messageBuilder;
     }
 
+    /// <summary>
+    /// Determines which audio filter is currently applied to the Lavalink player.
+    /// </summary>
+    /// <param name="queuedLavalinkPlayer">
+    /// The <see cref="QueuedLavalinkPlayer"/> whose active audio filters are inspected.
+    /// </param>
+    /// <returns>
+    /// A string representing the name of the currently applied filter,
+    /// such as Nightcore, Vaporwave, Slow Motion, Karaoke, or 8D.
+    /// Returns "None" if no filter is applied.
+    /// </returns>
     private string AppliedFilter(QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         if (queuedLavalinkPlayer.Filters.Timescale != null)
@@ -244,6 +294,23 @@ public class AudioPlayerEmbed
         return "None";
     }
 
+    /// <summary>
+    /// Generates a visual progress slider representing the current playback
+    /// position relative to the total track duration.
+    /// </summary>
+    /// <param name="position">
+    /// The current playback position of the track.
+    /// </param>
+    /// <param name="duration">
+    /// The total duration of the track.
+    /// </param>
+    /// <param name="barLength">
+    /// The number of characters used to render the progress bar. Defaults to 20.
+    /// </param>
+    /// <returns>
+    /// A formatted string containing the current time, progress slider,
+    /// and total duration of the track.
+    /// </returns>
     private string GenerateSlider(TimeSpan position, TimeSpan duration, int barLength = 20)
     {
         if (duration.TotalSeconds == 0)
@@ -262,13 +329,31 @@ public class AudioPlayerEmbed
         return $"`{FormatTime(position)}` {bar} `{FormatTime(duration)}`";
     }
 
+    /// <summary>
+    /// Converts a <see cref="TimeSpan"/> into a formatted time string.
+    /// </summary>
+    /// <param name="time">
+    /// The time value to format.
+    /// </param>
+    /// <returns>
+    /// A string formatted as mm:ss or hh:mm:ss depending on the length of the time.
+    /// </returns>
     private string FormatTime(TimeSpan time)
     {
         return time.Hours > 0
             ? time.ToString(@"hh\:mm\:ss")
             : time.ToString(@"mm\:ss");
     }
-
+    
+    /// <summary>
+    /// Builds an embed message indicating that a track was added to the queue.
+    /// </summary>
+    /// <param name="track">
+    /// The <see cref="LavalinkTrack"/> that was added to the playback queue.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the queued track.
+    /// </returns>
     public DiscordEmbedBuilder TrackAddedToQueue(LavalinkTrack track)
     {
         var embed = new DiscordEmbedBuilder
@@ -280,6 +365,18 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a Spotify album was added to the queue.
+    /// </summary>
+    /// <param name="fullAlbum">
+    /// The Spotify <see cref="FullAlbum"/> containing the album metadata.
+    /// </param>
+    /// <param name="albumUrl">
+    /// The URL linking to the Spotify album.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the queued album.
+    /// </returns>
     public DiscordEmbedBuilder AlbumAddedToQueue(FullAlbum fullAlbum, string albumUrl)
     {
         var artistName = fullAlbum.Artists.FirstOrDefault()!.Name;
@@ -293,6 +390,19 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a Deezer album was added to the queue.
+    /// </summary>
+    /// <param name="trackLoadResult">
+    /// The <see cref="TrackLoadResult"/> returned from Lavalink containing
+    /// the loaded playlist or album information.
+    /// </param>
+    /// <param name="albumUrl">
+    /// The URL linking to the Deezer album.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the queued album.
+    /// </returns>
     public DiscordEmbedBuilder AlbumAddedToQueue(TrackLoadResult trackLoadResult, string albumUrl)
     {
         var albumName = trackLoadResult.Playlist!.Name;
@@ -307,6 +417,18 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a Spotify playlist was added to the queue.
+    /// </summary>
+    /// <param name="fullPlaylist">
+    /// The Spotify <see cref="FullPlaylist"/> containing the playlist metadata.
+    /// </param>
+    /// <param name="playlistUrl">
+    /// The URL linking to the Spotify playlist.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the queued playlist.
+    /// </returns>
     public DiscordEmbedBuilder PlaylistAddedToQueue(FullPlaylist fullPlaylist, string playlistUrl)
     {
         var embed = new DiscordEmbedBuilder
@@ -318,6 +440,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a YouTube or YouTube Music playlist was added to the queue.
+    /// </summary>
+    /// <param name="playlist">
+    /// The <see cref="Playlist"/> object containing the playlist title and URL.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the queued playlist.
+    /// </returns>
     public DiscordEmbedBuilder PlaylistAddedToQueue(Playlist playlist)
     {
         var embed = new DiscordEmbedBuilder
@@ -329,6 +460,18 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a Deezer or SoundCloud playlist was added to the queue.
+    /// </summary>
+    /// <param name="playlist">
+    /// The <see cref="TrackLoadResult"/> containing the playlist metadata.
+    /// </param>
+    /// <param name="playlistUrl">
+    /// The URL linking to the playlist.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the queued playlist.
+    /// </returns>
     public DiscordEmbedBuilder PlaylistAddedToQueue(TrackLoadResult playlist, string playlistUrl)
     {
         var embed = new DiscordEmbedBuilder
@@ -340,6 +483,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a track was paused using a slash command.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing the user who paused the track.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the pause action.
+    /// </returns>
     public DiscordEmbedBuilder Pause(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -350,6 +502,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a track was paused using a button interaction.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the button.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the pause action.
+    /// </returns>
     public DiscordEmbedBuilder Pause(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -360,6 +521,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a track was resumed using a slash command.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing the user who resumed the track.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the resume action.
+    /// </returns>
     public DiscordEmbedBuilder Resume(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -369,7 +539,16 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-
+    
+    /// <summary>
+    /// Builds an embed message indicating that a track was resumed using a button interaction.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the button.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the resume action.
+    /// </returns>
     public DiscordEmbedBuilder Resume(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -380,6 +559,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that the audio player was stopped using a slash command.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing the user who stopped the player.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the stop action.
+    /// </returns> 
     public DiscordEmbedBuilder Stop(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -389,7 +577,16 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-
+    
+    /// <summary>
+    /// Builds an embed message indicating that the audio player was stopped using a button interaction.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the button.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the stop action.
+    /// </returns>
     public DiscordEmbedBuilder Stop(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -400,6 +597,13 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message informing users that no track is currently playing
+    /// and prompts them to use the play command to add music to the queue.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> displaying the "nothing playing" message.
+    /// </returns>
     public DiscordEmbedBuilder QueueSomething()
     {
         var embed = new DiscordEmbedBuilder
@@ -417,6 +621,18 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a user changed the player's volume using a slash command.
+    /// </summary>
+    /// <param name="volume">
+    /// The new volume level applied to the audio player.
+    /// </param>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing the user who executed the command.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the volume change action.
+    /// </returns>
     public DiscordEmbedBuilder Volume(double volume, InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -427,6 +643,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that the volume was decreased using a button interaction.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the volume decrease.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the volume decrease action.
+    /// </returns>
     public DiscordEmbedBuilder VolumeDecreased(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -437,6 +662,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that the volume was increased using a button interaction.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the volume increase.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the volume increase action.
+    /// </returns>
     public DiscordEmbedBuilder VolumeIncreased(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -447,6 +681,16 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a user restarted the currently playing track
+    /// using a slash command.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing the user who restarted the track.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the restart action.
+    /// </returns>
     public DiscordEmbedBuilder Restart(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -458,6 +702,16 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a user restarted the currently playing track
+    /// using a button interaction.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the restart.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the restart action.
+    /// </returns>
     public DiscordEmbedBuilder Restart(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -469,6 +723,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a user disconnected the bot from the voice channel.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing the user who disconnected the bot.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the disconnect action.
+    /// </returns>
     public DiscordEmbedBuilder Leave(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -480,6 +743,23 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds a message displaying the current music queue for the guild.
+    /// Shows up to 15 tracks per page along with controls for skipping to
+    /// a specific track or removing tracks from the queue.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> that triggered the request. 
+    /// Used to access guild information such as the server icon.
+    /// </param>
+    /// <param name="queuedLavalinkPlayer">
+    /// The <see cref="QueuedLavalinkPlayer"/> instance containing the
+    /// current playback queue and player state.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordMessageBuilder"/> containing the queue embed and
+    /// any interactive components such as skip, remove, and pagination buttons.
+    /// </returns>
     public DiscordMessageBuilder ViewQueue(InteractionContext context, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var messageBuilder = new DiscordMessageBuilder();
@@ -579,6 +859,27 @@ public class AudioPlayerEmbed
         return messageBuilder;
     }
 
+    /// <summary>
+    /// Builds a paginated message displaying the current music queue when
+    /// triggered from a button interaction. The queue is divided into pages
+    /// of 15 tracks and allows users to navigate between pages.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the
+    /// interaction data for the button press, including the user and guild.
+    /// </param>
+    /// <param name="queuedLavalinkPlayer">
+    /// The <see cref="QueuedLavalinkPlayer"/> instance that holds the
+    /// current queue and playback information.
+    /// </param>
+    /// <param name="pageNumber">
+    /// The page number of the queue to display. Each page contains up to
+    /// 15 tracks. Defaults to page 1.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordMessageBuilder"/> containing the queue embed and
+    /// pagination controls used to navigate between queue pages.
+    /// </returns>
     public DiscordMessageBuilder ViewQueue(ComponentInteractionCreateEventArgs btnInteractionArgs,
         QueuedLavalinkPlayer queuedLavalinkPlayer, string pageNumber = "1")
     {
@@ -1250,6 +1551,28 @@ public class AudioPlayerEmbed
         return messageBuilder;
     }
 
+    /// <summary>
+    /// Builds a paginated message displaying the current music queue when triggered
+    /// from a modal submission. The queue is divided into pages of 15 tracks and
+    /// allows users to navigate between pages while also providing controls to
+    /// skip to or remove tracks.
+    /// </summary>
+    /// <param name="modalEventArgs">
+    /// The <see cref="ModalSubmitEventArgs"/> containing the modal interaction data,
+    /// including the user and guild where the queue is being viewed.
+    /// </param>
+    /// <param name="queuedLavalinkPlayer">
+    /// The <see cref="QueuedLavalinkPlayer"/> instance that contains the current
+    /// playback queue and player state.
+    /// </param>
+    /// <param name="pageNumber">
+    /// The page number of the queue to display. Each page contains up to 15 tracks.
+    /// Defaults to page 1 if not specified.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordMessageBuilder"/> containing the queue embed along with
+    /// interactive components such as pagination buttons and queue management menus.
+    /// </returns>
     public DiscordMessageBuilder ViewQueue(ModalSubmitEventArgs modalEventArgs,
         QueuedLavalinkPlayer queuedLavalinkPlayer, string pageNumber = "1")
     {
@@ -1921,6 +2244,15 @@ public class AudioPlayerEmbed
         return messageBuilder;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that the queue was shuffled using a slash command.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing the user who shuffled the queue.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the shuffle action.
+    /// </returns>
     public DiscordEmbedBuilder ShuffleQueue(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -1932,6 +2264,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that the queue was shuffled using a button interaction.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the shuffle.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the shuffle action.
+    /// </returns>
     public DiscordEmbedBuilder ShuffleQueue(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -1943,6 +2284,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that the current track was skipped using a slash command.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing the user who skipped the track.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the skip action.
+    /// </returns>
     public DiscordEmbedBuilder Skip(InteractionContext context)
     {
         var embed = new DiscordEmbedBuilder
@@ -1954,6 +2304,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that the current track was skipped using a button interaction.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the skip.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the skip action.
+    /// </returns>
     public DiscordEmbedBuilder Skip(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -1965,6 +2324,18 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a user skipped directly to a specific track in the queue.
+    /// </summary>
+    /// <param name="menuInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who selected the track.
+    /// </param>
+    /// <param name="queuedLavalinkPlayer">
+    /// The <see cref="QueuedLavalinkPlayer"/> instance containing the current queue and track information.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the skip-to-track action.
+    /// </returns>
     public DiscordEmbedBuilder SkipTo(ComponentInteractionCreateEventArgs menuInteractionArgs,
         QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
@@ -1979,6 +2350,18 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a user changed the playback position of the current track.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing the user who changed the track position.
+    /// </param>
+    /// <param name="seekedPosition">
+    /// The new playback position in seconds where the track was moved.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the seek action.
+    /// </returns>
     public DiscordEmbedBuilder Seek(InteractionContext context, double seekedPosition)
     {
         var time = TimeSpan.FromSeconds(seekedPosition);
@@ -1992,6 +2375,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message displaying the current playback position of the track.
+    /// </summary>
+    /// <param name="position">
+    /// The current playback position of the track.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the current track position.
+    /// </returns>
     public DiscordEmbedBuilder TrackPosition(TimeSpan position)
     {
         var embed = new DiscordEmbedBuilder
@@ -2002,11 +2394,32 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Rounds a <see cref="TimeSpan"/> value to the nearest second.
+    /// </summary>
+    /// <param name="timespan">
+    /// The time value to round.
+    /// </param>
+    /// <returns>
+    /// A <see cref="TimeSpan"/> representing the rounded time value.
+    /// </returns>
     private TimeSpan RoundSeconds(TimeSpan timespan)
     {
         return TimeSpan.FromSeconds(Math.Round(timespan.TotalSeconds));
     }
 
+    /// <summary>
+    /// Builds an embed message indicating the current repeat mode after it was changed using a slash command.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing the user who changed the repeat mode.
+    /// </param>
+    /// <param name="queuedLavalinkPlayer">
+    /// The <see cref="QueuedLavalinkPlayer"/> instance that contains the current repeat mode state.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> describing the updated repeat mode.
+    /// </returns>
     public DiscordEmbedBuilder Repeat(InteractionContext context, QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         DiscordEmbedBuilder embed;
@@ -2036,6 +2449,15 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that repeat track mode was enabled using a button interaction.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who enabled repeat mode.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the repeat track mode action.
+    /// </returns>
     public DiscordEmbedBuilder EnableRepeat(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -2047,7 +2469,16 @@ public class AudioPlayerEmbed
 
         return embed;
     }
-
+    
+    /// <summary>
+    /// Builds an embed message indicating that repeat mode was disabled using a button interaction.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who disabled repeat mode.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the repeat disable action.
+    /// </returns>
     public DiscordEmbedBuilder DisableRepeat(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
@@ -2060,6 +2491,18 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a user applied or changed an audio filter.
+    /// </summary>
+    /// <param name="menuInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who selected the filter.
+    /// </param>
+    /// <param name="filter">
+    /// The name of the filter that was applied.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the filter change action.
+    /// </returns>
     public DiscordEmbedBuilder BuildFilter(ComponentInteractionCreateEventArgs menuInteractionArgs, string filter)
     {
         var embed = new DiscordEmbedBuilder
@@ -2071,6 +2514,18 @@ public class AudioPlayerEmbed
         return embed;
     }
 
+    /// <summary>
+    /// Builds an embed message indicating that a track was removed from the queue.
+    /// </summary>
+    /// <param name="menuInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who removed the track.
+    /// </param>
+    /// <param name="removedTrack">
+    /// The <see cref="LavalinkTrack"/> that was removed from the queue.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the track removal action.
+    /// </returns>
     public DiscordEmbedBuilder Remove(ComponentInteractionCreateEventArgs menuInteractionArgs,
         LavalinkTrack removedTrack)
     {

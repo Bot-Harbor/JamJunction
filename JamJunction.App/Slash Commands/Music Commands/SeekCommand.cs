@@ -1,14 +1,30 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
+/// <summary>
+/// Slash command used to change the playback position of the current track.
+/// </summary>
+/// <remarks>
+/// This command allows users to seek to a specific timestamp within the
+/// currently playing track. The position is provided in seconds and must
+/// fall within the duration of the track.
+/// </remarks>
 public class SeekCommand : ApplicationCommandModule
 {
+    /// <summary>
+    /// Provides access to the Lavalink audio service used for managing
+    /// audio playback and retrieving player instances.
+    /// </summary>
+    /// <remarks>
+    /// This service is used to interact with Lavalink through Lavalink4NET,
+    /// allowing the application to control music playback, queues, filters,
+    /// and other audio-related functionality.
+    /// </remarks>
     private readonly IAudioService _audioService;
 
     public SeekCommand(IAudioService audioService)
@@ -16,6 +32,34 @@ public class SeekCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
+    /// <summary>
+    /// Sets the playback position of the current track.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing information about
+    /// the command invocation and the user executing the command.
+    /// </param>
+    /// <param name="time">
+    /// The desired playback position in seconds where the track should seek to.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous execution of the seek command.
+    /// </returns>
+    /// <remarks>
+    /// This command performs several validation checks before seeking the track:
+    /// <list type="bullet">
+    /// <item>Ensures the user is connected to a voice channel.</item>
+    /// <item>Ensures the bot is currently connected to a voice channel.</item>
+    /// <item>Ensures the user and bot are in the same voice channel.</item>
+    /// <item>Ensures an active Lavalink player connection exists.</item>
+    /// <item>Ensures a track is currently playing.</item>
+    /// <item>Ensures the provided time value is a valid integer.</item>
+    /// <item>Ensures the provided time does not exceed the track duration.</item>
+    /// </list>
+    /// 
+    /// If validation succeeds, the Lavalink player seeks to the requested
+    /// timestamp and the player embed is updated to reflect the new position.
+    /// </remarks>
     [SlashCommand("seek", "Sets the position of the track.")]
     public async Task SeekCommandAsync(InteractionContext context,
         [Option("time", "Change the current position of the track in seconds.")]

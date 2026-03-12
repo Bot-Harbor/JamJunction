@@ -3,8 +3,26 @@ using Lavalink4NET.Players.Queued;
 
 namespace JamJunction.App.Views.Menus;
 
+/// <summary>
+/// Provides helper methods for building interactive menu components
+/// used by the audio player, such as filter selection, queue navigation,
+/// skipping tracks, and removing tracks from the queue.
+/// </summary>
+/// <remarks>
+/// These menus are used within the Jam Junction audio player interface
+/// to allow users to interact with the queue and player settings through
+/// Discord select components.
+/// </remarks>
 public class AudioPlayerMenu
 {
+    /// <summary>
+    /// Builds a select menu containing the available audio filters that can be
+    /// applied to the current audio player.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="DiscordSelectComponent"/> containing filter options such as
+    /// Nightcore, 8D, Vaporwave, Karaoke, and Slow Motion.
+    /// </returns>
     public DiscordSelectComponent BuildFilters()
     {
         var options = new List<DiscordSelectComponentOption>
@@ -21,6 +39,21 @@ public class AudioPlayerMenu
         return menu;
     }
 
+    /// <summary>
+    /// Builds a select menu allowing users to skip directly to a specific track
+    /// within the queue. The menu displays up to 15 tracks per page.
+    /// </summary>
+    /// <param name="queuedLavalinkPlayer">
+    /// The <see cref="QueuedLavalinkPlayer"/> containing the current playback queue.
+    /// </param>
+    /// <param name="pageNumber">
+    /// The queue page to display. Each page contains up to 15 tracks.
+    /// Defaults to page 1.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordSelectComponent"/> populated with track options that
+    /// allow users to skip directly to the selected track.
+    /// </returns>
     public DiscordSelectComponent BuildSkipTo(QueuedLavalinkPlayer queuedLavalinkPlayer, string pageNumber = "1")
     {
         var options = new List<DiscordSelectComponentOption>();
@@ -162,6 +195,21 @@ public class AudioPlayerMenu
         return menu;
     }
 
+    /// <summary>
+    /// Builds a select menu allowing users to remove tracks from the queue.
+    /// The menu displays up to 15 tracks per page.
+    /// </summary>
+    /// <param name="queuedLavalinkPlayer">
+    /// The <see cref="QueuedLavalinkPlayer"/> containing the current playback queue.
+    /// </param>
+    /// <param name="pageNumber">
+    /// The queue page to display. Each page contains up to 15 tracks.
+    /// Defaults to page 1.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordSelectComponent"/> populated with track options that
+    /// allow users to remove the selected track from the queue.
+    /// </returns>
     public DiscordSelectComponent BuildRemove(QueuedLavalinkPlayer queuedLavalinkPlayer, string pageNumber = "1")
     {
         var options = new List<DiscordSelectComponentOption>();

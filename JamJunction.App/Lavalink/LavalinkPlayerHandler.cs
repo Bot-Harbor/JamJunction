@@ -8,6 +8,15 @@ namespace JamJunction.App.Lavalink;
 
 public class LavalinkPlayerHandler
 {
+    /// <summary>
+    /// Provides access to the Lavalink audio service used for managing
+    /// audio playback and retrieving player instances.
+    /// </summary>
+    /// <remarks>
+    /// This service is used to interact with Lavalink through Lavalink4NET,
+    /// allowing the application to control music playback, queues, filters,
+    /// and other audio-related functionality.
+    /// </remarks>
     private readonly IAudioService _audioService;
 
     public LavalinkPlayerHandler(IAudioService audioService)
@@ -16,12 +25,22 @@ public class LavalinkPlayerHandler
     }
 
     /// <summary>
-    ///     Gets queued Lavalink player for commands.
+    /// Retrieves the <see cref="QueuedLavalinkPlayer"/> associated with the specified guild
+    /// for use within slash commands.
     /// </summary>
-    /// <param name="guildId"></param>
-    /// <param name="voiceChannel"></param>
-    /// <param name="connectToVoiceChannel"></param>
-    /// <returns></returns>
+    /// <param name="guildId">
+    /// The unique identifier of the Discord guild where the player should be retrieved.
+    /// </param>
+    /// <param name="voiceChannel">
+    /// The voice channel that the player should connect to or operate within.
+    /// </param>
+    /// <param name="connectToVoiceChannel">
+    /// Indicates whether the player should join the specified voice channel if it is not already connected.
+    /// </param>
+    /// <returns>
+    /// A <see cref="ValueTask{T}"/> containing the <see cref="QueuedLavalinkPlayer"/> if retrieval succeeds;
+    /// otherwise <c>null</c>.
+    /// </returns>
     public async ValueTask<QueuedLavalinkPlayer> GetPlayerAsync(ulong guildId, DiscordChannel voiceChannel,
         bool connectToVoiceChannel = true)
     {
@@ -47,12 +66,22 @@ public class LavalinkPlayerHandler
     }
 
     /// <summary>
-    ///     Gets queued Lavalink player for events.
+    /// Retrieves the <see cref="QueuedLavalinkPlayer"/> associated with the specified guild
+    /// for use within event handlers.
     /// </summary>
-    /// <param name="guildId"></param>
-    /// <param name="voiceChannelId"></param>
-    /// <param name="connectToVoiceChannel"></param>
-    /// <returns></returns>
+    /// <param name="guildId">
+    /// The unique identifier of the Discord guild where the player should be retrieved.
+    /// </param>
+    /// <param name="voiceChannelId">
+    /// The identifier of the voice channel that the player should connect to or operate within.
+    /// </param>
+    /// <param name="connectToVoiceChannel">
+    /// Indicates whether the player should join the specified voice channel if it is not already connected.
+    /// </param>
+    /// <returns>
+    /// A <see cref="ValueTask{T}"/> containing the <see cref="QueuedLavalinkPlayer"/> if retrieval succeeds;
+    /// otherwise <c>null</c>.
+    /// </returns>
     public async ValueTask<QueuedLavalinkPlayer> GetPlayerAsync(ulong guildId, ulong voiceChannelId,
         bool connectToVoiceChannel = true)
     {

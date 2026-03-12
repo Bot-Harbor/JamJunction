@@ -1,14 +1,30 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Embeds;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
+/// <summary>
+/// Slash command used to randomize the order of tracks in the queue.
+/// </summary>
+/// <remarks>
+/// This command shuffles all tracks currently waiting in the Lavalink
+/// player's queue. The currently playing track is not affected,
+/// but the remaining queued tracks will be reordered randomly.
+/// </remarks>
 public class ShuffleQueueCommand : ApplicationCommandModule
 {
+    /// <summary>
+    /// Provides access to the Lavalink audio service used for managing
+    /// audio playback and retrieving player instances.
+    /// </summary>
+    /// <remarks>
+    /// This service is used to interact with Lavalink through Lavalink4NET,
+    /// allowing the application to control music playback, queues, filters,
+    /// and other audio-related functionality.
+    /// </remarks>
     private readonly IAudioService _audioService;
 
     public ShuffleQueueCommand(IAudioService audioService)
@@ -16,6 +32,32 @@ public class ShuffleQueueCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
+    /// <summary>
+    /// Randomizes the order of the tracks currently in the queue.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing information about
+    /// the command invocation and the user executing the command.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous execution
+    /// of the shuffle queue command.
+    /// </returns>
+    /// <remarks>
+    /// This command performs several validation checks before shuffling the queue:
+    /// <list type="bullet">
+    /// <item>Ensures the user is connected to a voice channel.</item>
+    /// <item>Ensures the bot is currently connected to a voice channel.</item>
+    /// <item>Ensures the user and bot are in the same voice channel.</item>
+    /// <item>Ensures an active Lavalink player connection exists.</item>
+    /// <item>Ensures a track is currently playing.</item>
+    /// <item>Ensures there are tracks available in the queue to shuffle.</item>
+    /// </list>
+    /// 
+    /// If validation succeeds, the command shuffles the remaining tracks
+    /// in the queue and updates the player embed message to reflect the
+    /// new queue order.
+    /// </remarks>
     [SlashCommand("shuffle", "Shuffles the queue.")]
     public async Task ShuffleCommandAsync(InteractionContext context)
     {

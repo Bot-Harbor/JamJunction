@@ -6,8 +6,26 @@ using Lavalink4NET;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
+/// <summary>
+/// Slash command used to display information about the currently playing track.
+/// </summary>
+/// <remarks>
+/// This command retrieves the active Lavalink player and displays
+/// details about the track currently being played in the guild.
+/// The existing player message is replaced with an updated embed
+/// containing the current track information.
+/// </remarks>
 public class CurrentTrackCommand : ApplicationCommandModule
 {
+    /// <summary>
+    /// Provides access to the Lavalink audio service used for managing
+    /// audio playback and retrieving player instances.
+    /// </summary>
+    /// <remarks>
+    /// This service is used to interact with Lavalink through Lavalink4NET,
+    /// allowing the application to control music playback, queues, filters,
+    /// and other audio-related functionality.
+    /// </remarks>
     private readonly IAudioService _audioService;
 
     public CurrentTrackCommand(IAudioService audioService)
@@ -15,6 +33,38 @@ public class CurrentTrackCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
+    /// <summary>
+    /// Displays information about the track currently playing in the voice channel.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing information about
+    /// the command invocation and the user who executed it.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous execution
+    /// of the slash command.
+    /// </returns>
+    /// <remarks>
+    /// This command performs several validations before displaying
+    /// the current track:
+    /// <list type="bullet">
+    /// <item>
+    /// Ensures the user is connected to a voice channel.
+    /// </item>
+    /// <item>
+    /// Ensures the bot is connected to a voice channel.
+    /// </item>
+    /// <item>
+    /// Ensures the user is in the same voice channel as the bot.
+    /// </item>
+    /// <item>
+    /// Ensures an active Lavalink player exists and a track is playing.
+    /// </item>
+    /// </list>
+    /// 
+    /// If validation succeeds, the existing player embed message is
+    /// replaced with an updated embed showing the current track details.
+    /// </remarks>
     [SlashCommand("current-track", "Shows details about the current track playing.")]
     public async Task CurrentTrackCommandAsync(InteractionContext context)
     {

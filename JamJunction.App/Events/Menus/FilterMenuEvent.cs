@@ -1,7 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
-using JamJunction.App.Embeds;
 using JamJunction.App.Events.Menus.Interfaces;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
@@ -10,9 +9,46 @@ using Lavalink4NET.Filters;
 
 namespace JamJunction.App.Events.Menus;
 
+/// <summary>
+/// Handles filter selection interactions from the audio filter menu.
+/// </summary>
+/// <remarks>
+/// This menu allows users to apply audio filters to the currently playing
+/// Lavalink track. Filters modify playback characteristics such as pitch,
+/// speed, rotation, or vocal suppression.
+///
+/// Available filters include:
+/// - Nightcore
+/// - 8D audio
+/// - Vaporwave
+/// - Karaoke
+/// - Slow motion
+/// - Reset
+///
+/// The selected filter is applied to the active <see cref="QueuedLavalinkPlayer"/>
+/// using Lavalink filter options.
+/// </remarks>
 public class FilterMenuEvent : IMenu
 {
+    /// <summary>
+    /// Provides access to the Lavalink audio service used for managing
+    /// audio playback and retrieving player instances.
+    /// </summary>
+    /// <remarks>
+    /// This service is used to interact with Lavalink through Lavalink4NET,
+    /// allowing the application to control music playback, queues, filters,
+    /// and other audio-related functionality.
+    /// </remarks>
     private readonly IAudioService _audioService;
+    
+    /// <summary>
+    /// The Discord client used to interact with the Discord API.
+    /// </summary>
+    /// <remarks>
+    /// This client provides access to guilds, channels, users, and events
+    /// within Discord. It is commonly used to retrieve guild information,
+    /// resolve voice states, and perform actions such as sending or deleting messages.
+    /// </remarks>
     private readonly DiscordClient _discordClient;
 
     public FilterMenuEvent(IAudioService audioService, DiscordClient discordClient)
@@ -21,8 +57,36 @@ public class FilterMenuEvent : IMenu
         _discordClient = discordClient;
     }
 
+    /// <summary>
+    /// Gets or sets the voice channel that the interacting user is currently connected to.
+    /// </summary>
+    /// <remarks>
+    /// This is used to verify that the user is in the same voice channel as the bot
+    /// before applying audio filters.
+    /// </remarks>
     private DiscordChannel UserVoiceChannel { get; set; }
 
+    /// <summary>
+    /// Executes the filter menu interaction logic.
+    /// </summary>
+    /// <param name="sender">
+    /// The <see cref="DiscordClient"/> instance that triggered the interaction.
+    /// </param>
+    /// <param name="menuInteractionArgs">
+    /// The interaction event arguments containing information about the
+    /// select menu interaction and selected filter values.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous execution
+    /// of the filter operation.
+    /// </returns>
+    /// <remarks>
+    /// This method validates the user's voice channel, retrieves the active
+    /// Lavalink player, and applies the selected audio filter to the current track.
+    ///
+    /// After applying a filter, the player message embed is updated to reflect
+    /// the new audio configuration.
+    /// </remarks>
     public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs menuInteractionArgs)
     {
         if (menuInteractionArgs.Interaction.Data.CustomId == "filters-menu")
