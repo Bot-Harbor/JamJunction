@@ -33,14 +33,4 @@ public class GuildData
     /// start immediately when a track is queued.
     /// </remarks>
     public bool FirstSongInQueue { get; set; } = true;
-
-    /// <summary>
-    /// Gets or sets a value indicating whether repeat mode is enabled
-    /// for the player.
-    /// </summary>
-    /// <remarks>
-    /// When enabled, the player may repeat the current track or queue
-    /// depending on the configured repeat behavior.
-    /// </remarks>
-    public bool RepeatMode { get; set; } = true;
 }

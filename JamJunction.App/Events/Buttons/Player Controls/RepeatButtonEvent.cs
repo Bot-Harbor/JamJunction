@@ -170,13 +170,37 @@ public class RepeatButtonEvent : IButton
             }
 
             var guildData = Bot.GuildData[guildId];
-            var repeatMode = guildData.RepeatMode;
 
-            guildData.RepeatMode = !guildData.RepeatMode;
-
-            if (repeatMode == false)
+            if (player.RepeatMode == TrackRepeatMode.None)
             {
-                player!.RepeatMode = TrackRepeatMode.None;
+                player!.RepeatMode = TrackRepeatMode.Track;
+
+                try
+                {
+                    await channel.EditFollowupMessageAsync(guildData.PlayerMessage.Id,
+                        new DiscordWebhookBuilder(audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                }
+                catch (Exception)
+                {
+                    guildData.PlayerMessage =
+                        await channel.CreateFollowupMessageAsync(
+                            new DiscordFollowupMessageBuilder(
+                                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                }
+                
+                var enableRepeatTrackMessage = await channel.CreateFollowupMessageAsync(
+                    new DiscordFollowupMessageBuilder().AddEmbed(
+                        audioPlayerEmbed.EnableTrackRepeat(btnInteractionArgs)));
+
+                await Task.Delay(10000);
+
+                _ = channel.DeleteFollowupMessageAsync(enableRepeatTrackMessage.Id);
+                return;
+            }
+            
+            if (player.RepeatMode == TrackRepeatMode.Track)
+            {
+                player!.RepeatMode = TrackRepeatMode.Queue;
 
                 try
                 {
@@ -191,17 +215,17 @@ public class RepeatButtonEvent : IButton
                                 audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
                 }
 
-                var disableRepeatMessage = await channel.CreateFollowupMessageAsync(
+                var enableRepeatQueueMessage = await channel.CreateFollowupMessageAsync(
                     new DiscordFollowupMessageBuilder().AddEmbed(
-                        audioPlayerEmbed.DisableRepeat(btnInteractionArgs)));
+                        audioPlayerEmbed.EnableQueueRepeat(btnInteractionArgs)));
 
                 await Task.Delay(10000);
 
-                _ = channel.DeleteFollowupMessageAsync(disableRepeatMessage.Id);
+                _ = channel.DeleteFollowupMessageAsync(enableRepeatQueueMessage.Id);
                 return;
             }
-
-            player!.RepeatMode = TrackRepeatMode.Track;
+            
+            player!.RepeatMode = TrackRepeatMode.None;
 
             try
             {
@@ -216,12 +240,12 @@ public class RepeatButtonEvent : IButton
                             audioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
             }
 
-            var enableRepeatMessage = await channel.CreateFollowupMessageAsync(
+            var disableRepeatMessage = await channel.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.EnableRepeat(btnInteractionArgs)));
+                    audioPlayerEmbed.DisableRepeat(btnInteractionArgs)));
 
             await Task.Delay(10000);
-            _ = channel.DeleteFollowupMessageAsync(enableRepeatMessage.Id);
+            _ = channel.DeleteFollowupMessageAsync(disableRepeatMessage.Id);
         }
     }
 }

@@ -90,24 +90,24 @@ public class AudioPlayerEmbed
                                 $"{slider}";
         }
 
-        if (track.Uri!.ToString().ToLower().Contains("spotify"))
+        if (track.Uri!.ToString().ToLower().Contains("spotify.com"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
                 Name = "Platform: Spotify",
                 IconUrl =
-                    "https://cdn.freebiesupply.com/logos/large/2x/spotify-2-logo-png-transparent.png"
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Spotify_icon.svg/3840px-Spotify_icon.svg.png"
             };
 
-        if (track.Uri!.ToString().ToLower().Contains("youtube"))
+        if (track.Uri!.ToString().ToLower().Contains("youtube.com"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
-                Name = "Platform: Youtube",
+                Name = "Platform: YouTube",
                 IconUrl =
-                    "https://cdn4.iconfinder.com/data/icons/social-messaging-ui-color-shapes-2-free/128/social-youtube-circle-512.png"
+                    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/3840px-YouTube_full-color_icon_%282017%29.svg.png"
             };
 
 
-        if (track.Uri!.ToString().ToLower().Contains("deezer"))
+        if (track.Uri!.ToString().ToLower().Contains("deezer.com"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
                 Name = "Platform: Deezer",
@@ -115,13 +115,20 @@ public class AudioPlayerEmbed
                     "https://companieslogo.com/img/orig/DEEZR.PA-dbdcf2cf.png?t=1721547851"
             };
 
-        if (track.Uri!.ToString().ToLower().Contains("soundcloud"))
+        if (track.Uri!.ToString().ToLower().Contains("soundcloud.com"))
             embed.Author = new DiscordEmbedBuilder.EmbedAuthor
             {
-                Name = "Platform: Soundcloud",
+                Name = "Platform: SoundCloud",
                 IconUrl = "https://cdn-icons-png.flaticon.com/512/145/145809.png"
             };
-
+        
+        if (track.Uri!.ToString().ToLower().Contains("music.youtube.com"))
+            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+            {
+                Name = "Platform: YouTube Music",
+                IconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Youtube_Music_icon.svg/960px-Youtube_Music_icon.svg.png"
+            };
+        
         var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
         var queue = queuedLavalinkPlayer.Queue;
 
@@ -2453,17 +2460,37 @@ public class AudioPlayerEmbed
     /// Builds an embed message indicating that repeat track mode was enabled using a button interaction.
     /// </summary>
     /// <param name="btnInteractionArgs">
-    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who enabled repeat mode.
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who enabled repeat track mode.
     /// </param>
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> representing the repeat track mode action.
     /// </returns>
-    public DiscordEmbedBuilder EnableRepeat(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordEmbedBuilder EnableTrackRepeat(ComponentInteractionCreateEventArgs btnInteractionArgs)
     {
         var embed = new DiscordEmbedBuilder
         {
             Description =
                 $" ⇄  • ``{btnInteractionArgs.User.Username}`` enabled repeat track mode.",
+            Color = DiscordColor.Cyan
+        };
+
+        return embed;
+    }
+    /// <summary>
+    /// Builds an embed message indicating that repeat queue mode was enabled using a button interaction.
+    /// </summary>
+    /// <param name="btnInteractionArgs">
+    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who enabled repeat queue mode.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the repeat queue mode action.
+    /// </returns>
+    public DiscordEmbedBuilder EnableQueueRepeat(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description =
+                $" ⇄  • ``{btnInteractionArgs.User.Username}`` enabled repeat queue mode.",
             Color = DiscordColor.Cyan
         };
 
