@@ -137,30 +137,41 @@ public class PlayCommand : ApplicationCommandModule
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
-        
+
         IEnumerable<IPlatform> platforms =
         [
             new SpotifyPlatform(_audioService),
             new YoutubePlatform(),
             new DeezerPlatform(_audioService),
             new SoundCloudPlatform(_audioService),
-            new YouTubeMusicPlatform(),
+            new YouTubeMusicPlatform()
         ];
-        
+
         var platformHandler = new PlatformHandler();
-        
-        foreach (var platform in platforms)
+
+        var isUrl = Uri.TryCreate(query, UriKind.Absolute, out var uri)
+                    && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+
+        if (isUrl)
         {
-            if (streamingPlatform == default && query.Contains(platform.Url))
+            foreach (var platform in platforms)
             {
-                platformHandler.Execute(platform, player, context, query, queueNext);
-                break;
+                if (query!.Contains(platform.Url))
+                {
+                    platformHandler.Execute(platform, player, context, query, queueNext);
+                    break;
+                }
             }
-            
-            if (platform.Platform == streamingPlatform)
+        }
+        else
+        {
+            foreach (var platform in platforms)
             {
-                platformHandler.Execute(platform, player, context, query, queueNext);
-                break;
+                if (platform.Platform == streamingPlatform)
+                {
+                    platformHandler.Execute(platform, player, context, query, queueNext);
+                    break;
+                }
             }
         }
     }
