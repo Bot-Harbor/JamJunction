@@ -1,6 +1,6 @@
 ﻿using DSharpPlus.SlashCommands;
 
-namespace JamJunction.App.Lavalink.Enums;
+namespace JamJunction.App.Lavalink.Platforms.Enums;
 
 /// <summary>
 /// Represents the supported music platforms that Jam Junction
@@ -54,5 +54,5 @@ public enum Platform
     /// Used to load tracks and playlists specifically from
     /// YouTube Music sources.
     /// </remarks>
-    [ChoiceName("YouTubeMusic")] YouTubeMusic
+    [ChoiceName("YouTubeMusic")] YouTubeMusic,
 }

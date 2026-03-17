@@ -1,7 +1,7 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Lavalink.Enums;
-using JamJunction.App.Lavalink.Interfaces;
+using JamJunction.App.Lavalink.Platforms.Enums;
+using JamJunction.App.Lavalink.Platforms.Interfaces;
 using JamJunction.App.Models;
 using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
@@ -10,10 +10,27 @@ using Lavalink4NET.Players.Queued;
 using Lavalink4NET.Rest.Entities.Tracks;
 using Lavalink4NET.Tracks;
 
-namespace JamJunction.App.Lavalink;
+namespace JamJunction.App.Lavalink.Platforms;
 
+/// <summary>
+/// Provides SoundCloud platform integration for Jam Junction.
+/// </summary>
+/// <remarks>
+/// This implementation of <see cref="IPlatform"/> resolves SoundCloud
+/// tracks, playlists, and sets and sends them to the
+/// <see cref="QueuedLavalinkPlayer"/> for playback through Lavalink.
+/// </remarks>
 public class SoundCloudPlatform : IPlatform
 {
+    /// <summary>
+    /// Provides access to the Lavalink audio service used for managing
+    /// audio playback and retrieving player instances.
+    /// </summary>
+    /// <remarks>
+    /// This service is used to interact with Lavalink through Lavalink4NET,
+    /// allowing the application to control music playback, queues, filters,
+    /// and other audio-related functionality.
+    /// </remarks>
     private readonly IAudioService _audioService;
 
     public SoundCloudPlatform(IAudioService audioService)
@@ -21,13 +38,75 @@ public class SoundCloudPlatform : IPlatform
         _audioService = audioService;
     }
     
+    /// <summary>
+    /// Gets or sets the platform type handled by this implementation.
+    /// </summary>
+    public Platform Platform { get; set; } = Platform.SoundCloud;
+    
+    /// <summary>
+    /// Gets or sets the base URL used to identify SoundCloud queries.
+    /// </summary>
+    /// <remarks>
+    /// This value helps determine whether a user query should be
+    /// processed by the SoundCloud platform handler.
+    /// </remarks>
+    public string Url { get; set; } = "soundcloud.com";
+    
+    /// <summary>
+    /// Stores guild-specific data related to the current playback session.
+    /// </summary>
     private GuildData GuildData { get; set; }
     
+    /// <summary>
+    /// Provides embed builders used to display player status
+    /// and queue updates.
+    /// </summary>
     private AudioPlayerEmbed AudioPlayerEmbed { get; } = new();
+    
+    /// <summary>
+    /// Provides embed builders used to display playback errors
+    /// and invalid request messages.
+    /// </summary>
     private ErrorEmbed ErrorEmbed { get; } = new();
     
+    /// <summary>
+    /// Stores the Discord message that displays the current player
+    /// information within the guild text channel.
+    /// </summary>
     private DiscordMessage DiscordMessage { get; set; }
     
+    /// <summary>
+    /// Resolves a SoundCloud query or URL and sends the resulting track,
+    /// playlist, or set to the Lavalink player.
+    /// </summary>
+    /// <param name="player">
+    /// The <see cref="QueuedLavalinkPlayer"/> responsible for managing
+    /// playback and the queue.
+    /// </param>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing information
+    /// about the Discord interaction that initiated the request.
+    /// </param>
+    /// <param name="query">
+    /// The SoundCloud URL or search query used to locate the track
+    /// or playlist.
+    /// </param>
+    /// <param name="queueNext">
+    /// Indicates whether the track should be inserted next in the queue
+    /// instead of being appended to the end.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous playback operation.
+    /// </returns>
+    /// <remarks>
+    /// This method supports:
+    /// - Individual SoundCloud tracks
+    /// - SoundCloud playlists and sets
+    /// - URLs containing query parameters
+    ///
+    /// Tracks are converted into <see cref="LavalinkTrack"/> instances
+    /// before being added to the player's queue.
+    /// </remarks>
     public async Task PlayTrack(QueuedLavalinkPlayer player, InteractionContext context, string query,
         bool queueNext = false)
     {

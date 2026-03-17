@@ -1,8 +1,8 @@
 ﻿using DSharpPlus.SlashCommands;
-using JamJunction.App.Lavalink.Interfaces;
+using JamJunction.App.Lavalink.Platforms.Interfaces;
 using Lavalink4NET.Players.Queued;
 
-namespace JamJunction.App.Lavalink;
+namespace JamJunction.App.Lavalink.Platforms;
 
 /// <summary>
 /// Handles execution of platform-specific playback logic.

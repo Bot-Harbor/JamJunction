@@ -1,14 +1,36 @@
 ﻿using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Lavalink;
-using JamJunction.App.Lavalink.Enums;
+using JamJunction.App.Lavalink.Platforms;
+using JamJunction.App.Lavalink.Platforms.Enums;
+using JamJunction.App.Lavalink.Platforms.Interfaces;
 using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
 
 namespace JamJunction.App.Slash_Commands.Music_Commands;
 
+/// <summary>
+/// Slash command used to queue tracks for playback.
+/// </summary>
+/// <remarks>
+/// This command allows users to search for or provide a direct URL to a track
+/// from supported streaming platforms. The bot retrieves the appropriate
+/// platform handler and queues the requested track using the Lavalink player.
+///
+/// Supported platforms include Spotify, YouTube, Deezer, SoundCloud,
+/// and YouTube Music.
+/// </remarks>
 public class PlayCommand : ApplicationCommandModule
 {
+    /// <summary>
+    /// Provides access to the Lavalink audio service used for managing
+    /// audio playback and retrieving player instances.
+    /// </summary>
+    /// <remarks>
+    /// This service is used to interact with Lavalink through Lavalink4NET,
+    /// allowing the application to control music playback, queues, filters,
+    /// and other audio-related functionality.
+    /// </remarks>
     private readonly IAudioService _audioService;
 
     public PlayCommand(IAudioService audioService)
@@ -16,6 +38,41 @@ public class PlayCommand : ApplicationCommandModule
         _audioService = audioService;
     }
 
+    /// <summary>
+    /// Queues a track for playback in the user's voice channel.
+    /// </summary>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing information about
+    /// the command invocation and the user who executed it.
+    /// </param>
+    /// <param name="query">
+    /// A keyword search or direct URL used to locate the track to play.
+    /// </param>
+    /// <param name="streamingPlatform">
+    /// The streaming platform to use when searching for the track.
+    /// If omitted, the platform may be inferred from the query.
+    /// </param>
+    /// <param name="queueNext">
+    /// Determines whether the track should be inserted at the front of the
+    /// queue rather than added to the end.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous execution
+    /// of the play command.
+    /// </returns>
+    /// <remarks>
+    /// This command performs several validations before queuing a track:
+    /// <list type="bullet">
+    /// <item>Ensures the user is connected to a voice channel.</item>
+    /// <item>Ensures the bot is connected to the same voice channel.</item>
+    /// <item>Ensures the Lavalink player is active.</item>
+    /// <item>Ensures the queue has not reached its maximum capacity.</item>
+    /// </list>
+    ///
+    /// Once validation succeeds, the command selects the appropriate
+    /// platform handler and delegates playback logic to the corresponding
+    /// <see cref="IPlatform"/> implementation.
+    /// </remarks>
     [SlashCommand("play", "Queue a track.")]
     public async Task PlayAsync
     (
@@ -80,43 +137,31 @@ public class PlayCommand : ApplicationCommandModule
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
-
-        if (streamingPlatform == default) streamingPlatform = CheckForUrl(query);
-
+        
+        IEnumerable<IPlatform> platforms =
+        [
+            new SpotifyPlatform(_audioService),
+            new YoutubePlatform(),
+            new DeezerPlatform(_audioService),
+            new SoundCloudPlatform(_audioService),
+            new YouTubeMusicPlatform(),
+        ];
+        
         var platformHandler = new PlatformHandler();
-
-        switch (streamingPlatform)
+        
+        foreach (var platform in platforms)
         {
-            case Platform.Spotify:
-                platformHandler.Excute(new SpotifyPlatform(_audioService), player, context, query, queueNext);
-                return;
-            case Platform.YouTube:
-                platformHandler.Excute(new YoutubePlatform(), player, context, query, queueNext);
-                return;
-            case Platform.Deezer:
-                platformHandler.Excute(new DeezerPlatform(_audioService), player, context, query, queueNext);
-                return;
-            case Platform.SoundCloud:
-                platformHandler.Excute(new SoundCloudPlatform(_audioService), player, context, query, queueNext);
-                return;
-            case Platform.YouTubeMusic:
-                platformHandler.Excute(new YouTubeMusicPlatform(), player, context, query, queueNext);
-                return;
-            default:
-                platformHandler.Excute(new SpotifyPlatform(_audioService), player, context, query, queueNext);
-                return;
+            if (streamingPlatform == default && query.Contains(platform.Url))
+            {
+                platformHandler.Execute(platform, player, context, query, queueNext);
+                break;
+            }
+            
+            if (platform.Platform == streamingPlatform)
+            {
+                platformHandler.Execute(platform, player, context, query, queueNext);
+                break;
+            }
         }
-    }
-
-    private Platform CheckForUrl(string query)
-    {
-        return query switch
-        {
-            var a when a.Contains("spotify.com") => Platform.Spotify,
-            var b when b.Contains("youtube.com") || b.Contains("music.youtube") => Platform.YouTube,
-            var c when c.Contains("deezer.com") => Platform.Deezer,
-            var d when d.Contains("soundcloud.com") => Platform.SoundCloud,
-            _ => default
-        };
     }
 }

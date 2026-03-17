@@ -1,7 +1,8 @@
 ﻿using System.Net;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
-using JamJunction.App.Lavalink.Interfaces;
+using JamJunction.App.Lavalink.Platforms.Enums;
+using JamJunction.App.Lavalink.Platforms.Interfaces;
 using JamJunction.App.Models;
 using JamJunction.App.Secrets;
 using JamJunction.App.Views.Embeds;
@@ -14,18 +15,96 @@ using YoutubeExplode.Playlists;
 using YoutubeExplode.Search;
 using YoutubeExplode.Videos;
 
-namespace JamJunction.App.Lavalink;
+namespace JamJunction.App.Lavalink.Platforms;
 
-public class YouTubeMusicPlatform : IPlatform
+/// <summary>
+/// Provides YouTube platform integration for Jam Junction.
+/// </summary>
+/// <remarks>
+/// This implementation of <see cref="IPlatform"/> resolves YouTube videos,
+/// playlists, and search queries using the YoutubeExplode library and
+/// queues the resulting tracks into the <see cref="QueuedLavalinkPlayer"/>
+/// for playback through Lavalink.
+/// </remarks>
+public class YoutubePlatform : IPlatform
 {
+    /// <summary>
+    /// Gets or sets the platform type handled by this implementation.
+    /// </summary>
+    /// <remarks>
+    /// This value identifies the platform as YouTube within the
+    /// Jam Junction platform handling system.
+    /// </remarks>
+    public Platform Platform { get; set; } = Platform.YouTube;
+    
+    /// <summary>
+    /// Gets or sets the base URL used to identify YouTube queries.
+    /// </summary>
+    /// <remarks>
+    /// Queries containing this value will be routed to the YouTube
+    /// platform handler.
+    /// </remarks>
+    public string Url { get; set; } = "youtube.com";
+    
+    /// <summary>
+    /// Stores guild-specific playback information such as the player
+    /// message and associated text channel.
+    /// </summary>
     private GuildData GuildData { get; set; }
 
+    /// <summary>
+    /// Provides embed builders used for displaying audio player
+    /// information and queue updates.
+    /// </summary>
     private AudioPlayerEmbed AudioPlayerEmbed { get; } = new();
+    
+    /// <summary>
+    /// Provides embed builders used for displaying error messages
+    /// related to playback or track loading.
+    /// </summary>
     private ErrorEmbed ErrorEmbed { get; } = new();
 
+    /// <summary>
+    /// Stores the Discord message used to display the audio player
+    /// interface within the guild.
+    /// </summary>
     private DiscordMessage DiscordMessage { get; set; }
 
-    public async Task PlayTrack(QueuedLavalinkPlayer player, InteractionContext context, string query, bool queueNext = false)
+    /// <summary>
+    /// Resolves a YouTube query or URL and sends the resulting track
+    /// or playlist to the Lavalink player.
+    /// </summary>
+    /// <param name="player">
+    /// The <see cref="QueuedLavalinkPlayer"/> responsible for managing
+    /// playback and the queue.
+    /// </param>
+    /// <param name="context">
+    /// The <see cref="InteractionContext"/> containing information about
+    /// the command interaction.
+    /// </param>
+    /// <param name="query">
+    /// The YouTube URL or search query used to locate the video
+    /// or playlist.
+    /// </param>
+    /// <param name="queueNext">
+    /// Indicates whether the track should be inserted next in the queue
+    /// instead of being appended to the end.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous playback operation.
+    /// </returns>
+    /// <remarks>
+    /// This method supports:
+    /// - YouTube video URLs
+    /// - YouTube playlist URLs
+    /// - YouTube search queries
+    ///
+    /// Tracks are retrieved using the YoutubeExplode library and converted
+    /// into <see cref="LavalinkTrack"/> instances before being added to the
+    /// player's queue.
+    /// </remarks>
+    public async Task PlayTrack(QueuedLavalinkPlayer player, InteractionContext context, string query,
+        bool queueNext = false)
     {
         var address = ProxySecrets.Address;
         var username = ProxySecrets.Username;
