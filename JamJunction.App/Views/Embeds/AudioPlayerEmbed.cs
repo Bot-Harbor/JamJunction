@@ -129,6 +129,13 @@ public class AudioPlayerEmbed
                 IconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Youtube_Music_icon.svg/960px-Youtube_Music_icon.svg.png"
             };
         
+        if (track.Uri!.ToString().ToLower().Contains("music.apple.com"))
+            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+            {
+                Name = "Platform: Apple Music",
+                IconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/500px-Apple_Music_icon.svg.png"
+            };
+
         var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
         var queue = queuedLavalinkPlayer.Queue;
 

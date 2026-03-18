@@ -144,7 +144,8 @@ public class PlayCommand : ApplicationCommandModule
             new YoutubePlatform(),
             new DeezerPlatform(_audioService),
             new SoundCloudPlatform(_audioService),
-            new YouTubeMusicPlatform()
+            new YouTubeMusicPlatform(),
+            new AppleMusicPlatform(_audioService),
         ];
 
         var platformHandler = new PlatformHandler();

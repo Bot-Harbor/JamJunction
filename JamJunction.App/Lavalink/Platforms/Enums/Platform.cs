@@ -14,36 +14,38 @@ namespace JamJunction.App.Lavalink.Platforms.Enums;
 public enum Platform
 {
     /// <summary>
-    /// Represents the Spotify music platform.
+    /// Represents the Spotify platform.
     /// </summary>
     /// <remarks>
-    /// Allows Jam Junction to resolve and play tracks, albums,
-    /// and playlists sourced from Spotify.
+    /// Used to load tracks, albums, and playlists specifically from
+    /// Spotify sources.
     /// </remarks>
     [ChoiceName("Spotify")] Spotify,
 
     /// <summary>
-    /// Represents the YouTube video platform.
+    /// Represents the YouTube platform.
     /// </summary>
     /// <remarks>
-    /// Used to load and play audio from standard YouTube videos.
+    /// Used to load tracks and playlists specifically from
+    /// YouTube sources.
     /// </remarks>
     [ChoiceName("YouTube")] YouTube,
 
     /// <summary>
-    /// Represents the Deezer music streaming platform.
+    /// Represents the Deezer platform.
     /// </summary>
     /// <remarks>
-    /// Allows tracks, albums, and playlists from Deezer
-    /// to be resolved and played through the audio player.
+    /// Used to load tracks, albums, and playlists specifically from
+    /// Deezer sources.
     /// </remarks>
     [ChoiceName("Deezer")] Deezer,
 
     /// <summary>
-    /// Represents the SoundCloud audio platform.
+    /// Represents the SoundCloud platform.
     /// </summary>
     /// <remarks>
-    /// Used to load and stream tracks hosted on SoundCloud.
+    /// Used to load tracks and sets specifically from
+    /// SoundCloud sources.
     /// </remarks>
     [ChoiceName("SoundCloud")] SoundCloud,
 
@@ -55,4 +57,13 @@ public enum Platform
     /// YouTube Music sources.
     /// </remarks>
     [ChoiceName("YouTubeMusic")] YouTubeMusic,
+    
+    /// <summary>
+    /// Represents the Apple Music platform.
+    /// </summary>
+    /// <remarks>
+    /// Used to load tracks, albums, and playlists specifically from
+    /// Apple Music sources.
+    /// </remarks>
+    [ChoiceName("AppleMusic")] AppleMusic,
 }

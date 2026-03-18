@@ -43,7 +43,7 @@ public class CaptionCommand : ApplicationCommandModule
     public async Task CaptionAsync
     (
         InteractionContext context,
-        [Option("caption", "he caption you want the image to have.")]
+        [Option("caption", "The caption you want the image to have.")]
         string caption,
         [Option("image", "The image you want to upload.")]
         DiscordAttachment image,
