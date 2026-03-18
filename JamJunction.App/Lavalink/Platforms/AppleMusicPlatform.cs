@@ -119,6 +119,10 @@ public class AppleMusicPlatform : IPlatform
 
         if (query.Contains("music.apple.com") && query.Contains("album"))
         {
+            var uri = new Uri(query);
+            var cleanUrl = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}";
+            query = cleanUrl;
+            
             var trackLoadResult = await _audioService.Tracks.LoadTracksAsync(query!, TrackSearchMode.AppleMusic);
 
             if (trackLoadResult.Playlist == null)
@@ -239,6 +243,10 @@ public class AppleMusicPlatform : IPlatform
 
         if (query.Contains("music.apple.com") && query.Contains("playlist"))
         {
+            var uri = new Uri(query);
+            var cleanUrl = $"{uri.Scheme}://{uri.Host}{uri.AbsolutePath}";
+            query = cleanUrl;
+            
             var trackLoadResult = await _audioService.Tracks.LoadTracksAsync(query!, TrackSearchMode.AppleMusic);
 
             if (trackLoadResult.Playlist == null)
