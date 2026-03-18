@@ -56,7 +56,7 @@ public enum Platform
     /// Used to load tracks and playlists specifically from
     /// YouTube Music sources.
     /// </remarks>
-    [ChoiceName("YouTubeMusic")] YouTubeMusic,
+    [ChoiceName("YouTube Music")] YouTubeMusic,
     
     /// <summary>
     /// Represents the Apple Music platform.
@@ -65,5 +65,5 @@ public enum Platform
     /// Used to load tracks, albums, and playlists specifically from
     /// Apple Music sources.
     /// </remarks>
-    [ChoiceName("AppleMusic")] AppleMusic,
+    [ChoiceName("Apple Music")] AppleMusic,
 }
