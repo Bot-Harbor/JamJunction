@@ -159,7 +159,12 @@ public class PlayCommand : ApplicationCommandModule
             {
                 if (query!.Contains(platform.Url))
                 {
-                    platformHandler.Execute(platform, player, context, query, queueNext);
+                    if (query!.Contains("music.youtube.com"))
+                    {
+                        await platformHandler.Execute(new YouTubeMusicPlatform(), player, context, query, queueNext);
+                        break;
+                    }
+                    await platformHandler.Execute(platform, player, context, query, queueNext);
                     break;
                 }
             }
@@ -170,7 +175,7 @@ public class PlayCommand : ApplicationCommandModule
             {
                 if (platform.Platform == streamingPlatform)
                 {
-                    platformHandler.Execute(platform, player, context, query, queueNext);
+                    await platformHandler.Execute(platform, player, context, query, queueNext);
                     break;
                 }
             }

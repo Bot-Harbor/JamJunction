@@ -57,8 +57,6 @@ public class AudioPlayerEmbed
         bool isStartedFromEvent = false, bool trackIsRestarted = false, bool pauseDisabled = false,
         bool resumeDisabled = true)
     {
-        var uri = track.Uri!.AbsoluteUri;
-
         string slider;
 
         if (isStartedFromEvent)
@@ -77,6 +75,8 @@ public class AudioPlayerEmbed
             }
         };
 
+        var uri = track.Uri!.AbsoluteUri;
+
         if (track.Title.Length > 35)
         {
             embed.Description = $"💿  •  **Title**: [{track.Title.Substring(0, 35)}...]({uri})\n" +
@@ -90,51 +90,78 @@ public class AudioPlayerEmbed
                                 $"{slider}";
         }
 
-        if (track.Uri!.ToString().ToLower().Contains("spotify.com"))
-            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+        while (true)
+        {
+            if (track.Uri!.ToString().ToLower().Contains("spotify.com"))
             {
-                Name = "Platform: Spotify",
-                IconUrl =
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Spotify_icon.svg/3840px-Spotify_icon.svg.png"
-            };
-
-        if (track.Uri!.ToString().ToLower().Contains("youtube.com"))
-            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
-            {
-                Name = "Platform: YouTube",
-                IconUrl =
-                    "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/3840px-YouTube_full-color_icon_%282017%29.svg.png"
-            };
+                embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+                {
+                    Name = "Platform: Spotify",
+                    IconUrl =
+                        "https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Spotify_icon.svg/3840px-Spotify_icon.svg.png"
+                };
+                break;
+            }
 
 
-        if (track.Uri!.ToString().ToLower().Contains("deezer.com"))
-            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+            if (track.Uri!.ToString().ToLower().Contains("music.youtube.com"))
             {
-                Name = "Platform: Deezer",
-                IconUrl =
-                    "https://companieslogo.com/img/orig/DEEZR.PA-dbdcf2cf.png?t=1721547851"
-            };
+                embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+                {
+                    Name = "Platform: YouTube Music",
+                    IconUrl =
+                        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Youtube_Music_icon.svg/960px-Youtube_Music_icon.svg.png"
+                };
+                break;
+            }
 
-        if (track.Uri!.ToString().ToLower().Contains("soundcloud.com"))
-            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+
+            if (track.Uri!.ToString().ToLower().Contains("youtube.com"))
             {
-                Name = "Platform: SoundCloud",
-                IconUrl = "https://cdn-icons-png.flaticon.com/512/145/145809.png"
-            };
-        
-        if (track.Uri!.ToString().ToLower().Contains("music.youtube.com"))
-            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+                embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+                {
+                    Name = "Platform: YouTube",
+                    IconUrl =
+                        "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/3840px-YouTube_full-color_icon_%282017%29.svg.png"
+                };
+                break;
+            }
+
+
+            if (track.Uri!.ToString().ToLower().Contains("deezer.com"))
             {
-                Name = "Platform: YouTube Music",
-                IconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6a/Youtube_Music_icon.svg/960px-Youtube_Music_icon.svg.png"
-            };
-        
-        if (track.Uri!.ToString().ToLower().Contains("music.apple.com"))
-            embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+                embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+                {
+                    Name = "Platform: Deezer",
+                    IconUrl =
+                        "https://companieslogo.com/img/orig/DEEZR.PA-dbdcf2cf.png?t=1721547851"
+                };
+                break;
+            }
+
+
+            if (track.Uri!.ToString().ToLower().Contains("soundcloud.com"))
             {
-                Name = "Platform: Apple Music",
-                IconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/500px-Apple_Music_icon.svg.png"
-            };
+                embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+                {
+                    Name = "Platform: SoundCloud",
+                    IconUrl = "https://cdn-icons-png.flaticon.com/512/145/145809.png"
+                };
+                break;
+            }
+
+
+            if (track.Uri!.ToString().ToLower().Contains("music.apple.com"))
+            {
+                embed.Author = new DiscordEmbedBuilder.EmbedAuthor
+                {
+                    Name = "Platform: Apple Music",
+                    IconUrl =
+                        "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Apple_Music_icon.svg/500px-Apple_Music_icon.svg.png"
+                };
+                break;
+            }
+        }
 
         var playerState = !queuedLavalinkPlayer.IsPaused ? "Off" : "On";
         var queue = queuedLavalinkPlayer.Queue;
@@ -358,7 +385,7 @@ public class AudioPlayerEmbed
             ? time.ToString(@"hh\:mm\:ss")
             : time.ToString(@"mm\:ss");
     }
-    
+
     /// <summary>
     /// Builds an embed message indicating that a track was added to the queue.
     /// </summary>
@@ -553,7 +580,7 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-    
+
     /// <summary>
     /// Builds an embed message indicating that a track was resumed using a button interaction.
     /// </summary>
@@ -591,7 +618,7 @@ public class AudioPlayerEmbed
         };
         return embed;
     }
-    
+
     /// <summary>
     /// Builds an embed message indicating that the audio player was stopped using a button interaction.
     /// </summary>
@@ -2483,6 +2510,7 @@ public class AudioPlayerEmbed
 
         return embed;
     }
+
     /// <summary>
     /// Builds an embed message indicating that repeat queue mode was enabled using a button interaction.
     /// </summary>
@@ -2503,7 +2531,7 @@ public class AudioPlayerEmbed
 
         return embed;
     }
-    
+
     /// <summary>
     /// Builds an embed message indicating that repeat mode was disabled using a button interaction.
     /// </summary>

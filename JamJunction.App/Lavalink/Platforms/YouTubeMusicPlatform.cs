@@ -21,10 +21,10 @@ namespace JamJunction.App.Lavalink.Platforms;
 /// Provides YouTube Music platform integration for Jam Junction.
 /// </summary>
 /// <remarks>
-/// This implementation of <see cref="IPlatform"/> resolves YouTube Music
-/// tracks, playlists, and search queries using the YoutubeExplode library
-/// and sends the resulting tracks to the <see cref="QueuedLavalinkPlayer"/>
-/// for playback through Lavalink.
+/// This implementation of <see cref="IPlatform"/> handles loading and queuing
+/// tracks, videos, and playlists from YouTube Music using the YouTube client.
+/// It resolves YouTube URLs or search queries and sends the resulting tracks to the
+/// <see cref="QueuedLavalinkPlayer"/> for playback.
 /// </remarks>
 public class YouTubeMusicPlatform : IPlatform
 {
@@ -37,16 +37,16 @@ public class YouTubeMusicPlatform : IPlatform
     /// Gets or sets the base URL used to identify YouTube Music queries.
     /// </summary>
     /// <remarks>
-    /// This value is used to determine whether a user query should be
-    /// processed by the YouTube Music platform handler.
+    /// This value is used to determine whether a user query corresponds
+    /// to a YouTube Music source.
     /// </remarks>
     public string Url { get; set; } = "music.youtube.com";
     
     /// <summary>
-    /// Stores guild-specific data related to the current playback session.
+    /// Gets or sets the guild-specific data associated with the current playback session.
     /// </summary>
     private GuildData GuildData { get; set; }
-
+    
     /// <summary>
     /// Provides embed builders used to display audio player information
     /// and queue updates.
@@ -54,19 +54,20 @@ public class YouTubeMusicPlatform : IPlatform
     private AudioPlayerEmbed AudioPlayerEmbed { get; } = new();
     
     /// <summary>
-    /// Provides embed builders used to display playback and input errors.
+    /// Provides embed builders used to display error messages
+    /// related to playback and queue operations.
     /// </summary>
     private ErrorEmbed ErrorEmbed { get; } = new();
-
+    
     /// <summary>
-    /// Stores the Discord message used to display the player interface
-    /// within the guild text channel.
+    /// Stores the Discord message used to display player information
+    /// within the text channel.
     /// </summary>
     private DiscordMessage DiscordMessage { get; set; }
-
+    
     /// <summary>
-    /// Resolves a YouTube Music query or URL and sends the resulting track
-    /// or playlist to the Lavalink player.
+    /// Resolves a YouTube Music query or URL and sends the resulting track,
+    /// video, or playlist to the Lavalink player.
     /// </summary>
     /// <param name="player">
     /// The <see cref="QueuedLavalinkPlayer"/> responsible for managing
@@ -77,8 +78,8 @@ public class YouTubeMusicPlatform : IPlatform
     /// the Discord interaction that initiated the request.
     /// </param>
     /// <param name="query">
-    /// The YouTube Music URL or search query used to locate the track
-    /// or playlist.
+    /// The YouTube or YouTube Music URL or search query used to locate
+    /// the track, video, or playlist.
     /// </param>
     /// <param name="queueNext">
     /// Indicates whether the track should be inserted next in the queue
@@ -89,19 +90,18 @@ public class YouTubeMusicPlatform : IPlatform
     /// </returns>
     /// <remarks>
     /// This method supports:
-    /// - YouTube Music video URLs
+    /// - YouTube video URLs
     /// - YouTube playlists
-    /// - YouTube search queries
+    /// - Search queries
     ///
-    /// Tracks are retrieved using the YoutubeExplode library and converted
-    /// into <see cref="LavalinkTrack"/> instances before being added to
-    /// the player's queue.
+    /// Tracks are converted into <see cref="LavalinkTrack"/> instances
+    /// and added to the player's queue.
     /// </remarks>
     public async Task PlayTrack(QueuedLavalinkPlayer player, InteractionContext context, string query, bool queueNext = false)
     {
-        var address = ProxySecrets.Address;
-        var username = ProxySecrets.Username;
-        var password = ProxySecrets.Password;
+        const string address = ProxySecrets.Address;
+        const string username = ProxySecrets.Username;
+        const string password = ProxySecrets.Password;
 
         var proxy = new WebProxy(address)
         {
@@ -122,8 +122,6 @@ public class YouTubeMusicPlatform : IPlatform
         var channel = context.Channel;
         var guildId = context.Guild.Id;
 
-        // CHANGE THIS TO ONLY PULL FROM YOUTUBE MUSIC
-        
         if (query.Contains("youtube.com"))
         {
             if (query.Contains("/playlist"))
@@ -178,7 +176,7 @@ public class YouTubeMusicPlatform : IPlatform
                         Author = video.Author.ToString(),
                         StartPosition = TimeSpan.Zero,
                         Duration = (TimeSpan)video.Duration!,
-                        Uri = new Uri(video.Url),
+                        Uri = new Uri($"https://music.youtube.com/watch?v={video.Id}"),
                         ArtworkUri = new Uri(artworkUri!)
                     };
 
@@ -306,7 +304,7 @@ public class YouTubeMusicPlatform : IPlatform
                     Author = video.Author.ToString(),
                     StartPosition = TimeSpan.Zero,
                     Duration = (TimeSpan)video.Duration!,
-                    Uri = new Uri(video.Url),
+                    Uri = new Uri(query),
                     ArtworkUri = new Uri(artworkUri!)
                 };
 
@@ -415,7 +413,7 @@ public class YouTubeMusicPlatform : IPlatform
                 Author = video.Author.ToString(),
                 StartPosition = TimeSpan.Zero,
                 Duration = (TimeSpan)video.Duration!,
-                Uri = new Uri(video.Url),
+                Uri = new Uri($"https://music.youtube.com/watch?v={video.Id}"),
                 ArtworkUri = new Uri(artworkUri!)
             };
 

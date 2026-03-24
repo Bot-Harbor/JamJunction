@@ -40,9 +40,9 @@ public class PlatformHandler
     /// This method delegates playback handling to the provided
     /// platform implementation.
     /// </remarks>
-    public void Execute(IPlatform platform, QueuedLavalinkPlayer player, InteractionContext context, string query,
+    public async Task Execute(IPlatform platform, QueuedLavalinkPlayer player, InteractionContext context, string query,
         bool queueNext = false)
     {
-        platform.PlayTrack(player, context, query, queueNext);
+        await platform.PlayTrack(player, context, query, queueNext);
     }
 }

@@ -106,9 +106,9 @@ public class YoutubePlatform : IPlatform
     public async Task PlayTrack(QueuedLavalinkPlayer player, InteractionContext context, string query,
         bool queueNext = false)
     {
-        var address = ProxySecrets.Address;
-        var username = ProxySecrets.Username;
-        var password = ProxySecrets.Password;
+        const string address = ProxySecrets.Address;
+        const string username = ProxySecrets.Username;
+        const string password = ProxySecrets.Password;
 
         var proxy = new WebProxy(address)
         {
