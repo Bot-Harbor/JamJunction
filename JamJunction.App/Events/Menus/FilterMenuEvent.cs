@@ -6,6 +6,7 @@ using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
 using Lavalink4NET.Filters;
+using Lavalink4NET.Players.Queued;
 
 namespace JamJunction.App.Events.Menus;
 
@@ -317,13 +318,23 @@ public class FilterMenuEvent : IMenu
                         player.Filters.Clear();
                         var karaokeFilter = new KaraokeFilterOptions
                         {
-                            Level = 0.2f,
-                            MonoLevel = 0.1f,
+                            Level = 1.0f,
+                            MonoLevel = 1.0f,
                             FilterBand = 220.0f,
                             FilterWidth = 100.0f
                         };
 
                         player.Filters.Karaoke = karaokeFilter;
+                        player.Filters.Equalizer = new EqualizerFilterOptions(new Equalizer
+                        {
+                            Band5 = -0.25f,
+                            Band6 = -0.25f,
+                            Band7 = -0.25f,
+                            Band8 = -0.25f,
+                            Band9 = -0.25f,
+                            Band10 = -0.25f,
+                            Band11 = -0.25f
+                        });
                         await player!.Filters.CommitAsync();
 
                         try
