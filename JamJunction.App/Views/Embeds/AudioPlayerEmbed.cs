@@ -80,7 +80,7 @@ public class AudioPlayerEmbed
         if (track.Title.Length > 35)
         {
             embed.Description = $"💿  •  **Title**: [{track.Title.Substring(0, 35)}...]({uri})\n" +
-                                $"🎙️  •  **Artist**: {track.Author}\n" +
+                                $"🎙️  •  **Artist**: {track.Author.Substring(0, 35)}\n" +
                                 $"{slider}";
         }
         else
