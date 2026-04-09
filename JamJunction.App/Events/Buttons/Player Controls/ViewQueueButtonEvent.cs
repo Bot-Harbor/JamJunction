@@ -104,8 +104,7 @@ public class ViewQueueButtonEvent : IButton
                 if (UserVoiceChannel == null)
                 {
                     var errorMessage = await channel.CreateFollowupMessageAsync(
-                        new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.ValidVoiceChannelError()));
+                        errorEmbed.ValidVoiceChannelError());
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
@@ -114,8 +113,7 @@ public class ViewQueueButtonEvent : IButton
             catch (Exception)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.ValidVoiceChannelError()));
+                    errorEmbed.ValidVoiceChannelError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -128,8 +126,7 @@ public class ViewQueueButtonEvent : IButton
             if (botVoiceChannel == false)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoPlayerError()));
+                    errorEmbed.NoPlayerError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -140,8 +137,7 @@ public class ViewQueueButtonEvent : IButton
             if (UserVoiceChannel!.Id != botVoiceState.Channel!.Id)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.SameVoiceChannelError()));
+                    errorEmbed.SameVoiceChannelError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -154,8 +150,7 @@ public class ViewQueueButtonEvent : IButton
             if (player == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoConnectionError()));
+                    errorEmbed.NoConnectionError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -164,8 +159,7 @@ public class ViewQueueButtonEvent : IButton
             if (player!.CurrentTrack == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.PlayerInactiveError()));
+                    errorEmbed.PlayerInactiveError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;

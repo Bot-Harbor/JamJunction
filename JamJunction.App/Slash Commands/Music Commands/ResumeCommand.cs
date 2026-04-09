@@ -1,4 +1,4 @@
-﻿using DSharpPlus.Entities;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
@@ -59,7 +59,7 @@ public class ResumeCommand : ApplicationCommandModule
     [SlashCommand("resume", "Resumes the current track.")]
     public async Task ResumeCommandAsync(InteractionContext context)
     {
-        await context.DeferAsync();
+        await context.DeferAsync(true);
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
@@ -69,9 +69,7 @@ public class ResumeCommand : ApplicationCommandModule
 
         if (userVoiceChannel == null)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.ValidVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -82,9 +80,7 @@ public class ResumeCommand : ApplicationCommandModule
 
         if (botVoiceChannel == false)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.NoPlayerError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -92,9 +88,7 @@ public class ResumeCommand : ApplicationCommandModule
 
         if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.SameVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -106,9 +100,7 @@ public class ResumeCommand : ApplicationCommandModule
 
         if (player == null)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.NoConnectionError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -116,9 +108,7 @@ public class ResumeCommand : ApplicationCommandModule
 
         if (player!.CurrentTrack == null)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.PlayerInactiveError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.PlayerInactiveError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -126,9 +116,7 @@ public class ResumeCommand : ApplicationCommandModule
 
         if (!player.IsPaused)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.AlreadyPlayingError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.AlreadyPlayingError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -151,9 +139,7 @@ public class ResumeCommand : ApplicationCommandModule
                     audioPlayerEmbed.TrackInformation(player.CurrentTrack, player, resumeDisabled: true)));
         }
 
-        var resumeMessage = await context.FollowUpAsync(
-            new DiscordFollowupMessageBuilder().AddEmbed(
-                audioPlayerEmbed.Resume(context)));
+        var resumeMessage = await context.FollowUpAsync(audioPlayerEmbed.Resume());
 
         await Task.Delay(10000);
         _ = context.DeleteFollowupAsync(resumeMessage.Id);

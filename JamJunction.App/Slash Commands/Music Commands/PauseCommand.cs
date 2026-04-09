@@ -1,4 +1,4 @@
-﻿using DSharpPlus.Entities;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
@@ -58,7 +58,7 @@ public class PauseCommand : ApplicationCommandModule
     [SlashCommand("pause", "Pauses the current track.")]
     public async Task PauseCommandAsync(InteractionContext context)
     {
-        await context.DeferAsync();
+        await context.DeferAsync(true);
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
@@ -68,9 +68,7 @@ public class PauseCommand : ApplicationCommandModule
 
         if (userVoiceChannel == null)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.ValidVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -81,9 +79,7 @@ public class PauseCommand : ApplicationCommandModule
 
         if (botVoiceChannel == false)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.NoPlayerError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -91,9 +87,7 @@ public class PauseCommand : ApplicationCommandModule
 
         if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.SameVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -105,9 +99,7 @@ public class PauseCommand : ApplicationCommandModule
 
         if (player == null)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.NoConnectionError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -115,9 +107,7 @@ public class PauseCommand : ApplicationCommandModule
 
         if (player!.CurrentTrack == null)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.PlayerInactiveError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.PlayerInactiveError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -125,9 +115,7 @@ public class PauseCommand : ApplicationCommandModule
 
         if (player.IsPaused)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.AlreadyPausedError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.AlreadyPausedError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -152,9 +140,7 @@ public class PauseCommand : ApplicationCommandModule
                         resumeDisabled: false)));
         }
 
-        var pauseMessage = await context.FollowUpAsync(
-            new DiscordFollowupMessageBuilder().AddEmbed(
-                audioPlayerEmbed.Pause(context)));
+        var pauseMessage = await context.FollowUpAsync(audioPlayerEmbed.Pause());
 
         await Task.Delay(10000);
         _ = context.DeleteFollowupAsync(pauseMessage.Id);

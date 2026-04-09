@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Lavalink.Platforms.Enums;
@@ -144,8 +144,7 @@ public class YouTubeMusicPlatform : IPlatform
                 if (playlist == null)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.AudioTrackError()));
+                        .FollowUpAsync(ErrorEmbed.AudioTrackError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -183,8 +182,7 @@ public class YouTubeMusicPlatform : IPlatform
                     if (youtubeVideo.IsLiveStream)
                     {
                         var errorMessage = await context
-                            .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                                .AddEmbed(ErrorEmbed.LiveSteamError()));
+                            .FollowUpAsync(ErrorEmbed.LiveSteamError());
                         await Task.Delay(10000);
                         _ = channel.DeleteMessageAsync(errorMessage);
                         return;
@@ -219,20 +217,9 @@ public class YouTubeMusicPlatform : IPlatform
                     await player.Queue.RemoveAtAsync(0);
                     await player.SetVolumeAsync(.50f);
 
-                    try
-                    {
-                        DiscordMessage = await context
-                            .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                                new DiscordInteractionResponseBuilder(
-                                    AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                        GuildData.PlayerMessage = DiscordMessage;
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                        throw;
-                    }
-
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(firstTrack, player));
+                    await context.DeleteResponseAsync();
                     return;
                 }
 
@@ -244,17 +231,14 @@ public class YouTubeMusicPlatform : IPlatform
                 }
                 catch (Exception e)
                 {
-                    GuildData.PlayerMessage =
-                        await context.FollowUpAsync(
-                            new DiscordFollowupMessageBuilder(
-                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                     Console.WriteLine(e);
                 }
 
                 DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(AudioPlayerEmbed
-                            .PlaylistAddedToQueue(playlistData)));
+                    .FollowUpAsync(AudioPlayerEmbed
+                            .PlaylistAddedToQueue(playlistData));
 
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
@@ -276,8 +260,7 @@ public class YouTubeMusicPlatform : IPlatform
                 if (video == null)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.AudioTrackError()));
+                        .FollowUpAsync(ErrorEmbed.AudioTrackError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -311,8 +294,7 @@ public class YouTubeMusicPlatform : IPlatform
                 if (youtubeVideo.IsLiveStream)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.LiveSteamError()));
+                        .FollowUpAsync(ErrorEmbed.LiveSteamError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -335,11 +317,9 @@ public class YouTubeMusicPlatform : IPlatform
                 if (player.Queue.IsEmpty)
                 {
                     await player.SetVolumeAsync(.50f);
-                    DiscordMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                AudioPlayerEmbed.TrackInformation(youtubeVideo, player))));
-                    GuildData.PlayerMessage = DiscordMessage;
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(youtubeVideo, player));
+                    await context.DeleteResponseAsync();
                     return;
                 }
 
@@ -351,16 +331,13 @@ public class YouTubeMusicPlatform : IPlatform
                 }
                 catch (Exception e)
                 {
-                    GuildData.PlayerMessage =
-                        await context.FollowUpAsync(
-                            new DiscordFollowupMessageBuilder(
-                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                     Console.WriteLine(e);
                 }
 
                 DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo)));
+                    .FollowUpAsync(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo));
 
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
@@ -383,8 +360,7 @@ public class YouTubeMusicPlatform : IPlatform
             if (videos == null)
             {
                 var errorMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.AudioTrackError()));
+                    .FollowUpAsync(ErrorEmbed.AudioTrackError());
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -420,8 +396,7 @@ public class YouTubeMusicPlatform : IPlatform
             if (youtubeVideo.IsLiveStream)
             {
                 var errorMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.LiveSteamError()));
+                    .FollowUpAsync(ErrorEmbed.LiveSteamError());
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -444,11 +419,9 @@ public class YouTubeMusicPlatform : IPlatform
             if (player.Queue.IsEmpty)
             {
                 await player.SetVolumeAsync(.50f);
-                DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(
-                            AudioPlayerEmbed.TrackInformation(youtubeVideo, player))));
-                GuildData.PlayerMessage = DiscordMessage;
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(youtubeVideo, player));
+                await context.DeleteResponseAsync();
                 return;
             }
 
@@ -460,16 +433,13 @@ public class YouTubeMusicPlatform : IPlatform
             }
             catch (Exception e)
             {
-                GuildData.PlayerMessage =
-                    await context.FollowUpAsync(
-                        new DiscordFollowupMessageBuilder(
-                            AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 Console.WriteLine(e);
             }
 
             DiscordMessage = await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo)));
+                .FollowUpAsync(AudioPlayerEmbed.TrackAddedToQueue(youtubeVideo));
 
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(DiscordMessage.Id);

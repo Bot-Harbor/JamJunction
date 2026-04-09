@@ -1,4 +1,4 @@
-﻿using DSharpPlus.Entities;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Lavalink.Platforms.Enums;
 using JamJunction.App.Lavalink.Platforms.Interfaces;
@@ -126,8 +126,7 @@ public class SoundCloudPlatform : IPlatform
                 if (soundcloudTrack == null)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.AudioTrackError()));
+                        .FollowUpAsync(ErrorEmbed.AudioTrackError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -136,8 +135,7 @@ public class SoundCloudPlatform : IPlatform
                 if (soundcloudTrack.IsLiveStream)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.LiveSteamError()));
+                        .FollowUpAsync(ErrorEmbed.LiveSteamError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -160,11 +158,9 @@ public class SoundCloudPlatform : IPlatform
                 if (player.Queue.IsEmpty)
                 {
                     await player.SetVolumeAsync(.50f);
-                    DiscordMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                AudioPlayerEmbed.TrackInformation(soundcloudTrack, player))));
-                    GuildData.PlayerMessage = DiscordMessage;
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(soundcloudTrack, player));
+                    await context.DeleteResponseAsync();
                     return;
                 }
 
@@ -176,16 +172,13 @@ public class SoundCloudPlatform : IPlatform
                 }
                 catch (Exception e)
                 {
-                    GuildData.PlayerMessage =
-                        await context.FollowUpAsync(
-                            new DiscordFollowupMessageBuilder(
-                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                     Console.WriteLine(e);
                 }
 
                 DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(soundcloudTrack)));
+                    .FollowUpAsync(AudioPlayerEmbed.TrackAddedToQueue(soundcloudTrack));
 
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
@@ -198,8 +191,7 @@ public class SoundCloudPlatform : IPlatform
             if (trackLoadResult.Playlist == null)
             {
                 var errorMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.AudioTrackError()));
+                    .FollowUpAsync(ErrorEmbed.AudioTrackError());
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -235,8 +227,7 @@ public class SoundCloudPlatform : IPlatform
                 if (soundCloudTrack.IsLiveStream)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.LiveSteamError()));
+                        .FollowUpAsync(ErrorEmbed.LiveSteamError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -271,11 +262,9 @@ public class SoundCloudPlatform : IPlatform
                 await player.Queue.RemoveAtAsync(0);
                 await player.SetVolumeAsync(.50f);
 
-                DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(
-                            AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                GuildData.PlayerMessage = DiscordMessage;
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(firstTrack, player));
+                await context.DeleteResponseAsync();
                 return;
             }
 
@@ -287,19 +276,16 @@ public class SoundCloudPlatform : IPlatform
             }
             catch (Exception e)
             {
-                GuildData.PlayerMessage =
-                    await context.FollowUpAsync(
-                        new DiscordFollowupMessageBuilder(
-                            AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 Console.WriteLine(e);
             }
 
             var playlistUrl = query;
 
             DiscordMessage = await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(AudioPlayerEmbed
-                        .PlaylistAddedToQueue(trackLoadResult, playlistUrl)));
+                .FollowUpAsync(AudioPlayerEmbed
+                        .PlaylistAddedToQueue(trackLoadResult, playlistUrl));
 
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(DiscordMessage.Id);
@@ -311,8 +297,7 @@ public class SoundCloudPlatform : IPlatform
             if (soundcloudTrack == null)
             {
                 var errorMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.AudioTrackError()));
+                    .FollowUpAsync(ErrorEmbed.AudioTrackError());
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -321,8 +306,7 @@ public class SoundCloudPlatform : IPlatform
             if (soundcloudTrack.IsLiveStream)
             {
                 var errorMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.LiveSteamError()));
+                    .FollowUpAsync(ErrorEmbed.LiveSteamError());
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -345,11 +329,9 @@ public class SoundCloudPlatform : IPlatform
             if (player.Queue.IsEmpty)
             {
                 await player.SetVolumeAsync(.50f);
-                DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(
-                            AudioPlayerEmbed.TrackInformation(soundcloudTrack, player))));
-                GuildData.PlayerMessage = DiscordMessage;
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(soundcloudTrack, player));
+                await context.DeleteResponseAsync();
                 return;
             }
 
@@ -361,16 +343,13 @@ public class SoundCloudPlatform : IPlatform
             }
             catch (Exception e)
             {
-                GuildData.PlayerMessage =
-                    await context.FollowUpAsync(
-                        new DiscordFollowupMessageBuilder(
-                            AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 Console.WriteLine(e);
             }
 
             DiscordMessage = await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(soundcloudTrack)));
+                .FollowUpAsync(AudioPlayerEmbed.TrackAddedToQueue(soundcloudTrack));
 
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(DiscordMessage.Id);

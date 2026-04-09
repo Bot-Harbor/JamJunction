@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Lavalink.Platforms.Enums;
@@ -142,8 +142,7 @@ public class SpotifyPlatform : IPlatform
                 if (fullAlbum == null)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.AudioTrackError()));
+                        .FollowUpAsync(ErrorEmbed.AudioTrackError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -182,8 +181,7 @@ public class SpotifyPlatform : IPlatform
                     if (spotifyTrack.IsLiveStream)
                     {
                         var errorMessage = await context
-                            .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                                .AddEmbed(ErrorEmbed.LiveSteamError()));
+                            .FollowUpAsync(ErrorEmbed.LiveSteamError());
                         await Task.Delay(10000);
                         _ = channel.DeleteMessageAsync(errorMessage);
                         return;
@@ -218,11 +216,9 @@ public class SpotifyPlatform : IPlatform
                     await player.Queue.RemoveAtAsync(0);
                     await player.SetVolumeAsync(.50f);
 
-                    DiscordMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                    GuildData.PlayerMessage = DiscordMessage;
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(firstTrack, player));
+                    await context.DeleteResponseAsync();
                     return;
                 }
 
@@ -234,18 +230,15 @@ public class SpotifyPlatform : IPlatform
                 }
                 catch (Exception e)
                 {
-                    GuildData.PlayerMessage =
-                        await context.FollowUpAsync(
-                            new DiscordFollowupMessageBuilder(
-                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                     Console.WriteLine(e);
                 }
 
                 var albumUrl = $"https://open.spotify.com/album/{fullAlbum.Id}";
                 DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(AudioPlayerEmbed
-                            .AlbumAddedToQueue(fullAlbum, albumUrl)));
+                    .FollowUpAsync(AudioPlayerEmbed
+                            .AlbumAddedToQueue(fullAlbum, albumUrl));
 
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
@@ -268,8 +261,7 @@ public class SpotifyPlatform : IPlatform
                 if (fullPlaylist == null)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.AudioTrackError()));
+                        .FollowUpAsync(ErrorEmbed.AudioTrackError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -312,8 +304,7 @@ public class SpotifyPlatform : IPlatform
                     if (spotifyTrack.IsLiveStream)
                     {
                         var errorMessage = await context
-                            .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                                .AddEmbed(ErrorEmbed.LiveSteamError()));
+                            .FollowUpAsync(ErrorEmbed.LiveSteamError());
                         await Task.Delay(10000);
                         _ = channel.DeleteMessageAsync(errorMessage);
                         return;
@@ -348,11 +339,9 @@ public class SpotifyPlatform : IPlatform
                     await player.Queue.RemoveAtAsync(0);
                     await player.SetVolumeAsync(.50f);
 
-                    DiscordMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                    GuildData.PlayerMessage = DiscordMessage;
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(firstTrack, player));
+                    await context.DeleteResponseAsync();
                     return;
                 }
 
@@ -364,18 +353,15 @@ public class SpotifyPlatform : IPlatform
                 }
                 catch (Exception e)
                 {
-                    GuildData.PlayerMessage =
-                        await context.FollowUpAsync(
-                            new DiscordFollowupMessageBuilder(
-                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                     Console.WriteLine(e);
                 }
 
                 var playlistUrl = $"https://open.spotify.com/playlist/{fullPlaylist.Id}";
                 DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(AudioPlayerEmbed
-                            .PlaylistAddedToQueue(fullPlaylist, playlistUrl)));
+                    .FollowUpAsync(AudioPlayerEmbed
+                            .PlaylistAddedToQueue(fullPlaylist, playlistUrl));
 
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
@@ -398,8 +384,7 @@ public class SpotifyPlatform : IPlatform
                 if (fullTrack == null)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.AudioTrackError()));
+                        .FollowUpAsync(ErrorEmbed.AudioTrackError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -436,8 +421,7 @@ public class SpotifyPlatform : IPlatform
                 if (spotifyTrack.IsLiveStream)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.LiveSteamError()));
+                        .FollowUpAsync(ErrorEmbed.LiveSteamError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -460,11 +444,9 @@ public class SpotifyPlatform : IPlatform
                 if (player.Queue.IsEmpty)
                 {
                     await player.SetVolumeAsync(.50f);
-                    DiscordMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                            new DiscordInteractionResponseBuilder(
-                                AudioPlayerEmbed.TrackInformation(spotifyTrack, player))));
-                    GuildData.PlayerMessage = DiscordMessage;
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(spotifyTrack, player));
+                    await context.DeleteResponseAsync();
                     return;
                 }
 
@@ -476,16 +458,13 @@ public class SpotifyPlatform : IPlatform
                 }
                 catch (Exception e)
                 {
-                    GuildData.PlayerMessage =
-                        await context.FollowUpAsync(
-                            new DiscordFollowupMessageBuilder(
-                                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                    GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                     Console.WriteLine(e);
                 }
 
                 DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(spotifyTrack)));
+                    .FollowUpAsync(AudioPlayerEmbed.TrackAddedToQueue(spotifyTrack));
 
                 await Task.Delay(10000);
                 _ = context.DeleteFollowupAsync(DiscordMessage.Id);
@@ -498,8 +477,7 @@ public class SpotifyPlatform : IPlatform
             if (spotifyTrack == null)
             {
                 var errorMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.AudioTrackError()));
+                    .FollowUpAsync(ErrorEmbed.AudioTrackError());
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -508,8 +486,7 @@ public class SpotifyPlatform : IPlatform
             if (spotifyTrack.IsLiveStream)
             {
                 var errorMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.LiveSteamError()));
+                    .FollowUpAsync(ErrorEmbed.LiveSteamError());
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -532,11 +509,9 @@ public class SpotifyPlatform : IPlatform
             if (player.Queue.IsEmpty)
             {
                 await player.SetVolumeAsync(.50f);
-                DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(
-                            AudioPlayerEmbed.TrackInformation(spotifyTrack, player))));
-                GuildData.PlayerMessage = DiscordMessage;
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(spotifyTrack, player));
+                await context.DeleteResponseAsync();
                 return;
             }
 
@@ -548,16 +523,13 @@ public class SpotifyPlatform : IPlatform
             }
             catch (Exception e)
             {
-                GuildData.PlayerMessage =
-                    await context.FollowUpAsync(
-                        new DiscordFollowupMessageBuilder(
-                            AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 Console.WriteLine(e);
             }
 
             DiscordMessage = await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(spotifyTrack)));
+                .FollowUpAsync(AudioPlayerEmbed.TrackAddedToQueue(spotifyTrack));
 
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(DiscordMessage.Id);

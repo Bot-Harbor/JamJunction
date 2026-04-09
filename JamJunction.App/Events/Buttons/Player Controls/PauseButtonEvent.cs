@@ -1,4 +1,4 @@
-﻿using DSharpPlus;
+using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Lavalink;
@@ -92,7 +92,7 @@ public class PauseButtonEvent : IButton
 
             var channel = btnInteractionArgs.Interaction;
 
-            await channel.DeferAsync();
+            await channel.DeferAsync(true);
 
             try
             {
@@ -101,8 +101,7 @@ public class PauseButtonEvent : IButton
                 if (UserVoiceChannel == null)
                 {
                     var errorMessage = await channel.CreateFollowupMessageAsync(
-                        new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.ValidVoiceChannelError()));
+                        errorEmbed.ValidVoiceChannelError());
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
@@ -111,8 +110,7 @@ public class PauseButtonEvent : IButton
             catch (Exception)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.ValidVoiceChannelError()));
+                    errorEmbed.ValidVoiceChannelError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -125,8 +123,7 @@ public class PauseButtonEvent : IButton
             if (botVoiceChannel == false)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoPlayerError()));
+                    errorEmbed.NoPlayerError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -137,8 +134,7 @@ public class PauseButtonEvent : IButton
             if (UserVoiceChannel!.Id != botVoiceState.Channel!.Id)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.SameVoiceChannelError()));
+                    errorEmbed.SameVoiceChannelError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -151,8 +147,7 @@ public class PauseButtonEvent : IButton
             if (player == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoConnectionError()));
+                    errorEmbed.NoConnectionError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -161,8 +156,7 @@ public class PauseButtonEvent : IButton
             if (player!.CurrentTrack == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.PlayerInactiveError()));
+                    errorEmbed.PlayerInactiveError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -189,8 +183,7 @@ public class PauseButtonEvent : IButton
             }
 
             var pauseMessage = await channel.CreateFollowupMessageAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    audioPlayerEmbed.Pause(btnInteractionArgs)));
+                audioPlayerEmbed.Pause());
 
             await Task.Delay(10000);
             _ = channel.DeleteFollowupMessageAsync(pauseMessage.Id);

@@ -1,4 +1,4 @@
-﻿using DSharpPlus.Entities;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Lavalink.Platforms.Enums;
 using JamJunction.App.Lavalink.Platforms.Interfaces;
@@ -125,8 +125,7 @@ public class DeezerPlatform : IPlatform
             if (trackLoadResult.Playlist == null)
             {
                 var errorMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.AudioTrackError()));
+                    .FollowUpAsync(ErrorEmbed.AudioTrackError());
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -166,8 +165,7 @@ public class DeezerPlatform : IPlatform
                 if (deezerTrack.IsLiveStream)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.LiveSteamError()));
+                        .FollowUpAsync(ErrorEmbed.LiveSteamError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -202,11 +200,9 @@ public class DeezerPlatform : IPlatform
                 await player.Queue.RemoveAtAsync(0);
                 await player.SetVolumeAsync(.50f);
 
-                DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(
-                            AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                GuildData.PlayerMessage = DiscordMessage;
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(firstTrack, player));
+                await context.DeleteResponseAsync();
                 return;
             }
 
@@ -218,19 +214,16 @@ public class DeezerPlatform : IPlatform
             }
             catch (Exception e)
             {
-                GuildData.PlayerMessage =
-                    await context.FollowUpAsync(
-                        new DiscordFollowupMessageBuilder(
-                            AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 Console.WriteLine(e);
             }
 
             var albumUrl = query;
 
             DiscordMessage = await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(AudioPlayerEmbed
-                        .AlbumAddedToQueue(trackLoadResult, albumUrl)));
+                .FollowUpAsync(AudioPlayerEmbed
+                        .AlbumAddedToQueue(trackLoadResult, albumUrl));
 
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(DiscordMessage.Id);
@@ -245,8 +238,7 @@ public class DeezerPlatform : IPlatform
             if (trackLoadResult.Playlist == null)
             {
                 var errorMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                        .AddEmbed(ErrorEmbed.AudioTrackError()));
+                    .FollowUpAsync(ErrorEmbed.AudioTrackError());
                 await Task.Delay(10000);
                 _ = channel.DeleteMessageAsync(errorMessage);
                 return;
@@ -282,8 +274,7 @@ public class DeezerPlatform : IPlatform
                 if (deezerTrack.IsLiveStream)
                 {
                     var errorMessage = await context
-                        .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                            .AddEmbed(ErrorEmbed.LiveSteamError()));
+                        .FollowUpAsync(ErrorEmbed.LiveSteamError());
                     await Task.Delay(10000);
                     _ = channel.DeleteMessageAsync(errorMessage);
                     return;
@@ -318,11 +309,9 @@ public class DeezerPlatform : IPlatform
                 await player.Queue.RemoveAtAsync(0);
                 await player.SetVolumeAsync(.50f);
 
-                DiscordMessage = await context
-                    .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                        new DiscordInteractionResponseBuilder(
-                            AudioPlayerEmbed.TrackInformation(firstTrack, player))));
-                GuildData.PlayerMessage = DiscordMessage;
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(firstTrack, player));
+                await context.DeleteResponseAsync();
                 return;
             }
 
@@ -334,19 +323,16 @@ public class DeezerPlatform : IPlatform
             }
             catch (Exception e)
             {
-                GuildData.PlayerMessage =
-                    await context.FollowUpAsync(
-                        new DiscordFollowupMessageBuilder(
-                            AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+                GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                    AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
                 Console.WriteLine(e);
             }
 
             var albumUrl = query;
 
             DiscordMessage = await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(AudioPlayerEmbed
-                        .PlaylistAddedToQueue(trackLoadResult, albumUrl)));
+                .FollowUpAsync(AudioPlayerEmbed
+                        .PlaylistAddedToQueue(trackLoadResult, albumUrl));
 
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(DiscordMessage.Id);
@@ -359,8 +345,7 @@ public class DeezerPlatform : IPlatform
         if (deezerTrack == null)
         {
             var errorMessage = await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(ErrorEmbed.AudioTrackError()));
+                .FollowUpAsync(ErrorEmbed.AudioTrackError());
             await Task.Delay(10000);
             _ = channel.DeleteMessageAsync(errorMessage);
             return;
@@ -369,8 +354,7 @@ public class DeezerPlatform : IPlatform
         if (deezerTrack.IsLiveStream)
         {
             var errorMessage = await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                    .AddEmbed(ErrorEmbed.LiveSteamError()));
+                .FollowUpAsync(ErrorEmbed.LiveSteamError());
             await Task.Delay(10000);
             _ = channel.DeleteMessageAsync(errorMessage);
             return;
@@ -393,11 +377,9 @@ public class DeezerPlatform : IPlatform
         if (player.Queue.IsEmpty)
         {
             await player.SetVolumeAsync(.50f);
-            DiscordMessage = await context
-                .FollowUpAsync(new DiscordFollowupMessageBuilder(
-                    new DiscordInteractionResponseBuilder(
-                        AudioPlayerEmbed.TrackInformation(deezerTrack, player))));
-            GuildData.PlayerMessage = DiscordMessage;
+            GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                AudioPlayerEmbed.TrackInformation(deezerTrack, player));
+            await context.DeleteResponseAsync();
             return;
         }
 
@@ -409,16 +391,13 @@ public class DeezerPlatform : IPlatform
         }
         catch (Exception e)
         {
-            GuildData.PlayerMessage =
-                await context.FollowUpAsync(
-                    new DiscordFollowupMessageBuilder(
-                        AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player)));
+            GuildData.PlayerMessage = await context.Channel.SendMessageAsync(
+                AudioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
             Console.WriteLine(e);
         }
 
         DiscordMessage = await context
-            .FollowUpAsync(new DiscordFollowupMessageBuilder()
-                .AddEmbed(AudioPlayerEmbed.TrackAddedToQueue(deezerTrack)));
+            .FollowUpAsync(AudioPlayerEmbed.TrackAddedToQueue(deezerTrack));
 
         await Task.Delay(10000);
         _ = context.DeleteFollowupAsync(DiscordMessage.Id);

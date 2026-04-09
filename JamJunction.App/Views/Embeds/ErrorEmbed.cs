@@ -1,4 +1,4 @@
-﻿using DSharpPlus.Entities;
+using DSharpPlus.Entities;
 
 namespace JamJunction.App.Views.Embeds;
 
@@ -18,16 +18,16 @@ public class ErrorEmbed
     /// to a valid voice channel to use the command.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the voice channel validation error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the voice channel validation error.
     /// </returns>
-    public DiscordEmbedBuilder ValidVoiceChannelError()
+    public DiscordFollowupMessageBuilder ValidVoiceChannelError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udd0a • You must be in a valid voice channel.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -35,16 +35,16 @@ public class ErrorEmbed
     /// voice channel as the bot to execute the command.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the voice channel mismatch error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the voice channel mismatch error.
     /// </returns>
-    public DiscordEmbedBuilder SameVoiceChannelError()
+    public DiscordFollowupMessageBuilder SameVoiceChannelError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udd0a • You must be in the same voice channel as the bot.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -52,16 +52,16 @@ public class ErrorEmbed
     /// has not been established.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the Lavalink connection error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the Lavalink connection error.
     /// </returns>
-    public DiscordEmbedBuilder NoConnectionError()
+    public DiscordFollowupMessageBuilder NoConnectionError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83c\udf0b • Lavalink connection is not established.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -69,16 +69,16 @@ public class ErrorEmbed
     /// in the current voice channel.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the missing player error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the missing player error.
     /// </returns>
-    public DiscordEmbedBuilder NoPlayerError()
+    public DiscordFollowupMessageBuilder NoPlayerError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udcfb • There is no player in the voice channel.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -86,16 +86,16 @@ public class ErrorEmbed
     /// currently active and no track is playing.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the inactive player error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the inactive player error.
     /// </returns>
-    public DiscordEmbedBuilder PlayerInactiveError()
+    public DiscordFollowupMessageBuilder PlayerInactiveError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udcfb • The player is not active currently. Please queue something.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -103,144 +103,144 @@ public class ErrorEmbed
     /// for the requested track.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the audio lookup error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the audio lookup error.
     /// </returns>
-    public DiscordEmbedBuilder AudioTrackError()
+    public DiscordFollowupMessageBuilder AudioTrackError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\u274c • Failed to find audio data.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
     /// Builds an embed message indicating that livestream content cannot be played.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the livestream playback error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the livestream playback error.
     /// </returns>
-    public DiscordEmbedBuilder LiveSteamError()
+    public DiscordFollowupMessageBuilder LiveSteamError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udd34 • You can not play a livestream.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
     /// Builds an embed message indicating that the volume value must be a whole number.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the invalid volume input error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the invalid volume input error.
     /// </returns>
-    public DiscordEmbedBuilder VolumeNotAnIntegerError()
+    public DiscordFollowupMessageBuilder VolumeNotAnIntegerError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udd0a  •  The number for the volume must be a whole number.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
     /// Builds an embed message indicating that the volume cannot be set above 100.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the maximum volume limit error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the maximum volume limit error.
     /// </returns>
-    public DiscordEmbedBuilder NoVolumeOver100Error()
+    public DiscordFollowupMessageBuilder NoVolumeOver100Error()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udd0a  •  You cannot set the volume above 100.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
     /// Builds an embed message indicating that the volume is already at its maximum level.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the maximum volume state error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the maximum volume state error.
     /// </returns>
-    public DiscordEmbedBuilder MaxVolumeError()
+    public DiscordFollowupMessageBuilder MaxVolumeError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udd0a  •  The volume is already at its maximum.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
     /// Builds an embed message indicating that the volume is already at its minimum level.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the minimum volume state error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the minimum volume state error.
     /// </returns>
-    public DiscordEmbedBuilder MinVolumeError()
+    public DiscordFollowupMessageBuilder MinVolumeError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udd09  •  The volume is already at its minimum.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
     /// Builds an embed message indicating that the audio player is already paused.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbed"/> representing the already-paused error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the already-paused error.
     /// </returns>
-    public DiscordEmbed AlreadyPausedError()
+    public DiscordFollowupMessageBuilder AlreadyPausedError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\u23f8  •  The player is already paused.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
-    
+
     /// <summary>
     /// Builds an embed message indicating that the audio player is already playing.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbed"/> representing the already-playing error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the already-playing error.
     /// </returns>
-    public DiscordEmbed AlreadyPlayingError()
+    public DiscordFollowupMessageBuilder AlreadyPlayingError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "▶  •  The player is already playing.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
     /// Builds an embed message indicating that the seek time must be a whole number.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the invalid seek input error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the invalid seek input error.
     /// </returns>
-    public DiscordEmbedBuilder SeekNotAnIntegerError()
+    public DiscordFollowupMessageBuilder SeekNotAnIntegerError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udd52  •  The number for the time must be a whole number.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -248,9 +248,9 @@ public class ErrorEmbed
     /// exceeds the total duration of the track.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the seek duration error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the seek duration error.
     /// </returns>
-    public DiscordEmbedBuilder SeekLargerThanDurationError()
+    public DiscordFollowupMessageBuilder SeekLargerThanDurationError()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -258,7 +258,7 @@ public class ErrorEmbed
                 "\ud83d\udd52  •  The time you are seeking for is larger than the duration of the track.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -266,16 +266,16 @@ public class ErrorEmbed
     /// available in the queue to skip to.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the skip-to error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the skip-to error.
     /// </returns>
-    public DiscordEmbedBuilder NoTracksToSkipToError()
+    public DiscordFollowupMessageBuilder NoTracksToSkipToError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\u23ed • There are no tracks to skip to.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -283,16 +283,16 @@ public class ErrorEmbed
     /// available in the queue to shuffle.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the shuffle error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the shuffle error.
     /// </returns>
-    public DiscordEmbedBuilder NoTracksToShuffleError()
+    public DiscordFollowupMessageBuilder NoTracksToShuffleError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\u21cc • There are no tracks in the queue to shuffle.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -300,16 +300,16 @@ public class ErrorEmbed
     /// maximum capacity.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the queue full error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the queue full error.
     /// </returns>
-    public DiscordEmbedBuilder QueueIsFullError()
+    public DiscordFollowupMessageBuilder QueueIsFullError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\u2630 • The queue is full. The max capacity is 100 tracks.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -317,16 +317,16 @@ public class ErrorEmbed
     /// available in the queue to remove.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the remove error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the remove error.
     /// </returns>
-    public DiscordEmbedBuilder RemoveError()
+    public DiscordFollowupMessageBuilder RemoveError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\uddd1\ufe0f • There are no tracks in the queue to remove.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -334,16 +334,16 @@ public class ErrorEmbed
     /// and that the bot will attempt to reconnect.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the track load failure error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the track load failure error.
     /// </returns>
-    public DiscordEmbedBuilder TrackFailedToLoadError()
+    public DiscordFollowupMessageBuilder TrackFailedToLoadError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "❌ • Track failed to load. Reattempting to connect in 5 seconds.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -351,16 +351,16 @@ public class ErrorEmbed
     /// a track failed and the audio player has been reset.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the failed retry error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the failed retry error.
     /// </returns>
-    public DiscordEmbedBuilder CouldNotLoadTrackOnAttemptError()
+    public DiscordFollowupMessageBuilder CouldNotLoadTrackOnAttemptError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "❌ • Attempt to load track again failed. The audio player has been reset.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -368,16 +368,16 @@ public class ErrorEmbed
     /// does not exist.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the invalid page number error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the invalid page number error.
     /// </returns>
-    public DiscordEmbedBuilder PageNumberDoesNotExistError()
+    public DiscordFollowupMessageBuilder PageNumberDoesNotExistError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udcc4 • Page number does not exist.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -385,15 +385,15 @@ public class ErrorEmbed
     /// does not exist in the queue.
     /// </summary>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the invalid track error.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the invalid track error.
     /// </returns>
-    public DiscordEmbedBuilder TrackDoesNotExistError()
+    public DiscordFollowupMessageBuilder TrackDoesNotExistError()
     {
         var embed = new DiscordEmbedBuilder
         {
             Description = "\ud83d\udcc4 • Track does not exist in the queue.",
             Color = DiscordColor.Red
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 }

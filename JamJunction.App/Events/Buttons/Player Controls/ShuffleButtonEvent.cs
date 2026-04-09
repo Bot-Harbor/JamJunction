@@ -1,4 +1,4 @@
-﻿using DSharpPlus;
+using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Lavalink;
@@ -94,7 +94,7 @@ public class ShuffleButtonEvent : IButton
 
             var channel = btnInteractionArgs.Interaction;
 
-            await channel.DeferAsync();
+            await channel.DeferAsync(true);
 
             try
             {
@@ -103,8 +103,7 @@ public class ShuffleButtonEvent : IButton
                 if (UserVoiceChannel == null)
                 {
                     var errorMessage = await channel.CreateFollowupMessageAsync(
-                        new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.ValidVoiceChannelError()));
+                        errorEmbed.ValidVoiceChannelError());
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
@@ -113,8 +112,7 @@ public class ShuffleButtonEvent : IButton
             catch (Exception)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.ValidVoiceChannelError()));
+                    errorEmbed.ValidVoiceChannelError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -127,8 +125,7 @@ public class ShuffleButtonEvent : IButton
             if (botVoiceChannel == false)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoPlayerError()));
+                    errorEmbed.NoPlayerError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -139,8 +136,7 @@ public class ShuffleButtonEvent : IButton
             if (UserVoiceChannel!.Id != botVoiceState.Channel!.Id)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.SameVoiceChannelError()));
+                    errorEmbed.SameVoiceChannelError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -153,8 +149,7 @@ public class ShuffleButtonEvent : IButton
             if (player == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoConnectionError()));
+                    errorEmbed.NoConnectionError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -163,8 +158,7 @@ public class ShuffleButtonEvent : IButton
             if (player!.CurrentTrack == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.PlayerInactiveError()));
+                    errorEmbed.PlayerInactiveError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -173,8 +167,7 @@ public class ShuffleButtonEvent : IButton
             if (player.Queue.IsEmpty)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoTracksToShuffleError()));
+                    errorEmbed.NoTracksToShuffleError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;

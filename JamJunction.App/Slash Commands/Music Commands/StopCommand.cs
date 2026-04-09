@@ -1,4 +1,4 @@
-﻿using DSharpPlus.Entities;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
@@ -59,7 +59,7 @@ public class StopCommand : ApplicationCommandModule
     [SlashCommand("stop", "Stops the playback.")]
     public async Task StopCommandAsync(InteractionContext context)
     {
-        await context.DeferAsync();
+        await context.DeferAsync(true);
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
@@ -69,9 +69,7 @@ public class StopCommand : ApplicationCommandModule
 
         if (userVoiceChannel == null)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.ValidVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -82,9 +80,7 @@ public class StopCommand : ApplicationCommandModule
 
         if (botVoiceChannel == false)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.NoPlayerError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -92,9 +88,7 @@ public class StopCommand : ApplicationCommandModule
 
         if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.SameVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -106,9 +100,7 @@ public class StopCommand : ApplicationCommandModule
 
         if (player == null)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.NoConnectionError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -116,9 +108,7 @@ public class StopCommand : ApplicationCommandModule
 
         if (player!.CurrentTrack == null)
         {
-            var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.PlayerInactiveError()));
+            var errorMessage = await context.FollowUpAsync(errorEmbed.PlayerInactiveError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -126,9 +116,7 @@ public class StopCommand : ApplicationCommandModule
 
         await player!.StopAsync();
 
-        var stopMessage = await context.FollowUpAsync(
-            new DiscordFollowupMessageBuilder().AddEmbed(
-                audioPlayerEmbed.Stop(context)));
+        var stopMessage = await context.FollowUpAsync(audioPlayerEmbed.Stop());
 
         await Task.Delay(10000);
         _ = context.DeleteFollowupAsync(stopMessage.Id);

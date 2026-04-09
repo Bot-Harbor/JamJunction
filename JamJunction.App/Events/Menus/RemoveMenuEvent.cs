@@ -1,4 +1,4 @@
-﻿using DSharpPlus;
+using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Events.Menus.Interfaces;
@@ -91,7 +91,7 @@ public class RemoveMenuEvent : IMenu
 
             var channel = menuInteractionArgs.Interaction;
 
-            await channel.DeferAsync();
+            await channel.DeferAsync(true);
 
             try
             {
@@ -100,8 +100,7 @@ public class RemoveMenuEvent : IMenu
                 if (UserVoiceChannel == null)
                 {
                     var errorMessage = await channel.CreateFollowupMessageAsync(
-                        new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.ValidVoiceChannelError()));
+                        errorEmbed.ValidVoiceChannelError());
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
@@ -110,8 +109,7 @@ public class RemoveMenuEvent : IMenu
             catch (Exception)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.ValidVoiceChannelError()));
+                    errorEmbed.ValidVoiceChannelError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -124,8 +122,7 @@ public class RemoveMenuEvent : IMenu
             if (botVoiceChannel == false)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoPlayerError()));
+                    errorEmbed.NoPlayerError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -136,8 +133,7 @@ public class RemoveMenuEvent : IMenu
             if (UserVoiceChannel!.Id != botVoiceState.Channel!.Id)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.SameVoiceChannelError()));
+                    errorEmbed.SameVoiceChannelError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -150,8 +146,7 @@ public class RemoveMenuEvent : IMenu
             if (player == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoConnectionError()));
+                    errorEmbed.NoConnectionError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -160,8 +155,7 @@ public class RemoveMenuEvent : IMenu
             if (player!.CurrentTrack == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.PlayerInactiveError()));
+                    errorEmbed.PlayerInactiveError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -192,8 +186,7 @@ public class RemoveMenuEvent : IMenu
                     }
 
                     var removeMenuMessage = await channel.CreateFollowupMessageAsync(
-                        new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.Remove(menuInteractionArgs,
-                            removedTrack)));
+                        audioPlayerEmbed.Remove(removedTrack));
 
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(removeMenuMessage.Id);
@@ -207,7 +200,7 @@ public class RemoveMenuEvent : IMenu
                 await channel.DeleteFollowupMessageAsync(userData.ViewQueueMessage.Id);
 
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(errorEmbed.TrackDoesNotExistError()));
+                    errorEmbed.TrackDoesNotExistError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
             }

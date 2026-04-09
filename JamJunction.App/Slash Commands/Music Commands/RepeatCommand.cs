@@ -1,4 +1,4 @@
-﻿using DSharpPlus.Entities;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Slash_Commands.Music_Commands.Enums;
@@ -74,7 +74,7 @@ public class RepeatCommand : ApplicationCommandModule
         [Option("mode", "Select the repeating mode.")]
         RepeatingMode repeatingMode = default)
     {
-        await context.DeferAsync();
+        await context.DeferAsync(true);
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
@@ -85,8 +85,7 @@ public class RepeatCommand : ApplicationCommandModule
         if (userVoiceChannel == null)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelError()));
+                errorEmbed.ValidVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -98,8 +97,7 @@ public class RepeatCommand : ApplicationCommandModule
         if (botVoiceChannel == false)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerError()));
+                errorEmbed.NoPlayerError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -108,8 +106,7 @@ public class RepeatCommand : ApplicationCommandModule
         if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelError()));
+                errorEmbed.SameVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -122,8 +119,7 @@ public class RepeatCommand : ApplicationCommandModule
         if (player == null)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionError()));
+                errorEmbed.NoConnectionError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -132,8 +128,7 @@ public class RepeatCommand : ApplicationCommandModule
         if (player!.CurrentTrack == null)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.PlayerInactiveError()));
+                errorEmbed.PlayerInactiveError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;

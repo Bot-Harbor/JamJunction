@@ -71,8 +71,7 @@ public class SkipToCommand : ApplicationCommandModule
         if (userVoiceChannel == null)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelError()));
+                errorEmbed.ValidVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -84,8 +83,7 @@ public class SkipToCommand : ApplicationCommandModule
         if (botVoiceChannel == false)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerError()));
+                errorEmbed.NoPlayerError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -94,8 +92,7 @@ public class SkipToCommand : ApplicationCommandModule
         if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelError()));
+                errorEmbed.SameVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -108,8 +105,7 @@ public class SkipToCommand : ApplicationCommandModule
         if (player == null)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionError()));
+                errorEmbed.NoConnectionError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -118,8 +114,7 @@ public class SkipToCommand : ApplicationCommandModule
         if (player.Queue.IsEmpty)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoTracksToSkipToError()));
+                errorEmbed.NoTracksToSkipToError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;

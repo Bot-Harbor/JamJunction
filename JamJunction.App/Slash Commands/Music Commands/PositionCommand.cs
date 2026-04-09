@@ -1,4 +1,4 @@
-﻿using DSharpPlus.Entities;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
@@ -59,7 +59,7 @@ public class PositionCommand : ApplicationCommandModule
     [SlashCommand("position", "Gets the current track position.")]
     public async Task PositionAsync(InteractionContext context)
     {
-        await context.DeferAsync();
+        await context.DeferAsync(true);
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
@@ -70,8 +70,7 @@ public class PositionCommand : ApplicationCommandModule
         if (userVoiceChannel == null)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelError()));
+                errorEmbed.ValidVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -83,8 +82,7 @@ public class PositionCommand : ApplicationCommandModule
         if (botVoiceChannel == false)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerError()));
+                errorEmbed.NoPlayerError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -93,8 +91,7 @@ public class PositionCommand : ApplicationCommandModule
         if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelError()));
+                errorEmbed.SameVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -107,8 +104,7 @@ public class PositionCommand : ApplicationCommandModule
         if (player == null)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionError()));
+                errorEmbed.NoConnectionError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -117,8 +113,7 @@ public class PositionCommand : ApplicationCommandModule
         if (player!.CurrentTrack == null)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.PlayerInactiveError()));
+                errorEmbed.PlayerInactiveError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;

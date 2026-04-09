@@ -1,4 +1,4 @@
-﻿using DSharpPlus;
+using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
 using JamJunction.App.Events.Menus.Interfaces;
@@ -102,7 +102,7 @@ public class FilterMenuEvent : IMenu
 
             var channel = menuInteractionArgs.Interaction;
 
-            await channel.DeferAsync();
+            await channel.DeferAsync(true);
 
             try
             {
@@ -111,8 +111,7 @@ public class FilterMenuEvent : IMenu
                 if (UserVoiceChannel == null)
                 {
                     var errorMessage = await channel.CreateFollowupMessageAsync(
-                        new DiscordFollowupMessageBuilder().AddEmbed(
-                            errorEmbed.ValidVoiceChannelError()));
+                        errorEmbed.ValidVoiceChannelError());
                     await Task.Delay(10000);
                     _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                     return;
@@ -121,8 +120,7 @@ public class FilterMenuEvent : IMenu
             catch (Exception)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.ValidVoiceChannelError()));
+                    errorEmbed.ValidVoiceChannelError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -135,8 +133,7 @@ public class FilterMenuEvent : IMenu
             if (botVoiceChannel == false)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoPlayerError()));
+                    errorEmbed.NoPlayerError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -147,8 +144,7 @@ public class FilterMenuEvent : IMenu
             if (UserVoiceChannel!.Id != botVoiceState.Channel!.Id)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.SameVoiceChannelError()));
+                    errorEmbed.SameVoiceChannelError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -161,8 +157,7 @@ public class FilterMenuEvent : IMenu
             if (player == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.NoConnectionError()));
+                    errorEmbed.NoConnectionError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -171,8 +166,7 @@ public class FilterMenuEvent : IMenu
             if (player!.CurrentTrack == null)
             {
                 var errorMessage = await channel.CreateFollowupMessageAsync(
-                    new DiscordFollowupMessageBuilder().AddEmbed(
-                        errorEmbed.PlayerInactiveError()));
+                    errorEmbed.PlayerInactiveError());
                 await Task.Delay(10000);
                 _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
                 return;
@@ -204,8 +198,7 @@ public class FilterMenuEvent : IMenu
                         }
 
                         filterMessage = await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(
-                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🔄 Reset")));
+                            audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🔄 Reset"));
 
                         await Task.Delay(10000);
                         _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
@@ -238,8 +231,7 @@ public class FilterMenuEvent : IMenu
                         }
 
                         filterMessage = await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(
-                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🌙 Nightcore")));
+                            audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🌙 Nightcore"));
 
                         await Task.Delay(10000);
                         _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
@@ -271,8 +263,7 @@ public class FilterMenuEvent : IMenu
                         }
 
                         filterMessage = await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(
-                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "️8️ 8D")));
+                            audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🎧 8D"));
 
                         await Task.Delay(10000);
                         _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
@@ -306,8 +297,7 @@ public class FilterMenuEvent : IMenu
                         }
 
                         filterMessage = await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(
-                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🌊 Vaporwave")));
+                            audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🌊 Vaporwave"));
 
                         await Task.Delay(10000);
                         _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
@@ -352,8 +342,7 @@ public class FilterMenuEvent : IMenu
                         }
 
                         filterMessage = await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(
-                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🎤 Karaoke")));
+                            audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🎤 Karaoke"));
 
                         await Task.Delay(10000);
                         _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
@@ -385,8 +374,7 @@ public class FilterMenuEvent : IMenu
                         }
 
                         filterMessage = await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(
-                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🕒 Slow Motion")));
+                            audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🕒 Slow Motion"));
 
                         await Task.Delay(10000);
                         _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);
@@ -411,8 +399,7 @@ public class FilterMenuEvent : IMenu
                         }
 
                         filterMessage = await channel.CreateFollowupMessageAsync(
-                            new DiscordFollowupMessageBuilder().AddEmbed(
-                                audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🔄 Reset")));
+                            audioPlayerEmbed.BuildFilter(menuInteractionArgs, "🔄 Reset"));
 
                         await Task.Delay(10000);
                         _ = channel.DeleteFollowupMessageAsync(filterMessage.Id);

@@ -77,18 +77,12 @@ public class AudioPlayerEmbed
 
         var uri = track.Uri!.AbsoluteUri;
 
-        if (track.Title.Length > 35)
-        {
-            embed.Description = $"💿  •  **Title**: [{track.Title.Substring(0, 35)}...]({uri})\n" +
-                                $"🎙️  •  **Artist**: {track.Author.Substring(0, 35)}\n" +
-                                $"{slider}";
-        }
-        else
-        {
-            embed.Description = $"💿  •  **Title**: [{track.Title}]({uri})\n" +
-                                $"🎙️  •  **Artist**: {track.Author}\n" +
-                                $"{slider}";
-        }
+        var title = track.Title.Length > 35 ? $"{track.Title.Substring(0, 35)}..." : track.Title;
+        var author = track.Author.Length > 35 ? $"{track.Author.Substring(0, 35)}..." : track.Author;
+
+        embed.Description = $"💿  •  **Title**: [{title}]({uri})\n" +
+                            $"🎙️  •  **Artist**: {author}\n" +
+                            $"{slider}";
 
         while (true)
         {
@@ -395,7 +389,7 @@ public class AudioPlayerEmbed
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> representing the queued track.
     /// </returns>
-    public DiscordEmbedBuilder TrackAddedToQueue(LavalinkTrack track)
+    public DiscordFollowupMessageBuilder TrackAddedToQueue(LavalinkTrack track)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -403,7 +397,7 @@ public class AudioPlayerEmbed
             Description = $"ılı   •  [{track!.Title}]({track.Uri}) - By **{track.Author}**",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -418,7 +412,7 @@ public class AudioPlayerEmbed
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> representing the queued album.
     /// </returns>
-    public DiscordEmbedBuilder AlbumAddedToQueue(FullAlbum fullAlbum, string albumUrl)
+    public DiscordFollowupMessageBuilder AlbumAddedToQueue(FullAlbum fullAlbum, string albumUrl)
     {
         var artistName = fullAlbum.Artists.FirstOrDefault()!.Name;
 
@@ -428,7 +422,7 @@ public class AudioPlayerEmbed
             Description = $"ılı   •  [{fullAlbum.Name}]({albumUrl}) - By **{artistName}**",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -444,7 +438,7 @@ public class AudioPlayerEmbed
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> representing the queued album.
     /// </returns>
-    public DiscordEmbedBuilder AlbumAddedToQueue(TrackLoadResult trackLoadResult, string albumUrl)
+    public DiscordFollowupMessageBuilder AlbumAddedToQueue(TrackLoadResult trackLoadResult, string albumUrl)
     {
         var albumName = trackLoadResult.Playlist!.Name;
         var authorName = trackLoadResult.Track!.Author;
@@ -455,7 +449,7 @@ public class AudioPlayerEmbed
             Description = $"ılı   •  [{albumName}]({albumUrl}) - By **{authorName}**",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -470,7 +464,7 @@ public class AudioPlayerEmbed
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> representing the queued playlist.
     /// </returns>
-    public DiscordEmbedBuilder PlaylistAddedToQueue(FullPlaylist fullPlaylist, string playlistUrl)
+    public DiscordFollowupMessageBuilder PlaylistAddedToQueue(FullPlaylist fullPlaylist, string playlistUrl)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -478,7 +472,7 @@ public class AudioPlayerEmbed
             Description = $"ılı   •  [{fullPlaylist.Name}]({playlistUrl}) - By **{fullPlaylist.Owner!.DisplayName}**",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -490,7 +484,7 @@ public class AudioPlayerEmbed
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> representing the queued playlist.
     /// </returns>
-    public DiscordEmbedBuilder PlaylistAddedToQueue(Playlist playlist)
+    public DiscordFollowupMessageBuilder PlaylistAddedToQueue(Playlist playlist)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -498,7 +492,7 @@ public class AudioPlayerEmbed
             Description = $"ılı   •  [{playlist.Title}]({playlist.Url})",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -513,7 +507,7 @@ public class AudioPlayerEmbed
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> representing the queued playlist.
     /// </returns>
-    public DiscordEmbedBuilder PlaylistAddedToQueue(TrackLoadResult playlist, string playlistUrl)
+    public DiscordFollowupMessageBuilder PlaylistAddedToQueue(TrackLoadResult playlist, string playlistUrl)
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -521,121 +515,55 @@ public class AudioPlayerEmbed
             Description = $"ılı   •  [{playlist.Playlist!.Name}]({playlistUrl})",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
-    /// Builds an embed message indicating that a track was paused using a slash command.
+    /// Builds an embed message indicating that a track has been paused.
     /// </summary>
-    /// <param name="context">
-    /// The <see cref="InteractionContext"/> containing the user who paused the track.
-    /// </param>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the pause action.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the pause action.
     /// </returns>
-    public DiscordEmbedBuilder Pause(InteractionContext context)
+    public DiscordFollowupMessageBuilder Pause()
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"⏸  • ``{context.Member.Username}`` paused the track.",
+            Description = "⏸  •  The track has been paused.",
             Color = DiscordColor.Yellow
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
-    /// Builds an embed message indicating that a track was paused using a button interaction.
+    /// Builds an embed message indicating that a track has been resumed.
     /// </summary>
-    /// <param name="btnInteractionArgs">
-    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the button.
-    /// </param>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the pause action.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the resume action.
     /// </returns>
-    public DiscordEmbedBuilder Pause(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordFollowupMessageBuilder Resume()
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"⏸  • ``{btnInteractionArgs.User.Username}`` paused the track.",
-            Color = DiscordColor.Yellow
-        };
-        return embed;
-    }
-
-    /// <summary>
-    /// Builds an embed message indicating that a track was resumed using a slash command.
-    /// </summary>
-    /// <param name="context">
-    /// The <see cref="InteractionContext"/> containing the user who resumed the track.
-    /// </param>
-    /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the resume action.
-    /// </returns>
-    public DiscordEmbedBuilder Resume(InteractionContext context)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description = $"▶  • ``{context.Member.Username}`` resumed the track.",
+            Description = "▶  •  The track has been resumed.",
             Color = DiscordColor.Green
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
-    /// Builds an embed message indicating that a track was resumed using a button interaction.
+    /// Builds an embed message indicating that the audio player has been stopped.
     /// </summary>
-    /// <param name="btnInteractionArgs">
-    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the button.
-    /// </param>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the resume action.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the stop action.
     /// </returns>
-    public DiscordEmbedBuilder Resume(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordFollowupMessageBuilder Stop()
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"▶  • ``{btnInteractionArgs.User.Username}`` resumed the track.",
-            Color = DiscordColor.Green
-        };
-        return embed;
-    }
-
-    /// <summary>
-    /// Builds an embed message indicating that the audio player was stopped using a slash command.
-    /// </summary>
-    /// <param name="context">
-    /// The <see cref="InteractionContext"/> containing the user who stopped the player.
-    /// </param>
-    /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the stop action.
-    /// </returns> 
-    public DiscordEmbedBuilder Stop(InteractionContext context)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description = $"⏹   • ``{context.Member.Username}`` stopped the player.",
+            Description = "⏹  •  The player has been stopped.",
             Color = DiscordColor.Red
         };
-        return embed;
-    }
-
-    /// <summary>
-    /// Builds an embed message indicating that the audio player was stopped using a button interaction.
-    /// </summary>
-    /// <param name="btnInteractionArgs">
-    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the button.
-    /// </param>
-    /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the stop action.
-    /// </returns>
-    public DiscordEmbedBuilder Stop(ComponentInteractionCreateEventArgs btnInteractionArgs)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description = $"⏹   • ``{btnInteractionArgs.User.Username}`` stopped the player.",
-            Color = DiscordColor.Red
-        };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -645,7 +573,7 @@ public class AudioPlayerEmbed
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> displaying the "nothing playing" message.
     /// </returns>
-    public DiscordEmbedBuilder QueueSomething()
+    public DiscordFollowupMessageBuilder QueueSomething()
     {
         var embed = new DiscordEmbedBuilder
         {
@@ -659,129 +587,90 @@ public class AudioPlayerEmbed
                 Url = "https://media.lordicon.com/icons/wired/gradient/29-play-pause-circle.gif"
             }
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
-    /// Builds an embed message indicating that a user changed the player's volume using a slash command.
+    /// Builds an embed message indicating that the player's volume has been changed.
     /// </summary>
     /// <param name="volume">
     /// The new volume level applied to the audio player.
     /// </param>
-    /// <param name="context">
-    /// The <see cref="InteractionContext"/> containing the user who executed the command.
-    /// </param>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the volume change action.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the volume change action.
     /// </returns>
-    public DiscordEmbedBuilder Volume(double volume, InteractionContext context)
+    public DiscordFollowupMessageBuilder Volume(double volume)
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{context.Member.Username}`` changed the volume to ``{volume}``.",
+            Description = $"🔊  •  Volume changed to `{volume}`.",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
-    /// Builds an embed message indicating that the volume was decreased using a button interaction.
+    /// Builds an embed message indicating that the volume has been decreased.
     /// </summary>
-    /// <param name="btnInteractionArgs">
-    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the volume decrease.
-    /// </param>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the volume decrease action.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the volume decrease action.
     /// </returns>
-    public DiscordEmbedBuilder VolumeDecreased(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordFollowupMessageBuilder VolumeDecreased()
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔉  •  ``{btnInteractionArgs.User.Username}`` decreased the volume.",
+            Description = "🔉  •  Volume decreased.",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
-    /// Builds an embed message indicating that the volume was increased using a button interaction.
+    /// Builds an embed message indicating that the volume has been increased.
     /// </summary>
-    /// <param name="btnInteractionArgs">
-    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the volume increase.
-    /// </param>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the volume increase action.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the volume increase action.
     /// </returns>
-    public DiscordEmbedBuilder VolumeIncreased(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordFollowupMessageBuilder VolumeIncreased()
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description = $"🔊  •  ``{btnInteractionArgs.User.Username}`` increased the volume.",
+            Description = "🔊  •  Volume increased.",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
-    /// Builds an embed message indicating that a user restarted the currently playing track
-    /// using a slash command.
+    /// Builds an embed message indicating that the current track has been restarted.
     /// </summary>
-    /// <param name="context">
-    /// The <see cref="InteractionContext"/> containing the user who restarted the track.
-    /// </param>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the restart action.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the restart action.
     /// </returns>
-    public DiscordEmbedBuilder Restart(InteractionContext context)
+    public DiscordFollowupMessageBuilder Restart()
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description =
-                $"↻   • ``{context.Member.Username}`` restarted the track.",
+            Description = "↻  •  The track has been restarted.",
             Color = DiscordColor.Orange
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
-    /// Builds an embed message indicating that a user restarted the currently playing track
-    /// using a button interaction.
+    /// Builds an embed message indicating that Jam Junction has been disconnected from the voice channel.
     /// </summary>
-    /// <param name="btnInteractionArgs">
-    /// The <see cref="ComponentInteractionCreateEventArgs"/> containing the user who triggered the restart.
-    /// </param>
     /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the restart action.
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the disconnect action.
     /// </returns>
-    public DiscordEmbedBuilder Restart(ComponentInteractionCreateEventArgs btnInteractionArgs)
+    public DiscordFollowupMessageBuilder Leave()
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description =
-                $"↻   • ``{btnInteractionArgs.User.Username}`` restarted the track.",
-            Color = DiscordColor.Orange
-        };
-        return embed;
-    }
-
-    /// <summary>
-    /// Builds an embed message indicating that a user disconnected the bot from the voice channel.
-    /// </summary>
-    /// <param name="context">
-    /// The <see cref="InteractionContext"/> containing the user who disconnected the bot.
-    /// </param>
-    /// <returns>
-    /// A <see cref="DiscordEmbedBuilder"/> representing the disconnect action.
-    /// </returns>
-    public DiscordEmbedBuilder Leave(InteractionContext context)
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description =
-                $"🔌   • ``{context.Member.Username}`` disconnected Jam Junction.",
+            Description = "🔌  •  Jam Junction has been disconnected.",
             Color = DiscordColor.DarkRed
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -2299,7 +2188,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"⇌  • ``{context.Member.Username}`` shuffled the queue.",
+                $"⇌  •  The queue was shuffled.",
             Color = DiscordColor.Cyan
         };
         return embed;
@@ -2319,7 +2208,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"⇌  • ``{btnInteractionArgs.User.Username}`` shuffled the queue.",
+                $"⇌  •  The queue was shuffled.",
             Color = DiscordColor.Cyan
         };
         return embed;
@@ -2339,7 +2228,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"⏭  • ``{context.Member.Username}`` skipped to the next track.",
+                $"⏭  •  Skipped to the next track.",
             Color = DiscordColor.Cyan
         };
         return embed;
@@ -2359,7 +2248,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"⏭  • ``{btnInteractionArgs.User.Username}`` skipped to the next track.",
+                $"⏭  •  Skipped to the next track.",
             Color = DiscordColor.Cyan
         };
         return embed;
@@ -2377,18 +2266,16 @@ public class AudioPlayerEmbed
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> representing the skip-to-track action.
     /// </returns>
-    public DiscordEmbedBuilder SkipTo(ComponentInteractionCreateEventArgs menuInteractionArgs,
-        QueuedLavalinkPlayer queuedLavalinkPlayer)
+    public DiscordFollowupMessageBuilder SkipTo(QueuedLavalinkPlayer queuedLavalinkPlayer)
     {
         var track = queuedLavalinkPlayer.CurrentItem;
 
         var embed = new DiscordEmbedBuilder
         {
-            Description =
-                $"⏭  • ``{menuInteractionArgs.User.Username}`` skipped to ``{track!.Track!.Title}``.",
+            Description = $"⏭  •  Skipped to ``{track!.Track!.Title}``.",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -2410,7 +2297,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🕒   • ``{context.Member.Username}`` changed the track position to ``{time}``.",
+                $"🕒   •  Track position changed to ``{time}``.",
             Color = DiscordColor.Cyan
         };
         return embed;
@@ -2469,21 +2356,21 @@ public class AudioPlayerEmbed
             embed = new DiscordEmbedBuilder
             {
                 Description =
-                    $" ⇄  • ``{context.Member.Username}`` enabled repeat track mode.",
+                    $" ⇄  •  Repeat track mode enabled.",
                 Color = DiscordColor.Cyan
             };
         else if (queuedLavalinkPlayer.RepeatMode == TrackRepeatMode.Queue)
             embed = new DiscordEmbedBuilder
             {
                 Description =
-                    $" ⇄  • ``{context.Member.Username}`` enabled repeat queue mode.",
+                    $" ⇄  •  Repeat queue mode enabled.",
                 Color = DiscordColor.Cyan
             };
         else
             embed = new DiscordEmbedBuilder
             {
                 Description =
-                    $" ⇄  • ``{context.Member.Username}`` disabled repeat mode.",
+                    $" ⇄  •  Repeat mode disabled.",
                 Color = DiscordColor.Cyan
             };
 
@@ -2504,7 +2391,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $" ⇄  • ``{btnInteractionArgs.User.Username}`` enabled repeat track mode.",
+                $" ⇄  •  Repeat track mode enabled.",
             Color = DiscordColor.Cyan
         };
 
@@ -2525,7 +2412,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $" ⇄  • ``{btnInteractionArgs.User.Username}`` enabled repeat queue mode.",
+                $" ⇄  •  Repeat queue mode enabled.",
             Color = DiscordColor.Cyan
         };
 
@@ -2546,7 +2433,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $" ⇄  • ``{btnInteractionArgs.User.Username}`` disabled repeat mode.",
+                $" ⇄  •  Repeat mode disabled.",
             Color = DiscordColor.Cyan
         };
 
@@ -2565,15 +2452,14 @@ public class AudioPlayerEmbed
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> representing the filter change action.
     /// </returns>
-    public DiscordEmbedBuilder BuildFilter(ComponentInteractionCreateEventArgs menuInteractionArgs, string filter)
+    public DiscordFollowupMessageBuilder BuildFilter(ComponentInteractionCreateEventArgs menuInteractionArgs, string filter)
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description =
-                $"၊||၊  • ``{menuInteractionArgs.User.Username}`` changed the filter to ``{filter}``.",
+            Description = $"၊||၊  •  Filter changed to ``{filter}``.",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 
     /// <summary>
@@ -2588,15 +2474,13 @@ public class AudioPlayerEmbed
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> representing the track removal action.
     /// </returns>
-    public DiscordEmbedBuilder Remove(ComponentInteractionCreateEventArgs menuInteractionArgs,
-        LavalinkTrack removedTrack)
+    public DiscordFollowupMessageBuilder Remove(LavalinkTrack removedTrack)
     {
         var embed = new DiscordEmbedBuilder
         {
-            Description =
-                $"🗑️  • ``{menuInteractionArgs.User.Username}`` removed ``{removedTrack.Title}`` from the queue.",
+            Description = $"🗑️  •  ``{removedTrack.Title}`` removed from the queue.",
             Color = DiscordColor.Cyan
         };
-        return embed;
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
 }

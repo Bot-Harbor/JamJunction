@@ -1,4 +1,5 @@
 ﻿using DSharpPlus;
+using DSharpPlus.Entities;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
@@ -78,7 +79,7 @@ public class TrackStuckEvent
 
         var errorEmbed = new ErrorEmbed();
 
-        var errorMessage = await channel.SendMessageAsync(errorEmbed.TrackFailedToLoadError());
+        var errorMessage = await channel.SendMessageAsync(new DiscordMessageBuilder(errorEmbed.TrackFailedToLoadError()));
 
         await Task.Delay(5000);
 
@@ -94,7 +95,7 @@ public class TrackStuckEvent
 
         if (player.State == PlayerState.NotPlaying)
         {
-            errorMessage = await channel.SendMessageAsync(errorEmbed.CouldNotLoadTrackOnAttemptError());
+            errorMessage = await channel.SendMessageAsync(new DiscordMessageBuilder(errorEmbed.CouldNotLoadTrackOnAttemptError()));
 
             await Task.Delay(10000);
 

@@ -1,4 +1,4 @@
-﻿using DSharpPlus.Entities;
+using DSharpPlus.Entities;
 using DSharpPlus.SlashCommands;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
@@ -65,7 +65,7 @@ public class SeekCommand : ApplicationCommandModule
         [Option("time", "Change the current position of the track in seconds.")]
         double time)
     {
-        await context.DeferAsync();
+        await context.DeferAsync(true);
 
         var audioPlayerEmbed = new AudioPlayerEmbed();
         var errorEmbed = new ErrorEmbed();
@@ -76,8 +76,7 @@ public class SeekCommand : ApplicationCommandModule
         if (userVoiceChannel == null)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.ValidVoiceChannelError()));
+                errorEmbed.ValidVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -89,8 +88,7 @@ public class SeekCommand : ApplicationCommandModule
         if (botVoiceChannel == false)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoPlayerError()));
+                errorEmbed.NoPlayerError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -99,8 +97,7 @@ public class SeekCommand : ApplicationCommandModule
         if (userVoiceChannel.Id != botVoiceState.Channel!.Id)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SameVoiceChannelError()));
+                errorEmbed.SameVoiceChannelError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -113,8 +110,7 @@ public class SeekCommand : ApplicationCommandModule
         if (player == null)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.NoConnectionError()));
+                errorEmbed.NoConnectionError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -123,8 +119,7 @@ public class SeekCommand : ApplicationCommandModule
         if (player!.CurrentTrack == null)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.PlayerInactiveError()));
+                errorEmbed.PlayerInactiveError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -135,8 +130,7 @@ public class SeekCommand : ApplicationCommandModule
         if (!isInt)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SeekNotAnIntegerError()));
+                errorEmbed.SeekNotAnIntegerError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
@@ -147,8 +141,7 @@ public class SeekCommand : ApplicationCommandModule
         if (time > duration)
         {
             var errorMessage = await context.FollowUpAsync(
-                new DiscordFollowupMessageBuilder().AddEmbed(
-                    errorEmbed.SeekLargerThanDurationError()));
+                errorEmbed.SeekLargerThanDurationError());
             await Task.Delay(10000);
             _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
