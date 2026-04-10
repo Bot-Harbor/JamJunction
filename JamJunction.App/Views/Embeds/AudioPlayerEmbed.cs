@@ -283,11 +283,16 @@ public class AudioPlayerEmbed
             ButtonStyle.Secondary, "playlist", "📋"
         );
 
+        var seekButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Secondary, "seek-autofill", "🔍"
+        );
+
         var buttons = new List<DiscordComponent>
         {
             pauseButton, previousTrackButton, resumeButton, skipButton, stopButton,
             viewQueueButton, volumeDownButton, volumeUpButton, restartButton, repeatButton,
-            shuffleButton, likeButton, helpButton, playlistButton
+            shuffleButton, likeButton, helpButton, playlistButton, seekButton
         };
 
         var componentsRows = new List<List<DiscordComponent>>();
@@ -2366,6 +2371,21 @@ public class AudioPlayerEmbed
     }
 
     /// <summary>
+    /// Builds an embed prompting the user to click the seek command mention to auto-fill it in the text box.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> containing the seek command mention.
+    /// </returns>
+    public DiscordEmbedBuilder SeekAutofill()
+    {
+        return new DiscordEmbedBuilder
+        {
+            Description = "🔍  •  Click </seek:1186000603273510952> to seek to a position in the track.",
+            Color = DiscordColor.Cyan
+        };
+    }
+
+    /// <summary>
     /// Builds an embed message indicating that a user skipped directly to a specific track in the queue.
     /// </summary>
     /// <param name="menuInteractionArgs">
@@ -2408,7 +2428,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description =
-                $"🕒   •  Track position changed to ``{time}``.",
+                $"🔍   •  Track position changed to ``{time}``.",
             Color = DiscordColor.Cyan
         };
         return embed;
