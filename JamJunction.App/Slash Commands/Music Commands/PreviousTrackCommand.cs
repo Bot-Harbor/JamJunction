@@ -131,20 +131,6 @@ public class PreviousTrackCommand : ApplicationCommandModule
 
         await player.PlayAsync(previousTrack!, false);
 
-        var guildData = Bot.GuildData[guildId];
-
-        try
-        {
-            var updatedPlayerMessage = await context.Channel.GetMessageAsync(guildData.PlayerMessage.Id);
-            await updatedPlayerMessage.ModifyAsync(
-                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
-        }
-        catch (Exception)
-        {
-            guildData.PlayerMessage = await context.Channel.SendMessageAsync(
-                audioPlayerEmbed.TrackInformation(player.CurrentTrack, player));
-        }
-
         var previousMessage = await context.FollowUpAsync(
             new DSharpPlus.Entities.DiscordFollowupMessageBuilder().AddEmbed(
                 audioPlayerEmbed.PreviousTrack()));
