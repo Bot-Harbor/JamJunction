@@ -203,6 +203,12 @@ public class AudioPlayerEmbed
             ButtonStyle.Secondary, "pause", "⏸", pauseDisabled
         );
 
+        var previousTrackButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Secondary, "previous-track", "⏮",
+            disabled: !queuedLavalinkPlayer.Queue.HasHistory || queuedLavalinkPlayer.Queue.History.Count == 0
+        );
+
         var resumeButton = new DiscordButtonComponent
         (
             ButtonStyle.Secondary, "resume", "▶", resumeDisabled
@@ -262,8 +268,9 @@ public class AudioPlayerEmbed
 
         var buttons = new List<DiscordComponent>
         {
-            pauseButton, resumeButton, skipButton, stopButton, viewQueueButton,
-            volumeDownButton, volumeUpButton, restartButton, repeatButton, shuffleButton
+            pauseButton, previousTrackButton, resumeButton, skipButton, stopButton,
+            viewQueueButton, volumeDownButton, volumeUpButton, restartButton, repeatButton,
+            shuffleButton
         };
 
         var componentsRows = new List<List<DiscordComponent>>();
