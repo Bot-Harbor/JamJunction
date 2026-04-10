@@ -61,6 +61,7 @@ internal sealed class Bot : BackgroundService
         slashCommands.RegisterCommands<SkipCommand>();
         slashCommands.RegisterCommands<PreviousTrackCommand>();
         slashCommands.RegisterCommands<HelpCommand>();
+        slashCommands.RegisterCommands<PersonalPlaylistCommand>();
         slashCommands.RegisterCommands<PositionCommand>();
         slashCommands.RegisterCommands<RepeatCommand>();
     }

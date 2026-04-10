@@ -1,6 +1,7 @@
 using DSharpPlus;
 using DSharpPlus.Entities;
 using DSharpPlus.EventArgs;
+using JamJunction.App.Views.Embeds;
 using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
 
 namespace JamJunction.App.Events.Buttons.Player_Controls;
@@ -37,24 +38,14 @@ public class PlaylistButtonEvent : IButton
 
             await btnInteractionArgs.Interaction.DeferAsync(true);
 
+            var audioPlayerEmbed = new AudioPlayerEmbed();
             var dmChannel = await member.CreateDmChannelAsync();
-
-            var openDmBtn = new DiscordLinkButtonComponent(
-                $"https://discord.com/channels/@me/{dmChannel.Id}",
-                "📋 Open Playlist"
-            );
-
-            var embed = new DiscordEmbedBuilder
-            {
-                Description = "📋  •  Click below to open your playlist.",
-                Color = DiscordColor.Cyan
-            };
 
             await btnInteractionArgs.Interaction.CreateFollowupMessageAsync(
                 new DiscordFollowupMessageBuilder()
                     .AsEphemeral()
-                    .AddEmbed(embed)
-                    .AddComponents(openDmBtn));
+                    .AddEmbed(audioPlayerEmbed.PersonalPlaylist())
+                    .AddComponents(audioPlayerEmbed.PersonalPlaylistButton(dmChannel.Id)));
         }
     }
 }

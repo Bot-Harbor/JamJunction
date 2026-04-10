@@ -2334,6 +2334,38 @@ public class AudioPlayerEmbed
     }
 
     /// <summary>
+    /// Builds an embed prompting the user to open their personal playlist in the bot's DMs.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the personal playlist prompt.
+    /// </returns>
+    public DiscordEmbedBuilder PersonalPlaylist()
+    {
+        return new DiscordEmbedBuilder
+        {
+            Description = "📋  •  Click below to open your playlist.",
+            Color = DiscordColor.Cyan
+        };
+    }
+
+    /// <summary>
+    /// Builds a link button that navigates the user to their personal playlist DM channel.
+    /// </summary>
+    /// <param name="dmChannelId">
+    /// The ID of the user's DM channel with the bot.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordLinkButtonComponent"/> pointing to the DM channel.
+    /// </returns>
+    public DiscordLinkButtonComponent PersonalPlaylistButton(ulong dmChannelId)
+    {
+        return new DiscordLinkButtonComponent(
+            $"https://discord.com/channels/@me/{dmChannelId}",
+            "📋 Open Playlist"
+        );
+    }
+
+    /// <summary>
     /// Builds an embed message indicating that a user skipped directly to a specific track in the queue.
     /// </summary>
     /// <param name="menuInteractionArgs">
