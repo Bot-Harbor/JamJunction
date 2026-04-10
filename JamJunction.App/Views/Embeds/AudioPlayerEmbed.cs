@@ -291,8 +291,8 @@ public class AudioPlayerEmbed
         var buttons = new List<DiscordComponent>
         {
             pauseButton, previousTrackButton, resumeButton, skipButton, stopButton,
-            viewQueueButton, volumeDownButton, volumeUpButton, restartButton, repeatButton,
-            shuffleButton, likeButton, helpButton, playlistButton, seekButton
+            viewQueueButton,shuffleButton, restartButton, repeatButton, seekButton,
+            likeButton, volumeDownButton, volumeUpButton, helpButton, playlistButton
         };
 
         var componentsRows = new List<List<DiscordComponent>>();
