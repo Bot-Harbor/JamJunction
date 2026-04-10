@@ -1,0 +1,151 @@
+using DSharpPlus;
+using DSharpPlus.Entities;
+using DSharpPlus.EventArgs;
+using JamJunction.App.Lavalink;
+using JamJunction.App.Views.Embeds;
+using Lavalink4NET;
+using IButton = JamJunction.App.Events.Buttons.Interfaces.IButton;
+
+namespace JamJunction.App.Events.Buttons.Player_Controls;
+
+/// <summary>
+/// Handles the like button interaction for the audio player.
+/// </summary>
+/// <remarks>
+/// This event is triggered when a user presses the like button on the
+/// player interface. The handler sends the user a DM containing the
+/// current track's title and artist.
+/// </remarks>
+public class LikeButtonEvent : IButton
+{
+    /// <summary>
+    /// Provides access to the Lavalink audio service used for managing
+    /// audio playback and retrieving player instances.
+    /// </summary>
+    private readonly IAudioService _audioService;
+
+    /// <summary>
+    /// The Discord client used to interact with the Discord API.
+    /// </summary>
+    private readonly DiscordClient _discordClient;
+
+    public LikeButtonEvent(IAudioService audioService, DiscordClient discordClient)
+    {
+        _audioService = audioService;
+        _discordClient = discordClient;
+    }
+
+    /// <summary>
+    /// Gets or sets the voice channel that the interacting user is currently connected to.
+    /// </summary>
+    private DiscordChannel UserVoiceChannel { get; set; }
+
+    /// <summary>
+    /// Executes the like button interaction logic.
+    /// </summary>
+    /// <param name="sender">
+    /// The <see cref="DiscordClient"/> instance that triggered the interaction.
+    /// </param>
+    /// <param name="btnInteractionArgs">
+    /// The interaction event arguments containing information about the
+    /// button interaction, the user who triggered it, and the guild context.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous operation.
+    /// </returns>
+    public async Task Execute(DiscordClient sender, ComponentInteractionCreateEventArgs btnInteractionArgs)
+    {
+        if (btnInteractionArgs.Interaction.Data.CustomId == "like")
+        {
+            var errorEmbed = new ErrorEmbed();
+
+            var guildId = btnInteractionArgs.Guild.Id;
+
+            var memberId = btnInteractionArgs.User.Id;
+            var member = await btnInteractionArgs.Guild.GetMemberAsync(memberId);
+
+            var channel = btnInteractionArgs.Interaction;
+
+            await channel.DeferAsync(true);
+
+            try
+            {
+                UserVoiceChannel = member.VoiceState.Channel;
+
+                if (UserVoiceChannel == null)
+                {
+                    var errorMessage = await channel.CreateFollowupMessageAsync(
+                        errorEmbed.ValidVoiceChannelError());
+                    await Task.Delay(10000);
+                    _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                    return;
+                }
+            }
+            catch (Exception)
+            {
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    errorEmbed.ValidVoiceChannelError());
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
+
+            var botId = _discordClient.CurrentUser.Id;
+            var bot = await btnInteractionArgs.Guild.GetMemberAsync(botId);
+            var botVoiceChannel = bot.Guild.VoiceStates.TryGetValue(botId, out var botVoiceState);
+
+            if (botVoiceChannel == false)
+            {
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    errorEmbed.NoPlayerError());
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
+
+            UserVoiceChannel = member.VoiceState.Channel;
+
+            if (UserVoiceChannel!.Id != botVoiceState!.Channel!.Id)
+            {
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    errorEmbed.SameVoiceChannelError());
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
+
+            var lavalinkPlayer = new LavalinkPlayerHandler(_audioService);
+            var player = await lavalinkPlayer.GetPlayerAsync(guildId, UserVoiceChannel, false);
+
+            if (player == null)
+            {
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    errorEmbed.NoConnectionError());
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
+
+            if (player!.CurrentTrack == null)
+            {
+                var errorMessage = await channel.CreateFollowupMessageAsync(
+                    errorEmbed.PlayerInactiveError());
+                await Task.Delay(10000);
+                _ = channel.DeleteFollowupMessageAsync(errorMessage.Id);
+                return;
+            }
+
+            var audioPlayerEmbed = new AudioPlayerEmbed();
+
+            var dmChannel = await member.CreateDmChannelAsync();
+            await dmChannel.SendMessageAsync(new DiscordMessageBuilder().AddEmbed(
+                audioPlayerEmbed.LikedSong(player.CurrentTrack)));
+
+            var confirmMessage = await channel.CreateFollowupMessageAsync(
+                new DiscordFollowupMessageBuilder().AddEmbed(audioPlayerEmbed.LikedSongConfirm()));
+
+            await Task.Delay(10000);
+            _ = channel.DeleteFollowupMessageAsync(confirmMessage.Id);
+        }
+    }
+}

@@ -268,11 +268,16 @@ public class AudioPlayerEmbed
             ButtonStyle.Secondary, "repeat", "⇄"
         );
 
+        var likeButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Secondary, "like", "❤️"
+        );
+
         var buttons = new List<DiscordComponent>
         {
             pauseButton, previousTrackButton, resumeButton, skipButton, stopButton,
             viewQueueButton, volumeDownButton, volumeUpButton, restartButton, repeatButton,
-            shuffleButton
+            shuffleButton, likeButton
         };
 
         var componentsRows = new List<List<DiscordComponent>>();
@@ -2277,6 +2282,45 @@ public class AudioPlayerEmbed
             Color = DiscordColor.Cyan
         };
         return embed;
+    }
+
+    /// <summary>
+    /// Builds a DM embed containing the liked track's title and artist.
+    /// </summary>
+    /// <param name="track">
+    /// The <see cref="LavalinkTrack"/> representing the track that was liked.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> containing the track title and artist.
+    /// </returns>
+    public DiscordEmbedBuilder LikedSong(LavalinkTrack track)
+    {
+        var uri = track.Uri!.AbsoluteUri;
+        var title = track.Title.Length > 35 ? $"{track.Title.Substring(0, 35)}..." : track.Title;
+        var author = track.Author.Length > 35 ? $"{track.Author.Substring(0, 35)}..." : track.Author;
+
+        return new DiscordEmbedBuilder
+        {
+            Title = "❤️  •  Liked Song",
+            Description = $"💿  •  **Title**: [{title}]({uri})\n" +
+                          $"🎙️  •  **Artist**: {author}",
+            Color = DiscordColor.Cyan
+        };
+    }
+
+    /// <summary>
+    /// Builds an ephemeral confirmation embed indicating the liked song was sent to the user's DMs.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the like confirmation.
+    /// </returns>
+    public DiscordEmbedBuilder LikedSongConfirm()
+    {
+        return new DiscordEmbedBuilder
+        {
+            Description = "❤️  •  Song sent to your DMs.",
+            Color = DiscordColor.Cyan
+        };
     }
 
     /// <summary>
