@@ -396,4 +396,21 @@ public class ErrorEmbed
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
+
+    /// <summary>
+    /// Builds an embed message indicating that there is no previous track
+    /// in the playback history to go back to.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the no previous track error.
+    /// </returns>
+    public DiscordFollowupMessageBuilder NoPreviousTrackError()
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = "⏮  •  There is no previous track in the history.",
+            Color = DiscordColor.Red
+        };
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
+    }
 }

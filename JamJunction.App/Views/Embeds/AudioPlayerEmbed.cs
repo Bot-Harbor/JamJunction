@@ -2255,6 +2255,22 @@ public class AudioPlayerEmbed
     }
 
     /// <summary>
+    /// Builds an embed message indicating that playback has returned to the previous track.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="DiscordEmbedBuilder"/> representing the previous track action.
+    /// </returns>
+    public DiscordEmbedBuilder PreviousTrack()
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = "⏮  •  Playing the previous track.",
+            Color = DiscordColor.Cyan
+        };
+        return embed;
+    }
+
+    /// <summary>
     /// Builds an embed message indicating that a user skipped directly to a specific track in the queue.
     /// </summary>
     /// <param name="menuInteractionArgs">
