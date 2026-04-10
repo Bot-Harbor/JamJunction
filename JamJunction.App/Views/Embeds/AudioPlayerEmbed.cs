@@ -238,12 +238,14 @@ public class AudioPlayerEmbed
 
         var volumeDownButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "volume-down", "🔉"
+            ButtonStyle.Secondary, "volume-down", "🔉",
+            disabled: queuedLavalinkPlayer.Volume == 0
         );
 
         var volumeUpButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "volume-up", "🔊"
+            ButtonStyle.Secondary, "volume-up", "🔊",
+            disabled: queuedLavalinkPlayer.Volume == 1
         );
 
         var viewQueueButton = new DiscordButtonComponent
