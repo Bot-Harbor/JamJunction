@@ -250,7 +250,8 @@ public class AudioPlayerEmbed
 
         var viewQueueButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "view-queue", "☰"
+            ButtonStyle.Secondary, "view-queue", "☰",
+            disabled: queuedLavalinkPlayer.Queue.IsEmpty
         );
 
         var restartButton = new DiscordButtonComponent
@@ -260,7 +261,8 @@ public class AudioPlayerEmbed
 
         var shuffleButton = new DiscordButtonComponent
         (
-            ButtonStyle.Secondary, "shuffle", "⇌"
+            ButtonStyle.Secondary, "shuffle", "⇌",
+            disabled: queuedLavalinkPlayer.Queue.IsEmpty
         );
 
         var repeatButton = new DiscordButtonComponent
