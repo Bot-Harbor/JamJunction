@@ -103,14 +103,10 @@ public class TrackEndedEvent
 
         if (player.State == PlayerState.NotPlaying)
         {
-            var audioPlayerEmbed = new AudioPlayerEmbed();
             await channel.DeleteMessageAsync(guildData.PlayerMessage);
 
-            var queueSomethingMessage = await channel.SendMessageAsync(new DiscordMessageBuilder(audioPlayerEmbed.QueueSomething()));
-
-            await Task.Delay(10000);
-
-            _ = channel.DeleteMessageAsync(queueSomethingMessage);
+            if (player.Queue.HasHistory)
+                await player.Queue.History.ClearAsync();
 
             foreach (var userData in Bot.UserData.Values)
                 if (userData.GuildId == guildId)
@@ -121,6 +117,13 @@ public class TrackEndedEvent
                 }
 
             Bot.GuildData.Remove(guildId);
+
+            var audioPlayerEmbed = new AudioPlayerEmbed();
+            var queueSomethingMessage = await channel.SendMessageAsync(
+                new DiscordMessageBuilder(audioPlayerEmbed.QueueSomething()));
+
+            await Task.Delay(10000);
+            _ = channel.DeleteMessageAsync(queueSomethingMessage);
         }
     }
 }
