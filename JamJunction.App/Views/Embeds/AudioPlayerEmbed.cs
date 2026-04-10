@@ -558,7 +558,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "⏸  •  The track has been paused.",
-            Color = DiscordColor.Yellow
+            Color = DiscordColor.Cyan
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -574,7 +574,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "▶  •  The track has been resumed.",
-            Color = DiscordColor.Green
+            Color = DiscordColor.Cyan
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -590,7 +590,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "⏹  •  The player has been stopped.",
-            Color = DiscordColor.Red
+            Color = DiscordColor.Cyan
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -608,7 +608,7 @@ public class AudioPlayerEmbed
         {
             Description = "**Nothing is playing.**\n" +
                           "Please use the </play:1181715791658360852> command to queue something.",
-            Color = DiscordColor.Orange,
+            Color = DiscordColor.Cyan,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
                 Width = 50,
@@ -681,7 +681,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "↻  •  The track has been restarted.",
-            Color = DiscordColor.Orange
+            Color = DiscordColor.Cyan
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -697,7 +697,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "🔌  •  Jam Junction has been disconnected.",
-            Color = DiscordColor.DarkRed
+            Color = DiscordColor.Cyan
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
