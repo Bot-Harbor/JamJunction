@@ -273,11 +273,16 @@ public class AudioPlayerEmbed
             ButtonStyle.Secondary, "like", "❤️"
         );
 
+        var helpButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Secondary, "help", "🛟"
+        );
+
         var buttons = new List<DiscordComponent>
         {
             pauseButton, previousTrackButton, resumeButton, skipButton, stopButton,
             viewQueueButton, volumeDownButton, volumeUpButton, restartButton, repeatButton,
-            shuffleButton, likeButton
+            shuffleButton, likeButton, helpButton
         };
 
         var componentsRows = new List<List<DiscordComponent>>();

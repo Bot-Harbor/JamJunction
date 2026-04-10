@@ -125,4 +125,111 @@ public class HelpEmbed
 
         return messageBuilder;
     }
+
+    /// <summary>
+    /// Builds the help message as an ephemeral followup for use in button interactions.
+    /// </summary>
+    /// <param name="client">
+    /// The <see cref="DiscordClient"/> providing bot info, ping, and version data.
+    /// </param>
+    /// <param name="user">
+    /// The <see cref="DiscordUser"/> who triggered the button interaction.
+    /// </param>
+    /// <returns>
+    /// A <see cref="DiscordFollowupMessageBuilder"/> containing the help embed and link buttons.
+    /// </returns>
+    public DiscordFollowupMessageBuilder Build(DiscordClient client, DiscordUser user)
+    {
+        var userIcon = user.GetAvatarUrl(ImageFormat.Png);
+        var userName = client.CurrentUser.Username;
+        var botIcon = client.CurrentUser.GetAvatarUrl(ImageFormat.Png);
+        var serverCount = client.Guilds.Count;
+        var shardCount = client.ShardCount;
+        var ping = client.Ping;
+        var dSharpPlusVersion = client.VersionString.Substring(0, 5);
+
+        var helpEmbed = new DiscordEmbedBuilder
+        {
+            Author = new DiscordEmbedBuilder.EmbedAuthor
+            {
+                Name = $"{userName}",
+                Url = "https://github.com/Bot-Harbor/JamJunction",
+                IconUrl = userIcon
+            },
+            Title = "\ud83d\udcdd Getting Started",
+            Color = DiscordColor.Cyan,
+            Description =
+                "Type </play:1181715791658360852> to get started! " +
+                "Jam Junction supports **Spotify**, **YouTube**, **Deezer**, and **SoundCloud**. " +
+                $"Jam Junction is powered by [DSharpPlus {dSharpPlusVersion}]" +
+                "(https://github.com/DSharpPlus/DSharpPlus), " +
+                "[Lavalink4NET 4.2.0](https://github.com/angelobreuer/Lavalink4NET), " +
+                "and [Docker](https://www.docker.com/).",
+            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
+            {
+                Url = botIcon
+            },
+            Footer = new DiscordEmbedBuilder.EmbedFooter
+            {
+                Text = "Bot Info  •  " +
+                       "Version: 2.6.4  •  " +
+                       $"Total Servers: {serverCount}  •  " +
+                       $"Shard: {shardCount}  •  " +
+                       $"Ping: {ping}" +
+                       "\n\nMade With ❤️",
+            }
+        };
+
+        helpEmbed.AddField
+        (
+            "🎶  **Music Commands**",
+            "\u25b6\ufe0f  </play:1181715791658360852>\n" +
+            "\u23f8\ufe0f  </pause:1185357127468986450>\n" +
+            "\u25b6\ufe0f  </resume:1185412430055084052>\n" +
+            "\ud83d\uded1  </stop:1185428654155636738>\n" +
+            "\ud83d\udd00  </shuffle:1200625616244981821>\n" +
+            "\ud83d\udd0a  </volume:1185357127468986451>\n" +
+            "\ud83c\udfb6  </view-queue:1292956075032576070>\n" +
+            "\ud83d\udcc4  </current-track:1300139412553859085>\n" +
+            "\ud83d\udd52  </position:1215802163658358795>\n" +
+            "\ud83d\udd04  </restart:1186037012642418698>\n" +
+            "\ud83d\udd01  </repeating-mode:1319060173561659555>\n" +
+            "\ud83d\udd52  </seek:1186000603273510952>\n" +
+            "\u23ed\ufe0f  </skip:1204215826773835778>\n" +
+            "\ud83d\udd0c  </leave:1192206662468108438>\n",
+            true
+        );
+
+        helpEmbed.AddField
+        (
+            "🛠️  **Other Commands**",
+            "\ud83c\udd98  </help:1204525562954121257>\n" +
+            "\ud83c\udfd3  </ping:1181709713256239204>\n" +
+            "\ud83d\uddbc\ufe0f  </caption:1182083902752444498>\n",
+            true
+        );
+
+        var addBotBtn = new DiscordLinkButtonComponent
+        (
+            "https://discord.com/oauth2/authorize?client_id=1181700334561796227\n",
+            "🤖 Add To A Server"
+        );
+
+        var viewTopggBtn = new DiscordLinkButtonComponent
+        (
+            "https://top.gg/bot/1181700334561796227",
+            "🎩 View On Top.gg"
+        );
+
+        var leaveReviewBtn = new DiscordLinkButtonComponent
+        (
+            "https://top.gg/bot/1181700334561796227#reviews",
+            "⭐ Leave A Review"
+        );
+
+        return new DiscordFollowupMessageBuilder()
+            .AsEphemeral()
+            .AddEmbed(helpEmbed)
+            .AddComponents(addBotBtn, viewTopggBtn, leaveReviewBtn);
+    }
 }
