@@ -106,7 +106,7 @@ public class TrackEndedEvent
             await channel.DeleteMessageAsync(guildData.PlayerMessage);
 
             if (player.Queue.HasHistory)
-                await player.Queue.History.ClearAsync();
+                await player.Queue.History!.ClearAsync();
 
             foreach (var userData in Bot.UserData.Values)
                 if (userData.GuildId == guildId)
