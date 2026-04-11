@@ -2423,9 +2423,9 @@ public class AudioPlayerEmbed
     /// <returns>
     /// A <see cref="DiscordEmbedBuilder"/> representing the seek action.
     /// </returns>
-    public DiscordEmbedBuilder Seek(InteractionContext context, double seekedPosition)
+    public DiscordEmbedBuilder Seek(InteractionContext context, TimeSpan seekedPosition)
     {
-        var time = TimeSpan.FromSeconds(seekedPosition);
+        var time = seekedPosition;
 
         var embed = new DiscordEmbedBuilder
         {

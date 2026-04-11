@@ -226,23 +226,7 @@ public class ErrorEmbed
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
-
-    /// <summary>
-    /// Builds an embed message indicating that the seek time must be a whole number.
-    /// </summary>
-    /// <returns>
-    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the invalid seek input error.
-    /// </returns>
-    public DiscordFollowupMessageBuilder SeekNotAnIntegerError()
-    {
-        var embed = new DiscordEmbedBuilder
-        {
-            Description = "\ud83d\udd52  •  The number for the time must be a whole number.",
-            Color = DiscordColor.Red
-        };
-        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
-    }
-
+    
     /// <summary>
     /// Builds an embed message indicating that the requested seek time
     /// exceeds the total duration of the track.

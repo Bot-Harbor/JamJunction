@@ -39,8 +39,14 @@ public class SeekCommand : ApplicationCommandModule
     /// The <see cref="InteractionContext"/> containing information about
     /// the command invocation and the user executing the command.
     /// </param>
-    /// <param name="time">
-    /// The desired playback position in seconds where the track should seek to.
+    /// <param name="hour">
+    /// Changes the current position of the track in hours.
+    /// </param>
+    /// <param name="minute">
+    /// Changes the current position of the track in hours.
+    /// </param>
+    /// <param name="second">
+    /// Changes the current position of the track in seconds.
     /// </param>
     /// <returns>
     /// A <see cref="Task"/> representing the asynchronous execution of the seek command.
@@ -56,14 +62,17 @@ public class SeekCommand : ApplicationCommandModule
     /// <item>Ensures the provided time value is a valid integer.</item>
     /// <item>Ensures the provided time does not exceed the track duration.</item>
     /// </list>
-    /// 
     /// If validation succeeds, the Lavalink player seeks to the requested
     /// timestamp and the player embed is updated to reflect the new position.
     /// </remarks>
     [SlashCommand("seek", "Sets the position of the track.")]
     public async Task SeekCommandAsync(InteractionContext context,
-        [Option("time", "Change the current position of the track in seconds.")]
-        double time)
+        [Option("hour", "Change the current position of the track in hours.")]
+        double hour = 0,
+        [Option("minute", "Change the current position of the track in minutes.")]
+        double minute = 0,
+        [Option("second", "Change the current position of the track in seconds.")]
+        double second = 0)
     {
         await context.DeferAsync(true);
 
@@ -125,18 +134,14 @@ public class SeekCommand : ApplicationCommandModule
             return;
         }
 
-        var isInt = time == (int)time;
+        var time = new TimeSpan
+        (
+            (int)Math.Round(hour), 
+            (int)Math.Round(minute),
+            (int)Math.Round(second)
+        );
 
-        if (!isInt)
-        {
-            var errorMessage = await context.FollowUpAsync(
-                errorEmbed.SeekNotAnIntegerError());
-            await Task.Delay(10000);
-            _ = context.DeleteFollowupAsync(errorMessage.Id);
-            return;
-        }
-
-        var duration = Math.Round(player.CurrentTrack.Duration.TotalSeconds);
+        var duration = player.CurrentTrack.Duration;
 
         if (time > duration)
         {
@@ -147,7 +152,7 @@ public class SeekCommand : ApplicationCommandModule
             return;
         }
 
-        await player.SeekAsync(TimeSpan.FromSeconds(time));
+        await player.SeekAsync(time);
 
         var guildData = Bot.GuildData[guildId];
 
