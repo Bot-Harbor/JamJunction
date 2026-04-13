@@ -37,7 +37,7 @@ public class HelpButtonEvent : IButton
             await btnInteractionArgs.Interaction.DeferAsync(true);
 
             await btnInteractionArgs.Interaction.CreateFollowupMessageAsync(
-                helpEmbed.Build(sender, btnInteractionArgs.User));
+                helpEmbed.Build(sender));
         }
     }
 }
