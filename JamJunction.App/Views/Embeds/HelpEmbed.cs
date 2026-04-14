@@ -287,6 +287,11 @@ public class HelpEmbed
             "• Seek autofill, help, and playlist buttons built into the player"
         );
 
+        embed.Footer = new DiscordEmbedBuilder.EmbedFooter()
+        {
+            Text = "\n\nMade With ❤️"
+        };
+
         return embed;
     }
 
@@ -332,6 +337,11 @@ public class HelpEmbed
             "</repeating-mode:1319060173561659555> — Change the repeating mode.\n" +
             "</leave:1192206662468108438> — Disconnects the player."
         );
+        
+        embed.Footer = new DiscordEmbedBuilder.EmbedFooter()
+        {
+            Text = "\n\nMade With ❤️"
+        };
 
         return embed;
     }
@@ -352,6 +362,11 @@ public class HelpEmbed
             "</ping:1181709713256239204> — Will pong back to the server.\n" +
             "</caption:1182083902752444498> — Give any image a caption."
         );
+        
+        embed.Footer = new DiscordEmbedBuilder.EmbedFooter()
+        {
+            Text = "\n\nMade With ❤️"
+        };
 
         return embed;
     }
@@ -386,6 +401,11 @@ public class HelpEmbed
             "• 🔉 is disabled at minimum volume, 🔊 at maximum\n" +
             "• ⏮ is disabled when there is no playback history"
         );
+        
+        embed.Footer = new DiscordEmbedBuilder.EmbedFooter()
+        {
+            Text = "\n\nMade With ❤️"
+        };
 
         return embed;
     }
