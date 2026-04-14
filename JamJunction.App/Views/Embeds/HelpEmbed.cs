@@ -75,12 +75,6 @@ public class HelpEmbed
             "🤖 Add To A Server"
         );
 
-        var viewTopggBtn = new DiscordLinkButtonComponent
-        (
-            "https://top.gg/bot/1181700334561796227",
-            "🎩 View On Top.gg"
-        );
-
         var leaveReviewBtn = new DiscordLinkButtonComponent
         (
             "https://top.gg/bot/1181700334561796227#reviews",
@@ -89,7 +83,7 @@ public class HelpEmbed
         
         var buttons = new List<DiscordComponent>
         {
-            addBotBtn, viewTopggBtn, leaveReviewBtn
+            addBotBtn, leaveReviewBtn
         };
         
 
@@ -126,10 +120,6 @@ public class HelpEmbed
             "https://discord.com/oauth2/authorize?client_id=1181700334561796227\n",
             "🤖 Add To A Server"
         );
-        var viewTopggBtn = new DiscordLinkButtonComponent(
-            "https://top.gg/bot/1181700334561796227",
-            "🎩 View On Top.gg"
-        );
         var leaveReviewBtn = new DiscordLinkButtonComponent(
             "https://top.gg/bot/1181700334561796227#reviews",
             "⭐ Leave A Review"
@@ -138,7 +128,7 @@ public class HelpEmbed
         return new DiscordInteractionResponseBuilder()
             .AddEmbed(embed)
             .AddComponents(helpMenu.Build())
-            .AddComponents(new List<DiscordComponent> { addBotBtn, viewTopggBtn, leaveReviewBtn });
+            .AddComponents(new List<DiscordComponent> { addBotBtn, leaveReviewBtn });
     }
     
     public DiscordFollowupMessageBuilder Build(DiscordClient client)
@@ -185,13 +175,7 @@ public class HelpEmbed
             "https://discord.com/oauth2/authorize?client_id=1181700334561796227\n",
             "🤖 Add To A Server"
         );
-
-        var viewTopggBtn = new DiscordLinkButtonComponent
-        (
-            "https://top.gg/bot/1181700334561796227",
-            "🎩 View On Top.gg"
-        );
-
+        
         var leaveReviewBtn = new DiscordLinkButtonComponent
         (
             "https://top.gg/bot/1181700334561796227#reviews",
@@ -200,7 +184,7 @@ public class HelpEmbed
         
         var buttons = new List<DiscordComponent>
         {
-            addBotBtn, viewTopggBtn, leaveReviewBtn
+            addBotBtn, leaveReviewBtn
         };
         
 
