@@ -725,12 +725,14 @@ public class AudioPlayerEmbed
     {
         var messageBuilder = new DiscordMessageBuilder();
 
+        var botIcon = context.Client.CurrentUser.GetAvatarUrl(ImageFormat.Png);
+        
         var embed = new DiscordEmbedBuilder
         {
             Title = "☰  Queue List:",
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
-                Url = context.Guild.IconUrl
+                Url = botIcon
             }
         };
 
@@ -845,13 +847,15 @@ public class AudioPlayerEmbed
         QueuedLavalinkPlayer queuedLavalinkPlayer, string pageNumber = "1")
     {
         var messageBuilder = new DiscordMessageBuilder();
-
+        
+        var botIcon = btnInteractionArgs.Guild.CurrentMember.GetAvatarUrl(ImageFormat.Png);
+        
         var embed = new DiscordEmbedBuilder
         {
             Title = "☰  Queue List:",
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
-                Url = btnInteractionArgs.Interaction.Guild.IconUrl
+                Url = botIcon
             }
         };
 
@@ -1538,13 +1542,15 @@ public class AudioPlayerEmbed
         QueuedLavalinkPlayer queuedLavalinkPlayer, string pageNumber = "1")
     {
         var messageBuilder = new DiscordMessageBuilder();
+        
+        var botIcon = modalEventArgs.Interaction.Guild.CurrentMember.GetAvatarUrl(ImageFormat.Png);
 
         var embed = new DiscordEmbedBuilder
         {
             Title = "☰  Queue List:",
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
-                Url = modalEventArgs.Interaction.Guild.IconUrl
+                Url = botIcon
             }
         };
 
