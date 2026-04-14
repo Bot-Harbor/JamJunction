@@ -317,33 +317,36 @@ public class HelpEmbed
 
         embed.AddField(
             "Playback",
-            "</play:1181715791658360852> — Queue a track by keyword or URL\n" +
-            "</pause:1185357127468986450> — Pause the current track\n" +
-            "</resume:1185412430055084052> — Resume the paused track\n" +
-            "</stop:1185428654155636738> — Stop playback\n" +
-            "</restart:1186037012642418698> — Restart the current track\n" +
-            "</previous-track:0> — Return to the previously played track"
+            "</play:1181715791658360852> — Queue a track.\n" +
+            "</pause:1185357127468986450> — Pauses the current track.\n" +
+            "</resume:1185412430055084052> — Resumes the current track.\n" +
+            "</stop:1185428654155636738> — Stops the playback.\n" +
+            "</restart:1186037012642418698> — Restarts the current track.\n" +
+            "</previous-track:0> — Returns to the previously played track."
         );
 
         embed.AddField(
             "Queue",
-            "</skip:1204215826773835778> — Skip to the next track\n" +
-            "</shuffle:1200625616244981821> — Shuffle the queue\n" +
-            "</view-queue:1292956075032576070> — Browse the current queue\n" +
-            "</current-track:1300139412553859085> — Show the current track"
+            "</skip:1204215826773835778> — Skips to the next track in the queue.\n" +
+            "</skip-to:0> — Skips to the desired track in the queue.\n" +
+            "</remove:0> — Removes a track from the queue.\n" +
+            "</shuffle:1200625616244981821> — Shuffles the queue.\n" +
+            "</view-queue:1292956075032576070> — Displays what is currently in the queue.\n" +
+            "</current-track:1300139412553859085> — Shows details about the current track playing."
         );
 
         embed.AddField(
             "Positioning & Volume",
-            "</seek:1186000603273510952> — Seek to a position (hours, minutes, seconds)\n" +
-            "</position:1215802163658358795> — Show the current playback position\n" +
-            "</volume:1185357127468986451> — Set the volume (0–100)"
+            "</seek:1186000603273510952> — Sets the position of the track.\n" +
+            "</position:1215802163658358795> — Gets the current track position.\n" +
+            "</volume:1185357127468986451> — Adjust the volume 0-100."
         );
 
         embed.AddField(
             "Other",
-            "</repeating-mode:1319060173561659555> — Change the repeat mode\n" +
-            "</leave:1192206662468108438> — Disconnect the bot from the voice channel"
+            "</filters:0> — Change filter for the player.\n" +
+            "</repeating-mode:1319060173561659555> — Change the repeating mode.\n" +
+            "</leave:1192206662468108438> — Disconnects the player."
         );
 
         return embed;
@@ -360,10 +363,10 @@ public class HelpEmbed
 
         embed.AddField(
             "Utility",
-            "</help:1204525562954121257> — Open this help menu\n" +
-            "</personal-playlist:0> — Open your personal playlist in the bot's DMs\n" +
-            "</ping:1181709713256239204> — Check the bot's response time\n" +
-            "</caption:1182083902752444498> — Create a captioned image embed"
+            "</help:1204525562954121257> — Gives information about the bot & available commands.\n" +
+            "</personal-playlist:0> — Opens your personal playlist in the bot's DMs.\n" +
+            "</ping:1181709713256239204> — Will pong back to the server.\n" +
+            "</caption:1182083902752444498> — Give any image a caption."
         );
 
         return embed;
