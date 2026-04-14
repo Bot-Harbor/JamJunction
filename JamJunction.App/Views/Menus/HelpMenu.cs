@@ -12,7 +12,7 @@ public class HelpMenu
             new("🌐 All Features", "all-features"),
             new("🎵 Music Commands Explanation", "music-commands"),
             new("🛠️ Other Commands Explanation", "other-commands"),
-            new("📻 Player Controls Explanation", "play-controls"),
+            new("📻 Player Controls Explanation", "player-controls"),
         };
 
         var menu = new DiscordSelectComponent("help-menu", "Browse Help Menu", options);

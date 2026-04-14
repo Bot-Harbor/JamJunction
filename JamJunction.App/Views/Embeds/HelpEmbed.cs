@@ -118,6 +118,29 @@ public class HelpEmbed
     /// and interactive link buttons for adding the bot, viewing it on Top.gg,
     /// and leaving a review.
     /// </returns>
+    public DiscordInteractionResponseBuilder BuildSection(DiscordEmbedBuilder embed)
+    {
+        var helpMenu = new HelpMenu();
+
+        var addBotBtn = new DiscordLinkButtonComponent(
+            "https://discord.com/oauth2/authorize?client_id=1181700334561796227\n",
+            "🤖 Add To A Server"
+        );
+        var viewTopggBtn = new DiscordLinkButtonComponent(
+            "https://top.gg/bot/1181700334561796227",
+            "🎩 View On Top.gg"
+        );
+        var leaveReviewBtn = new DiscordLinkButtonComponent(
+            "https://top.gg/bot/1181700334561796227#reviews",
+            "⭐ Leave A Review"
+        );
+
+        return new DiscordInteractionResponseBuilder()
+            .AddEmbed(embed)
+            .AddComponents(helpMenu.Build())
+            .AddComponents(new List<DiscordComponent> { addBotBtn, viewTopggBtn, leaveReviewBtn });
+    }
+    
     public DiscordFollowupMessageBuilder Build(DiscordClient client)
     {
         var botIcon = client.CurrentUser.GetAvatarUrl(ImageFormat.Png);
@@ -191,5 +214,192 @@ public class HelpEmbed
         followUpMessage.AddComponents(buttons);
 
         return followUpMessage;
+    }
+    
+     public DiscordEmbedBuilder BuildMain(DiscordClient client)
+    {
+        var botIcon = client.CurrentUser.GetAvatarUrl(ImageFormat.Png);
+        var serverCount = client.Guilds.Count;
+        var shardCount = client.ShardCount;
+        var ping = client.Ping;
+        var dSharpPlusVersion = client.VersionString.Substring(0, 5);
+
+        return new DiscordEmbedBuilder
+        {
+            Title = "🛟 Help Menu",
+            Color = DiscordColor.Cyan,
+            Description =
+                "Welcome to the help menu! This is your go-to place for " +
+                "everything you need to start using the bot. Browse through " +
+                "the menu to explore the different sections and features available, or " +
+                "type </play:1181715791658360852> to get started! " +
+                $"\n\nJam Junction is powered by [DSharpPlus {dSharpPlusVersion}]" +
+                "(https://github.com/DSharpPlus/DSharpPlus), " +
+                "[Lavalink4NET 4.2.0](https://github.com/angelobreuer/Lavalink4NET), " +
+                "and [Docker](https://www.docker.com/).",
+            Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail { Url = botIcon },
+            Footer = new DiscordEmbedBuilder.EmbedFooter
+            {
+                Text = "Bot Info:   " +
+                       "Version: 2.7.4  •  " +
+                       $"Total Servers: {serverCount}  •  " +
+                       $"Shard: {shardCount}  •  " +
+                       $"Ping: {ping}" +
+                       "\n\nMade With ❤️",
+            }
+        };
+    }
+
+    public DiscordEmbedBuilder BuildAllFeatures()
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Title = "🌐 All Features",
+            Color = DiscordColor.Cyan,
+            Description = "Here is everything Jam Junction has to offer."
+        };
+
+        embed.AddField(
+            "🎵 Playback",
+            "• 6 supported platforms: Spotify, YouTube, YouTube Music, Deezer, SoundCloud, Apple Music\n" +
+            "• Search by keyword or paste a URL\n" +
+            "• Queue next to insert a track at the front\n" +
+            "• Previous track support with full history tracking\n" +
+            "• Seek to any position using hours, minutes, and seconds"
+        );
+
+        embed.AddField(
+            "📋 Queue",
+            "• Up to 100 tracks per queue\n" +
+            "• Paginated queue view with navigation controls\n" +
+            "• Skip to any track directly from the menu\n" +
+            "• Remove any track from the queue\n" +
+            "• Shuffle the remaining queue at any time"
+        );
+
+        embed.AddField(
+            "🔁 Repeat Modes",
+            "• None — playback stops when the queue ends\n" +
+            "• Repeat Track — loops the current track\n" +
+            "• Repeat Queue — loops the entire queue"
+        );
+
+        embed.AddField(
+            "🎛️ Audio Filters",
+            "• 🌙 Nightcore  • 🎧 8D  • 🌊 Vaporwave\n" +
+            "• 🎤 Karaoke  • 🕒 Slow Motion  • 🔄 Reset"
+        );
+
+        embed.AddField(
+            "❤️ Personal Playlist",
+            "• Like any track to save it directly to your DMs\n" +
+            "• Access your playlist anytime via the 📋 button or </personal-playlist:0>"
+        );
+
+        embed.AddField(
+            "🔊 Player Controls",
+            "• Pause, resume, skip, previous, stop, restart\n" +
+            "• Volume up/down in 10% increments\n" +
+            "• Seek autofill, help, and playlist buttons built into the player"
+        );
+
+        return embed;
+    }
+
+    public DiscordEmbedBuilder BuildMusicCommands()
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Title = "🎵 Music Commands",
+            Color = DiscordColor.Cyan,
+            Description = "All music-related slash commands available in Jam Junction."
+        };
+
+        embed.AddField(
+            "Playback",
+            "</play:1181715791658360852> — Queue a track by keyword or URL\n" +
+            "</pause:1185357127468986450> — Pause the current track\n" +
+            "</resume:1185412430055084052> — Resume the paused track\n" +
+            "</stop:1185428654155636738> — Stop playback\n" +
+            "</restart:1186037012642418698> — Restart the current track\n" +
+            "</previous-track:0> — Return to the previously played track"
+        );
+
+        embed.AddField(
+            "Queue",
+            "</skip:1204215826773835778> — Skip to the next track\n" +
+            "</shuffle:1200625616244981821> — Shuffle the queue\n" +
+            "</view-queue:1292956075032576070> — Browse the current queue\n" +
+            "</current-track:1300139412553859085> — Show the current track"
+        );
+
+        embed.AddField(
+            "Positioning & Volume",
+            "</seek:1186000603273510952> — Seek to a position (hours, minutes, seconds)\n" +
+            "</position:1215802163658358795> — Show the current playback position\n" +
+            "</volume:1185357127468986451> — Set the volume (0–100)"
+        );
+
+        embed.AddField(
+            "Other",
+            "</repeating-mode:1319060173561659555> — Change the repeat mode\n" +
+            "</leave:1192206662468108438> — Disconnect the bot from the voice channel"
+        );
+
+        return embed;
+    }
+
+    public DiscordEmbedBuilder BuildOtherCommands()
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Title = "🛠️ Other Commands",
+            Color = DiscordColor.Cyan,
+            Description = "General-purpose commands outside of music playback."
+        };
+
+        embed.AddField(
+            "Utility",
+            "</help:1204525562954121257> — Open this help menu\n" +
+            "</personal-playlist:0> — Open your personal playlist in the bot's DMs\n" +
+            "</ping:1181709713256239204> — Check the bot's response time\n" +
+            "</caption:1182083902752444498> — Create a captioned image embed"
+        );
+
+        return embed;
+    }
+
+    public DiscordEmbedBuilder BuildPlayerControls()
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Title = "📻 Player Controls",
+            Color = DiscordColor.Cyan,
+            Description = "Every button on the audio player and what it does."
+        };
+
+        embed.AddField(
+            "Row 1 — Playback",
+            "⏸ Pause  •  ⏮ Previous Track  •  ▶ Resume  •  ⏭ Skip  •  ⏹ Stop"
+        );
+
+        embed.AddField(
+            "Row 2 — Controls",
+            "☰ View Queue  •  🔉 Volume Down  •  🔊 Volume Up  •  ↻ Restart  •  ⇄ Repeat"
+        );
+
+        embed.AddField(
+            "Row 3 — Extras",
+            "⇌ Shuffle  •  ❤️ Like (saves track to DMs)  •  🛟 Help  •  📋 Playlist  •  🔍 Seek"
+        );
+
+        embed.AddField(
+            "Notes",
+            "• ⏭ and ☰ and ⇌ are disabled when the queue is empty\n" +
+            "• 🔉 is disabled at minimum volume, 🔊 at maximum\n" +
+            "• ⏮ is disabled when there is no playback history"
+        );
+
+        return embed;
     }
 }
