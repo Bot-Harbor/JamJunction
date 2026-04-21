@@ -317,8 +317,6 @@ public class HelpEmbed
         embed.AddField(
             "Queue",
             "</skip:1204215826773835778> — Skips to the next track in the queue.\n" +
-            "</skip-to:0> — Skips to the desired track in the queue.\n" +
-            "</remove:0> — Removes a track from the queue.\n" +
             "</shuffle:1200625616244981821> — Shuffles the queue.\n" +
             "</view-queue:1292956075032576070> — Displays what is currently in the queue.\n" +
             "</current-track:1300139412553859085> — Shows details about the current track playing."
@@ -333,7 +331,6 @@ public class HelpEmbed
 
         embed.AddField(
             "Other",
-            "</filters:0> — Change filter for the player.\n" +
             "</repeating-mode:1319060173561659555> — Change the repeating mode.\n" +
             "</leave:1192206662468108438> — Disconnects the player."
         );
