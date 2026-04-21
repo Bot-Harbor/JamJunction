@@ -133,7 +133,7 @@ public class DeezerPlatform : IPlatform
 
             var result = await _audioService.Tracks.LoadTracksAsync(trackLoadResult.Tracks[0].Uri!.ToString(),
                 new TrackLoadOptions(TrackSearchMode.None));
-            var artworkUri = result.Track!.ArtworkUri!.ToString();
+            var artworkUri = result.Track?.ArtworkUri?.ToString();
 
             foreach (var track in trackLoadResult.Tracks.Take(100))
             {
@@ -159,7 +159,7 @@ public class DeezerPlatform : IPlatform
                     StartPosition = TimeSpan.Zero,
                     Duration = track.Duration,
                     Uri = new Uri(track.Uri!.ToString()),
-                    ArtworkUri = new Uri(artworkUri)
+                    ArtworkUri = artworkUri != null ? new Uri(artworkUri) : track.ArtworkUri
                 };
 
                 if (deezerTrack.IsLiveStream)
@@ -268,7 +268,7 @@ public class DeezerPlatform : IPlatform
                     StartPosition = TimeSpan.Zero,
                     Duration = track.Duration,
                     Uri = new Uri(track.Uri!.ToString()),
-                    ArtworkUri = new Uri(track.ArtworkUri!.ToString())
+                    ArtworkUri = track.ArtworkUri
                 };
 
                 if (deezerTrack.IsLiveStream)

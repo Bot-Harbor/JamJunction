@@ -170,7 +170,7 @@ public class YoutubePlatform : IPlatform
                         liveStream = true;
                     }
 
-                    var artworkUri = video.Thumbnails.FirstOrDefault()?.Url!;
+                    var artworkUri = video.Thumbnails.FirstOrDefault()?.Url;
 
                     var youtubeVideo = new LavalinkTrack
                     {
@@ -183,7 +183,7 @@ public class YoutubePlatform : IPlatform
                         StartPosition = TimeSpan.Zero,
                         Duration = (TimeSpan)video.Duration!,
                         Uri = new Uri(video.Url),
-                        ArtworkUri = new Uri(artworkUri!)
+                        ArtworkUri = artworkUri != null ? new Uri(artworkUri) : null
                     };
 
                     if (youtubeVideo.IsLiveStream)
@@ -282,7 +282,7 @@ public class YoutubePlatform : IPlatform
                     liveStream = true;
                 }
 
-                var artworkUri = video.Thumbnails.FirstOrDefault()?.Url!;
+                var artworkUri = video.Thumbnails.FirstOrDefault()?.Url;
 
                 var youtubeVideo = new LavalinkTrack
                 {
@@ -295,7 +295,7 @@ public class YoutubePlatform : IPlatform
                     StartPosition = TimeSpan.Zero,
                     Duration = (TimeSpan)video.Duration!,
                     Uri = new Uri(video.Url),
-                    ArtworkUri = new Uri(artworkUri!)
+                    ArtworkUri = artworkUri != null ? new Uri(artworkUri) : null
                 };
 
                 if (youtubeVideo.IsLiveStream)
@@ -397,7 +397,7 @@ public class YoutubePlatform : IPlatform
                 StartPosition = TimeSpan.Zero,
                 Duration = (TimeSpan)video.Duration!,
                 Uri = new Uri(video.Url),
-                ArtworkUri = new Uri(artworkUri!)
+                ArtworkUri = artworkUri != null ? new Uri(artworkUri) : null
             };
 
             if (youtubeVideo.IsLiveStream)

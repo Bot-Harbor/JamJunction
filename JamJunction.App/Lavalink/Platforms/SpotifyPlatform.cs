@@ -162,7 +162,7 @@ public class SpotifyPlatform : IPlatform
                     var author = track.Artists.FirstOrDefault()!.Name;
                     var duration = TimeSpan.FromMilliseconds(track.DurationMs);
                     var uri = $"https://open.spotify.com/track/{track.Id}";
-                    var artworkUri = fullAlbum.Images.FirstOrDefault()!.Url;
+                    var artworkUri = fullAlbum.Images.FirstOrDefault()?.Url;
 
                     var spotifyTrack = new LavalinkTrack
                     {
@@ -175,7 +175,7 @@ public class SpotifyPlatform : IPlatform
                         StartPosition = TimeSpan.Zero,
                         Duration = duration,
                         Uri = new Uri(uri),
-                        ArtworkUri = new Uri(artworkUri)
+                        ArtworkUri = artworkUri != null ? new Uri(artworkUri) : null
                     };
 
                     if (spotifyTrack.IsLiveStream)
@@ -285,7 +285,7 @@ public class SpotifyPlatform : IPlatform
                     var author = track.Artists.FirstOrDefault()!.Name;
                     var duration = TimeSpan.FromMilliseconds(track.DurationMs);
                     var uri = $"https://open.spotify.com/track/{track.Id}";
-                    var artworkUri = track.Album.Images.FirstOrDefault()!.Url;
+                    var artworkUri = track.Album.Images.FirstOrDefault()?.Url;
 
                     var spotifyTrack = new LavalinkTrack
                     {
@@ -298,7 +298,7 @@ public class SpotifyPlatform : IPlatform
                         StartPosition = TimeSpan.Zero,
                         Duration = duration,
                         Uri = new Uri(uri),
-                        ArtworkUri = new Uri(artworkUri)
+                        ArtworkUri = artworkUri != null ? new Uri(artworkUri) : null
                     };
 
                     if (spotifyTrack.IsLiveStream)
@@ -402,7 +402,7 @@ public class SpotifyPlatform : IPlatform
                 var author = fullTrack.Artists.FirstOrDefault()!.Name;
                 var duration = TimeSpan.FromMilliseconds(fullTrack.DurationMs);
                 var uri = $"https://open.spotify.com/track/{fullTrack.Id}";
-                var artworkUri = fullTrack.Album.Images.FirstOrDefault()!.Url;
+                var artworkUri = fullTrack.Album.Images.FirstOrDefault()?.Url;
 
                 var spotifyTrack = new LavalinkTrack
                 {
@@ -415,7 +415,7 @@ public class SpotifyPlatform : IPlatform
                     StartPosition = TimeSpan.Zero,
                     Duration = duration,
                     Uri = new Uri(uri),
-                    ArtworkUri = new Uri(artworkUri)
+                    ArtworkUri = artworkUri != null ? new Uri(artworkUri) : null
                 };
 
                 if (spotifyTrack.IsLiveStream)

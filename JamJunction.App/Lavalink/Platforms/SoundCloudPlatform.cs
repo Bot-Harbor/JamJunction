@@ -221,7 +221,7 @@ public class SoundCloudPlatform : IPlatform
                     StartPosition = TimeSpan.Zero,
                     Duration = track.Duration,
                     Uri = new Uri(track.Uri!.ToString()),
-                    ArtworkUri = new Uri(track.ArtworkUri!.ToString())
+                    ArtworkUri = track.ArtworkUri
                 };
 
                 if (soundCloudTrack.IsLiveStream)
