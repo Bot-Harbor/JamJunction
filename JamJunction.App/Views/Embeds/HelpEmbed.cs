@@ -277,7 +277,7 @@ public class HelpEmbed
         embed.AddField(
             "❤️ Personal Playlist",
             "• Like any track to save it directly to your DMs\n" +
-            "• Access your playlist anytime via the 📋 button or </personal-playlist:0>"
+            "• Access your playlist anytime via the 📋 button or </personal-playlist:1496305132093050952>"
         );
 
         embed.AddField(
@@ -311,7 +311,7 @@ public class HelpEmbed
             "</resume:1185412430055084052> — Resumes the current track.\n" +
             "</stop:1185428654155636738> — Stops the playback.\n" +
             "</restart:1186037012642418698> — Restarts the current track.\n" +
-            "</previous-track:0> — Returns to the previously played track."
+            "</previous-track:1496305132093050951> — Returns to the previously played track."
         );
 
         embed.AddField(
@@ -355,7 +355,7 @@ public class HelpEmbed
         embed.AddField(
             "Utility",
             "</help:1204525562954121257> — Gives information about the bot & available commands.\n" +
-            "</personal-playlist:0> — Opens your personal playlist in the bot's DMs.\n" +
+            "</personal-playlist:1496305132093050952> — Opens your personal playlist in the bot's DMs.\n" +
             "</ping:1181709713256239204> — Will pong back to the server.\n" +
             "</caption:1182083902752444498> — Give any image a caption."
         );
