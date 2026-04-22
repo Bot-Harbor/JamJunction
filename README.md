@@ -8,6 +8,10 @@
 
 ---
 
+![Bot Card](/Images/Bot-Card.png)
+
+---
+
 ## Overview
 
 Jam Junction is a feature-rich Discord music bot built with DSharpPlus and Lavalink4NET. It supports multiple streaming platforms, full queue management, audio filters, repeat modes, and an interactive player with button controls — all within your Discord server.
