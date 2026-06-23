@@ -94,7 +94,7 @@ public class CurrentTrackCommand : ApplicationCommandModule
             var errorMessage = await context.FollowUpAsync(
                 errorEmbed.NoPlayerError());
             await Task.Delay(10000);
-            _ = channel.DeleteMessageAsync(errorMessage);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -103,7 +103,7 @@ public class CurrentTrackCommand : ApplicationCommandModule
             var errorMessage = await context.FollowUpAsync(
                 errorEmbed.SameVoiceChannelError());
             await Task.Delay(10000);
-            _ = channel.DeleteMessageAsync(errorMessage);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -116,7 +116,7 @@ public class CurrentTrackCommand : ApplicationCommandModule
             var errorMessage = await context.FollowUpAsync(
                 errorEmbed.NoConnectionError());
             await Task.Delay(10000);
-            _ = channel.DeleteMessageAsync(errorMessage);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
@@ -125,7 +125,7 @@ public class CurrentTrackCommand : ApplicationCommandModule
             var errorMessage = await context.FollowUpAsync(
                 errorEmbed.PlayerInactiveError());
             await Task.Delay(10000);
-            _ = channel.DeleteMessageAsync(errorMessage);
+            _ = context.DeleteFollowupAsync(errorMessage.Id);
             return;
         }
 
