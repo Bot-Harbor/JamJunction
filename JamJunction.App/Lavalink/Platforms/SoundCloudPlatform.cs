@@ -128,7 +128,7 @@ public class SoundCloudPlatform : IPlatform
                     var errorMessage = await context
                         .FollowUpAsync(ErrorEmbed.AudioTrackError());
                     await Task.Delay(10000);
-                    _ = channel.DeleteMessageAsync(errorMessage);
+                    _ = context.DeleteFollowupAsync(errorMessage.Id);
                     return;
                 }
 
@@ -137,7 +137,7 @@ public class SoundCloudPlatform : IPlatform
                     var errorMessage = await context
                         .FollowUpAsync(ErrorEmbed.LiveSteamError());
                     await Task.Delay(10000);
-                    _ = channel.DeleteMessageAsync(errorMessage);
+                    _ = context.DeleteFollowupAsync(errorMessage.Id);
                     return;
                 }
 
@@ -193,7 +193,7 @@ public class SoundCloudPlatform : IPlatform
                 var errorMessage = await context
                     .FollowUpAsync(ErrorEmbed.AudioTrackError());
                 await Task.Delay(10000);
-                _ = channel.DeleteMessageAsync(errorMessage);
+                _ = context.DeleteFollowupAsync(errorMessage.Id);
                 return;
             }
 
@@ -229,7 +229,7 @@ public class SoundCloudPlatform : IPlatform
                     var errorMessage = await context
                         .FollowUpAsync(ErrorEmbed.LiveSteamError());
                     await Task.Delay(10000);
-                    _ = channel.DeleteMessageAsync(errorMessage);
+                    _ = context.DeleteFollowupAsync(errorMessage.Id);
                     return;
                 }
 
@@ -299,7 +299,7 @@ public class SoundCloudPlatform : IPlatform
                 var errorMessage = await context
                     .FollowUpAsync(ErrorEmbed.AudioTrackError());
                 await Task.Delay(10000);
-                _ = channel.DeleteMessageAsync(errorMessage);
+                _ = context.DeleteFollowupAsync(errorMessage.Id);
                 return;
             }
 
@@ -308,7 +308,7 @@ public class SoundCloudPlatform : IPlatform
                 var errorMessage = await context
                     .FollowUpAsync(ErrorEmbed.LiveSteamError());
                 await Task.Delay(10000);
-                _ = channel.DeleteMessageAsync(errorMessage);
+                _ = context.DeleteFollowupAsync(errorMessage.Id);
                 return;
             }
 
