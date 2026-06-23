@@ -100,6 +100,15 @@ public class TrackStuckEvent
             await Task.Delay(10000);
 
             await channel.DeleteMessageAsync(errorMessage);
+            _ = channel.DeleteMessageAsync(guildData.PlayerMessage);
+
+            foreach (var userData in Bot.UserData.Values)
+                if (userData.GuildId == guildId)
+                {
+                    var userToRemove = Bot.UserData.FirstOrDefault(x =>
+                        x.Value.GuildId == guildId).Key;
+                    Bot.UserData.Remove(userToRemove);
+                }
 
             Bot.GuildData.Remove(guildId);
         }

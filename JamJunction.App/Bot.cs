@@ -32,12 +32,30 @@ internal sealed class Bot : BackgroundService
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await _discordClient.ConnectAsync();
-        
+
         SlashCommands();
         ButtonEvents();
         MenuEvents();
         AudioPlayerEvents();
         ModalEvents();
+    }
+
+    public override async Task StopAsync(CancellationToken cancellationToken)
+    {
+        foreach (var (guildId, guildData) in GuildData)
+        {
+            if (guildData.PlayerMessage == null) continue;
+            try
+            {
+                var guild = await _discordClient.GetGuildAsync(guildId);
+                var channel = guild.GetChannel(guildData.TextChannelId);
+                await channel.DeleteMessageAsync(guildData.PlayerMessage);
+            }
+            catch { }
+        }
+
+        await _discordClient.DisconnectAsync();
+        await base.StopAsync(cancellationToken);
     }
     
     private void SlashCommands()
