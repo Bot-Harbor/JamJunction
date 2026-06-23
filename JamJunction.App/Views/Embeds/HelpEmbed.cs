@@ -41,7 +41,7 @@ public class HelpEmbed
         var helpEmbed = new DiscordEmbedBuilder
         {
             Title = "🛟 Help Menu",
-            Color = DiscordColor.Cyan,
+            Color = DiscordColor.Purple,
             Description =
                 "Welcome to the help menu! This is your go-to place for " +
                 "everything you need to start using the bot. Browse through " +
@@ -142,7 +142,7 @@ public class HelpEmbed
         var helpEmbed = new DiscordEmbedBuilder
         {
             Title = "🛟 Help Menu",
-            Color = DiscordColor.Cyan,
+            Color = DiscordColor.Purple,
             Description =
                 "Welcome to the help menu! This is your go-to place for " +
                 "everything you need to start using the bot. Browse through " +
@@ -211,7 +211,7 @@ public class HelpEmbed
         return new DiscordEmbedBuilder
         {
             Title = "🛟 Help Menu",
-            Color = DiscordColor.Cyan,
+            Color = DiscordColor.Purple,
             Description =
                 "Welcome to the help menu! This is your go-to place for " +
                 "everything you need to start using the bot. Browse through " +
@@ -239,7 +239,7 @@ public class HelpEmbed
         var embed = new DiscordEmbedBuilder
         {
             Title = "🌐 All Features",
-            Color = DiscordColor.Cyan,
+            Color = DiscordColor.Purple,
             Description = "Here is everything Jam Junction has to offer."
         };
 
@@ -300,7 +300,7 @@ public class HelpEmbed
         var embed = new DiscordEmbedBuilder
         {
             Title = "🎵 Music Commands",
-            Color = DiscordColor.Cyan,
+            Color = DiscordColor.Purple,
             Description = "All music-related slash commands available in Jam Junction."
         };
 
@@ -348,7 +348,7 @@ public class HelpEmbed
         var embed = new DiscordEmbedBuilder
         {
             Title = "🛠️ Other Commands",
-            Color = DiscordColor.Cyan,
+            Color = DiscordColor.Purple,
             Description = "General-purpose commands outside of music playback."
         };
 
@@ -373,7 +373,7 @@ public class HelpEmbed
         var embed = new DiscordEmbedBuilder
         {
             Title = "📻 Player Controls",
-            Color = DiscordColor.Cyan,
+            Color = DiscordColor.Purple,
             Description = "Every button on the audio player and what it does."
         };
 

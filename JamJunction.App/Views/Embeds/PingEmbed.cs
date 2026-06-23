@@ -29,7 +29,7 @@ public class PingEmbed
         {
             Title = $"Pong 🏓 ``{context.Member.Username}``",
             ImageUrl = "https://pbs.twimg.com/media/CijH1M7WgAE_3we.jpg",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
 
         return embed;

@@ -68,7 +68,7 @@ public class AudioPlayerEmbed
 
         var embed = new DiscordEmbedBuilder
         {
-            Color = DiscordColor.Cyan,
+            Color = DiscordColor.Purple,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
                 Url = track.ArtworkUri!.AbsoluteUri
@@ -426,7 +426,7 @@ public class AudioPlayerEmbed
         {
             Title = "Added To The Queue 🎵",
             Description = $"ılı   •  [{track!.Title}]({track.Uri}) - By **{track.Author}**",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -451,7 +451,7 @@ public class AudioPlayerEmbed
         {
             Title = "Added To The Queue 🎵",
             Description = $"ılı   •  [{fullAlbum.Name}]({albumUrl}) - By **{artistName}**",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -478,7 +478,7 @@ public class AudioPlayerEmbed
         {
             Title = "Added To The Queue 🎵",
             Description = $"ılı   •  [{albumName}]({albumUrl}) - By **{authorName}**",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -501,7 +501,7 @@ public class AudioPlayerEmbed
         {
             Title = "Added To The Queue 🎵",
             Description = $"ılı   •  [{fullPlaylist.Name}]({playlistUrl}) - By **{fullPlaylist.Owner!.DisplayName}**",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -521,7 +521,7 @@ public class AudioPlayerEmbed
         {
             Title = "Added To The Queue 🎵",
             Description = $"ılı   •  [{playlist.Title}]({playlist.Url})",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -544,7 +544,7 @@ public class AudioPlayerEmbed
         {
             Title = "Added To The Queue 🎵",
             Description = $"ılı   •  [{playlist.Playlist!.Name}]({playlistUrl})",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -560,7 +560,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "⏸  •  The track has been paused.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -576,7 +576,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "▶  •  The track has been resumed.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -592,7 +592,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "⏹  •  The player has been stopped.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -610,7 +610,7 @@ public class AudioPlayerEmbed
         {
             Description = "**Nothing is playing.**\n" +
                           "Please use the </play:1181715791658360852> command to queue something.",
-            Color = DiscordColor.Cyan,
+            Color = DiscordColor.Purple,
             Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
             {
                 Width = 50,
@@ -635,7 +635,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = $"🔊  •  Volume changed to `{volume}`.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -651,7 +651,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "🔉  •  Volume decreased.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -667,7 +667,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "🔊  •  Volume increased.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -683,7 +683,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "↻  •  The track has been restarted.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -699,7 +699,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "🔌  •  Jam Junction has been disconnected.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -744,7 +744,7 @@ public class AudioPlayerEmbed
         }
         else
         {
-            embed.Color = DiscordColor.Cyan;
+            embed.Color = DiscordColor.Purple;
 
             var i = 1;
 
@@ -867,7 +867,7 @@ public class AudioPlayerEmbed
         }
         else
         {
-            embed.Color = DiscordColor.Cyan;
+            embed.Color = DiscordColor.Purple;
 
             var i = 1;
 
@@ -1562,7 +1562,7 @@ public class AudioPlayerEmbed
         }
         else
         {
-            embed.Color = DiscordColor.Cyan;
+            embed.Color = DiscordColor.Purple;
 
             var i = 1;
 
@@ -2226,7 +2226,7 @@ public class AudioPlayerEmbed
         {
             Description =
                 $"⇌  •  The queue was shuffled.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return embed;
     }
@@ -2246,7 +2246,7 @@ public class AudioPlayerEmbed
         {
             Description =
                 $"⇌  •  The queue was shuffled.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return embed;
     }
@@ -2266,7 +2266,7 @@ public class AudioPlayerEmbed
         {
             Description =
                 $"⏭  •  Skipped to the next track.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return embed;
     }
@@ -2286,7 +2286,7 @@ public class AudioPlayerEmbed
         {
             Description =
                 $"⏭  •  Skipped to the next track.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return embed;
     }
@@ -2302,7 +2302,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = "⏮  •  Playing the previous track.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return embed;
     }
@@ -2327,7 +2327,7 @@ public class AudioPlayerEmbed
             Title = "❤️  •  Liked Song",
             Description = $"💿  •  **Title**: [{title}]({uri})\n" +
                           $"🎙️  •  **Artist**: {author}",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
     }
 
@@ -2342,7 +2342,7 @@ public class AudioPlayerEmbed
         return new DiscordEmbedBuilder
         {
             Description = "❤️  •  Song sent to your DMs.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
     }
 
@@ -2357,7 +2357,7 @@ public class AudioPlayerEmbed
         return new DiscordEmbedBuilder
         {
             Description = "📋  •  Click below to open your playlist.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
     }
 
@@ -2389,7 +2389,7 @@ public class AudioPlayerEmbed
         return new DiscordEmbedBuilder
         {
             Description = "🔍  •  Click </seek:1186000603273510952> to seek to a position in the track.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
     }
 
@@ -2412,7 +2412,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = $"⏭  •  Skipped to ``{track!.Track!.Title}``.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -2437,7 +2437,7 @@ public class AudioPlayerEmbed
         {
             Description =
                 $"🔍   •  Track position changed to ``{time}``.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return embed;
     }
@@ -2456,7 +2456,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = $"🕒  • Current Track Position: ``{RoundSeconds(position)}``.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return embed;
     }
@@ -2496,21 +2496,21 @@ public class AudioPlayerEmbed
             {
                 Description =
                     $" ⇄  •  Repeat track mode enabled.",
-                Color = DiscordColor.Cyan
+                Color = DiscordColor.Purple
             };
         else if (queuedLavalinkPlayer.RepeatMode == TrackRepeatMode.Queue)
             embed = new DiscordEmbedBuilder
             {
                 Description =
                     $" ⇄  •  Repeat queue mode enabled.",
-                Color = DiscordColor.Cyan
+                Color = DiscordColor.Purple
             };
         else
             embed = new DiscordEmbedBuilder
             {
                 Description =
                     $" ⇄  •  Repeat mode disabled.",
-                Color = DiscordColor.Cyan
+                Color = DiscordColor.Purple
             };
 
         return embed;
@@ -2531,7 +2531,7 @@ public class AudioPlayerEmbed
         {
             Description =
                 $" ⇄  •  Repeat track mode enabled.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
 
         return embed;
@@ -2552,7 +2552,7 @@ public class AudioPlayerEmbed
         {
             Description =
                 $" ⇄  •  Repeat queue mode enabled.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
 
         return embed;
@@ -2573,7 +2573,7 @@ public class AudioPlayerEmbed
         {
             Description =
                 $" ⇄  •  Repeat mode disabled.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
 
         return embed;
@@ -2596,7 +2596,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = $"၊||၊  •  Filter changed to ``{filter}``.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
@@ -2618,7 +2618,7 @@ public class AudioPlayerEmbed
         var embed = new DiscordEmbedBuilder
         {
             Description = $"🗑️  •  ``{removedTrack.Title}`` removed from the queue.",
-            Color = DiscordColor.Cyan
+            Color = DiscordColor.Purple
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
