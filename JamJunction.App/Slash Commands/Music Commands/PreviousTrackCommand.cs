@@ -127,7 +127,7 @@ public class PreviousTrackCommand : ApplicationCommandModule
         
         await player.Queue.InsertAsync(0, new TrackQueueItem(player.CurrentTrack));
         
-        await player.Queue.History.RemoveAtAsync(previousIndex);
+        await player.Queue.History.ClearAsync();
 
         await player.PlayAsync(previousTrack!, false);
 
