@@ -397,4 +397,47 @@ public class ErrorEmbed
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
+
+    /// <summary>
+    /// Builds an embed message indicating that lyrics could not be found
+    /// for the current track.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the missing lyrics error.
+    /// </returns>
+    public DiscordFollowupMessageBuilder LyricsNotFoundError()
+    {
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = "\ud83c\udfb5 • Lyrics were not found for the current track.",
+            Color = DiscordColor.Red
+        };
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
+    }
+
+    /// <summary>
+    /// Builds an embed message indicating that the lyrics service failed
+    /// while looking up the current track.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="DiscordFollowupMessageBuilder"/> representing the lyrics lookup error.
+    /// </returns>
+    public DiscordFollowupMessageBuilder LyricsLookupError(string developerDetails = null)
+    {
+        var description = "\ud83c\udfb5 • Lyrics are temporarily unavailable. Please try again in a moment.";
+
+        // developerDetails is only passed in development; production callers pass null
+        // so the client never sees internal failure detail (it stays in the logs).
+        if (!string.IsNullOrWhiteSpace(developerDetails))
+        {
+            description += $"\n\nDetails: {developerDetails}";
+        }
+
+        var embed = new DiscordEmbedBuilder
+        {
+            Description = description,
+            Color = DiscordColor.Red
+        };
+        return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
+    }
 }

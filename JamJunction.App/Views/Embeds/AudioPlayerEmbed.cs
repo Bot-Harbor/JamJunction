@@ -2622,4 +2622,99 @@ public class AudioPlayerEmbed
         };
         return new DiscordFollowupMessageBuilder().AsEphemeral().AddEmbed(embed);
     }
+
+    /// <summary>
+    /// Builds paged embed messages containing lyrics for the current track.
+    /// </summary>
+    /// <param name="track">
+    /// The <see cref="LavalinkTrack"/> whose lyrics are being displayed.
+    /// </param>
+    /// <param name="lyrics">
+    /// The full lyrics text to display.
+    /// </param>
+    /// <returns>
+    /// A list of <see cref="DiscordEmbedBuilder"/> instances split to fit Discord embed limits.
+    /// </returns>
+    public IReadOnlyList<DiscordEmbedBuilder> Lyrics(
+        LavalinkTrack track,
+        string lyrics)
+    {
+        var title = track.Title.Length > 80 ? $"{track.Title.Substring(0, 80)}..." : track.Title;
+        var chunks = SplitLyricsText(lyrics);
+        var embeds = new List<DiscordEmbedBuilder>();
+
+        for (var i = 0; i < chunks.Count; i++)
+        {
+            var embed = new DiscordEmbedBuilder
+            {
+                Title = $"Lyrics - {title}",
+                Description = chunks[i],
+                Color = DiscordColor.Purple,
+                Footer = new DiscordEmbedBuilder.EmbedFooter
+                {
+                    Text = $"Page {i + 1}/{chunks.Count}"
+                }
+            };
+
+            if (track.ArtworkUri != null)
+            {
+                embed.Thumbnail = new DiscordEmbedBuilder.EmbedThumbnail
+                {
+                    Url = track.ArtworkUri.AbsoluteUri
+                };
+            }
+
+            embeds.Add(embed);
+        }
+
+        return embeds;
+    }
+
+    private static List<string> SplitLyricsText(string lyrics, int maxLength = 3900)
+    {
+        var chunks = new List<string>();
+        var currentChunk = new StringBuilder();
+        var lines = lyrics.Replace("\r\n", "\n").Replace("\r", "\n").Split('\n');
+
+        foreach (var line in lines)
+        {
+            var lineWithBreak = $"{line}\n";
+
+            if (lineWithBreak.Length > maxLength)
+            {
+                if (currentChunk.Length > 0)
+                {
+                    chunks.Add(currentChunk.ToString().TrimEnd());
+                    currentChunk.Clear();
+                }
+
+                for (var i = 0; i < lineWithBreak.Length; i += maxLength)
+                {
+                    chunks.Add(lineWithBreak.Substring(i, Math.Min(maxLength, lineWithBreak.Length - i)).TrimEnd());
+                }
+
+                continue;
+            }
+
+            if (currentChunk.Length + lineWithBreak.Length > maxLength)
+            {
+                chunks.Add(currentChunk.ToString().TrimEnd());
+                currentChunk.Clear();
+            }
+
+            currentChunk.Append(lineWithBreak);
+        }
+
+        if (currentChunk.Length > 0)
+        {
+            chunks.Add(currentChunk.ToString().TrimEnd());
+        }
+
+        return chunks;
+    }
+
+    private static string GetDisplayValue(string value)
+    {
+        return string.IsNullOrWhiteSpace(value) ? "Unknown" : value;
+    }
 }
