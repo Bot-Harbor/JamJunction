@@ -88,6 +88,17 @@ public class TrackStartedEvent
             return;
         }
 
+        // A new track is now playing, so any AI recommendation left over from the
+        // previous track is stale. Remove it if it is still on screen.
+        if (guildData.RecommendationMessage != null)
+        {
+            var oldRecommendation = guildData.RecommendationMessage;
+            guildData.RecommendationMessage = null;
+            guildData.RecommendationQuery = null;
+            guildData.RecommendationSource = null;
+            _ = channel.DeleteMessageAsync(oldRecommendation);
+        }
+
         var playerMessage = guildData.PlayerMessage;
         _ = channel.DeleteMessageAsync(playerMessage);
 

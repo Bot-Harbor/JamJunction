@@ -1,5 +1,6 @@
 ﻿using DSharpPlus;
 using DSharpPlus.Entities;
+using JamJunction.App.Ai;
 using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
@@ -89,6 +90,9 @@ public class TrackEndedEvent
         {
             _ = channel.DeleteMessageAsync(guildData.PlayerMessage);
 
+            if (guildData.RecommendationMessage != null)
+                _ = channel.DeleteMessageAsync(guildData.RecommendationMessage);
+
             foreach (var userData in Bot.UserData.Values)
                 if (userData.GuildId == guildId)
                 {
@@ -104,6 +108,9 @@ public class TrackEndedEvent
         if (player.State == PlayerState.NotPlaying)
         {
             await channel.DeleteMessageAsync(guildData.PlayerMessage);
+
+            if (guildData.RecommendationMessage != null)
+                _ = channel.DeleteMessageAsync(guildData.RecommendationMessage);
 
             if (player.Queue.HasHistory)
                 await player.Queue.History!.ClearAsync();
@@ -124,6 +131,90 @@ public class TrackEndedEvent
 
             await Task.Delay(10000);
             _ = channel.DeleteMessageAsync(queueSomethingMessage);
+            return;
+        }
+
+        // The song is over but the queue continues (this was not the last track).
+        // Give the AI recommender a 1-in-8 chance to suggest a follow-up track.
+        // Runs in the background so it never delays the next track's player UI.
+        if (eventArgs.Reason == TrackEndReason.Finished &&
+            SongRecommender.IsEnabled &&
+            Random.Shared.Next(2) == 0)
+            _ = ShowRecommendationAsync(channel, guildId, eventArgs.Track);
+    }
+
+    /// <summary>
+    /// Fetches an AI song recommendation for the finished track and posts it to the
+    /// text channel with an "add to queue" button.
+    /// </summary>
+    /// <param name="channel">
+    /// The <see cref="DiscordChannel"/> in which the recommendation is displayed.
+    /// </param>
+    /// <param name="guildId">
+    /// The identifier of the guild the recommendation belongs to. Used to store the
+    /// recommendation state so it can be queued or cleaned up later.
+    /// </param>
+    /// <param name="finishedTrack">
+    /// The track that just finished playing, used as the basis for the recommendation.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Task"/> representing the asynchronous recommendation operation.
+    /// </returns>
+    /// <remarks>
+    /// The recommendation is not removed on a timer. Instead it remains visible until
+    /// the user presses its button to queue the suggested track, or until the next
+    /// track starts playing (see <see cref="TrackStartedEvent"/>), whichever occurs
+    /// first. Only one recommendation is shown per guild at a time.
+    /// </remarks>
+    private static async Task ShowRecommendationAsync(DiscordChannel channel, ulong guildId,
+        Lavalink4NET.Tracks.LavalinkTrack finishedTrack)
+    {
+        try
+        {
+            var recommendation = await SongRecommender.RecommendAsync(finishedTrack);
+
+            if (recommendation == null)
+                return;
+
+            // Playback may have stopped while the model was generating the
+            // recommendation. If the guild is no longer active, don't post an
+            // orphaned message that nothing would clean up.
+            if (!Bot.GuildData.TryGetValue(guildId, out var guildData))
+                return;
+
+            // Only one recommendation should be visible at a time. Remove a previous
+            // one that may still be lingering before posting the new suggestion.
+            if (guildData.RecommendationMessage != null)
+            {
+                var previousMessage = guildData.RecommendationMessage;
+                guildData.RecommendationMessage = null;
+                _ = channel.DeleteMessageAsync(previousMessage);
+            }
+
+            var audioPlayerEmbed = new AudioPlayerEmbed();
+            var recommendationBuilder = audioPlayerEmbed.SongRecommendation(
+                finishedTrack, recommendation.Title, recommendation.Artist, recommendation.Reason);
+
+            var recommendationMessage = await channel.SendMessageAsync(recommendationBuilder);
+
+            guildData.RecommendationMessage = recommendationMessage;
+            guildData.RecommendationQuery = $"{recommendation.Title} {recommendation.Artist}";
+
+            // Remember which platform the finished track came from so the suggested
+            // track is queued from that same source (Spotify -> Spotify, etc.).
+            // YouTube Music tracks report a "youtube" SourceName; the only thing that
+            // marks them as YouTube Music is the music.youtube.com URI, so detect that
+            // and preserve it. This keeps the queued suggestion labelled "YouTube Music"
+            // in the player UI, matching how the play command already handles it.
+            guildData.RecommendationSource =
+                finishedTrack.SourceName == "youtube" &&
+                finishedTrack.Uri?.ToString().Contains("music.youtube.com") == true
+                    ? "youtubemusic"
+                    : finishedTrack.SourceName;
+        }
+        catch
+        {
+            // The recommender is best-effort; never let a failure surface here.
         }
     }
 }
