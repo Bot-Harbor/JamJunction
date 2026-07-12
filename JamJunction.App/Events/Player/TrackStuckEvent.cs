@@ -4,7 +4,6 @@ using JamJunction.App.Lavalink;
 using JamJunction.App.Views.Embeds;
 using Lavalink4NET;
 using Lavalink4NET.Events.Players;
-using Lavalink4NET.Players;
 
 namespace JamJunction.App.Events.Player;
 
@@ -73,34 +72,38 @@ public class TrackStuckEvent
         var voiceChannel = eventArgs.Player.VoiceChannelId;
         var guild = await _discordClient.GetGuildAsync(guildId);
 
-        var guildData = Bot.GuildData[guildId];
+        // The failure path below removes the guild data to reset the player. If a
+        // stuck event still arrives afterwards (a genuinely broken track can keep
+        // stalling), there is nothing left to recover — bail out silently instead
+        // of throwing on a missing key.
+        if (!Bot.GuildData.TryGetValue(guildId, out var guildData))
+            return;
+
         var textChannelId = guildData.TextChannelId;
         var channel = guild.GetChannel(textChannelId);
 
         var errorEmbed = new ErrorEmbed();
 
-        var errorMessage = await channel.SendMessageAsync(new DiscordMessageBuilder(errorEmbed.TrackFailedToLoadError()));
-
-        await Task.Delay(5000);
-
-        _ = channel.DeleteMessageAsync(errorMessage);
-
         var lavaPlayerHandler = new LavalinkPlayerHandler(_audioService);
         var player = await lavaPlayerHandler.GetPlayerAsync(guildId, voiceChannel);
 
         var track = eventArgs.Track;
-        await player.PlayAsync(track);
 
-        await Task.Delay(3000);
-
-        if (player.State == PlayerState.NotPlaying)
+        // A reattempt was already made for this exact track and it is stuck again,
+        // so the retry has failed. Stop retrying (replaying a broken track just gets
+        // it stuck again and loops forever), tell the user the reattempt failed,
+        // remove the track information embed and reset the stored player state.
+        if (guildData.ReattemptedTrackIdentifier == track.Identifier)
         {
-            errorMessage = await channel.SendMessageAsync(new DiscordMessageBuilder(errorEmbed.CouldNotLoadTrackOnAttemptError()));
-
-            await Task.Delay(10000);
-
-            await channel.DeleteMessageAsync(errorMessage);
             _ = channel.DeleteMessageAsync(guildData.PlayerMessage);
+
+            var failedMessage = await channel.SendMessageAsync(
+                new DiscordMessageBuilder(errorEmbed.CouldNotLoadTrackOnAttemptError()));
+
+            // Stop the broken track so the player does not keep stalling in the
+            // voice channel after we have given up on it.
+            if (player != null)
+                await player.StopAsync();
 
             foreach (var userData in Bot.UserData.Values)
                 if (userData.GuildId == guildId)
@@ -111,6 +114,28 @@ public class TrackStuckEvent
                 }
 
             Bot.GuildData.Remove(guildId);
+
+            await Task.Delay(10000);
+            _ = channel.DeleteMessageAsync(failedMessage);
+            return;
         }
+
+        // First time this track got stuck: notify the user and reattempt playback
+        // once. Record the track identifier so a second stuck event for the same
+        // track is handled as a failure above instead of retrying endlessly.
+        guildData.ReattemptedTrackIdentifier = track.Identifier;
+
+        var errorMessage = await channel.SendMessageAsync(
+            new DiscordMessageBuilder(errorEmbed.TrackFailedToLoadError()));
+
+        await Task.Delay(5000);
+
+        _ = channel.DeleteMessageAsync(errorMessage);
+
+        // Force an immediate replay of the stuck track (enqueue: false) rather than
+        // appending it to the queue. The stuck track is still the player's CurrentTrack,
+        // so the default enqueue behaviour would just add a duplicate to the queue.
+        if (player != null)
+            await player.PlayAsync(track, false);
     }
 }
