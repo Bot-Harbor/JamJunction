@@ -28,6 +28,8 @@ Jam Junction is a feature-rich Discord music bot built with DSharpPlus and Laval
 - **Repeat Modes** — None, Repeat Track, Repeat Queue
 - **Volume Control** — Adjustable from 0 to 100
 - **Interactive Player** — 15 button controls directly on the player embed
+- **AI Song Recommendations** — An offline local LLM suggests a similar track after playback, ready to add to the queue with one click
+- **Synced Lyrics** — Fetch time-synced lyrics for the current track, sourced from LRCLIB
 - **Personal Playlist** — Like any track to save it to your DMs for later
 - **Help Menu** — Built-in dropdown help system with categorized sections
 
@@ -64,6 +66,7 @@ Jam Junction is a feature-rich Discord music bot built with DSharpPlus and Laval
 | `/shuffle` | Shuffles the queue. |
 | `/view-queue` | Displays what is currently in the queue. |
 | `/current-track` | Shows details about the current track playing. |
+| `/lyrics` | Shows lyrics for the current track. |
 | `/seek` | Sets the position of the track. |
 | `/position` | Gets the current track position. |
 | `/volume` | Adjust the volume 0-100. |
@@ -100,6 +103,8 @@ The interactive player embed includes 15 buttons across 3 rows.
 
 - [DSharpPlus 5.0.0](https://github.com/DSharpPlus/DSharpPlus) — Discord API wrapper
 - [Lavalink4NET 4.2.0](https://github.com/angelobreuer/Lavalink4NET) — Audio streaming
+- [Ollama](https://ollama.com) — Local LLM powering AI song recommendations
+- [LRCLIB](https://lrclib.net) — Synced lyrics provider
 - .NET 9
 - [Docker](https://www.docker.com/) — Containerized deployment
 
