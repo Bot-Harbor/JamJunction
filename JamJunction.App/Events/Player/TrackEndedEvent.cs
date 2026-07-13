@@ -135,11 +135,11 @@ public class TrackEndedEvent
         }
 
         // The song is over but the queue continues (this was not the last track).
-        // Give the AI recommender a 1-in-8 chance to suggest a follow-up track.
+        // Give the AI recommender a 1-in-4 chance to suggest a follow-up track.
         // Runs in the background so it never delays the next track's player UI.
         if (eventArgs.Reason == TrackEndReason.Finished &&
             SongRecommender.IsEnabled &&
-            Random.Shared.Next(2) == 0)
+            Random.Shared.Next(4) == 0)
             _ = ShowRecommendationAsync(channel, guildId, eventArgs.Track);
     }
 
