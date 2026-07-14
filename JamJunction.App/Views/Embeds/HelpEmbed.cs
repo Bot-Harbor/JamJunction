@@ -59,7 +59,7 @@ public class HelpEmbed
             Footer = new DiscordEmbedBuilder.EmbedFooter
             {
                 Text = "Bot Info:   " +
-                       "Version: 2.7.4  •  " +
+                       "Version: 2.8.4  •  " +
                        $"Total Servers: {serverCount}  •  " +
                        $"Shard: {shardCount}  •  " +
                        $"Ping: {ping}" + 
@@ -160,7 +160,7 @@ public class HelpEmbed
             Footer = new DiscordEmbedBuilder.EmbedFooter
             {
                 Text = "Bot Info:   " +
-                       "Version: 2.7.4  •  " +
+                       "Version: 2.8.4  •  " +
                        $"Total Servers: {serverCount}  •  " +
                        $"Shard: {shardCount}  •  " +
                        $"Ping: {ping}" + 
@@ -225,7 +225,7 @@ public class HelpEmbed
             Footer = new DiscordEmbedBuilder.EmbedFooter
             {
                 Text = "Bot Info:   " +
-                       "Version: 2.7.4  •  " +
+                       "Version: 2.8.4  •  " +
                        $"Total Servers: {serverCount}  •  " +
                        $"Shard: {shardCount}  •  " +
                        $"Ping: {ping}" +
@@ -248,7 +248,8 @@ public class HelpEmbed
             "• 6 supported platforms: Spotify, YouTube, YouTube Music, Deezer, SoundCloud, Apple Music\n" +
             "• Search by keyword or paste a URL\n" +
             "• Queue next to insert a track at the front\n" +
-            "• Previous track support with full history tracking\n" +
+            "• Step back to the previously played track\n" +
+            "• Synced lyrics for the current track\n" +
             "• Seek to any position using hours, minutes, and seconds"
         );
 
@@ -278,6 +279,13 @@ public class HelpEmbed
             "❤️ Personal Playlist",
             "• Like any track to save it directly to your DMs\n" +
             "• Access your playlist anytime via the 📋 button or </personal-playlist:1496305132093050952>"
+        );
+
+        embed.AddField(
+            "🤖 AI Recommendations",
+            "• When a track ends, get an AI-powered suggestion for what to play next\n" +
+            "• Suggestions match the mood and come from the same platform you were listening on\n" +
+            "• Tap ➕ Add to Queue to drop the suggested track straight into the queue"
         );
 
         embed.AddField(
@@ -319,7 +327,8 @@ public class HelpEmbed
             "</skip:1204215826773835778> — Skips to the next track in the queue.\n" +
             "</shuffle:1200625616244981821> — Shuffles the queue.\n" +
             "</view-queue:1292956075032576070> — Displays what is currently in the queue.\n" +
-            "</current-track:1300139412553859085> — Shows details about the current track playing."
+            "</current-track:1300139412553859085> — Shows details about the current track playing.\n" +
+            "/lyrics — Shows synced lyrics for the current track playing."
         );
 
         embed.AddField(
