@@ -69,10 +69,10 @@ public class HelpEmbed
         
         var helpMenu = new HelpMenu();
         
-        var addBotBtn = new DiscordLinkButtonComponent
+        var joinServerBtn = new DiscordLinkButtonComponent
         (
-            "https://discord.com/oauth2/authorize?client_id=1181700334561796227\n",
-            "🤖 Add To A Server"
+            "https://discord.gg/z5J6FwkuJ",
+            "🎧 Join Our Server"
         );
 
         var leaveReviewBtn = new DiscordLinkButtonComponent
@@ -83,7 +83,7 @@ public class HelpEmbed
         
         var buttons = new List<DiscordComponent>
         {
-            addBotBtn, leaveReviewBtn
+            joinServerBtn, leaveReviewBtn
         };
         
 
@@ -116,9 +116,9 @@ public class HelpEmbed
     {
         var helpMenu = new HelpMenu();
 
-        var addBotBtn = new DiscordLinkButtonComponent(
-            "https://discord.com/oauth2/authorize?client_id=1181700334561796227\n",
-            "🤖 Add To A Server"
+        var joinServerBtn = new DiscordLinkButtonComponent(
+            "https://discord.gg/z5J6FwkuJ",
+            "🎧 Join Our Server"
         );
         var leaveReviewBtn = new DiscordLinkButtonComponent(
             "https://top.gg/bot/1181700334561796227#reviews",
@@ -128,7 +128,7 @@ public class HelpEmbed
         return new DiscordInteractionResponseBuilder()
             .AddEmbed(embed)
             .AddComponents(helpMenu.Build())
-            .AddComponents(new List<DiscordComponent> { addBotBtn, leaveReviewBtn });
+            .AddComponents(new List<DiscordComponent> { joinServerBtn, leaveReviewBtn });
     }
     
     public DiscordFollowupMessageBuilder Build(DiscordClient client)
@@ -170,10 +170,10 @@ public class HelpEmbed
         
         var helpMenu = new HelpMenu();
         
-        var addBotBtn = new DiscordLinkButtonComponent
+        var joinServerBtn = new DiscordLinkButtonComponent
         (
-            "https://discord.com/oauth2/authorize?client_id=1181700334561796227\n",
-            "🤖 Add To A Server"
+            "https://discord.gg/z5J6FwkuJ",
+            "🎧 Join Our Server"
         );
         
         var leaveReviewBtn = new DiscordLinkButtonComponent
@@ -184,7 +184,7 @@ public class HelpEmbed
         
         var buttons = new List<DiscordComponent>
         {
-            addBotBtn, leaveReviewBtn
+            joinServerBtn, leaveReviewBtn
         };
         
 
