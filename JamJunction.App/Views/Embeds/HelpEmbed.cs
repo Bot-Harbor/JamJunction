@@ -328,7 +328,7 @@ public class HelpEmbed
             "</shuffle:1200625616244981821> — Shuffles the queue.\n" +
             "</view-queue:1292956075032576070> — Displays what is currently in the queue.\n" +
             "</current-track:1300139412553859085> — Shows details about the current track playing.\n" +
-            "/lyrics — Shows synced lyrics for the current track playing."
+            "</lyrics:1527411578109169766> — Shows synced lyrics for the current track playing."
         );
 
         embed.AddField(
