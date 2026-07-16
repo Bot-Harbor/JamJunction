@@ -421,7 +421,7 @@ public class AudioPlayerEmbed
                 $"_{reason}_",
             Footer = new DiscordEmbedBuilder.EmbedFooter
             {
-                Text = "Powered by AI  •  Press ➕ to add it to the queue\n\nMade With ❤️"
+                Text = "Powered by AI  •  ➕ Add it to the queue  •  ✖️ Skip\n\nMade With ❤️"
             }
         };
 
@@ -436,9 +436,14 @@ public class AudioPlayerEmbed
             ButtonStyle.Secondary, "add-recommendation", "➕ Add to Queue"
         );
 
+        var skipButton = new DiscordButtonComponent
+        (
+            ButtonStyle.Secondary, "skip-recommendation", "✖️ Skip"
+        );
+
         return new DiscordMessageBuilder()
             .AddEmbed(embed)
-            .AddComponents(addButton);
+            .AddComponents(addButton, skipButton);
     }
 
     /// <summary>
