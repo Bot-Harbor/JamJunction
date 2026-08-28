@@ -46,9 +46,10 @@ public class PlayerDestroyedEvent
     /// A <see cref="Task"/> representing the asynchronous cleanup operation.
     /// </returns>
     /// <remarks>
-    /// This method removes the active player message from the Discord channel
-    /// and clears the corresponding guild and user interaction data stored
-    /// within the bot's internal caches.
+    /// This method removes the active player message and any lingering AI song
+    /// recommendation message from the Discord channel, then clears the
+    /// corresponding guild and user interaction data stored within the bot's
+    /// internal caches.
     /// </remarks>
     public async Task PlayerDestroyed(object sender, PlayerDestroyedEventArgs eventArgs)
     {
@@ -60,6 +61,9 @@ public class PlayerDestroyedEvent
         var channel = guild.GetChannel(textChannelId);
 
         _ = channel.DeleteMessageAsync(guildData.PlayerMessage);
+
+        if (guildData.RecommendationMessage != null)
+            _ = channel.DeleteMessageAsync(guildData.RecommendationMessage);
 
         foreach (var userData in Bot.UserData.Values)
             if (userData.GuildId == guildId)
