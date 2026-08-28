@@ -59,10 +59,10 @@ public class HelpEmbed
             Footer = new DiscordEmbedBuilder.EmbedFooter
             {
                 Text = "Bot Info:   " +
-                       "Version: 2.8.4  •  " +
+                       "Version: 2.8.5  •  " +
+                       $"Ping: {ping}  •  " + 
                        $"Total Servers: {serverCount}  •  " +
-                       $"Shard: {shardCount}  •  " +
-                       $"Ping: {ping}" + 
+                       $"Shard: {shardCount}" +
                        "\n\nMade With ❤️",
             }
         };
